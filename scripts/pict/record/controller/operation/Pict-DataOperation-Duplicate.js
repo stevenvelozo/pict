@@ -47,7 +47,7 @@ define
 				var tmpCancelURL = _Config.DataSetHash+'read/'+pRecord[_Config.DataSetGUID];
 				var tmpRecordTemplate = _.template($(_Config.DOMTemplateMap.Update).text());
 
-				$(_Config.DOMContainerMap.Update).html(tmpRecordTemplate({Record : pRecord, CancelURL: tmpCancelURL, Pict: _Pict}));
+				$(_Config.DOMContainerMap.Update).html(tmpRecordTemplate({Record : pRecord, CancelURL: tmpCancelURL, Pict: _Pict, DAL: _DataOperations}));
 
 				// Change the ID to RECORD_DUPLICATE
 				$('#'+_Config.DataSetGUID).val('RECORD_DUPLICATE');

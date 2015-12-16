@@ -92,6 +92,7 @@ define
 			}
 			initializeDOMContainerMap(_DataSetHash);
 
+			// These are used by the metatemplates for titles and other content identifiers
 			var _EntityTemplateContent;
 			function initializeEntityTemplateMap()
 			{
@@ -102,6 +103,43 @@ define
 				});
 			}
 			initializeEntityTemplateMap();
+
+			// The metatemplate record row column definitions
+			/*
+				The format for these columns is (string, namefirst, hidden xs and small) --- the type is unnecessary as it is defaulted to String.  In fact, the only required piece is the Column.
+				{
+					Title: 'First Name',
+					Column: 'NameFirst',
+
+					Type: 'Default',
+
+					HiddenClasses: ['xs', 's']
+				},
+
+				A more complex example:
+				<td class="AutoFillByID" RecordType="User" ID="<%= Records[i].CreatingIDUser %>" DisplayField="NameFirst" DisplayFieldExtra="NameLast"></td>
+				{
+					Title: 'First Name',
+					Column: 'NameFirst',
+
+					Type: 'AutoFill',
+					AutoFillRecord: 'User',
+					AutoFillDisplayField: 'NameFirst',
+					AutoFillDisplayFieldExtra: 'NameLast'
+				}
+				The format for these columns is (string, namefirst, hidden xs and small) --- the type is unnecessary as it is defaulted to String.  In fact, the only required piece is the Column.
+				{
+					Column: '',
+					Type: 'ActionsMenu'
+				},
+			*/
+			var _MetaRowColumns = [];
+			var addMetaRowColumn = function(pOptions)
+			{
+				pOptions.Pict = _Pict;
+				_MetaRowColumns.push(pOptions);
+			}
+			var _MetaRowMenu = true;
 
 			// A set of post-operation hooks, for connecting other records.
 			var _PostOperationHooks = {};
@@ -147,6 +185,8 @@ define
 				initializeDOMTemplateMap: initializeDOMTemplateMap,
 				initializeDOMContainerMap: initializeDOMContainerMap,
 
+				AddMetaRowColumn: addMetaRowColumn,
+
 				SetAPIURIMapEntry: setAPIURIMapEntry,
 				SetDOMTemplateMapEntry: setDOMTemplateMapEntry,
 				SetDOMContainerMapEntry: setDOMContainerMapEntry,
@@ -161,6 +201,8 @@ define
 			Object.defineProperty(oConfig, 'DataSetGUID', {get: function() { return _DataSetGUID; }});
 
 			Object.defineProperty(oConfig, 'EntityTemplateContent', {get: function() { return _EntityTemplateContent; }});
+			Object.defineProperty(oConfig, 'MetaRowColumns', {get: function() { return _MetaRowColumns; }});
+			Object.defineProperty(oConfig, 'MetaRowMenu', {get: function() { return _MetaRowMenu; }});
 
 			Object.defineProperty(oConfig, 'APIURIMap', {get: function() { return _APIURIMap; }});
 

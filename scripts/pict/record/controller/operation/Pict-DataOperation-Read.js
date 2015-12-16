@@ -30,7 +30,7 @@ define
 				var tmpRecordTemplate = _.template($(_Config.DOMTemplateMap.Read).text());
 
 				// Now render the record
-				$(_Config.DOMContainerMap.Read).html(tmpRecordTemplate({Record : pRecord, Pict: _Pict}));
+				$(_Config.DOMContainerMap.Read).html(tmpRecordTemplate({Record : pRecord, Pict: _Pict, DAL: _DataOperations}));
 
 				// This allows us to add hooks at the higher layer (from routing)
 				if ('Display' in _Config.PostOperationHooks)

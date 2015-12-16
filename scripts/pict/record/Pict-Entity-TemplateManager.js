@@ -11,8 +11,7 @@ if (typeof define !== 'function') { var define = require('amdefine')(module); }
 
 define
 (
-	["pict/ui/templating/Pict-MetaTemplates"],
-	function(PictMetaTemplates)
+	function()
 	{
 		// These are the meta template scripts, used as the patterns for generating the templates for the entities
 		var _MetaTemplates = {};
@@ -49,21 +48,35 @@ define
 		};
 		loadMetaScripts();
 
+		var _Replace_HASH = /MTS_HASH_MTE/g;
+		var _Replace_GUID = /MTS_GUID_MTE/g;
+
+		var _Replace_ReadList_Title_Pre = /MTS_ReadList_Title_Pre_MTE/g;
+		var _Replace_ReadList_Title = /MTS_ReadList_Title_MTE/g;
+		var processMetaScript = function(pMetaTemplateParameters)
+		{
+			// Perform each regex on the meta template script.
+			var tmpResult = _MetaTemplates[pMetaTemplateParameters.TemplateMetaHash];
+
+			tmpResult = tmpResult.replace(_Replace_HASH, pMetaTemplateParameters.DataOperations.Config.DataSetHash);
+			tmpResult = tmpResult.replace(_Replace_GUID, pMetaTemplateParameters.DataOperations.Config.DataSetGUID);
+
+			// For the moment, do not try to parse these.  Just replace.
+			// These run once on page load, and a better first optimization would make them lazily loading.
+			tmpResult = tmpResult.replace(_Replace_ReadList_Title, pMetaTemplateParameters.DataOperations.Config.EntityTemplateContent.ReadList_Title);
+			tmpResult = tmpResult.replace(_Replace_ReadList_Title_Pre, pMetaTemplateParameters.DataOperations.Config.EntityTemplateContent.ReadList_Title_Pre);
+
+			return tmpResult;
+		};
+
 		/**
 		 * Append a template script to the DOM
 		 */
 		var generateTemplateScript = function(pMetaTemplateParameters)
 		{
-			// TODO: This === might need to be == ... unit test it.
 			var tmpTemplateExists = ($('#'+pMetaTemplateParameters.TemplateTargetAddress).length > 0);
-			//console.log('- Automagically checking template: '+pMetaTemplateParameters.TemplateTargetAddress);
-
-			if (tmpTemplateExists && pMetaTemplateParameters.Overwrite)
-			{
-				// TODO: Research if we can debug templates that are modififed with jquery
-				$('#'+pMetaTemplateParameters.TemplateTargetAddress).html(pMetaTemplateParameters.MetaTemplate({Meta: pMetaTemplateParameters}));
-			}
-			else if (!tmpTemplateExists)
+			
+			if (!tmpTemplateExists)
 			{
 				// We are using native javascript here to create DOM elements because uding jquery prevents us from being able to debug live
 				// (per discussions in http://stackoverflow.com/questions/610995/cant-append-script-element)
@@ -71,7 +84,7 @@ define
 				tmpTemplate.id = pMetaTemplateParameters.TemplateTargetAddress;
 				console.log('+ Automagically creating template: '+pMetaTemplateParameters.TemplateTargetAddress);
 				tmpTemplate.type  = "text/html";
-				tmpTemplate.text  = pMetaTemplateParameters.MetaTemplate({Meta: pMetaTemplateParameters});
+				tmpTemplate.text  = processMetaScript(pMetaTemplateParameters);
 				document.body.appendChild(tmpTemplate);
 			}
 
@@ -100,33 +113,23 @@ define
 		{
 			if(typeof(_MetaTemplates[pMetaTemplateParameters.TemplateMetaHash]) !== 'undefined')
 			{
-				pMetaTemplateParameters.MetaTemplate = _.template(_MetaTemplates[pMetaTemplateParameters.TemplateMetaHash]);
+				pMetaTemplateParameters.MetaTemplate = _MetaTemplates[pMetaTemplateParameters.TemplateMetaHash];
 			}
 
 			return;
 		};
 
-		var generateTemplate = function(pTemplateMetaHash, pDataOperations, pPict)
+		var generateTemplate = function(pTemplateMetaHash, pDataOperations)
 		{
 			var tmpMetaTemplateParameters = (
 			{
-				Pict: pPict,
-
-				TemplateFunctions: PictMetaTemplates(pDataOperations),
-
-
-
 				MetaTemplate: false,
 
 				TemplateMetaHash: pTemplateMetaHash,
 				TemplateTargetAddress: false,
 
-				DataOperations: pDataOperations,
-
-				Overwrite: false
+				DataOperations: pDataOperations
 			});
-
-			getMetaTemplate(tmpMetaTemplateParameters);
 
 			getScriptAddress(tmpMetaTemplateParameters);
 
@@ -153,25 +156,25 @@ define
 		 *		Delete: '#Container_'+tmpDOMContainerMapHash,
 		 *
 		 */
-		var generateTemplates = function(pDataOperations, pPict)
+		var generateTemplates = function(pDataOperations)
 		{
 			// TODO: Validate EntityName, View Controller, Schema and Data Operations
 			// TODO: Only generate scripts for the necessary templates...  Right now this generates every script even if they are not used.
-			generateTemplate('Container_ReadList', pDataOperations, pPict);
-			generateTemplate('Container_Read', pDataOperations, pPict);
-			generateTemplate('Container_Update', pDataOperations, pPict);
-			generateTemplate('Container_Delete', pDataOperations, pPict);
+			generateTemplate('Container_ReadList', pDataOperations);
+			generateTemplate('Container_Read', pDataOperations);
+			generateTemplate('Container_Update', pDataOperations);
+			generateTemplate('Container_Delete', pDataOperations);
 
-			generateTemplate('Table', pDataOperations, pPict);
-			generateTemplate('Rows', pDataOperations, pPict);
+			generateTemplate('Table', pDataOperations);
+			generateTemplate('Rows', pDataOperations);
 
-			generateTemplate('Read', pDataOperations, pPict);
-			generateTemplate('RecordRender', pDataOperations, pPict);
+			generateTemplate('Read', pDataOperations);
+			generateTemplate('RecordRender', pDataOperations);
 
-			generateTemplate('Update', pDataOperations, pPict);
+			generateTemplate('Update', pDataOperations);
 
-			generateTemplate('Delete', pDataOperations, pPict);
-			generateTemplate('DeleteCompleted', pDataOperations, pPict);
+			generateTemplate('Delete', pDataOperations);
+			generateTemplate('DeleteCompleted', pDataOperations);
 		};
 
 		return generateTemplates;

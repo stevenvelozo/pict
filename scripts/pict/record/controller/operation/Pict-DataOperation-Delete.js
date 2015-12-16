@@ -56,7 +56,7 @@ define
 				var tmpRecordTemplate = _.template($(_Config.DOMTemplateMap.Delete).text());
 
 				// Display the delete confirmation
-				$(_Config.DOMContainerMap.Delete).html(tmpRecordTemplate({Record : pRecord, Pict: _Pict}));
+				$(_Config.DOMContainerMap.Delete).html(tmpRecordTemplate({Record : pRecord, Pict: _Pict, DAL: _DataOperations}));
 
 				if ('DeleteConfirmation' in _Config.PostOperationHooks)
 					_Config.PostOperationHooks.DeleteConfirmation(pRecord);

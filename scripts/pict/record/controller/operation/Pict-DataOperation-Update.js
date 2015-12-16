@@ -51,7 +51,7 @@ define
 				var tmpCancelURL =  (typeof(pCancelURL) === 'undefined') ? _Config.DataSetHash+'read/'+pRecord[_Config.DataSetGUID] : pCancelURL;
 				var tmpRecordTemplate = _.template($(_Config.DOMTemplateMap.Update).text());
 
-				$(_Config.DOMContainerMap.Update).html(tmpRecordTemplate({Record : pRecord, CancelURL: tmpCancelURL, Pict: _Pict}));
+				$(_Config.DOMContainerMap.Update).html(tmpRecordTemplate({Record : pRecord, CancelURL: tmpCancelURL, Pict: _Pict, DAL: _DataOperations}));
 
 				if (typeof(fPostFormDisplayHook) === 'function')
 					fPostFormDisplayHook(pRecord);

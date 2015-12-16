@@ -39,7 +39,7 @@ define
 
 				// Now render the rows
 				// ...The logic for enumeration, counting, etc. is expected in in the template.
-				$(_Config.DOMContainerMap.Rows).html(tmpRowsTemplate({ Records:pRecords, Pict:_Pict, Options:pOptions }));
+				$(_Config.DOMContainerMap.Rows).html(tmpRowsTemplate({ Records:pRecords, Pict:_Pict, Options:pOptions, DAL: _DataOperations}));
 			};
 
 			// Create the default request configuration object.
@@ -190,7 +190,7 @@ define
 			var DisplayListContainer = function (pCustomParameter, pPageIndex, pEntriesPerPage)
 			{
 				var tmpRecordListContainerTemplate = _.template($(_Config.DOMTemplateMap.Table).text());
-				$(_Config.DOMContainerMap.Table).html(tmpRecordListContainerTemplate({ Pict: _Pict }));
+				$(_Config.DOMContainerMap.Table).html(tmpRecordListContainerTemplate({ Pict: _Pict, DAL: _DataOperations }));
 
 				if ('DisplayListContainer' in _Config.PostOperationHooks)
 					_Config.PostOperationHooks.DisplayListContainer(pCustomParameter, pPageIndex, pEntriesPerPage);

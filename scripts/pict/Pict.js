@@ -24,7 +24,7 @@ define
 
 		var _SitePrefix = 'Pict';
 
-		var _PictRouter = PictRouter;;
+		var _PictRouter = PictRouter;
 		// Create a Backbone router variable
 		var _Router = false;
 

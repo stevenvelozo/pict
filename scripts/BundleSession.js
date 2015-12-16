@@ -52,6 +52,8 @@ define
 			{
 			};
 */
+			_Pict.session.Login('Betty','Betty');
+
 			var oBundleController = (
 			{
 			});

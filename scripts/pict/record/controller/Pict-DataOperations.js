@@ -13,11 +13,13 @@ define
 (
 	['pict/Pict',
 		'pict/record/controller/Pict-DataOperations-Config',
+		'pict/ui/templating/Pict-UI-RecordTemplateMacros',
 		'pict/record/controller/operation/Pict-DataOperation-Read', 'pict/record/controller/operation/Pict-DataOperation-ReadList', 'pict/record/controller/operation/Pict-DataOperation-Count',
 		'pict/record/controller/operation/Pict-DataOperation-Update', 'pict/record/controller/operation/Pict-DataOperation-Create',
 		'pict/record/controller/operation/Pict-DataOperation-Delete'],
 	function(Pict,
 		PictDataOperationsConfig, 
+		PictUIRecordTemplateMacros,
 		PictDataOperationRead, PictDataOperationReadList, PictDataOperationCount,
 		PictDataOperationUpdate, PictDataOperationCreate,
 		PictDataOperationDelete)
@@ -28,6 +30,8 @@ define
 
 			// This contains all state for the record data operations and UX
 			var _Config = PictDataOperationsConfig(pDataSetHash, pMeadowHash, _Pict);
+
+			var _RecordTemplateMacros = PictUIRecordTemplateMacros;
 
 			var _Behaviors = {};
 
@@ -73,8 +77,14 @@ define
 				ParseFilter: ParseFilter
 			});
 
+			// Expose the pict property, for meta templates and such
+			Object.defineProperty(oDataOperation, 'Pict', {get: function() { return _Pict; }});
+
 			// Wireup the Config object.
 			Object.defineProperty(oDataOperation, 'Config', {get: function() { return _Config; }});
+
+			// Wireup the Record Template Macro object.
+			Object.defineProperty(oDataOperation, 'RecordTemplates', {get: function() { return _RecordTemplateMacros; }});
 
 			// Create the behavior sets
 			_Behaviors.Read = PictDataOperationRead(oDataOperation, _Pict);
