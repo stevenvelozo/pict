@@ -1,0 +1,21 @@
+{
+  "name": "pict",
+  "description": "Pict browser library.",
+  "main": "source/Pict.js",
+  "authors": [
+    "steven velozo <steven@velozo.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/stevenvelozo/pict",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
