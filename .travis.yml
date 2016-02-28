@@ -5,6 +5,8 @@ node_js:
   - "0.12"
   - "0.11"
 addons:
+  code_climate:
+    repo_token: cf43f6eac54da4cd49c803d61f437107260dd2ef70ce81d804ae173df3f54121
 after_success:
   - npm run coverage
 after_script:

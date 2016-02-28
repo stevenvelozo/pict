@@ -19,7 +19,7 @@ libGulp.task('minified',
 		// set up the custom browserify instance for this task
 		var tmpBrowserify = libBrowserify(
 		{
-			entries: './source/Pict.js',
+			entries: './source/Pict-Browser-Shim.js',
 			debug: true
 		});
 		//tmpBrowserify.ignore('underscore');
@@ -45,7 +45,7 @@ libGulp.task('debug',
 		// set up the custom browserify instance for this task
 		var tmpBrowserify = libBrowserify(
 		{
-			entries: './source/Pict.js',
+			entries: './source/Pict-Browser-Shim.js',
 			debug: true
 		});
 		// Until we bundle modules with the right globals, don't worry about this.
@@ -57,3 +57,9 @@ libGulp.task('debug',
 					.on('error', libGulpUtil.log)
 			.pipe(libGulp.dest('./dist/'));
 	});
+
+libGulp.task
+(
+	'build',
+	['debug', 'minified']
+);
