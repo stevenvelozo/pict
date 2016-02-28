@@ -37,7 +37,7 @@ suite
 				test
 				(
 					'The class should initialize itself into a happy little object.',
-					function()
+					function(fDone)
 					{
 						var testScope = {};
 						var testPict = require('../source/Pict.js').initialize(_MockSettings, testScope);
@@ -47,23 +47,25 @@ suite
 							.that.is.a('object');
 						Expect(testPict.settings)
 							.to.be.a('object');
+						fDone();
 					}
 				);
 				test
 				(
 					'Try with a global scope...',
-					function()
+					function(fDone)
 					{
 						var testPict = require('../source/Pict.js').initialize(_MockSettings);
 						Expect(testPict).to.be.an('object', 'Pict should initialize as an object directly from the require statement.');
 						Expect(global)
 							.to.have.a.property('pict')
 							.that.is.a('object');
+						fDone();
 					}
 				);
 				test
 				(
-					'Explicitly set a "window" and "document" global to test browser workability',
+					'Explicitly set a "window" and "document" global to test browser workability (the virtual dom is slow to initialize)',
 					function(fDone)
 					{
 						var libJSDom = require("jsdom");
@@ -90,13 +92,13 @@ suite
 		);
 		suite
 		(
-			'Logging',
+			'Logging Tests',
 			function()
 			{
 				test
 				(
 					'Each log channel should work.',
-					function()
+					function(fDone)
 					{
 						var testScope = {};
 						var testPict = require('../source/Pict.js').initialize(_MockSettings, testScope);
@@ -128,6 +130,8 @@ suite
 						testPict.log.debug('Settings: ', testPict.settings);
 
 						testPict.log.logTimeDelta(tmpTestStart, 'Test Complete');
+
+						fDone();
 					}
 				);
 			}
