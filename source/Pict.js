@@ -21,14 +21,19 @@ var Pict = function()
 		// Dependencies are shared with children like this so we can share them
 		// This keeps them minified and safe to use across the browser, node and even sandboxed templates
 		var _Dependencies = {};
-		_Dependencies.underscore = require('underscore');
 		_Dependencies.jquery = require('jquery');
-		_Dependencies.backbone = require('backbone');
 		_Dependencies.moment = require('moment');
+		// TODO: Allow backbone and underscore to be turned off
+		_Dependencies.underscore = require('underscore');
+		_Dependencies.backbone = require('backbone');
 		// This module is browser-only
 		if ((typeof(window) !== 'undefined') && (typeof(document) !== 'undefined'))
 		{
 			_Dependencies.mousetrap = require('mousetrap');
+		}
+		else
+		{
+			// TODO: Mock mousetrap?
 		}
 
 		// Setup the application settings object
