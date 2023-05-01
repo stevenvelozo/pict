@@ -114,7 +114,6 @@ const libSourcemaps = require('gulp-sourcemaps');
 const libGulpUtil = require('gulp-util');
 const libBabel = require('gulp-babel');
 const libTerser = require('gulp-terser');
-const libStripComments = require('gulp-strip-comments');
 
 // Build the module for the browser
 libGulp.task('minified',
@@ -134,7 +133,6 @@ libGulp.task('minified',
 				// Add transformation tasks to the pipeline here.
 				.pipe(libBabel())
 				.pipe(libTerser())
-				.pipe(libStripComments())
 				.on('error', libGulpUtil.log)
 		.pipe(libSourcemaps.write('./'))
 		.pipe(libGulp.dest(_CONFIG.LibraryOutputFolder));
@@ -155,7 +153,6 @@ libGulp.task('debug',
 			.pipe(libVinylSourceStream(_CONFIG.LibraryUniminifiedFileName))
 			.pipe(libVinylBuffer())
 					.pipe(libBabel())
-					.pipe(libStripComments())
 					.on('error', libGulpUtil.log)
 			.pipe(libGulp.dest(_CONFIG.LibraryOutputFolder));
 	});
