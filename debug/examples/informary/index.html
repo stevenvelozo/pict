@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Informary Test Harness">
+        <meta name="author" content="">
+        <title>Sample Form</title>`
+        <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+        <script src="../../../dist/pict.js"></script>
+        <script type="text/javascript">
+//<![CDATA[
+            // Properly initialize informary for our form, and tell it to be verbose in the console
+            let _Pict = new Pict({Product: "InformarySampleForm", InformarySettings: {Settings: {Form: "SampleForm", DebugLog: true}, Context:"SampleForm", ContextGUID:"GUIDx0x0000015"}})
+            let libInformaryServiceProvider = _Pict.serviceManager.instantiateServiceProvider('Informary', _Pict.settings.InformarySettings);
+            let libInformary = libInformaryServiceProvider.informary;
+
+            // Pull informary's built-in version of JQUERY into the DOM for other libraries to use
+            window.$ = libInformary._Dependencies.jquery;
+            window.jQuery = window.$;
+
+            // Simple function to pull data from the form into the debug text area
+            var pullInformaryDataFromForm = function()
+            {
+                // Create an empty data object to stuff values into
+                var tmpDataObject = {};
+                libInformary.marshalFormToData(tmpDataObject,
+                    function(pError)
+                    {
+                        if (pError)
+                        {
+                            // The form marshalling had some kind of error!
+                            console.log('INFORMARY MARSHAL FROM FORM ERROR: '+pError);
+                            console.log(JSON.stringify(tmpDataObject,null,4));
+                        }
+
+                        $('#informaryOutput').val(JSON.stringify(tmpDataObject,null,4));
+                    });
+            };
+
+            // Simple function to push data from debug text area to form
+            var pushInformaryDataToForm = function()
+            {
+                try
+                {
+                    // Create an empty data object to stuff values into
+                    var tmpDataObject = JSON.parse($("#informaryInput").val());
+                    libInformary.marshalDataToForm(tmpDataObject,
+                        function(pError)
+                        {
+                            if (pError)
+                            {
+                                // The form marshalling had some kind of error!
+                                console.log('INFORMARY MARSHAL TO FORM ERROR: '+pError);
+                                console.log(JSON.stringify(tmpDataObject,null,4));
+                            }
+
+                            $('#informaryOutput').val(JSON.stringify(tmpDataObject,null,4));
+                        });
+                }
+                catch (pError)
+                {
+                    console.log('ERROR Trying to stuff values into the form ... likely a JSON parsing error.');
+                    console.log('Message: '+pError);
+                }
+            };
+
+            // Setup a global location for the form state to live
+            window.informaryState = {};
+            var storeInformaryState = function(fCallback)
+            {
+                var tmpCallback = (typeof(fCallback) === 'function') ? fCallback : function() {};
+                libInformary.marshalFormToData(window.informaryState,
+                    (pError) =>
+                    {
+                        if (pError)
+                        {
+                            // The form marshalling had some kind of error!
+                            this.log.error('INFORMARY MARSHAL FROM FORM ERROR: '+pError);
+                        }
+                        tmpCallback(pError, window.informaryState);
+                    });
+            };
+            var getInformaryDatum = function(pAddress, fCallback)
+            {
+                storeInformaryState(function(pError, pInformaryState)
+                    {
+                        console.log('Informary state at address ['+pAddress+']: ');
+                        console.log(JSON.stringify(libInformary.getValueAtAddress(pInformaryState, pAddress),null,4));
+                    });
+            };
+
+            var undoInformaryDataChanges = function()
+            {
+                libInformary.revertToPreviousSnapshot();
+            }
+
+            var redoInformaryDataChanges = function()
+            {
+                libInformary.reapplyNextRevertedSnapshot();
+            }
+
+            var snapshotInformaryData = function()
+            {
+                libInformary.snapshotData();
+            }
+
+            var storeInformarySourceData = function()
+            {
+                var tmpCallback = (typeof(fCallback) === 'function') ? fCallback : function() {};
+                libInformary.marshalFormToData(window.informaryState,
+                    (pError) =>
+                    {
+                        if (pError)
+                        {
+                            // The form marshalling had some kind of error!
+                            this.log.error('INFORMARY MARSHAL FROM FORM ERROR: '+pError);
+                        }
+                        libInformary.storeSourceData(window.informaryState);
+                    });
+            }
+
+            var checkInformaryState = function()
+            {
+                let tmpDataObject = libInformary.checkRecoveryState({});
+                $('#informaryCheckState').val(JSON.stringify(tmpDataObject,null,4));
+            }
+
+            var checkInformaryDeltas = function()
+            {
+                libInformary.compareCurrentStateToUndoAndRedo(
+                    (pDeltas)=>
+                    {
+                        $('#informaryDeltas').val(JSON.stringify(pDeltas,null,4));
+                    });
+            }
+
+            var restoreInformaryCheckpoint = function()
+            {
+                libInformary.restoreRecoveryScenarioData();
+            }
+
+            window.onload = function()
+            {
+                console.log('--> Informary test harness Window Onload triggered');
+                // Uncomment this line to automatically load the data below into the form after page load
+                pushInformaryDataToForm();
+                // Now spool up the global informary state object
+                storeInformaryState();
+                console.log('--> Informary test harness Window Onload completed');
+            }
+//]]>
+        </script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+    </head>
+    <body class="bg-light">
+        <div class="container">
+            <div class="row mt-5">
+                <div class="col-md-12 mt-3"><h1>Informary HTML Test Harness</div>
+                <div class="col-md-12" style="background-color:#ffffee;border-radius:10px;border:2px solid #353535;">
+                    <h4 class="mb-3 mt-3">Sample Form</h4>
+                    <form novalidate>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="workDate">Work Date</label>
+                                <input type="text" class="form-control" id="workDate" placeholder="e.g. 2010-05-19" value="" data-i-form="SampleForm" data-i-datum="Header.WorkDate">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="inspector">Inspector</label>
+                                <input type="text" class="form-control" id="inspector" placeholder="inspector name" value="" data-i-form="SampleForm" data-i-datum="Header.Inspector">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="location">Location</label>
+                            <input type="text" class="form-control" id="location" placeholder="I5 Milepost 214" data-i-form="SampleForm" data-i-datum="Header.Location.Description">
+                        </div>
+                        <div class="mb-3">
+                            <label for="location-extended">Station</label>
+                            <input type="text" class="form-control" id="location-extended" placeholder="Station 114+48 Lt" data-i-form="SampleForm" data-i-datum="Header.Location.Station">
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="work-completed" data-i-form="SampleForm" data-i-datum="Header.WorkCompleted">
+                            <label class="custom-control-label" for="work-completed">Work has been completed today</label>
+                        </div>
+                        <table class="table mt-3">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Personnel Name</th>
+                                    <th scope="col">Contractor</th>
+                                    <th scope="col">Line Item</th>
+                                    <th scope="col">Equipment</th>
+                                    <th scope="col">Hours</th>
+                                    <th scope="col">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_personnel_1" placeholder="name" data-i-form="SampleForm" data-i-datum="PersonnelName" data-i-container="PersonnelAndEquipment" data-i-index="0">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_contractor_1" placeholder="contractor" data-i-form="SampleForm" data-i-datum="Contractor" data-i-container="PersonnelAndEquipment" data-i-index="0">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_lineitem_1" placeholder="item" data-i-form="SampleForm" data-i-datum="LineItem" data-i-container="PersonnelAndEquipment" data-i-index="0">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_equipment_1" placeholder="equipment" data-i-form="SampleForm" data-i-datum="Equipment" data-i-container="PersonnelAndEquipment" data-i-index="0">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_hours_1" placeholder="hours" data-i-form="SampleForm" data-i-datum="Hours" data-i-container="PersonnelAndEquipment" data-i-index="0">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_description_1" placeholder="" data-i-form="SampleForm" data-i-datum="Description" data-i-container="PersonnelAndEquipment" data-i-index="0">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_personnel_2" placeholder="name" data-i-form="SampleForm" data-i-datum="PersonnelName" data-i-container="PersonnelAndEquipment" data-i-index="1">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_contractor_2" placeholder="contractor" data-i-form="SampleForm" data-i-datum="Contractor" data-i-container="PersonnelAndEquipment" data-i-index="1">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_lineitem_2" placeholder="item" data-i-form="SampleForm" data-i-datum="LineItem" data-i-container="PersonnelAndEquipment" data-i-index="1">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_equipment_2" placeholder="equipment" data-i-form="SampleForm" data-i-datum="Equipment" data-i-container="PersonnelAndEquipment" data-i-index="1">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_hours_2" placeholder="hours" data-i-form="SampleForm" data-i-datum="Hours" data-i-container="PersonnelAndEquipment" data-i-index="1">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_description_2" placeholder="" data-i-form="SampleForm" data-i-datum="Description" data-i-container="PersonnelAndEquipment" data-i-index="1">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_personnel_3" placeholder="name" data-i-form="SampleForm" data-i-datum="PersonnelName" data-i-container="PersonnelAndEquipment" data-i-index="2">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_contractor_3" placeholder="contractor" data-i-form="SampleForm" data-i-datum="Contractor" data-i-container="PersonnelAndEquipment" data-i-index="2">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_lineitem_3" placeholder="item" data-i-form="SampleForm" data-i-datum="LineItem" data-i-container="PersonnelAndEquipment" data-i-index="2">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_equipment_3" placeholder="equipment" data-i-form="SampleForm" data-i-datum="Equipment" data-i-container="PersonnelAndEquipment" data-i-index="2">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_hours_3" placeholder="hours" data-i-form="SampleForm" data-i-datum="Hours" data-i-container="PersonnelAndEquipment" data-i-index="2">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="row_description_3" placeholder="" data-i-form="SampleForm" data-i-datum="Description" data-i-container="PersonnelAndEquipment" data-i-index="2">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- This below is to aid in interactive testing of informary functionality -->
+            <div class="row mt-5 d-print-none">
+                <div class="col-md-12"  style="background-color:#eeffee;border-radius:10px;border:2px solid #353535;">
+                    <h4 class="mb-3 mt-3">Undo and Recovery</h4>
+                    <form novalidate>
+                        <div class="input=group mb-3">
+                            <button type="button" class="btn btn-primary" onclick="undoInformaryDataChanges()">Undo</button>
+                            <button type="button" class="btn btn-primary" onclick="redoInformaryDataChanges()">Redo</button>
+                            <button type="button" class="btn btn-primary" onclick="snapshotInformaryData()">Snapshot</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- This below is to aid in interactive testing of informary functionality -->
+            <div class="row mt-5 d-print-none">
+                <div class="col-md-12"  style="background-color:#eeffee;border-radius:10px;border:2px solid #353535;">
+                    <h4 class="mb-3 mt-3">Informary Data Testing</h4>
+                    <form novalidate>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Informary Output</span>
+                            </div>
+                            <textarea class="form-control" aria-label="Informary-Output" style="min-height:6rem;height:24rem;max-height:40rem;" id="informaryOutput">(click the button below to populate this)</textarea>
+                        </div>
+                        <div class="input=group">
+                            <button type="button" class="btn btn-primary" onclick="pullInformaryDataFromForm()">Pull JSON Data from Form to Above</button>
+                        </div>
+
+                        <hr class="w-100 mb-5 mt-3" />
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Informary Input</span>
+                            </div>
+                            <textarea class="form-control" aria-label="Informary-Input" style="min-height:6rem;height:24rem;max-height:40rem;" id="informaryInput">
+{
+    "Header": {
+        "WorkDate": "2020-11-09",
+        "Inspector": "James Smith",
+        "Location": {
+            "Description": "SB I5 Milepost 678 near Redding",
+            "Station": "Station 10+1.054 RT"
+        },
+        "WorkCompleted": "on"
+    },
+    "Rows": {
+        "Row_1": {
+            "PersonnelName": "Sally Suthers",
+            "Contractor": "ABC Demolition",
+            "LineItem": "1001 - Clearing and Grubbing",
+            "Equipment": "Ford F350 Pickup",
+            "Hours": "5",
+            "Description": "Removing bulk landscape material"
+        }
+    }
+}
+                            </textarea>
+                        </div>
+                        <div class="input=group mb-3">
+                            <button type="button" class="btn btn-success" onclick="pushInformaryDataToForm()">Push Above JSON Data to Form</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+           <!-- This below is to aid in interactive testing of informary functionality -->
+           <div class="row mt-5 d-print-none">
+            <div class="col-md-12"  style="background-color:#eeffee;border-radius:10px;border:2px solid #353535;">
+                <h4 class="mb-3 mt-3">Informary Data Testing</h4>
+                <form novalidate>
+                    <hr class="w-100 mb-5 mt-3" />
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Informary Checkpoint State</span>
+                        </div>
+                        <textarea class="form-control" aria-label="Informary-CheckState" style="min-height:6rem;height:24rem;max-height:40rem;" id="informaryCheckState">
+                        </textarea>
+                    </div>
+                    <div class="input=group mb-3">
+                        <button type="button" class="btn btn-success" onclick="storeInformarySourceData()">Store Source Data</button>
+                        <button type="button" class="btn btn-success" onclick="checkInformaryState()">Check Informary State</button>
+                        <button type="button" class="btn btn-success" onclick="restoreInformaryCheckpoint()">Restore Checkpoint State</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+           <!-- This below is to aid in interactive testing of informary undo/redo delta functionality -->
+           <div class="row mt-5 d-print-none">
+            <div class="col-md-12"  style="background-color:#eeffee;border-radius:10px;border:2px solid #353535;">
+                <h4 class="mb-3 mt-3">Informary Undo/Redo Data Delta Testing</h4>
+                <form novalidate>
+                    <hr class="w-100 mb-5 mt-3" />
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Undo/Redo Deltas</span>
+                        </div>
+                        <textarea class="form-control" aria-label="Informary-Deltas" style="min-height:6rem;height:24rem;max-height:40rem;" id="informaryDeltas">
+                        </textarea>
+                    </div>
+                    <div class="input=group mb-3">
+                        <button type="button" class="btn btn-success" onclick="checkInformaryDeltas()">Check Undo/Redo Deltas</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+            <footer class="my-5 pt-5 text-muted text-center text-small">
+                <p class="mb-1">Informary Sample Page</p>
+            </footer>
+        </div>
+    </body>
+</html>

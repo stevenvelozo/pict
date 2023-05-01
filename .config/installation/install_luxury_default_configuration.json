@@ -1,0 +1,45 @@
+{
+    "WorkspaceName": "my_cool_software",
+    "Docker":
+    {
+        "ContainerPrefix": "luxury",
+        "ImagePrefix": "luxury",
+
+        "DockerfileName": "Dockerfile_LUXURY",
+
+        "AutoGenerateLuxuryDockerfile": true,
+
+        "WebEditor":
+        {
+            "Password": "123456789",
+            "ExternalPort": 12345,
+            
+            "AutoInstallAddOns": true,
+            "AddonList":
+            {
+                "hbenl.vscode-mocha-test-adapter": true,
+                "hbenl.test-adapter-converter": true,
+		        "hbenl.vscode-test-explorer": true,
+		        "ritwickdey.LiveServer": true,
+		        "daylerees.rainglow": true,
+                "oderwat.indent-rainbow": true
+            }
+        },
+
+        "MySQL":
+        {
+            "Installation": true,
+            "Password": "123456789",
+            "ExternalPort": 13306,
+            "DatabaseName": "luxury_database",
+            "RunPopulateScript": false,
+            "PopulateScriptFile": "Database-Initialization.sql"
+        }
+    },
+    "Package-json":
+    {
+        "AutoUpdate": true,
+        "MochaTestRunCommands": false,
+        "MochaIDEConfigurations": true
+    }
+}

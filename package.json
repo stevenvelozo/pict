@@ -1,12 +1,32 @@
 {
   "name": "pict",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "Pict browser library.",
   "main": "source/Pict.js",
   "scripts": {
     "start": "node source/Pict.js",
-    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -u tdd -R spec",
-    "test": "./node_modules/mocha/bin/_mocha -u tdd -R spec"
+    "coverage": "./node_modules/.bin/nyc --reporter=lcov --reporter=text-lcov ./node_modules/mocha/bin/_mocha -- -u tdd -R spec",
+    "test": "./node_modules/.bin/mocha -u tdd -R spec",
+    "build": "./node_modules/.bin/gulp build",
+    "build-compatible": "GULP_CUSTOM_BUILD_TARGET=compatible ./node_modules/.bin/gulp build"
+  },
+  "mocha": {
+    "diff": true,
+    "extension": [
+      "js"
+    ],
+    "package": "./package.json",
+    "reporter": "spec",
+    "slow": "75",
+    "timeout": "5000",
+    "ui": "tdd",
+    "watch-files": [
+      "source/**/*.js",
+      "test/**/*.js"
+    ],
+    "watch-ignore": [
+      "lib/vendor"
+    ]
   },
   "repository": {
     "type": "git",
@@ -19,27 +39,28 @@
   },
   "homepage": "https://github.com/stevenvelozo/pict#readme",
   "devDependencies": {
-    "browserify": "^13.0.0",
-    "chai": "2.0.0",
-    "codeclimate-test-reporter": "0.0.4",
-    "coveralls": "2.11.2",
-    "gulp": "^3.9.1",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-uglify": "^1.5.3",
-    "gulp-util": "^3.0.7",
-    "istanbul": "0.3.5",
-    "jsdom": "^8.0.4",
-    "mocha": "2.1.0",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+    "@babel/core": "^7.21.5",
+    "@babel/preset-env": "^7.21.5",
+    "browserify": "^17.0.0",
+    "chai": "4.3.7",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-env": "^0.4.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-strip-comments": "^2.5.2",
+    "gulp-terser": "^2.1.0",
+    "gulp-util": "^3.0.8",
+    "jsdom": "^21.1.1",
+    "mocha": "10.2.0",
+    "nyc": "^15.1.0",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0"
   },
   "dependencies": {
-    "async": "^0.9.0",
-    "backbone": "^1.2.3",
-    "fable-settings": "^1.0.1",
-    "jquery": "^2.2.1",
-    "moment": "^2.11.2",
-    "mousetrap": "^1.5.3",
-    "underscore": "^1.8.3"
+    "elucidator": "^1.0.7",
+    "fable": "^3.0.24",
+    "informary": "^2.0.20",
+    "manyfest": "^1.0.18",
+    "mousetrap": "^1.6.5"
   }
 }

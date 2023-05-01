@@ -6,12 +6,12 @@
 * @author      Steven Velozo <steven@velozo.com>
 */
 
-var Chai = require("chai");
-var Expect = Chai.expect;
-var Assert = Chai.assert;
+const Chai = require("chai");
+const Expect = Chai.expect;
 
+const libPict = require('../source/Pict.js');
 
-var _MockSettings = (
+const _MockSettings = (
 {
 	Product: 'MockPict',
 	ProductVersion: '0.0.0'
@@ -39,98 +39,36 @@ suite
 					'The class should initialize itself into a happy little object.',
 					function(fDone)
 					{
-						var testScope = {};
-						var testPict = require('../source/Pict.js').initialize(_MockSettings, testScope);
+						var testPict = new libPict(_MockSettings);
 						Expect(testPict).to.be.an('object', 'Pict should initialize as an object directly from the require statement.');
-						Expect(testScope)
-							.to.have.a.property('pict')
-							.that.is.a('object');
-						Expect(testPict.settings)
-							.to.be.a('object');
 						fDone();
 					}
 				);
 				test
 				(
-					'Try with a global scope...',
+					'How about a little template for the road...',
 					function(fDone)
 					{
-						var testPict = require('../source/Pict.js').initialize(_MockSettings);
-						Expect(testPict).to.be.an('object', 'Pict should initialize as an object directly from the require statement.');
-						Expect(global)
-							.to.have.a.property('pict')
-							.that.is.a('object');
+						var testPict = new libPict(_MockSettings);
+						testPict.initializeTemplateMethods();
+						testPict.appData.TestValue = 'Test';
+
+						let tmpTemplateOutput = testPict.parseTemplate('This is a test of the {~Data:AppData.TestValue~} template system.');
+						Expect(tmpTemplateOutput).to.equal('This is a test of the Test template system.', 'The template system should parse a simple template.');
 						fDone();
 					}
 				);
 				test
 				(
-					'Explicitly set a "window" and "document" global to test browser workability (the virtual dom is slow to initialize)',
+					'How about a different template test for the road...',
 					function(fDone)
 					{
-						var libJSDom = require("jsdom");
-						libJSDom.env('',
-							function(pError, pWindow)
-							{
-								// Setup the jsdom simulator to load up our module in
-								window = pWindow;
-								document = pWindow.document;
-								navigator = {platform:'node'};
+						var testPict = new libPict(_MockSettings);
+						testPict.initializeTemplateMethods();
+						testPict.appData.TestValue = 'Test';
 
-								var testPict = require('../source/Pict-Browser-Shim.js');
-
-								Expect(testPict).to.be.an('object', 'Pict should initialize as an object directly from the require statement.');
-								Expect(pWindow)
-									.to.have.a.property('pict')
-									.that.is.a('object');
-
-								fDone();
-							});
-					}
-				);
-			}
-		);
-		suite
-		(
-			'Logging Tests',
-			function()
-			{
-				test
-				(
-					'Each log channel should work.',
-					function(fDone)
-					{
-						var testScope = {};
-						var testPict = require('../source/Pict.js').initialize(_MockSettings, testScope);
-
-						var tmpTestStart = testPict.log.getTimeStamp();
-
-						Expect(testScope)
-							.to.have.a.property('pict')
-							.that.is.a('object');
-						Expect(testPict.log)
-							.to.be.a('object');
-						testPict.log.trace('Test 1');
-						testPict.log.debug('Test 2');
-						testPict.log.info('Test 3');
-						testPict.log.warning('Test 4');
-						testPict.log.error('Test 5');
-
-
-						testPict.log.logTimeDelta(tmpTestStart);
-
-						// Test time logging
-						testPict.log.logTime();
-						testPict.log.logTimeDelta(tmpTestStart);
-
-						testPict.log.logTime('Custom Timestamp Message');
-						testPict.log.logTimeDelta(tmpTestStart);
-
-						// Exercise object logging
-						testPict.log.debug('Settings: ', testPict.settings);
-
-						testPict.log.logTimeDelta(tmpTestStart, 'Test Complete');
-
+						let tmpTemplateOutput = testPict.parseTemplate('This is a test of the {~Data:AppData.TestValue~} template system: Dollars {~Dollars:Record.Values[0]~} or Digits {~Digits:Record.Values[0]~}.', {Values: [35.5, 42]});
+						Expect(tmpTemplateOutput).to.equal('This is a test of the Test template system: Dollars $35.50 or Digits 35.50.', 'The template system should parse a simple template.');
 						fDone();
 					}
 				);

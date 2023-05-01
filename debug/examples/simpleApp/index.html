@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Test Harness">
+        <meta name="author" content="">
+
+        <title>Sample Form</title>`
+
+        <script type="text/javascript">
+//<![CDATA[
+        console.log('Good luck!');
+
+        function doFirstThing()
+        {
+            console.log('doFirstThing()');
+        }
+
+        function doSecondThing()
+        {
+            console.log('doSecondThing()');
+        }
+//]]>
+        </script>
+    </head>
+    <body class="bg-light">
+        <h1>Test Harness Page</h1>
+
+        <!-- A container for the Navigation to be displayed in. -->
+        <div id="applicationNavigation"></div>
+
+        <!-- A container for the Application to live in. -->
+        <div id="applicationContainer"></div>
+
+        <div id="debugContainer">
+            <!-- This below is to aid in interactive testing of the top functionality -->
+            <div style="background-color:#eeffee;border-radius:10px;border:2px solid #353535;margin: 4em;">
+                <h2>Top Data</h2>
+                <form novalidate>
+                    <textarea style="min-height:6rem;height:24rem;max-height:40rem;width:75%;" id="dataTop"></textarea>
+                    <br />
+                    <button type="button" onclick="doFirstThing()">Go</button>
+                </form>
+            </div>
+
+            <!-- This below is to aid in interactive testing of the bottom functionality -->
+            <div style="background-color:#eeffee;border-radius:10px;border:2px solid #353535;margin: 4em;">
+                <h2>Bottom Data</h2>
+                <form novalidate>
+                    <textarea style="min-height:6rem;height:24rem;max-height:40rem;width:75%;" id="dataBottom"></textarea>
+                    <br />
+                    <button type="button" onclick="doSecondThing()">Stop</button>
+                </form>
+            </div>
+        </div>
+
+
+        <!-- A container for the Side Panel to be displayed in. -->
+        <div id="applicationSidePanel"></div>
+
+        <!-- Pict Library -->
+        <script src="../../../dist/pict.compatible.js"></script>
+    </body>
+</html>

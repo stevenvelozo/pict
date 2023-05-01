@@ -1,0 +1,11 @@
+{
+	"EntrypointInputSourceFile": "./source/Pict-Browser-Shim.js",
+
+	"LibraryObjectName": "Pict",
+
+	"LibraryOutputFolder": "./dist/",
+
+	"LibraryUniminifiedFileName": "pict.js",
+
+	"LibraryMinifiedFileName": "pict.min.js"
+}
