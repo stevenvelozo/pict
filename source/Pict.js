@@ -4,6 +4,10 @@
 */
 const libFable = require('fable');
 
+// Pict Services
+const libPictTemplateProvider = require('./Pict-Template-Provider.js');
+
+// External Library Services
 const libFableServiceManyfest = require('./Pict-Fable-Service-Manyfest.js');
 const libFableServiceElucidator = require('./Pict-Fable-Service-Elucidator.js');
 const libFableServiceInformary = require('./Pict-Fable-Service-Informary.js');
@@ -21,18 +25,23 @@ class Pict
 
 		this.serviceManager = this.fable.serviceManager;
 
+		this.fable.serviceManager.addServiceType('TemplateProvider', libPictTemplateProvider);
+
 		this.fable.serviceManager.addServiceType('Manifest', libFableServiceManyfest);
 		this.fable.serviceManager.addServiceType('Solver', libFableServiceElucidator);
 		this.fable.serviceManager.addServiceType('Informary', libFableServiceInformary);
 
 		// Register the services
+
+		// The templateProvider provides a basic key->template mapping with default fallback capabilities
+		this.templateProvider = this.fable.serviceManager.instantiateServiceProvider('TemplateProvider', {}, 'defaultTemplateProvider');
+
 		this.defaultTemplateProcessor = this.fable.serviceManager.instantiateServiceProvider('MetaTemplate', {}, 'defaultTemplateProcessor');
 		this._DefaultTemplateMethodsInitialized = false;
 
 		this.manifestServiceProvider = this.fable.serviceManager.instantiateServiceProvider('Manifest', {}, 'defaultManifest');
 		this.manifest = this.manifestServiceProvider.manifest;
 
-		this._TemplateContainer = {};
 
 		this.appData = {};
 	}
@@ -114,6 +123,18 @@ class Pict
 	parseTemplate (pTemplateString, pData)
 	{
 		return this.defaultTemplateProcessor.parseString(pTemplateString, pData);
+	}
+
+	parseTemplateByHash (pTemplateHash, pData)
+	{
+		let tmpTemplateString = this.templateProvider.getTemplate(pTemplateHash);
+
+		// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
+		if (!tmpTemplateString)
+		{
+			return '';
+		}
+		return this.parseTemplate(tmpTemplateString, pData);
 	}
 };
 

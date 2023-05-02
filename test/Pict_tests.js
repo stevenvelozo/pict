@@ -17,6 +17,18 @@ const _MockSettings = (
 	ProductVersion: '0.0.0'
 });
 
+const _QuantityTemplate = `
+<td>{~Data:Record.worktype_String~}</td>
+<td align="center">{~Data:Record.itemnumber~}</td>
+<td width="45%">{~Data:Record.description~}</td>
+<td align="left">{~Data:Record.units~}</td>
+<td align="right">{~Dollars:Record.costperunit~}</td>
+<td align="right">{~Digits:Record.quantity~}</td>
+<td align="right">{~Dollars:Record.amount~}</td>
+`;
+
+const _QuantityRecord = require('./data/SampleRecord-Quantity.json');
+
 suite
 (
 	'Pict',
@@ -69,29 +81,56 @@ suite
 
 						let tmpTemplateOutput = testPict.parseTemplate('This is a test of the {~Data:AppData.TestValue~} template system: Dollars {~Dollars:Record.Values[0]~} or Digits {~Digits:Record.Values[0]~}.', {Values: [35.5, 42]});
 						Expect(tmpTemplateOutput).to.equal('This is a test of the Test template system: Dollars $35.50 or Digits 35.50.', 'The template system should parse a simple template.');
-						let tmpTemplateOutput2 = testPict.parseTemplate(`
-<td>{~Data:Record.worktype_String~}</td>
-<td align="center">{~Data:Record.itemnumber~}</td>
-<td width="45%">{~Data:Record.description~}</td>
-<td align="left">{~Data:Record.units~}</td>
-<td align="right">{~Dollars:Record.costperunit~}</td>
-<td align="right">{~Digits:Record.quantity~}</td>
-<td align="right">{~Dollars:Record.amount~}</td>
-`, {
-    "addressprefix": "MaterialsOnHand.UUID1",
-    "idrecord": 1,
-    "description": "Stockpile Qty Obs - January 25",
-    "quantity": 2593.78,
-    "units": "LNFT",
-    "costperunit": "0.0",
-    "worktype": 310381,
-    "worktype_String": "0032 Horizontal Directional Drill (Carrier Conduit)",
-    "worktype_StringAbbreviated": "0032",
-    "worktype_PayItems": "TS-728-37007",
-    "itemnumber": "TS-728-37007"
-});
-//						Expect(tmpTemplateOutput2).to.equal('This is a test of the Test template system: Dollars $35.50 or Digits 35.50.', 'The template system should parse a simple template.');
 						fDone();
+					}
+				);
+				test
+				(
+					'Use the template manager a bit...',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+						testPict.initializeTemplateMethods();
+
+						testPict.templateProvider.addTemplate('Quantity', _QuantityTemplate);
+
+						let tmpTemplateOutput = testPict.parseTemplateByHash('Quantity', _QuantityRecord);
+						Expect(tmpTemplateOutput).to.equal(`
+<td>0099 Horizontal Carrier Conduit Directional Drill</td>
+<td align="center">OU-001-19819</td>
+<td width="45%">Directional Bore Conduit</td>
+<td align="left">LNFT</td>
+<td align="right">$852.00</td>
+<td align="right">867.53</td>
+<td align="right">--</td>
+`, 'The template system should parse a simple template from a hash.');
+
+						Expect(testPict.parseTemplateByHash('ThisTemplateDoesNotExist', _QuantityRecord)).to.equal('', 'The template system should return an empty string if the template does not exist.');
+
+						return fDone();
+					}
+				);
+				test
+				(
+					'Try some defaults for the template manager...',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+						testPict.initializeTemplateMethods();
+
+						testPict.templateProvider.addDefaultTemplate('-ListTitle', '<h1>List of {~Data:AppData.EntityName~}s</h1>');
+						testPict.templateProvider.addDefaultTemplate('-ListRow', '<p>{~Data:Record.Name~}</p>');
+
+						testPict.appData.EntityName = 'Band';
+
+						Expect(testPict.templateProvider.templates.hasOwnProperty('Quantity-ListTitle')).to.equal(false, 'No template should exist before it is either set explicitly or accessed from a default.');
+						Expect(testPict.parseTemplateByHash('Quantity-ListTitle', _QuantityRecord)).to.equal('<h1>List of Bands</h1>', 'The template system should parse a simple default template from a hash.');
+
+						// The second path should have the template set!
+						Expect(testPict.templateProvider.templates.hasOwnProperty('Quantity-ListTitle')).to.equal(true, 'The template system should have a default template set for Quantity-ListTitle after accessing it once.');
+						Expect(testPict.parseTemplateByHash('Quantity-ListTitle', _QuantityRecord)).to.equal('<h1>List of Bands</h1>', 'The template system should parse a simple default template from a hash.');
+
+						return fDone();
 					}
 				);
 			}

@@ -1,6 +1,6 @@
 {
   "name": "pict",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Pict browser library.",
   "main": "source/Pict.js",
   "scripts": {
@@ -50,7 +50,7 @@
     "gulp-strip-comments": "^2.5.2",
     "gulp-terser": "^2.1.0",
     "gulp-util": "^3.0.8",
-    "jsdom": "^21.1.1",
+    "jsdom": "^21.1.2",
     "mocha": "10.2.0",
     "nyc": "^15.1.0",
     "vinyl-buffer": "^1.0.1",
@@ -60,7 +60,7 @@
     "elucidator": "^1.0.7",
     "fable": "^3.0.26",
     "informary": "^2.0.20",
-    "manyfest": "^1.0.18",
+    "manyfest": "^1.0.19",
     "mousetrap": "^1.6.5"
   }
 }

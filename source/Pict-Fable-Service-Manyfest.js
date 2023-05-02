@@ -10,17 +10,12 @@ class FableServiceManyfest extends libFableServiceBase
 
         this.serviceType = 'Manifest';
 
-        this.manyfest = false;
-
-        if (JSON.stringify(this.options) != '{}')
+        if (JSON.stringify(this.options) == '{}')
         {
-            this.manyfest = new libManyfest(this.options);
-        }
-        else
-        {
-            this.manyfest = new libManyfest();
+            this.options = { Scope:'PictDefault', Descriptors: {} };
         }
 
+        this.manyfest = new libManyfest(this.options);
         // Kinda the same thing, yo
         this.manifest = this.manyfest;
 	}

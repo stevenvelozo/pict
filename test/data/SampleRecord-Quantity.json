@@ -1,0 +1,13 @@
+{
+    "addressprefix": "Content.UUID001",
+    "idrecord": 1,
+    "description": "Directional Bore Conduit",
+    "quantity": 867.5309,
+    "units": "LNFT",
+    "costperunit": "852.0",
+    "worktype": 310381,
+    "worktype_String": "0099 Horizontal Carrier Conduit Directional Drill",
+    "worktype_StringAbbreviated": "0099",
+    "worktype_PayItemSet": "OU-001-19819",
+    "itemnumber": "OU-001-19819"
+}
