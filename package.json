@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "elucidator": "^1.0.7",
-    "fable": "^3.0.25",
+    "fable": "^3.0.26",
     "informary": "^2.0.20",
     "manyfest": "^1.0.18",
     "mousetrap": "^1.6.5"

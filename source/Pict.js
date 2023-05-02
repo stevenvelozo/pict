@@ -1,5 +1,4 @@
 /**
-* Pict browser shim loader
 * @license MIT
 * @author <steven@velozo.com>
 */
@@ -40,6 +39,12 @@ class Pict
 
 	initializeTemplateMethods(fExtraTemplateMethods)
 	{
+		/*
+		 *
+		 * To stave off madness, these are inefficient for now.  The wkhtmltopdf renderer leaves much to be desired
+		 * in the way of feedback with regards to javascript compatibility.
+		 *
+		 */
 		if (!this._DefaultTemplateMethodsInitialized)
 		{
 			this.defaultTemplateProcessor.addPattern('{~Data:', '~}',
@@ -50,10 +55,9 @@ class Pict
 
 					if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
 					{
-						console.log('undefined!');
+						//console.log('undefined!');
 						return '';
 					}
-
 					return tmpValue;
 				});
 
@@ -61,18 +65,22 @@ class Pict
 				(pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
-					let tmpValue = this.manifest.getValueAtAddress({AppData: this.appData, Record: pData}, tmpHash);
+					let tmpColumnData = this.manifest.getValueAtAddress({AppData: this.appData, Record: pData}, tmpHash);
 
-					return this.fable.DataArithmatic.formatterDollars(tmpValue);
+					let tmpValue = this.fable.DataArithmatic.formatterDollars(tmpColumnData);
+
+					return tmpValue;
 				});
 
 			this.defaultTemplateProcessor.addPattern('{~Digits:', '~}',
 				(pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
-					let tmpValue = this.manifest.getValueAtAddress({AppData: this.appData, Record: pData}, tmpHash);
+					let tmpColumnData = this.manifest.getValueAtAddress({AppData: this.appData, Record: pData}, tmpHash);
 
-					return this.fable.DataArithmatic.formatterAddCommasToNumber(this.fable.DataArithmatic.formatterRoundNumber(tmpValue, 2));
+					let tmpValue = this.fable.DataArithmatic.formatterAddCommasToNumber(this.fable.DataArithmatic.formatterRoundNumber(tmpColumnData, 2));
+
+					return tmpValue;
 				});
 
 			this.defaultTemplateProcessor.addPattern('{~NotEmpty:', '~}',
@@ -86,17 +94,17 @@ class Pict
 						return '';
 					}
 
-					let tmpValue = this.manifest.getValueAtAddress({AppData: this.appData, Record: pData}, tmpHashParts[0]);
+					let tmpTruthiness = this.manifest.getValueAtAddress({AppData: this.appData, Record: pData}, tmpHashParts[0]);
+
+					let tmpValue = '';
 
 					// For now just check truthiness
-					if (tmpValue)
+					if (tmpTruthiness)
 					{
-						return tmpHashParts[1];
+						tmpValue = tmpHashParts[1];
 					}
-					else
-					{
-						return '';
-					}
+
+					return tmpValue;
 				});
 
 			this._DefaultTemplateMethodsInitialized = true;

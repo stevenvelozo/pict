@@ -69,6 +69,28 @@ suite
 
 						let tmpTemplateOutput = testPict.parseTemplate('This is a test of the {~Data:AppData.TestValue~} template system: Dollars {~Dollars:Record.Values[0]~} or Digits {~Digits:Record.Values[0]~}.', {Values: [35.5, 42]});
 						Expect(tmpTemplateOutput).to.equal('This is a test of the Test template system: Dollars $35.50 or Digits 35.50.', 'The template system should parse a simple template.');
+						let tmpTemplateOutput2 = testPict.parseTemplate(`
+<td>{~Data:Record.worktype_String~}</td>
+<td align="center">{~Data:Record.itemnumber~}</td>
+<td width="45%">{~Data:Record.description~}</td>
+<td align="left">{~Data:Record.units~}</td>
+<td align="right">{~Dollars:Record.costperunit~}</td>
+<td align="right">{~Digits:Record.quantity~}</td>
+<td align="right">{~Dollars:Record.amount~}</td>
+`, {
+    "addressprefix": "MaterialsOnHand.UUID1",
+    "idrecord": 1,
+    "description": "Stockpile Qty Obs - January 25",
+    "quantity": 2593.78,
+    "units": "LNFT",
+    "costperunit": "0.0",
+    "worktype": 310381,
+    "worktype_String": "0032 Horizontal Directional Drill (Carrier Conduit)",
+    "worktype_StringAbbreviated": "0032",
+    "worktype_PayItems": "TS-728-37007",
+    "itemnumber": "TS-728-37007"
+});
+//						Expect(tmpTemplateOutput2).to.equal('This is a test of the Test template system: Dollars $35.50 or Digits 35.50.', 'The template system should parse a simple template.');
 						fDone();
 					}
 				);
