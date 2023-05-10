@@ -1,5 +1,4 @@
 /**
-* @license MIT
 * @author <steven@velozo.com>
 */
 const libFable = require('fable');
@@ -9,40 +8,28 @@ const libPictTemplateProvider = require('./Pict-Template-Provider.js');
 
 // External Library Services
 const libFableServiceManyfest = require('./Pict-Fable-Service-Manyfest.js');
-const libFableServiceElucidator = require('./Pict-Fable-Service-Elucidator.js');
-const libFableServiceInformary = require('./Pict-Fable-Service-Informary.js');
+//const libFableServiceElucidator = require('./Pict-Fable-Service-Elucidator.js');
+//const libFableServiceInformary = require('./Pict-Fable-Service-Informary.js');
 
 const libMouseTrap = require('mousetrap');
 
-class Pict
+class Pict extends libFable
 {
-	constructor(pOptions)
+	constructor(pSettings)
 	{
-		this.fable = new libFable(pOptions);
-
-		this.log = this.fable.log;
-		this.settings = this.fable.settings;
-
-		this.serviceManager = this.fable.serviceManager;
-
-		this.fable.serviceManager.addServiceType('TemplateProvider', libPictTemplateProvider);
-
-		this.fable.serviceManager.addServiceType('Manifest', libFableServiceManyfest);
-		this.fable.serviceManager.addServiceType('Solver', libFableServiceElucidator);
-		this.fable.serviceManager.addServiceType('Informary', libFableServiceInformary);
-
-		// Register the services
+		super(pSettings);
 
 		// The templateProvider provides a basic key->template mapping with default fallback capabilities
-		this.templateProvider = this.fable.serviceManager.instantiateServiceProvider('TemplateProvider', {}, 'defaultTemplateProvider');
+		this.serviceManager.addAndInstantiateServiceType('TemplateProvider', libPictTemplateProvider);
+		this.serviceManager.addAndInstantiateServiceType('Manifest', libFableServiceManyfest);
+		//this.serviceManager.addServiceType('Solver', libFableServiceElucidator);
+		//this.serviceManager.addServiceType('Informary', libFableServiceInformary);
 
-		this.defaultTemplateProcessor = this.fable.serviceManager.instantiateServiceProvider('MetaTemplate', {}, 'defaultTemplateProcessor');
+
 		this._DefaultTemplateMethodsInitialized = false;
+		this.serviceManager.instantiateServiceProvider('MetaTemplate');
 
-		this.manifestServiceProvider = this.fable.serviceManager.instantiateServiceProvider('Manifest', {}, 'defaultManifest');
-		this.manifest = this.manifestServiceProvider.manifest;
-
-
+		this.manifest = this.defaultServices.Manifest.manifest;
 		this.appData = {};
 	}
 
@@ -56,7 +43,7 @@ class Pict
 		 */
 		if (!this._DefaultTemplateMethodsInitialized)
 		{
-			this.defaultTemplateProcessor.addPattern('{~Data:', '~}',
+			this.defaultServices.MetaTemplate.addPattern('{~Data:', '~}',
 				(pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
@@ -70,29 +57,29 @@ class Pict
 					return tmpValue;
 				});
 
-			this.defaultTemplateProcessor.addPattern('{~Dollars:', '~}',
+			this.defaultServices.MetaTemplate.addPattern('{~Dollars:', '~}',
 				(pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpColumnData = this.manifest.getValueAtAddress({AppData: this.appData, Record: pData}, tmpHash);
 
-					let tmpValue = this.fable.DataArithmatic.formatterDollars(tmpColumnData);
+					let tmpValue = this.defaultServices.DataFormat.formatterDollars(tmpColumnData);
 
 					return tmpValue;
 				});
 
-			this.defaultTemplateProcessor.addPattern('{~Digits:', '~}',
+			this.defaultServices.MetaTemplate.addPattern('{~Digits:', '~}',
 				(pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpColumnData = this.manifest.getValueAtAddress({AppData: this.appData, Record: pData}, tmpHash);
 
-					let tmpValue = this.fable.DataArithmatic.formatterAddCommasToNumber(this.fable.DataArithmatic.formatterRoundNumber(tmpColumnData, 2));
+					let tmpValue = this.defaultServices.DataFormat.formatterAddCommasToNumber(this.defaultServices.DataFormat.formatterRoundNumber(tmpColumnData, 2));
 
 					return tmpValue;
 				});
 
-			this.defaultTemplateProcessor.addPattern('{~NotEmpty:', '~}',
+			this.defaultServices.MetaTemplate.addPattern('{~NotEmpty:', '~}',
 				(pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
@@ -122,12 +109,12 @@ class Pict
 
 	parseTemplate (pTemplateString, pData)
 	{
-		return this.defaultTemplateProcessor.parseString(pTemplateString, pData);
+		return this.defaultServices.MetaTemplate.parseString(pTemplateString, pData);
 	}
 
 	parseTemplateByHash (pTemplateHash, pData)
 	{
-		let tmpTemplateString = this.templateProvider.getTemplate(pTemplateHash);
+		let tmpTemplateString = this.defaultServices.TemplateProvider.getTemplate(pTemplateHash);
 
 		// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
 		if (!tmpTemplateString)

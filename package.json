@@ -1,6 +1,6 @@
 {
   "name": "pict",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "Pict browser library.",
   "main": "source/Pict.js",
   "scripts": {
@@ -57,10 +57,8 @@
     "vinyl-source-stream": "^2.0.0"
   },
   "dependencies": {
-    "elucidator": "^1.0.7",
-    "fable": "^3.0.26",
-    "informary": "^2.0.20",
-    "manyfest": "^1.0.19",
+    "fable": "^3.0.30",
+    "manyfest": "^1.0.20",
     "mousetrap": "^1.6.5"
   }
 }

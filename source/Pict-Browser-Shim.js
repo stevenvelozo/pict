@@ -1,6 +1,5 @@
 /**
 * Pict browser shim loader
-* @license MIT
 * @author <steven@velozo.com>
 */
 

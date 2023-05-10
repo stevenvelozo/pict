@@ -92,7 +92,7 @@ suite
 						var testPict = new libPict(_MockSettings);
 						testPict.initializeTemplateMethods();
 
-						testPict.templateProvider.addTemplate('Quantity', _QuantityTemplate);
+						testPict.defaultServices.TemplateProvider.addTemplate('Quantity', _QuantityTemplate);
 
 						let tmpTemplateOutput = testPict.parseTemplateByHash('Quantity', _QuantityRecord);
 						Expect(tmpTemplateOutput).to.equal(`
@@ -118,16 +118,16 @@ suite
 						var testPict = new libPict(_MockSettings);
 						testPict.initializeTemplateMethods();
 
-						testPict.templateProvider.addDefaultTemplate('-ListTitle', '<h1>List of {~Data:AppData.EntityName~}s</h1>');
-						testPict.templateProvider.addDefaultTemplate('-ListRow', '<p>{~Data:Record.Name~}</p>');
+						testPict.defaultServices.TemplateProvider.addDefaultTemplate('-ListTitle', '<h1>List of {~Data:AppData.EntityName~}s</h1>');
+						testPict.defaultServices.TemplateProvider.addDefaultTemplate('-ListRow', '<p>{~Data:Record.Name~}</p>');
 
 						testPict.appData.EntityName = 'Band';
 
-						Expect(testPict.templateProvider.templates.hasOwnProperty('Quantity-ListTitle')).to.equal(false, 'No template should exist before it is either set explicitly or accessed from a default.');
+						Expect(testPict.defaultServices.TemplateProvider.templates.hasOwnProperty('Quantity-ListTitle')).to.equal(false, 'No template should exist before it is either set explicitly or accessed from a default.');
 						Expect(testPict.parseTemplateByHash('Quantity-ListTitle', _QuantityRecord)).to.equal('<h1>List of Bands</h1>', 'The template system should parse a simple default template from a hash.');
 
 						// The second path should have the template set!
-						Expect(testPict.templateProvider.templates.hasOwnProperty('Quantity-ListTitle')).to.equal(true, 'The template system should have a default template set for Quantity-ListTitle after accessing it once.');
+						Expect(testPict.defaultServices.TemplateProvider.templates.hasOwnProperty('Quantity-ListTitle')).to.equal(true, 'The template system should have a default template set for Quantity-ListTitle after accessing it once.');
 						Expect(testPict.parseTemplateByHash('Quantity-ListTitle', _QuantityRecord)).to.equal('<h1>List of Bands</h1>', 'The template system should parse a simple default template from a hash.');
 
 						return fDone();
