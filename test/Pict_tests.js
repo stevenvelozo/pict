@@ -118,8 +118,8 @@ suite
 						var testPict = new libPict(_MockSettings);
 						testPict.initializeTemplateMethods();
 
-						testPict.defaultServices.TemplateProvider.addDefaultTemplate('-ListTitle', '<h1>List of {~Data:AppData.EntityName~}s</h1>');
-						testPict.defaultServices.TemplateProvider.addDefaultTemplate('-ListRow', '<p>{~Data:Record.Name~}</p>');
+						testPict.defaultServices.TemplateProvider.addDefaultTemplate('','-ListTitle', '<h1>List of {~Data:AppData.EntityName~}s</h1>');
+						testPict.defaultServices.TemplateProvider.addDefaultTemplate('','-ListRow', '<p>{~Data:Record.Name~}</p>');
 
 						testPict.appData.EntityName = 'Band';
 

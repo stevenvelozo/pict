@@ -103,6 +103,17 @@ class Pict extends libFable
 					return tmpValue;
 				});
 
+			this.defaultServices.MetaTemplate.addPattern('{~~', '~~}',
+				(pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpColumnData = this.manifest.getValueAtAddress({AppData: this.appData, Record: pData}, tmpHash);
+
+					let tmpValue = this.defaultServices.DataFormat.formatterAddCommasToNumber(this.defaultServices.DataFormat.formatterRoundNumber(tmpColumnData, 2));
+
+					return tmpValue;
+				});
+
 			this._DefaultTemplateMethodsInitialized = true;
 		}
 	}

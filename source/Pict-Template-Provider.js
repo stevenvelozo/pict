@@ -13,10 +13,7 @@ class PictTemplateProvider extends libFableServiceBase
         // Default templates are stored by prefix.
         // The longest prefix match is used.
         // Case sensitive.
-        this.defaultTemplates = {};
-        // Sorted list of default templates by length.
-        // Since this is a sorted list of case sensitive keys by length, it shouldn't be possible to have collisions.
-        this.defaultTemplateHashes = [];
+        this.defaultTemplates = [];
 
         // This function can be overloaded to load templates from a database, in a page or other source.
         this.loadTemplateFunction = (pTemplateHash) => { return false; };
@@ -27,20 +24,25 @@ class PictTemplateProvider extends libFableServiceBase
         this.templates[pTemplateHash] = pTemplate;
     }
 
-    addDefaultTemplate(pTemplateHash, pTemplate)
+    addDefaultTemplate(pPrefix, pPostfix, pTemplate)
     {
+        let tmpDefaultTemplate = {
+            prefix: pPrefix,
+            postfix: pPostfix,
+            template: pTemplate
+        };
         if (typeof(pTemplate) != 'string')
         {
             this.log.error('PictTemplateProvider.addDefaultTemplate: pTemplate is not a string.');
         }
-        this.defaultTemplates[pTemplateHash] = pTemplate;
-        this.defaultTemplateHashes = Object.keys(this.defaultTemplates).sort((a, b) => b.length - a.length);
+        this.defaultTemplates.push(tmpDefaultTemplate);
     }
 
     checkDefaultTemplateHash(pTemplateHash)
     {
         /*
-         * Default templates are managed by postfix.  The use case is things like titles, headers, list wrappers, rows, etc.
+         * Default templates are managed by postfix and prefix.  The use case is things like titles, headers, list 
+         * wrappers, rows, etc.
          *
          * So we might have a default template for a list wrapper and it should expect "-ListWrap" as the postfix.
          * And we might have a default template for a list row and it should expect "-ListRow" as the postfix.
@@ -48,18 +50,12 @@ class PictTemplateProvider extends libFableServiceBase
          * 
          * The idea is to allow fallbacks on defaults.
          */
-        let tmpTemplateHashLength = pTemplateHash.length;
-
-        for (let i = 0; i < this.defaultTemplateHashes.length; i++)
+        for (let i = 0; i < this.defaultTemplates.length; i++)
         {
-            // TODO: This is a bad way to check for a postfix.
-            // TODO: Is it a good idea to set the template so next time we don't have to check the defaults?
-            //       * Pros: Faster.
-            //       * Cons: If we later add another default template with a closer match, it won't get looked up.
-            //       Faster wins for now.
-            if (pTemplateHash.indexOf(this.defaultTemplateHashes[i]) == tmpTemplateHashLength - this.defaultTemplateHashes[i].length)
+            if ((pTemplateHash.indexOf(this.defaultTemplates[i].postfix) == pTemplateHash.length - this.defaultTemplates[i].postfix.length)
+                && (pTemplateHash.indexOf(this.defaultTemplates[i].prefix) == 0))
             {
-                this.templates[pTemplateHash] = this.defaultTemplates[this.defaultTemplateHashes[i]];
+                this.templates[pTemplateHash] = this.defaultTemplates[i].template;
                 return this.templates[pTemplateHash];
             }
         }
