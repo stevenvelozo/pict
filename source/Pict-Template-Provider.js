@@ -1,5 +1,21 @@
 const libFableServiceBase = require('fable').ServiceProviderBase;
 
+class PictTemplate
+{
+    constructor(pHash, pTemplateContent, pSourceType, pSourceAddress, pName, pDescription)
+    {
+        this.Hash = pHash;
+
+        this.Template = pTemplateContent;
+
+        this.SourceType = (typeof(pSourceType) == 'string') ? pSourceType : 'Unknown';
+        this.SourceAddress = (typeof(pSourceAddress) == 'string') ? pSourceAddress : 'Unknown';
+
+        this.Name = (typeof(pName) == 'string') ? pName : this.Hash;
+        this.Description = (typeof(pDescription) == 'string') ? pDescription : '';
+    }
+}
+
 class PictTemplateProvider extends libFableServiceBase
 {
 	constructor(pFable, pOptions, pServiceHash)
@@ -99,3 +115,4 @@ class PictTemplateProvider extends libFableServiceBase
 }
 
 module.exports = PictTemplateProvider;
+module.exports.PictTemplate = PictTemplate;

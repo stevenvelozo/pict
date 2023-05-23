@@ -92,7 +92,7 @@ suite
 						var testPict = new libPict(_MockSettings);
 						testPict.initializeTemplateMethods();
 
-						testPict.defaultServices.TemplateProvider.addTemplate('Quantity', _QuantityTemplate);
+						testPict.Template.addTemplate('Quantity', _QuantityTemplate);
 
 						let tmpTemplateOutput = testPict.parseTemplateByHash('Quantity', _QuantityRecord);
 						Expect(tmpTemplateOutput).to.equal(`
@@ -118,21 +118,104 @@ suite
 						var testPict = new libPict(_MockSettings);
 						testPict.initializeTemplateMethods();
 
-						testPict.defaultServices.TemplateProvider.addDefaultTemplate('','-ListTitle', '<h1>List of {~Data:AppData.EntityName~}s</h1>');
-						testPict.defaultServices.TemplateProvider.addDefaultTemplate('','-ListRow', '<p>{~Data:Record.Name~}</p>');
+						testPict.Template.addDefaultTemplate('','-List-Title', '<h1>List of {~Data:AppData.EntityName~}s</h1>');
+						testPict.Template.addDefaultTemplate('','-List-Row', '<p>{~Data:Record.Name~}</p>');
 
 						testPict.appData.EntityName = 'Band';
 
-						Expect(testPict.defaultServices.TemplateProvider.templates.hasOwnProperty('Quantity-ListTitle')).to.equal(false, 'No template should exist before it is either set explicitly or accessed from a default.');
-						Expect(testPict.parseTemplateByHash('Quantity-ListTitle', _QuantityRecord)).to.equal('<h1>List of Bands</h1>', 'The template system should parse a simple default template from a hash.');
+						Expect(testPict.Template.templates.hasOwnProperty('Quantity-List-Title')).to.equal(false, 'No template should exist before it is either set explicitly or accessed from a default.');
+						Expect(testPict.parseTemplateByHash('Quantity-List-Title', _QuantityRecord)).to.equal('<h1>List of Bands</h1>', 'The template system should parse a simple default template from a hash.');
 
 						// The second path should have the template set!
-						Expect(testPict.defaultServices.TemplateProvider.templates.hasOwnProperty('Quantity-ListTitle')).to.equal(true, 'The template system should have a default template set for Quantity-ListTitle after accessing it once.');
-						Expect(testPict.parseTemplateByHash('Quantity-ListTitle', _QuantityRecord)).to.equal('<h1>List of Bands</h1>', 'The template system should parse a simple default template from a hash.');
+						Expect(testPict.Template.templates.hasOwnProperty('Quantity-List-Title')).to.equal(true, 'The template system should have a default template set for Quantity-List-Title after accessing it once.');
+						Expect(testPict.parseTemplateByHash('Quantity-List-Title', _QuantityRecord)).to.equal('<h1>List of Bands</h1>', 'The template system should parse a simple default template from a hash.');
 
 						return fDone();
 					}
 				);
+				test
+				(
+					'Entity template rendering...',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+						testPict.initializeTemplateMethods();
+
+						testPict.Entity.options.urlPrefix  = 'http://localhost:8086/1.0/';
+
+						testPict.Template.addTemplate('Book-Author-Title', '<h1>{~Data:Record.Title~}: {~Dollars:Record.IDBook~}</h1>');
+						testPict.Template.addTemplate('Book-Author-Content', '<p>{~E:Book:1|Book-Author-Title~}</p>');
+						testPict.Template.addTemplate('Book-Author-Load', '<p>{~E:Book:100~}{~D:Record.itemnumber~}</p>');
+
+						testPict.parseTemplateByHash('Book-Author-Content', {IDBook: 100},
+							(pError, pValue) =>
+							{
+								Expect(pValue).to.equal('<p><h1>The Hunger Games: $1.00</h1></p>');
+								return fDone();
+							});
+					}
+				);
+				test
+				(
+					'Entity template rendering with Parameterized Location...',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+						testPict.initializeTemplateMethods();
+
+						testPict.Entity.options.urlPrefix  = 'http://localhost:8086/1.0/';
+
+						testPict.Template.addTemplate('Book-Author-Title', '<h1>{~Data:Record.Title~}: {~Dollars:Record.IDBook~}</h1>');
+						testPict.Template.addTemplate('Book-Author-Content', '<p>{~E:Book:Record.Header.IDBook|Book-Author-Title~}</p>');
+
+						testPict.parseTemplateByHash('Book-Author-Content', {Header: {IDBook: 100}},
+							(pError, pValue) =>
+							{
+								Expect(pValue).to.equal('<p><h1>The Poisonwood Bible: $100.00</h1></p>');
+								return fDone();
+							});
+					}
+				);
+			}
+		);
+
+		test
+		(
+			'Simple Single Record GET REST Request',
+			function(fDone)
+			{
+				var testPict = new libPict(_MockSettings);
+				testPict.initializeTemplateMethods();
+
+				testPict.Entity.options.urlPrefix  = 'http://localhost:8086/1.0/';
+
+				testPict.Entity.getEntity('Author', 1,
+					(pError, pRecord) =>
+					{
+						Expect(pRecord.Name).to.equal('Jane Austen', 'The REST request should return the correct author name.');
+						testPict.log.info('Rest response: ', pRecord);
+						return fDone();
+					});
+			}
+		);
+
+		test
+		(
+			'Multi-Record GET REST Request',
+			function(fDone)
+			{
+				var testPict = new libPict(_MockSettings);
+				testPict.initializeTemplateMethods();
+
+				testPict.Entity.options.urlPrefix  = 'http://localhost:8086/1.0/';
+
+				testPict.Entity.getEntitySet('BookAuthorJoin', 'Author', [1,2,3,4,5,6,7,8,9,10],
+					(pError, pRecord) =>
+					{
+						Expect(pRecord.length).to.equal(84, 'There should be 84 records returned.');
+						//testPict.log.info('Rest response: ', pRecord);
+						return fDone();
+					});
 			}
 		);
 	}

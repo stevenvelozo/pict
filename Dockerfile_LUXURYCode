@@ -12,17 +12,63 @@ RUN sudo apt install vim curl tmux -y
 RUN echo "Building development image..."
 
 RUN echo "...installing vscode extensions..."
-RUN code-server --install-extension ritwickdey.LiveServer \
-    code-server --install-extension hbenl.vscode-mocha-test-adapter \
-    code-server --install-extension hbenl.vscode-test-explorer \
-    code-server --install-extension hbenl.test-adapter-converter \
-    code-server --install-extension daylerees.rainglow \
-    code-server --install-extension oderwat.indent-rainbow
+
+# Mocha unit testing in the sidebar
+RUN code-server --install-extension hbenl.vscode-mocha-test-adapter
+RUN code-server --install-extension hbenl.test-adapter-converter
+RUN code-server --install-extension hbenl.vscode-test-explorer
+
+# Magic indentation rainbow
+RUN code-server --install-extension oderwat.indent-rainbow
+RUN code-server --install-extension dbaeumer.vscode-eslint
+
+# Contextual git
+RUN code-server --install-extension eamodio.gitlens
+
+# Other extensions (uncomment them to have them automagic, or run this from a terminal to install in the container):
+
+# SQL Tools
+RUN code-server --install-extension mtxr.sqltools
+RUN code-server --install-extension mtxr.sqltools-driver-mysql
+
+# Microsoft's AI code completion
+# RUN code-server --install-extension  VisualStudioExptTeam.vscodeintellicode
+
+# Live server -- make sure to open up the port on the docker image
+# RUN code-server --install-extension ritwickdey.LiveServer
+
+# Quick link to required modules' documentation
+# RUN code-server --install-extension bengreenier.vscode-node-readme
+
+# Switch up fonts
+# RUN code-server --install-extension evan-buss.font-switcher
+
+# Icons
+# RUN code-server --install-extension vscode-icons-team.vscode-icons
+# RUN code-server --install-extension PKief.material-icon-theme
+
+# Hover over CSS colors to see them previewed
+# RUN code-server --install-extension bierner.color-info
+
+# An easy on the eyes color theme
+RUN code-server --install-extension daylerees.rainglow
+
+RUN echo "...configuring mariadb (mysql) server...."
+RUN sudo apt install default-mysql-server default-mysql-client -y
+RUN sudo sed -i "s|bind-address|#bind-address|g" /etc/mysql/mariadb.conf.d/50-server.cnf
+ADD ./retold-harness/MySQL-Security.sql /home/coder/MySQL-Configure-Security.sql
+ADD ./retold-harness/MySQL-Laden-Entry.sh /usr/bin/MySQL-Laden-Entry.sh
+RUN ( sudo mysqld_safe --skip-grant-tables --skip-networking & ) && sleep 5 &&  mysql -u root < /home/coder/MySQL-Configure-Security.sql
+
+# Import the initial database
+COPY ./retold-harness/model/sql_create/BookStore-CreateDatabase.mysql.sql /home/coder/MySQL-Create-Databases.sql
+RUN sudo service mariadb restart && sleep 5 && mysql -u root -p"123456789" -e "CREATE DATABASE bookstore;"
+RUN sudo service mariadb restart && sleep 5 && mysql -u root -p"123456789" bookstore < /home/coder/MySQL-Create-Databases.sql
 
 RUN echo "...mapping library specific volumes..."
-# Volume mappings for code
+
+# Volume mapping for code
 VOLUME /home/coder/pict
-# VOLUME /home/coder/pict/node_modules
 
 SHELL ["/bin/bash", "-c"]
 USER coder
@@ -37,3 +83,8 @@ RUN . ~/.nvm/nvm.sh && source ~/.bashrc && nvm install 14
 RUN . ~/.nvm/nvm.sh && source ~/.bashrc && nvm alias default 14
 
 WORKDIR /home/coder/pict
+
+# RUN . ~/.nvm/nvm.sh && source ~/.bashrc && npm install
+# RUN . /home/coder/pict/retold-harness/Bookstore-Import-Books.sh
+
+ENTRYPOINT ["/usr/bin/MySQL-Laden-Entry.sh"]
