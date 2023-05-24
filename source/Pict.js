@@ -26,12 +26,14 @@ class Pict extends libFable
 	{
 		super(pSettings);
 
+		// Fill in any default Pict settings that are not in the settings object.
+		this.settingsManager.fill(defaultPictSettings);
+
 		// The templateProvider provides a basic key->template mapping with default fallback capabilities
 		this.serviceManager.addAndInstantiateServiceType('TemplateProvider', require('./Pict-Template-Provider.js'));
 		this.serviceManager.addAndInstantiateServiceType('EntityProvider',  require('./Pict-Meadow-EntityProvider.js'));
 		this.serviceManager.addAndInstantiateServiceType('ContentAssignment',  require('./Pict-Content-Assignment.js'));
 
-		this._DefaultTemplateMethodsInitialized = false;
 		this.serviceManager.instantiateServiceProvider('MetaTemplate');
 
 		this.manifest = this.serviceManager.instantiateServiceProvider('Manifest');
@@ -40,20 +42,11 @@ class Pict extends libFable
 
 		this.Bundle = {};
 
-		this.initializeTemplateMethods();
+		this._DefaultPictTemplatesInitialized = false;
+		this.initializePictTemplates();
 	}
 
-	get Template()
-	{
-		return this.defaultServices.TemplateProvider;
-	}
-
-	get Entity()
-	{
-		return this.defaultServices.EntityProvider;
-	}
-
-	initializeTemplateMethods(fExtraTemplateMethods)
+	initializePictTemplates(fExtraTemplateMethods)
 	{
 		/*
 		 *
@@ -61,7 +54,7 @@ class Pict extends libFable
 		 * in the way of feedback with regards to javascript compatibility.
 		 *
 		 */
-		if (!this._DefaultTemplateMethodsInitialized)
+		if (!this._DefaultPictTemplatesInitialized)
 		{
 			// Expects one of the following:
 			// 		{~Entity:Book:1~}
@@ -113,17 +106,17 @@ class Pict extends libFable
 					// No Entity or EntityID
 					if (!tmpEntity || !tmpEntityID)
 					{
-						this.fable.log.warn(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]`);
+						this.log.warn(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]`);
 						return fCallback(Error(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]`), '');
 					}
 
 					// Now try to get the entity
-					this.fable.Entity.getEntity(tmpEntity, tmpEntityID,
+					this.EntityProvider.getEntity(tmpEntity, tmpEntityID,
 						(pError, pRecord) =>
 						{
 							if (pError)
 							{
-								this.fable.log.error(`Pict: Entity Render: Error getting entity [${tmpEntity}] with ID [${tmpEntityID}] for [${tmpHash}]: ${pError}`, pError);
+								this.log.error(`Pict: Entity Render: Error getting entity [${tmpEntity}] with ID [${tmpEntityID}] for [${tmpHash}]: ${pError}`, pError);
 								return fCallback(pError, '');
 							}
 
@@ -184,7 +177,7 @@ class Pict extends libFable
 					// No template hash
 					if (!tmpTemplateHash)
 					{
-						this.fable.log.warn(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`);
+						this.log.warn(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`);
 						return `Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`;
 					}
 
@@ -224,7 +217,7 @@ class Pict extends libFable
 					// No template hash
 					if (!tmpTemplateHash)
 					{
-						this.fable.log.warn(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`);
+						this.log.warn(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`);
 						return `Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`;
 					}
 
@@ -271,7 +264,7 @@ class Pict extends libFable
 					return this.defaultServices.DataFormat.formatterAddCommasToNumber(this.defaultServices.DataFormat.formatterRoundNumber(tmpColumnData, 2));
 				});
 
-			this._DefaultTemplateMethodsInitialized = true;
+			this._DefaultPictTemplatesInitialized = true;
 		}
 	}
 
@@ -347,8 +340,6 @@ class Pict extends libFable
 				return '';
 			}			
 		}
-		//if (typeof(pDataSet) == 'object')
-		//return this.defaultServices.MetaTemplate.parseString(pTemplateString, pData, fCallback);
 	}
 
 	parseTemplateSetByHash (pTemplateHash, pDataSet, fCallback)

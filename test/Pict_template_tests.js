@@ -15,7 +15,7 @@ const _SampleChocoData = require('./data/Data-Archive-org-Frankenberry.json');
 
 // Outside and inside the docker container, the port is different.
 //const _RetoldTestPort = 60086;
-const _RetoldTestPort = 60086;
+const _RetoldTestPort = 8086;
 
 const _MockSettings = (
 {
@@ -102,7 +102,7 @@ suite
 					{
 						var testPict = new libPict(_MockSettings);
 
-						testPict.Template.addTemplate('Quantity', _QuantityTemplate);
+						testPict.TemplateProvider.addTemplate('Quantity', _QuantityTemplate);
 
 						let tmpTemplateOutput = testPict.parseTemplateByHash('Quantity', _QuantityRecord);
 						Expect(tmpTemplateOutput).to.equal(`
@@ -127,11 +127,11 @@ suite
 					{
 						var testPict = new libPict(_MockSettings);
 
-						testPict.Template.addDefaultTemplate('', '-List-Title', '<h1>List of {~Data:AppData.EntityName~}s</h1>');
-						testPict.Template.addDefaultTemplate('', '-List-Row', '<p>{~Data:Record.Name~}</p>');
-						testPict.Template.addDefaultTemplate('', '-Bad-End', false);
+						testPict.TemplateProvider.addDefaultTemplate('', '-List-Title', '<h1>List of {~Data:AppData.EntityName~}s</h1>');
+						testPict.TemplateProvider.addDefaultTemplate('', '-List-Row', '<p>{~Data:Record.Name~}</p>');
+						testPict.TemplateProvider.addDefaultTemplate('', '-Bad-End', false);
 
-						testPict.Template.loadTemplateFunction = (pTemplateHash) => 
+						testPict.TemplateProvider.loadTemplateFunction = (pTemplateHash) => 
 						{
 							if (pTemplateHash == 'Foo-List-Title')
 							{
@@ -139,13 +139,13 @@ suite
 							}
 						};
 
-						Expect(testPict.Template.templates.hasOwnProperty('Foo-List-Title')).to.equal(false, 'No template should exist before it is either set explicitly or accessed from a default.');
-						testPict.Template.loadTemplate('Foo-List-Title');
-						Expect(testPict.Template.templates.hasOwnProperty('Foo-List-Title')).to.equal(true, 'The template system should have a default template set for Foo-List-Title after loading it.');
+						Expect(testPict.TemplateProvider.templates.hasOwnProperty('Foo-List-Title')).to.equal(false, 'No template should exist before it is either set explicitly or accessed from a default.');
+						testPict.TemplateProvider.loadTemplate('Foo-List-Title');
+						Expect(testPict.TemplateProvider.templates.hasOwnProperty('Foo-List-Title')).to.equal(true, 'The template system should have a default template set for Foo-List-Title after loading it.');
 
 						testPict.AppData = { Dog: {Name: 'Wilco', Age: 14, Owner: 'Jack'} }
 
-						testPict.Template.addTemplate('DogNameStuff','If this dog has a name, breakdance! {~NE:AppData.Dog.Name|<br/>~}');
+						testPict.TemplateProvider.addTemplate('DogNameStuff','If this dog has a name, breakdance! {~NE:AppData.Dog.Name|<br/>~}');
 
 						Expect(testPict.parseTemplateByHash('DogNameStuff')).to.equal('If this dog has a name, breakdance! <br/>');
 
@@ -155,11 +155,11 @@ suite
 
 						testPict.AppData.EntityName = 'Band';
 
-						Expect(testPict.Template.templates.hasOwnProperty('Quantity-List-Title')).to.equal(false, 'No template should exist before it is either set explicitly or accessed from a default.');
+						Expect(testPict.TemplateProvider.templates.hasOwnProperty('Quantity-List-Title')).to.equal(false, 'No template should exist before it is either set explicitly or accessed from a default.');
 						Expect(testPict.parseTemplateByHash('Quantity-List-Title', _QuantityRecord)).to.equal('<h1>List of Bands</h1>', 'The template system should parse a simple default template from a hash.');
 
 						// The second path should have the template set!
-						Expect(testPict.Template.templates.hasOwnProperty('Quantity-List-Title')).to.equal(true, 'The template system should have a default template set for Quantity-List-Title after accessing it once.');
+						Expect(testPict.TemplateProvider.templates.hasOwnProperty('Quantity-List-Title')).to.equal(true, 'The template system should have a default template set for Quantity-List-Title after accessing it once.');
 						Expect(testPict.parseTemplateByHash('Quantity-List-Title', _QuantityRecord)).to.equal('<h1>List of Bands</h1>', 'The template system should parse a simple default template from a hash.');
 
 						return fDone();
@@ -172,9 +172,9 @@ suite
 					{
 						var testPict = new libPict(_MockSettings);
 
-						testPict.Template.addTemplate('Book-Author-Title', '<h1>{~Data:Record.Title~}: {~Dollars:Record.IDBook~}</h1>');
-						testPict.Template.addTemplate('Book-Author-Content', '<p>{~E:Book:1|Book-Author-Title~}</p>');
-						testPict.Template.addTemplate('Book-Author-Load', '<p>{~E:Book:100~}{~D:Record.itemnumber~}</p>');
+						testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~Data:Record.Title~}: {~Dollars:Record.IDBook~}</h1>');
+						testPict.TemplateProvider.addTemplate('Book-Author-Content', '<p>{~E:Book:1|Book-Author-Title~}</p>');
+						testPict.TemplateProvider.addTemplate('Book-Author-Load', '<p>{~E:Book:100~}{~D:Record.itemnumber~}</p>');
 
 						testPict.parseTemplateByHash('Book-Author-Content', {IDBook: 100},
 							(pError, pValue) =>
@@ -191,8 +191,8 @@ suite
 					{
 						var testPict = new libPict(_MockSettings);
 
-						testPict.Template.addTemplate('Book-Author-Title', '<h1>{~Data:Record.Title~}: {~Dollars:Record.IDBook~}</h1>');
-						testPict.Template.addTemplate('Book-Author-Content', '<p>{~E:Book:Record.Header.IDBook|Book-Author-Title~}</p>');
+						testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~Data:Record.Title~}: {~Dollars:Record.IDBook~}</h1>');
+						testPict.TemplateProvider.addTemplate('Book-Author-Content', '<p>{~E:Book:Record.Header.IDBook|Book-Author-Title~}</p>');
 
 						testPict.parseTemplateByHash('Book-Author-Content', {Header: {IDBook: 100}},
 							(pError, pValue) =>
@@ -211,11 +211,11 @@ suite
 
 						testPict.AppData.RecordSet = {IDAnimal: 1, Name: 'Fido', Type: 'Dog', Age: 3};
 
-						testPict.Template.addTemplate('Book-Author-Title', '<h1>{~Data:Record.Title~}: {~Dollars:Record.IDBook~}</h1>');
-						testPict.Template.addTemplate('Book-Author-Content', '{~T:Book-Author-Title~}<p>{~E:Book:777|Book-Author-Title~}</p>');
+						testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~Data:Record.Title~}: {~Dollars:Record.IDBook~}</h1>');
+						testPict.TemplateProvider.addTemplate('Book-Author-Content', '{~T:Book-Author-Title~}<p>{~E:Book:777|Book-Author-Title~}</p>');
 
-						testPict.Template.addTemplate('Animal-View', '<p>{~Data:Record.Name~} is a {~Data:Record.Type~} that is {~Data:Record.Age~} years old.</p>');
-						testPict.Template.addTemplate('Animal-Screen', '<h1>{~D:AppData.RecordSet.Type~}</h1>{~T:Animal-View:AppData.RecordSet~}');
+						testPict.TemplateProvider.addTemplate('Animal-View', '<p>{~Data:Record.Name~} is a {~Data:Record.Type~} that is {~Data:Record.Age~} years old.</p>');
+						testPict.TemplateProvider.addTemplate('Animal-Screen', '<h1>{~D:AppData.RecordSet.Type~}</h1>{~T:Animal-View:AppData.RecordSet~}');
 
 						let tmpTemplateOutput = testPict.parseTemplateByHash('Animal-Screen');
 
@@ -238,8 +238,8 @@ suite
 
 						testPict.AppData = {Records:_SampleChocoData, EntityName: 'Choco', Title: 'Choco Deluxe Records'};
 
-						testPict.Template.addTemplate('Choco-Row', '<p>{~Data:Record.name~} is a file of {~Data:Record.size~} bytes big.</p>');
-						testPict.Template.addTemplate('Choco-Screen', '<h1>{~D:AppData.Title~}</h1>{~TS:Choco-Row:AppData.Records.files~}');
+						testPict.TemplateProvider.addTemplate('Choco-Row', '<p>{~Data:Record.name~} is a file of {~Data:Record.size~} bytes big.</p>');
+						testPict.TemplateProvider.addTemplate('Choco-Screen', '<h1>{~D:AppData.Title~}</h1>{~TS:Choco-Row:AppData.Records.files~}');
 
 						let tmpTemplateOutput = testPict.parseTemplateByHash('Choco-Screen');
 
