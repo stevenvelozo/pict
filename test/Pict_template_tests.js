@@ -60,9 +60,23 @@ suite
 					function(fDone)
 					{
 						var testPict = new libPict(_MockSettings);
-                        let tmpTemplateOutput = testPict.parseTemplateSet('<p>{~Data:Record.size~}</p>', _SampleChocoData.files);
-                        Expect(tmpTemplateOutput).to.equal("<p>838</p><p>6843</p><p>8388</p><p>5993</p><p>4951</p><p>3383</p><p>3503</p><p>4093</p><p></p><p>1371</p><p>620</p><p>7481</p><p>101114</p><p>31625216</p><p>31141</p><p>2248166</p><p>2378677</p>");
+						let tmpTemplateOutput = testPict.parseTemplateSet('<p>{~Data:Record.size~}</p>', _SampleChocoData.files);
+						Expect(tmpTemplateOutput).to.equal("<p>838</p><p>6843</p><p>8388</p><p>5993</p><p>4951</p><p>3383</p><p>3503</p><p>4093</p><p></p><p>1371</p><p>620</p><p>7481</p><p>101114</p><p>31625216</p><p>31141</p><p>2248166</p><p>2378677</p>");
 						fDone();
+					}
+				);
+				test
+				(
+					'Templates should be able to run on sets asynchronously.',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+						testPict.parseTemplateSet('<p>{~Data:Record.size~}</p>', _SampleChocoData.files,
+							(pError, pValue) =>
+							{
+								Expect(pValue).to.equal("<p>838</p><p>6843</p><p>8388</p><p>5993</p><p>4951</p><p>3383</p><p>3503</p><p>4093</p><p></p><p>1371</p><p>620</p><p>7481</p><p>101114</p><p>31625216</p><p>31141</p><p>2248166</p><p>2378677</p>");
+								return fDone();
+							});
 					}
 				);
 				test
@@ -71,13 +85,13 @@ suite
 					function(fDone)
 					{
 						var testPict = new libPict(_MockSettings);
-                        var testCollectionObject = {};
-                        for (let i = 0; i < _SampleChocoData.files.length; i++)
-                        {
-                            testCollectionObject[_SampleChocoData.files[i].name] = _SampleChocoData.files[i];
-                        }
-                        let tmpTemplateOutput = testPict.parseTemplateSet('<p>{~Data:Record.size~}</p>', testCollectionObject);
-                        Expect(tmpTemplateOutput).to.equal("<p>838</p><p>6843</p><p>8388</p><p>5993</p><p>4951</p><p>3383</p><p>3503</p><p>4093</p><p></p><p>1371</p><p>620</p><p>7481</p><p>101114</p><p>31625216</p><p>31141</p><p>2248166</p><p>2378677</p>");
+						var testCollectionObject = {};
+						for (let i = 0; i < _SampleChocoData.files.length; i++)
+						{
+							testCollectionObject[_SampleChocoData.files[i].name] = _SampleChocoData.files[i];
+						}
+						let tmpTemplateOutput = testPict.parseTemplateSet('<p>{~Data:Record.size~}</p>', testCollectionObject);
+						Expect(tmpTemplateOutput).to.equal("<p>838</p><p>6843</p><p>8388</p><p>5993</p><p>4951</p><p>3383</p><p>3503</p><p>4093</p><p></p><p>1371</p><p>620</p><p>7481</p><p>101114</p><p>31625216</p><p>31141</p><p>2248166</p><p>2378677</p>");
 						fDone();
 					}
 				);
@@ -233,7 +247,7 @@ suite
 						return fDone();
 					}
 				);
-            }
-        );
-    }
+			}
+		);
+	}
 );

@@ -300,13 +300,14 @@ class Pict extends libFable
 		{
 			if (Array.isArray(pDataSet) || typeof(pDataSet) == 'object')
 			{
-				this.defaultServices.Utility.eachLimit(pDataSet,
+				this.defaultServices.Utility.eachLimit(pDataSet, 1,
 					(pRecord, fRecordTemplateCallback)=>
 					{
 						return this.parseTemplate(pTemplateString, pRecord,
-							(pTemplateResult)=>
+							(pError, pTemplateResult)=>
 							{
 								tmpValue += pTemplateResult;
+								return fRecordTemplateCallback();
 							});
 					},
 					(pError)=>
