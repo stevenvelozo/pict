@@ -8,9 +8,22 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 		this.serviceType = 'PictMeadowProvider';
 
-		if (!this.options.urlPrefix)
+		if (this.fable.settings.PictDefaultURLPrefix)
+		{
+			this.options.urlPrefix = this.fable.settings.PictDefaultURLPrefix;
+		}
+		else if (!this.options.urlPrefix)
 		{
 			this.options.urlPrefix = '/1.0/';
+		}
+
+		if (this.fable.settings.PictDefaultDownloadBatchSize)
+		{
+			this.options.downloadBatchSize = this.fable.settings.PictDefaultDownloadBatchSize;
+		}
+		else if (!this.options.downloadBatchSize)
+		{
+			this.options.downloadBatchSize = 100;
 		}
 
 		this.restClient = this.fable.serviceManager.instantiateServiceProviderWithoutRegistration('RestClient');
@@ -19,8 +32,8 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 		this.prepareRequestOptions = (pOptions) => { return pOptions; };
 	}
-	
-	getEntity (pEntity, pIDRecord, fCallback)
+
+	initializeCache(pEntity)
 	{
 		// This should not be happening as often as it's happening.
 		if (!this.cache.hasOwnProperty(pEntity))
@@ -30,8 +43,15 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			// For now cache for 30 seconds.
 			this.cache[pEntity].maxAge = 30000;
 			this.cache[pEntity].maxLength = 10000;
-		}
 
+			this.fable.Bundle[pEntity] = this.cache[pEntity].RecordMap;
+		}
+	}
+	
+	getEntity (pEntity, pIDRecord, fCallback)
+	{
+		this.initializeCache(pEntity);
+		// Discard anything from the cache that has expired or is over size.
 		this.cache[pEntity].prune(
 			()=>
 			{
@@ -46,7 +66,6 @@ class PictMeadowEntityProvider extends libFableServiceBase
 					{
 						url: `${this.options.urlPrefix}${pEntity}/${pIDRecord}`
 					});
-
 				tmpOptions = this.prepareRequestOptions(tmpOptions);
 
 				return this.restClient.getJSON(tmpOptions,
@@ -62,19 +81,67 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		);
 	}
 
-	getEntitySet = function (pEntity, pDestinationEntity, pIDRecordList, fCallback)
+	getEntitySet = function (pEntity, pMeadowFilterExpression, fCallback)
 	{
+		this.initializeCache(pEntity);
 		// TODO: Should we test for too many record IDs here by string length?
-		let tmpIDRecordsCommaSeparated = pIDRecordList.join(',');
-		let tmpOptions = (
+		// FBL~ID${pDestinationEntity}~INN~${tmpIDRecordsCommaSeparated}
+		// Discard anything from the cache that has expired or is over size.
+		this.cache[pEntity].prune(
+			()=>
 			{
-				url: `${this.options.urlPrefix}${pEntity}s/FilteredTo/FBL~ID${pDestinationEntity}~INN~${tmpIDRecordsCommaSeparated}`
-			});
+				let tmpCountOptions = (
+					{
+						url: `${this.options.urlPrefix}${pEntity}s/Count/FilteredTo/${pMeadowFilterExpression}`
+					});
+				tmpCountOptions = this.prepareRequestOptions(tmpCountOptions);
 
-		return this.restClient.getJSON(tmpOptions,
-			(pError, pResponse, pBody) =>
-			{
-				return fCallback(pError, pBody);
+				return this.restClient.getJSON(tmpCountOptions,
+					(pError, pResponse, pBody) =>
+					{
+						if (pError)
+						{
+							this.fable.log.error(`Error getting bulk entity count of [${pEntity}] filtered to [${pMeadowFilterExpression}] from server [${tmpCountOptions.url}]: ${pError}`);
+							return fCallback(pError);
+						}
+						let tmpRecordCount = 0;
+						if (pBody.Count)
+						{
+							tmpRecordCount = pBody.Count;
+						}
+
+						let tmpDownloadURIFragments = [];
+						let tmpDownloadBatchSize = this.options.downloadBatchSize;
+						for (let i = 0; i < (tmpRecordCount / tmpDownloadBatchSize); i++)
+						{
+							// Generate each of the URI fragments to download
+							tmpDownloadURIFragments.push(`${this.options.urlPrefix}${pEntity}s/FilteredTo/${pMeadowFilterExpression}/${i*tmpDownloadBatchSize}/${tmpDownloadBatchSize}`);
+						}
+
+						let tmpEntitySet = [];
+						// Now run these in series (it's possible to parallelize but no reason to)
+						this.fable.defaultServices.Utility.eachLimit(tmpDownloadURIFragments, 1, 
+							(pURIFragment, fDownloadCallback)=>
+							{
+								let tmpOptions = (
+								{
+									url: `${this.options.urlPrefix}${pURIFragment}`
+								});
+								tmpOptions = this.prepareRequestOptions(tmpOptions);
+
+								this.restClient.getJSON(pURIFragment,
+									(pDownloadError, pDownloadResponse, pDownloadBody)=>
+									{
+										tmpEntitySet = tmpEntitySet.concat(pDownloadBody);
+										// Should we be caching each record?
+										return fDownloadCallback(pDownloadError);
+									});
+							},
+							(pFullDownloadError)=>
+							{
+								return fCallback(pFullDownloadError, tmpEntitySet);
+							})
+					});
 			});
 	}
 }

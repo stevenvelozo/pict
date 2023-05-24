@@ -29,13 +29,18 @@ class Pict extends libFable
 		// The templateProvider provides a basic key->template mapping with default fallback capabilities
 		this.serviceManager.addAndInstantiateServiceType('TemplateProvider', require('./Pict-Template-Provider.js'));
 		this.serviceManager.addAndInstantiateServiceType('EntityProvider',  require('./Pict-Meadow-EntityProvider.js'));
+		this.serviceManager.addAndInstantiateServiceType('ContentAssignment',  require('./Pict-Content-Assignment.js'));
 
 		this._DefaultTemplateMethodsInitialized = false;
 		this.serviceManager.instantiateServiceProvider('MetaTemplate');
 
 		this.manifest = this.serviceManager.instantiateServiceProvider('Manifest');
 
-		this.appData = {};
+		this.AppData = {};
+
+		this.Bundle = {};
+
+		this.initializeTemplateMethods();
 	}
 
 	get Template()
@@ -102,7 +107,7 @@ class Pict extends libFable
 					else
 					{
 						// This is an address, so we need to get the value at the address
-						tmpEntityID = this.manifest.getValueAtAddress({AppData: this.appData, Record: pData}, tmpEntityID);
+						tmpEntityID = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpEntityID);
 					}
 
 					// No Entity or EntityID
@@ -136,77 +141,135 @@ class Pict extends libFable
 			this.defaultServices.MetaTemplate.addPatternAsync('{~E:', '~}', fEntityRender);
 			this.defaultServices.MetaTemplate.addPatternAsync('{~Entity:', '~}', fEntityRender);
 
-			let fData = (pHash, pData)=>
+			// {NE~Some.Address|If the left value is truthy, render this value.~}
+			let fNotEmptyRender = (pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
-					let tmpValue = this.manifest.getValueAtAddress({AppData: this.appData, Record: pData}, tmpHash);
+					// Should switch this to indexOf so pipes can be in the content.
+					let tmpHashParts = tmpHash.split('|');
 
+					// For now just check truthiness
+					if (this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpHashParts[0]))
+					{
+						return tmpHashParts[1];
+					}
+					else
+					{
+						return '';
+					}
+				};
+			this.defaultServices.MetaTemplate.addPattern('{~NotEmpty:', '~}', fNotEmptyRender);
+			this.defaultServices.MetaTemplate.addPattern('{~NE:', '~}', fNotEmptyRender);
+
+			// {~T:Template:AddressOfData~}
+			let fTemplateRender = (pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+
+					let tmpTemplateHash = false;
+					let tmpAddressOfData = false;
+
+					// This is just a simple 2 part hash (the entity and the ID)
+					let tmpHashTemplateSeparator = tmpHash.indexOf(':');
+					tmpTemplateHash = tmpHash.substring(0, tmpHashTemplateSeparator);
+					if (tmpHashTemplateSeparator > -1)
+					{
+						tmpAddressOfData = tmpHash.substring(tmpHashTemplateSeparator + 1);
+					}
+					else
+					{
+						tmpTemplateHash = tmpHash;
+					}
+
+					// No template hash
+					if (!tmpTemplateHash)
+					{
+						this.fable.log.warn(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`);
+						return `Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`;
+					}
+
+					if (!tmpAddressOfData)
+					{
+						// No address was provided, just render the template with what this template has.
+						return this.parseTemplateByHash(tmpTemplateHash, pData);
+					}
+					else
+					{
+						return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpAddressOfData));
+					}
+				};
+			this.defaultServices.MetaTemplate.addPattern('{~T:', '~}', fTemplateRender);
+			this.defaultServices.MetaTemplate.addPattern('{~Template:', '~}', fTemplateRender);
+
+			// {~TS:Template:AddressOfDataSet~}
+			let fTemplateSetRender = (pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+
+					let tmpTemplateHash = false;
+					let tmpAddressOfData = false;
+
+					// This is just a simple 2 part hash (the entity and the ID)
+					let tmpHashTemplateSeparator = tmpHash.indexOf(':');
+					tmpTemplateHash = tmpHash.substring(0, tmpHashTemplateSeparator);
+					if (tmpHashTemplateSeparator > -1)
+					{
+						tmpAddressOfData = tmpHash.substring(tmpHashTemplateSeparator + 1);
+					}
+					else
+					{
+						tmpTemplateHash = tmpHash;
+					}
+
+					// No template hash
+					if (!tmpTemplateHash)
+					{
+						this.fable.log.warn(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`);
+						return `Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`;
+					}
+
+					if (!tmpAddressOfData)
+					{
+						// No address was provided, just render the template with what this template has.
+						return this.parseTemplateSetByHash(tmpTemplateHash, pData);
+					}
+					else
+					{
+						return this.parseTemplateSetByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpAddressOfData));
+					}
+				};
+			this.defaultServices.MetaTemplate.addPattern('{~TS:', '~}', fTemplateSetRender);
+			this.defaultServices.MetaTemplate.addPattern('{~TemplateSet:', '~}', fTemplateSetRender);
+
+			//{~Data:AppData.Some.Value.to.Render~}
+			let fDataRender = (pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpValue = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpHash);
 					if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
 					{
 						return '';
 					}
 					return tmpValue;
 				};
-			this.defaultServices.MetaTemplate.addPattern('{~D:', '~}', fData);
-			this.defaultServices.MetaTemplate.addPattern('{~Data:', '~}', fData);
+			this.defaultServices.MetaTemplate.addPattern('{~D:', '~}', fDataRender);
+			this.defaultServices.MetaTemplate.addPattern('{~Data:', '~}', fDataRender);
 
 			this.defaultServices.MetaTemplate.addPattern('{~Dollars:', '~}',
 				(pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
-					let tmpColumnData = this.manifest.getValueAtAddress({AppData: this.appData, Record: pData}, tmpHash);
-
-					let tmpValue = this.defaultServices.DataFormat.formatterDollars(tmpColumnData);
-
-					return tmpValue;
+					let tmpColumnData = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpHash);
+					return this.defaultServices.DataFormat.formatterDollars(tmpColumnData);
 				});
 
 			this.defaultServices.MetaTemplate.addPattern('{~Digits:', '~}',
 				(pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
-					let tmpColumnData = this.manifest.getValueAtAddress({AppData: this.appData, Record: pData}, tmpHash);
-
-					let tmpValue = this.defaultServices.DataFormat.formatterAddCommasToNumber(this.defaultServices.DataFormat.formatterRoundNumber(tmpColumnData, 2));
-
-					return tmpValue;
+					let tmpColumnData = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpHash);
+					return this.defaultServices.DataFormat.formatterAddCommasToNumber(this.defaultServices.DataFormat.formatterRoundNumber(tmpColumnData, 2));
 				});
-
-			this.defaultServices.MetaTemplate.addPattern('{~NotEmpty:', '~}',
-				(pHash, pData)=>
-				{
-					let tmpHash = pHash.trim();
-					// Should switch this to indexOf so it allows pipes in the content.
-					let tmpHashParts = tmpHash.split('|');
-
-					if (tmpHashParts.length != 2)
-					{
-						return '';
-					}
-
-					let tmpTruthiness = this.manifest.getValueAtAddress({AppData: this.appData, Record: pData}, tmpHashParts[0]);
-
-					let tmpValue = '';
-
-					// For now just check truthiness
-					if (tmpTruthiness)
-					{
-						tmpValue = tmpHashParts[1];
-					}
-
-					return tmpValue;
-				});
-
-			let fTemplateRender = (pHash, pData)=>
-				{
-					let tmpHash = pHash.trim();
-					let tmpColumnData = this.manifest.getValueAtAddress({AppData: this.appData, Record: pData}, tmpHash);
-
-					let tmpValue = this.defaultServices.DataFormat.formatterAddCommasToNumber(this.defaultServices.DataFormat.formatterRoundNumber(tmpColumnData, 2));
-
-					return tmpValue;
-				};
-			this.defaultServices.MetaTemplate.addPattern('{~T:', '~~}', fTemplateRender);
 
 			this._DefaultTemplateMethodsInitialized = true;
 		}
@@ -227,6 +290,76 @@ class Pict extends libFable
 			return '';
 		}
 		return this.parseTemplate(tmpTemplateString, pData, fCallback);
+	}
+
+	parseTemplateSet (pTemplateString, pDataSet, fCallback)
+	{
+		// TODO: This will need streaming -- for now janky old string append does the trick
+		let tmpValue = '';
+		if (typeof(fCallback) == 'function')
+		{
+			if (Array.isArray(pDataSet) || typeof(pDataSet) == 'object')
+			{
+				this.defaultServices.Utility.eachLimit(pDataSet,
+					(pRecord, fRecordTemplateCallback)=>
+					{
+						return this.parseTemplate(pTemplateString, pRecord,
+							(pTemplateResult)=>
+							{
+								tmpValue += pTemplateResult;
+							});
+					},
+					(pError)=>
+					{
+						return fCallback(pError, tmpValue);
+					});
+			}
+			else
+			{
+				return fCallback(Error('Pict: Template Set: pDataSet is not an array or object.'), '');
+			}
+		}
+		else
+		{
+			if (Array.isArray(pDataSet) || typeof(pDataSet) == 'object')
+			{
+				if (Array.isArray(pDataSet))
+				{
+					for (let i = 0; i < pDataSet.length; i++)
+					{
+						tmpValue += this.parseTemplate(pTemplateString, pDataSet[i]);
+					}
+				}
+				else
+				{
+					let tmpKeys = Object.keys(pDataSet);
+					for (let i = 0; i < tmpKeys.length; i++)
+					{
+						tmpValue += this.parseTemplate(pTemplateString, pDataSet[tmpKeys[i]]);
+					}
+				}
+
+				return tmpValue;
+			}
+			else
+			{
+				return '';
+			}			
+		}
+		//if (typeof(pDataSet) == 'object')
+		//return this.defaultServices.MetaTemplate.parseString(pTemplateString, pData, fCallback);
+	}
+
+	parseTemplateSetByHash (pTemplateHash, pDataSet, fCallback)
+	{
+		let tmpTemplateString = this.defaultServices.TemplateProvider.getTemplate(pTemplateHash);
+
+		// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
+		if (!tmpTemplateString)
+		{
+			return '';
+		}
+		return this.parseTemplateSet(tmpTemplateString, pDataSet, fCallback);
 	}
 };
 
