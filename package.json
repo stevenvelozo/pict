@@ -1,6 +1,6 @@
 {
   "name": "pict",
-  "version": "1.0.48",
+  "version": "1.0.49",
   "description": "Pict browser library.",
   "main": "source/Pict.js",
   "scripts": {
@@ -9,8 +9,9 @@
     "test": "./node_modules/.bin/mocha -u tdd -R spec",
     "build": "./node_modules/.bin/gulp build",
     "build-compatible": "GULP_CUSTOM_BUILD_TARGET=compatible ./node_modules/.bin/gulp build",
+    "api-server-harness": "node ./retold-harness/bookstore-serve-api.js",
     "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t retold/pict:local",
-    "docker-dev-run": "docker run -it -d --name retold-pict-dev -p 60000:8080 -p 63306:3306 -p 60086:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" retold/pict:local",
+    "docker-dev-run": "docker run -it -d --name retold-pict-dev -p 60000:8080 -p 63306:3306 -p 8086:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" retold/pict:local",
     "docker-dev-shell": "docker exec -it retold-pict-dev /bin/bash"
   },
   "mocha": {
@@ -56,6 +57,7 @@
     "jsdom": "^21.1.2",
     "mocha": "10.2.0",
     "nyc": "^15.1.0",
+    "retold-data-service": "^1.0.3",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   },
