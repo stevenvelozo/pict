@@ -13,136 +13,6 @@
         <script src="../../../dist/pict.js"></script>
         <script type="text/javascript">
 //<![CDATA[
-            // Properly initialize informary for our form, and tell it to be verbose in the console
-            //let _Pict = new Pict({Product: "InformarySampleForm"})
-            //let libInformaryServiceProvider = _Pict.serviceManager.instantiateServiceProvider('Informary', _Pict.settings.InformarySettings);
-            //let libInformary = libInformaryServiceProvider.informary;
-
-            // Pull informary's built-in version of JQUERY into the DOM for other libraries to use
-            //window.$ = libInformary._Dependencies.jquery;
-            //window.jQuery = window.$;
-
-            // Simple function to pull data from the form into the debug text area
-            var pullInformaryDataFromForm = function()
-            {
-                // Create an empty data object to stuff values into
-                var tmpDataObject = {};
-                libInformary.marshalFormToData(tmpDataObject,
-                    function(pError)
-                    {
-                        if (pError)
-                        {
-                            // The form marshalling had some kind of error!
-                            console.log('INFORMARY MARSHAL FROM FORM ERROR: '+pError);
-                            console.log(JSON.stringify(tmpDataObject,null,4));
-                        }
-
-                        $('#informaryOutput').val(JSON.stringify(tmpDataObject,null,4));
-                    });
-            };
-
-            // Simple function to push data from debug text area to form
-            var pushInformaryDataToForm = function()
-            {
-                try
-                {
-                    // Create an empty data object to stuff values into
-                    var tmpDataObject = JSON.parse($("#informaryInput").val());
-                    libInformary.marshalDataToForm(tmpDataObject,
-                        function(pError)
-                        {
-                            if (pError)
-                            {
-                                // The form marshalling had some kind of error!
-                                console.log('INFORMARY MARSHAL TO FORM ERROR: '+pError);
-                                console.log(JSON.stringify(tmpDataObject,null,4));
-                            }
-
-                            $('#informaryOutput').val(JSON.stringify(tmpDataObject,null,4));
-                        });
-                }
-                catch (pError)
-                {
-                    console.log('ERROR Trying to stuff values into the form ... likely a JSON parsing error.');
-                    console.log('Message: '+pError);
-                }
-            };
-
-            // Setup a global location for the form state to live
-            window.informaryState = {};
-            var storeInformaryState = function(fCallback)
-            {
-                var tmpCallback = (typeof(fCallback) === 'function') ? fCallback : function() {};
-                libInformary.marshalFormToData(window.informaryState,
-                    (pError) =>
-                    {
-                        if (pError)
-                        {
-                            // The form marshalling had some kind of error!
-                            this.log.error('INFORMARY MARSHAL FROM FORM ERROR: '+pError);
-                        }
-                        tmpCallback(pError, window.informaryState);
-                    });
-            };
-            var getInformaryDatum = function(pAddress, fCallback)
-            {
-                storeInformaryState(function(pError, pInformaryState)
-                    {
-                        console.log('Informary state at address ['+pAddress+']: ');
-                        console.log(JSON.stringify(libInformary.getValueAtAddress(pInformaryState, pAddress),null,4));
-                    });
-            };
-
-            var undoInformaryDataChanges = function()
-            {
-                libInformary.revertToPreviousSnapshot();
-            }
-
-            var redoInformaryDataChanges = function()
-            {
-                libInformary.reapplyNextRevertedSnapshot();
-            }
-
-            var snapshotInformaryData = function()
-            {
-                libInformary.snapshotData();
-            }
-
-            var storeInformarySourceData = function()
-            {
-                var tmpCallback = (typeof(fCallback) === 'function') ? fCallback : function() {};
-                libInformary.marshalFormToData(window.informaryState,
-                    (pError) =>
-                    {
-                        if (pError)
-                        {
-                            // The form marshalling had some kind of error!
-                            this.log.error('INFORMARY MARSHAL FROM FORM ERROR: '+pError);
-                        }
-                        libInformary.storeSourceData(window.informaryState);
-                    });
-            }
-
-            var checkInformaryState = function()
-            {
-                let tmpDataObject = libInformary.checkRecoveryState({});
-                $('#informaryCheckState').val(JSON.stringify(tmpDataObject,null,4));
-            }
-
-            var checkInformaryDeltas = function()
-            {
-                libInformary.compareCurrentStateToUndoAndRedo(
-                    (pDeltas)=>
-                    {
-                        $('#informaryDeltas').val(JSON.stringify(pDeltas,null,4));
-                    });
-            }
-
-            var restoreInformaryCheckpoint = function()
-            {
-                libInformary.restoreRecoveryScenarioData();
-            }
-
             function onDocumentReady(fCallback)
             {
                 // In case the document is already rendered
@@ -160,11 +30,35 @@
                         {
                             Product:'SimpleApp'
                         });
+                    window._Pict.AppData.Content = 'I am content, hear me roar.';
+
                     window._Pict.ContentAssignment.assignContent('#ApplicationSampleData', '<h1>TEST APPLICATION INCOMING</h1>');
                     for (let i = 1; i < 4; i++)
                     {
                         window._Pict.ContentAssignment.appendContent('#ApplicationTitle', `<h${i}>Content appended numero ${i}</h${i}>`);
                     }
+
+                    window._Pict.serviceManager.instantiateServiceProvider('PictView',
+                    {
+                        ViewIdentifier: "ContentSection",
+                        RenderOnLoad: true,
+                        DefaultRenderable:"MainContentSection",
+                        DefaultDestinationAddress:"#PictContentSection",
+                        Templates: [
+                            {
+                                Hash: "Content-Section-Main",
+                                Template: "This is the content section.  {~D:AppData.Content~}"
+                            }
+                        ],
+                        Renderables:[
+                            {
+                                RenderableHash: "MainContentSection",
+                                TemplateHash: "Content-Section-Main",
+                                DestinationAddress: "#PictContentSection"
+                            }
+                        ]
+                        
+                    },'ContentSection');
                 });
 
             // window.onload = function()
@@ -184,9 +78,23 @@
     <body class="bg-light">
         <div class="container">
             <div class="row mt-5">
-                <div class="col-md-12 mt-3" id="ApplicationTitle"><h1>Informary HTML Test Harness</h1></div>
+                <div class="col-md-12 mt-3" id="ApplicationTitle"><h1>Informary HTML Test Harness</h1><div id="ApplicationSampleData"></div></div>
+
+            <div class="row mt-5 d-print-none">
+                <div class="col-md-12"  style="background-color:#eeffee;border-radius:10px;border:2px solid #353535;">
+                    <h4 class="mb-3 mt-3">Cellulose</h4>
+                    <div id="PictContentSection"></div>
+                    <form novalidate>
+                        <div class="input=group mb-3">
+                            <button type="button" class="btn btn-primary" onclick="undoInformaryDataChanges()">Undo</button>
+                            <button type="button" class="btn btn-primary" onclick="redoInformaryDataChanges()">Redo</button>
+                            <button type="button" class="btn btn-primary" onclick="snapshotInformaryData()">Snapshot</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
                 <div class="col-md-12" style="background-color:#ffffee;border-radius:10px;border:2px solid #353535;">
-                    <div id="ApplicationSampleData"></div>
                     <h4 class="mb-3 mt-3">Sample Form</h4>
                     <form novalidate>
                         <div class="row">
@@ -289,20 +197,6 @@
                 </div>
             </div>
 
-
-            <!-- This below is to aid in interactive testing of informary functionality -->
-            <div class="row mt-5 d-print-none">
-                <div class="col-md-12"  style="background-color:#eeffee;border-radius:10px;border:2px solid #353535;">
-                    <h4 class="mb-3 mt-3">Undo and Recovery</h4>
-                    <form novalidate>
-                        <div class="input=group mb-3">
-                            <button type="button" class="btn btn-primary" onclick="undoInformaryDataChanges()">Undo</button>
-                            <button type="button" class="btn btn-primary" onclick="redoInformaryDataChanges()">Redo</button>
-                            <button type="button" class="btn btn-primary" onclick="snapshotInformaryData()">Snapshot</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
 
 
             <!-- This below is to aid in interactive testing of informary functionality -->

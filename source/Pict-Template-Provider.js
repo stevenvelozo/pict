@@ -9,6 +9,7 @@ class PictTemplateProvider extends libFableServiceBase
         this.serviceType = 'PictTemplateProvider';
 
         this.templates = {};
+        this.templateSources = {};
 
         // Default templates are stored by prefix.
         // The longest prefix match is used.
@@ -19,17 +20,28 @@ class PictTemplateProvider extends libFableServiceBase
         this.loadTemplateFunction = (pTemplateHash) => { return false; };
 	}
 
-    addTemplate(pTemplateHash, pTemplate)
+    addTemplate(pTemplateHash, pTemplate, pTemplateSource)
     {
         this.templates[pTemplateHash] = pTemplate;
+
+        if (typeof(pTemplateSource) == 'string')
+        {
+            this.templateSources[pTemplateHash] = pTemplateSource;
+        }
+        else
+        {
+            this.templateSources[pTemplateHash] = `Direct addTemplate('${pTemplateHash}') function load into PictTemplateProvider [${this.UUID}]::[${this.Hash}]`;
+        }
     }
 
-    addDefaultTemplate(pPrefix, pPostfix, pTemplate)
+    addDefaultTemplate(pPrefix, pPostfix, pTemplate, pSource)
     {
+        let tmpSource = (typeof(pSource) == 'string') ? pSource : `Direct addDefaultTemplate('${pPrefix}','${pPostfix}',..) function load into PictTemplateProvider [${this.UUID}]::[${this.Hash}]`
         let tmpDefaultTemplate = {
             prefix: pPrefix,
             postfix: pPostfix,
-            template: pTemplate
+            template: pTemplate,
+            source: tmpSource
         };
         if (typeof(pTemplate) != 'string')
         {
@@ -56,6 +68,7 @@ class PictTemplateProvider extends libFableServiceBase
                 && (pTemplateHash.indexOf(this.defaultTemplates[i].prefix) == 0))
             {
                 this.templates[pTemplateHash] = this.defaultTemplates[i].template;
+                this.templateSources[pTemplateHash] = `Auto created in checkDefaultTemplateHash('${pTemplateHash}') function by PictTemplateProvider [${this.UUID}]::[${this.Hash}] from [${this.defaultTemplates[i].prefix}]...[${this.defaultTemplates[i].postfix}]`;
                 return this.templates[pTemplateHash];
             }
         }
@@ -91,7 +104,9 @@ class PictTemplateProvider extends libFableServiceBase
 
         if (tmpTemplate)
         {
-            this.templates[pTemplateHash] = tmpTemplate;
+            this.templates[pTemplateHash] = tmpTemplate.template;
+            this.templateSources[pTemplateHash] = `Loaded in loadTemplate('${pTemplateHash}') function by PictTemplateProvider [${this.UUID}]::[${this.Hash}] from [${tmpTemplate.source}]`;
+
         }
 
         return tmpTemplate;

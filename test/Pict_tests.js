@@ -87,7 +87,7 @@ suite
 						testPict.EntityProvider.getEntity('Author', 1,
 							(pError, pRecord) =>
 							{
-								Expect(pRecord.Name).to.equal('Jane Austen', 'The REST request should return the correct author name.');
+								Expect(pRecord.Name).to.equal('John Green', 'The REST request should return the correct author name.');
 								testPict.log.info('Rest response: ', pRecord);
 								return fDone();
 							});

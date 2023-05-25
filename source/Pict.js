@@ -14,7 +14,7 @@ const defaultPictSettings = (
 		ScreenDestinationElementID: 'PICTViewport',
 
 		// Whether or not we should automatically render the main viewport when appropriate
-		AutoRenderMainViewport: true,
+		AutoRenderMainViewport: false,
 
 		// The prefix to prepend on all template destination hashes
 		TemplateDestinationPrefix: 'PICT-'
@@ -33,6 +33,7 @@ class Pict extends libFable
 		this.serviceManager.addAndInstantiateServiceType('TemplateProvider', require('./Pict-Template-Provider.js'));
 		this.serviceManager.addAndInstantiateServiceType('EntityProvider',  require('./Pict-Meadow-EntityProvider.js'));
 		this.serviceManager.addAndInstantiateServiceType('ContentAssignment',  require('./Pict-Content-Assignment.js'));
+		this.serviceManager.addServiceType('PictView',  require('./Pict-View.js'));
 
 		this.serviceManager.instantiateServiceProvider('MetaTemplate');
 

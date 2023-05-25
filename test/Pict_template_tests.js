@@ -179,7 +179,7 @@ suite
 						testPict.parseTemplateByHash('Book-Author-Content', {IDBook: 100},
 							(pError, pValue) =>
 							{
-								Expect(pValue).to.equal('<p><h1>The Hunger Games: $1.00</h1></p>');
+								Expect(pValue).to.equal('<p><h1>Angels & Demons: $1.00</h1></p>');
 								return fDone();
 							});
 					}
