@@ -5,10 +5,8 @@ let libPict = require('../dist/pict.compatible.js');
 console.log(`--> Instantiating pict...`);
 
 let tmpPict = new libPict({"Nombre":"Numero uno hombre."});
-tmpPict.initializeTemplateMethods();
 
 tmpPict.log.info(`Pict initialized ... Nombre [${tmpPict.settings.Nombre}]`);
-
 
 let tmpTemplateOutput2 = tmpPict.parseTemplate(`
 <td>{~Data:Record.worktype_String~}</td>

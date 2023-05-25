@@ -12,7 +12,7 @@ class PictView extends libFableServiceBase
 
     renderContent(pContent, pAddress)
     {
-        return this.contentPushFunction(pContent, pAddress);
+        return this.fable.ContentAssignment.contentPushFunction(pContent, pAddress);
     }
 }
 

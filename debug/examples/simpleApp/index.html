@@ -15,13 +15,38 @@
 
         function doFirstThing()
         {
-            console.log('doFirstThing()');
+            window._Pict.log.info('doFirstThing()');
+            window._Pict.ContentAssignment.assignContent('#applicationContainer', '<h1>Test Application Complete -- you USED ME</h1>');
         }
 
         function doSecondThing()
         {
-            console.log('doSecondThing()');
+            window._Pict.log.info('doSecondThing()');
         }
+
+        function onDocumentReady(fCallback)
+        {
+            // In case the document is already rendered
+            if (document.readyState!='loading') fCallback();
+            // Modern browsers have event listener capabilities
+            else if (document.addEventListener) document.addEventListener('DOMContentLoaded', fCallback);
+            // IE <= 8 and ... other abominations
+            else document.attachEvent('onreadystatechange', function() { if (document.readyState=='complete') callback(); });
+        }
+
+        onDocumentReady(function ()
+            {
+                // After the document is ready, initialize pict.
+                window._Pict = new window.Pict(
+                    {
+                        Product:'SimpleApp'
+                    });
+                window._Pict.ContentAssignment.assignContent('#applicationContainer', '<h1>TEST APPLICATION INCOMING</h1>');
+                for (let i = 0; i < 100; i++)
+                {
+                    window._Pict.ContentAssignment.appendContent('#applicationNavigation', `<p>Content appended numero ${i}`);
+                }
+            });
 //]]>
         </script>
     </head>
