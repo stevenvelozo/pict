@@ -3,8 +3,6 @@
 */
 const libFable = require('fable');
 
-const libMouseTrap = require('mousetrap');
-
 const defaultPictSettings = (
 	{
 		// The main "viewport" is the view that is used to launch the entire application
