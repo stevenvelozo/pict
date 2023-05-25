@@ -6,16 +6,13 @@ const libFable = require('fable');
 const defaultPictSettings = (
 	{
 		// The main "viewport" is the view that is used to launch the entire application
-		MainViewportTemplateHash: 'Default-Viewport',
-
-		// The Element ID of where to stuff the main Viewport
-		ScreenDestinationElementID: 'PICTViewport',
+		MainViewportVew: 'Default-Viewport',
 
 		// Whether or not we should automatically render the main viewport when appropriate
-		AutoRenderMainViewport: false,
+		AutoRenderMainViewportView: false,
 
 		// The prefix to prepend on all template destination hashes
-		TemplateDestinationPrefix: 'PICT-'
+		IdentifierAddressPrefix: 'PICT-'
 	});
 
 class Pict extends libFable

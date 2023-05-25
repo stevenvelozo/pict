@@ -101,7 +101,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 					{
 						if (pError)
 						{
-							this.fable.log.error(`Error getting bulk entity count of [${pEntity}] filtered to [${pMeadowFilterExpression}] from server [${tmpCountOptions.url}]: ${pError}`);
+							this.log.error(`Error getting bulk entity count of [${pEntity}] filtered to [${pMeadowFilterExpression}] from server [${tmpCountOptions.url}]: ${pError}`);
 							return fCallback(pError);
 						}
 						let tmpRecordCount = 0;
@@ -120,7 +120,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 						let tmpEntitySet = [];
 						// Now run these in series (it's possible to parallelize but no reason to)
-						this.fable.defaultServices.Utility.eachLimit(tmpDownloadURIFragments, 1, 
+						this.fable.Utility.eachLimit(tmpDownloadURIFragments, 1, 
 							(pURIFragment, fDownloadCallback)=>
 							{
 								let tmpOptions = (

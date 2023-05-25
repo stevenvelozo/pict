@@ -66,7 +66,7 @@ class PictContentAssignment extends libFableServiceBase
         else
         {
             // Just log it out for now
-            this.fable.log.trace(`PICT Content ASSIGN to [${pAddress}]:`, pContent);
+            this.log.trace(`PICT Content ASSIGN to [${pAddress}]:`, pContent);
         }
     }
 
@@ -92,7 +92,7 @@ class PictContentAssignment extends libFableServiceBase
         else
         {
             // Just log it out for now -- nothing browser in our mix.
-            this.fable.log.trace(`PICT Content APPEND to [${pAddress}]:`, pContent);
+            this.log.trace(`PICT Content APPEND to [${pAddress}]:`, pContent);
         }
     }
 }

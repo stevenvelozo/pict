@@ -54,7 +54,7 @@
     "gulp-strip-comments": "^2.5.2",
     "gulp-terser": "^2.1.0",
     "gulp-util": "^3.0.8",
-    "jsdom": "^21.1.2",
+    "jsdom": "^22.0.0",
     "mocha": "10.2.0",
     "nyc": "^15.1.0",
     "retold-data-service": "^1.0.3",
@@ -63,6 +63,6 @@
   },
   "dependencies": {
     "cachetrax": "^1.0.3",
-    "fable": "^3.0.46"
+    "fable": "^3.0.47"
   }
 }

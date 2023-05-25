@@ -8,6 +8,7 @@ const defaultPictViewSettings = (
 
         ViewIdentifier: 'DEFAULT',
 
+        InitializeOnLoad: true,
         RenderOnLoad: false,
 
         Templates: [],
@@ -35,7 +36,7 @@ class PictView extends libFableServiceBase
 
             if (!tmpTemplate.hasOwnProperty('Hash') || !tmpTemplate.hasOwnProperty('Template'))
             {
-                this.fable.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not load Template ${i} in the options array.`, tmpTemplate);
+                this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not load Template ${i} in the options array.`, tmpTemplate);
             }
             else
             {
@@ -55,7 +56,7 @@ class PictView extends libFableServiceBase
 
             if (!tmpDefaultTemplate.hasOwnProperty('Postfix') || !tmpDefaultTemplate.hasOwnProperty('Template'))
             {
-                this.fable.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not load Default Template ${i} in the options array.`, tmpDefaultTemplate);
+                this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not load Default Template ${i} in the options array.`, tmpDefaultTemplate);
             }
             else
             {
@@ -79,7 +80,7 @@ class PictView extends libFableServiceBase
 
             if (!tmpRenderable.hasOwnProperty('RenderableHash') || !tmpRenderable.hasOwnProperty('TemplateHash'))
             {
-                this.fable.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not load Renderable ${i} in the options array.`, tmpRenderable);
+                this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not load Renderable ${i} in the options array.`, tmpRenderable);
             }
             else
             {
@@ -87,21 +88,83 @@ class PictView extends libFableServiceBase
             }
         }
 
-        if (this.options.RenderOnLoad)
-        {
-            this.render(this.options.DefaultRenderable);
-        }
+        // Array of Initialization Functions
+        this.initializationFunctionSet = [];
+
+        this.fable.Utility.waterfall(
+            [
+                (fStageComplete) =>
+                {
+                    if (this.options.InitializeOnLoad)
+                    {
+                        return this.initialize(fStageComplete);
+                    }
+
+                    return fStageComplete();
+                },
+                (fStageComplete) =>
+                {
+                    if (this.options.RenderOnLoad)
+                    {
+                        return this.renderAsync(this.options.DefaultRenderable, fStageComplete);
+                    }
+                }
+            ],
+            (pError) =>
+            {
+                if (pError)
+                {
+                    this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} did not auto initialize/render properly: ${pError}`, pError);
+                }
+                return fCallback(pError);
+            }
+        )
 	}
+
+    initialize(fCallback)
+    {
+        this.fable.Utility.waterfall(
+            [
+                ...[(fStageComplete) =>
+                {
+                    this.log.info(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} beginning initialization...`);
+                    return fStageComplete();
+                }],
+                ...this.initializationFunctionSet,
+                ...[(fStageComplete) =>
+                {
+                    this.log.info(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} initialization complete.`);
+                    return fStageComplete();
+                }]
+            ],
+            (pError) =>
+            {
+                if (pError)
+                {
+                    this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} did not initialize properly: ${pError}`, pError);
+                }
+                return fCallback(pError);
+            }
+        )
+    }
 
     render(pRenderable, pRenderDestinationAddress, pTemplateDataAddress)
     {
-        if (!this.renderables.hasOwnProperty(pRenderable))
+        let tmpRenderableHash = (typeof(pRenderable) === 'string') ? pRenderable : 
+            (typeof(this.options.DefaultRenderable) == 'string') ? this.options.DefaultRenderable : false;
+        if (!tmpRenderableHash)
         {
-            this.fable.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not render ${pRenderable} because it is not a valid renderable.`);
+            this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not render ${tmpRenderableHash} (param ${pRenderable}) because it is not a valid renderable.`);
             return false;
         }
 
-        let tmpRenderable = this.renderables[pRenderable];
+        let tmpRenderable = this.renderables[tmpRenderableHash];
+
+        if (!tmpRenderable)
+        {
+            this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not render ${tmpRenderableHash} (param ${pRenderable}) because it does not exist.`);
+            return false;
+        }
 
         let tmpRenderDestinationAddress = (typeof(pRenderDestinationAddress) === 'string') ? pRenderDestinationAddress : 
             (typeof(tmpRenderable.ContentDestinationAddress) === 'string') ? tmpRenderable.ContentDestinationAddress :
@@ -109,7 +172,7 @@ class PictView extends libFableServiceBase
 
         if (!tmpRenderDestinationAddress)
         {
-            this.fable.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not render ${pRenderable} because it does not have a valid destination address.`);
+            this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not render ${tmpRenderableHash} (param ${pRenderable}) because it does not have a valid destination address.`);
             return false;
         }
 
@@ -124,13 +187,20 @@ class PictView extends libFableServiceBase
 
     renderAsync(pRenderable, pRenderDestinationAddress, pTemplateDataAddress, fCallback)
     {
-        if (!this.renderables.hasOwnProperty(pRenderable))
+        let tmpRenderableHash = (typeof(pRenderable) === 'string') ? pRenderable : false;
+        if (!tmpRenderableHash)
         {
-            this.fable.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not render ${pRenderable} because it is not a valid renderable.`);
-            return false;
+            this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not asynchronously render ${tmpRenderableHash} (param ${pRenderable}because it is not a valid renderable.`);
+            return fCallback(Error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not asynchronously render ${tmpRenderableHash} (param ${pRenderable}because it is not a valid renderable.`));
         }
 
-        let tmpRenderable = this.renderables[pRenderable];
+        let tmpRenderable = this.renderables[tmpRenderableHash];
+
+        if (!tmpRenderable)
+        {
+            this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not render ${tmpRenderableHash} (param ${pRenderable}) because it does not exist.`);
+            return fCallback(Error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not render ${tmpRenderableHash} (param ${pRenderable}) because it does not exist.`));
+        }
 
         let tmpRenderDestinationAddress = (typeof(pRenderDestinationAddress) === 'string') ? pRenderDestinationAddress : 
             (typeof(tmpRenderable.ContentDestinationAddress) === 'string') ? tmpRenderable.ContentDestinationAddress :
@@ -138,8 +208,8 @@ class PictView extends libFableServiceBase
 
         if (!tmpRenderDestinationAddress)
         {
-            this.fable.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not render ${pRenderable} because it does not have a valid destination address.`);
-            return false;
+            this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not render ${tmpRenderableHash} (param ${pRenderable}) because it does not have a valid destination address.`);
+            return fCallback(Error(`Could not render ${tmpRenderableHash}`));
         }
 
         let tmpDataAddress = (typeof(pTemplateDataAddress) === 'string') ? pTemplateDataAddress :
@@ -152,7 +222,7 @@ class PictView extends libFableServiceBase
             {
                 if (pError)
                 {
-                    this.fable.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not render ${pRenderable} because it could not parse the template.`, pError);
+                    this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} could not render (asynchronously) ${tmpRenderableHash} (param ${pRenderable}) because it did not parse the template.`, pError);
                     return fCallback(pError);
                 }
                 this.fable.ContentAssignment.assignContent(tmpRenderDestinationAddress, pContent);

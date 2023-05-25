@@ -45,7 +45,7 @@ class PictTemplateProvider extends libFableServiceBase
         };
         if (typeof(pTemplate) != 'string')
         {
-            this.fable.log.error('PictTemplateProvider.addDefaultTemplate: pTemplate is not a string.');
+            this.log.error('PictTemplateProvider.addDefaultTemplate: pTemplate is not a string.');
         }
         this.defaultTemplates.push(tmpDefaultTemplate);
     }
