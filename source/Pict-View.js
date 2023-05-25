@@ -90,6 +90,8 @@ class PictView extends libFableServiceBase
 
         // Array of Initialization Functions
         this.initializationFunctionSet = [];
+        // This is here so we can easily have an inline initialize override
+        this.internalInitialize = (fStageComplete) => { return fStageComplete(); };
 
         this.fable.Utility.waterfall(
             [
@@ -129,7 +131,8 @@ class PictView extends libFableServiceBase
                 {
                     this.log.info(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} beginning initialization...`);
                     return fStageComplete();
-                }],
+                },
+                this.internalInitialize],
                 ...this.initializationFunctionSet,
                 ...[(fStageComplete) =>
                 {

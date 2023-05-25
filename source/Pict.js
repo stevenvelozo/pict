@@ -352,3 +352,4 @@ class Pict extends libFable
 };
 
 module.exports = Pict;
+module.exports.PictViewClass = require('./Pict-View.js');
