@@ -42,6 +42,24 @@ class Pict extends libFable
 		this.initializePictTemplates();
 	}
 
+	// Just passing an options will construct one for us.
+	// Passing a hash will set the hash.
+	// Passing a prototype will use that!
+	addView(pOptions, pViewHash, pViewPrototype)
+	{
+		let tmpOptions = (typeof(pOptions) == 'object') ? pOptions : {};
+		let tmpViewHash = (typeof(pHash) == 'string') ? pHash : this.fable.getUUID();
+
+		if (typeof(pViewPrototype) != 'undefined')
+		{
+			return this.serviceManager.instantiateServiceProviderFromPrototype('PictView', tmpOptions, tmpViewHash, pViewPrototype);
+		}
+		else
+		{
+			return this.serviceManager.instantiateServiceProvider('PictView', tmpOptions, tmpViewHash);
+		}
+	}
+
 	initializePictTemplates(fExtraTemplateMethods)
 	{
 		/*

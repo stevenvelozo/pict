@@ -5,7 +5,7 @@
 
 	"LibraryOutputFolder": "./dist/",
 
-	"LibraryUniminifiedFileName": "pict.compatible.js",
+	"LibraryUniminifiedFileName": "pict.js",
 
-	"LibraryMinifiedFileName": "pict.compatible.min.js"
+	"LibraryMinifiedFileName": "pict.min.js"
 }
