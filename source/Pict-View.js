@@ -3,8 +3,8 @@ const libFableServiceBase = require('fable').ServiceProviderBase;
 const defaultPictViewSettings = (
 	{
 		DefaultRenderable: false,
-        DefaultTemplateRecordAddress: false,
         DefaultDestinationAddress: false,
+        DefaultTemplateRecordAddress: false,
 
         ViewIdentifier: 'DEFAULT',
 
@@ -108,7 +108,7 @@ class PictView extends libFableServiceBase
                 {
                     if (this.options.RenderOnLoad)
                     {
-                        return this.renderAsync(this.options.DefaultRenderable, fStageComplete);
+                        return this.renderAsync(this.options.DefaultRenderable, null, null, fStageComplete);
                     }
                 }
             ],
@@ -117,8 +117,9 @@ class PictView extends libFableServiceBase
                 if (pError)
                 {
                     this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} did not auto initialize/render properly: ${pError}`, pError);
+                    return false;
                 }
-                return fCallback(pError);
+                return true;
             }
         )
 	}
