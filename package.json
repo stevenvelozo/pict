@@ -1,6 +1,6 @@
 {
   "name": "pict",
-  "version": "1.0.54",
+  "version": "1.0.56",
   "description": "Pict browser library.",
   "main": "source/Pict.js",
   "scripts": {
@@ -43,8 +43,8 @@
   },
   "homepage": "https://github.com/stevenvelozo/pict#readme",
   "devDependencies": {
-    "@babel/core": "^7.21.8",
-    "@babel/preset-env": "^7.21.5",
+    "@babel/core": "^7.22.1",
+    "@babel/preset-env": "^7.22.2",
     "browserify": "^17.0.0",
     "chai": "4.3.7",
     "gulp": "^4.0.2",
@@ -54,7 +54,7 @@
     "gulp-strip-comments": "^2.5.2",
     "gulp-terser": "^2.1.0",
     "gulp-util": "^3.0.8",
-    "jsdom": "^22.0.0",
+    "jsdom": "^22.1.0",
     "mocha": "10.2.0",
     "nyc": "^15.1.0",
     "retold-data-service": "^1.0.3",
@@ -63,6 +63,6 @@
   },
   "dependencies": {
     "cachetrax": "^1.0.3",
-    "fable": "^3.0.48"
+    "fable": "^3.0.50"
   }
 }
