@@ -34,6 +34,9 @@ class PictContentAssignment extends libFableServiceBase
 
         // API Consumers can also craft their own append function
         this.customAppendFunction = false;
+
+        // API Consumers can also craft their own read function
+        this.customReadFunction = false;
 	}
 
     assignContent(pAddress, pContent)
@@ -93,6 +96,39 @@ class PictContentAssignment extends libFableServiceBase
         {
             // Just log it out for now -- nothing browser in our mix.
             this.log.trace(`PICT Content APPEND to [${pAddress}]:`, pContent);
+        }
+    }
+
+    readContent(pAddress, pContentType)
+    {
+        let tmpContentType = (typeof(pContentType) == 'string') ? pContentType : 'value';
+
+        if (this.customReadFunction)
+        {
+            return this.customReadFunction(pAddress, pContentType);
+        }
+        else if (this.hasJquery)
+        {
+            let tmpTargetElement = window.jQuery(pAddress);
+            return tmpTargetElement.html();
+        }
+        else if (this.inBrowser && this.hasDocument)
+        {
+            let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+            if (tmpTargetElementSet.length < 1)
+            {
+                return '';
+            }
+            else if (tmpTargetElementSet.length == 1)
+            {
+                return tmpTargetElementSet[0].innerHTML;
+            }
+        }
+        else
+        {
+            // Just log it out for now -- nothing browser in our mix.
+            this.log.trace(`PICT Content READ from [${pAddress}] type [${tmpContentType}]...`);
+            return '';
         }
     }
 }
