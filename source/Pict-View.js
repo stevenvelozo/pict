@@ -28,6 +28,9 @@ class PictView extends libFableServiceBase
         this.options = this.fable.Utility.extend(defaultPictViewSettings, this.options);
         this.serviceType = 'PictView';
 
+        // Wire in the essential Pict service
+        this.AppData = this.fable.AppData;
+
         // Load all templates from the array in the options
         // Templates are in the form of {Hash:'Some-Template-Hash',Template:'Template content',Source:'TemplateSource'}
         for (let i = 0; i < this.options.Templates.length; i++)
@@ -120,8 +123,7 @@ class PictView extends libFableServiceBase
                     return false;
                 }
                 return true;
-            }
-        )
+            });
 	}
 
     initialize(fCallback)
@@ -148,8 +150,7 @@ class PictView extends libFableServiceBase
                     this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} did not initialize properly: ${pError}`, pError);
                 }
                 return fCallback(pError);
-            }
-        )
+            });
     }
 
     render(pRenderable, pRenderDestinationAddress, pTemplateDataAddress)

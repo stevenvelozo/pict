@@ -3,32 +3,17 @@
 */
 const libFable = require('fable');
 
-const defaultPictSettings = (
-	{
-		// The main "viewport" is the view that is used to launch the entire application
-		MainViewportVew: 'Default-Viewport',
-
-		// Whether or not we should automatically render the main viewport when appropriate
-		AutoRenderMainViewportView: false,
-
-		// The prefix to prepend on all template destination hashes
-		IdentifierAddressPrefix: 'PICT-'
-	});
-
 class Pict extends libFable
 {
 	constructor(pSettings)
 	{
 		super(pSettings);
 
-		// Fill in any default Pict settings that are not in the settings object.
-		this.settingsManager.fill(defaultPictSettings);
-
 		// The templateProvider provides a basic key->template mapping with default fallback capabilities
 		this.serviceManager.addAndInstantiateServiceType('TemplateProvider', require('./Pict-Template-Provider.js'));
 		this.serviceManager.addAndInstantiateServiceType('EntityProvider',  require('./Pict-Meadow-EntityProvider.js'));
+		this.serviceManager.addAndInstantiateServiceType('DataProvider',  require('./Pict-DataProvider.js'));
 		this.serviceManager.addAndInstantiateServiceType('ContentAssignment',  require('./Pict-Content-Assignment.js'));
-		this.serviceManager.addServiceType('PictView',  require('./Pict-View.js'));
 
 		this.serviceManager.instantiateServiceProvider('MetaTemplate');
 
@@ -40,6 +25,9 @@ class Pict extends libFable
 
 		this._DefaultPictTemplatesInitialized = false;
 		this.initializePictTemplates();
+
+		this.serviceManager.addServiceType('PictView',  require('./Pict-View.js'));
+		this.serviceManager.addServiceType('PictApplication',  require('./Pict-Application.js'));
 	}
 
 	// Just passing an options will construct one for us.
@@ -48,7 +36,7 @@ class Pict extends libFable
 	addView(pOptions, pViewHash, pViewPrototype)
 	{
 		let tmpOptions = (typeof(pOptions) == 'object') ? pOptions : {};
-		let tmpViewHash = (typeof(pHash) == 'string') ? pHash : this.fable.getUUID();
+		let tmpViewHash = (typeof(pViewHash) == 'string') ? pViewHash : this.fable.getUUID();
 
 		if (typeof(pViewPrototype) != 'undefined')
 		{
@@ -370,4 +358,5 @@ class Pict extends libFable
 };
 
 module.exports = Pict;
+module.exports.PictApplicationClass = require('./Pict-Application.js');
 module.exports.PictViewClass = require('./Pict-View.js');
