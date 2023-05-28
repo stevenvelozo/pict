@@ -74,11 +74,11 @@ class Pict extends libFable
 
 		if (typeof(pApplicationPrototype) != 'undefined')
 		{
-			return this.serviceManager.instantiateServiceProviderFromPrototype('PictView', tmpOptions, tmpApplicationHash, pApplicationPrototype);
+			return this.serviceManager.instantiateServiceProviderFromPrototype('PictApplication', tmpOptions, tmpApplicationHash, pApplicationPrototype);
 		}
 		else
 		{
-			return this.serviceManager.instantiateServiceProvider('PictView', tmpOptions, tmpApplicationHash);
+			return this.serviceManager.instantiateServiceProvider('PictApplication', tmpOptions, tmpApplicationHash);
 		}
 	}
 
