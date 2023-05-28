@@ -1,68 +1,53 @@
 {
-  "name": "pict",
-  "version": "1.0.67",
-  "description": "Pict browser library.",
-  "main": "source/Pict.js",
-  "scripts": {
-    "start": "node source/Pict.js",
-    "coverage": "./node_modules/.bin/nyc --reporter=lcov --reporter=text-lcov ./node_modules/mocha/bin/_mocha -- -u tdd -R spec",
-    "test": "./node_modules/.bin/mocha -u tdd -R spec",
-    "build": "./node_modules/.bin/gulp build",
-    "build-compatible": "GULP_CUSTOM_BUILD_TARGET=compatible ./node_modules/.bin/gulp build",
-    "api-server-harness": "node ./retold-harness/bookstore-serve-api.js",
-    "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t retold/pict:local",
-    "docker-dev-run": "docker run -it -d --name retold-pict-dev -p 60000:8080 -p 63306:3306 -p 8086:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" retold/pict:local",
-    "docker-dev-shell": "docker exec -it retold-pict-dev /bin/bash"
-  },
-  "mocha": {
-    "diff": true,
-    "extension": [
-      "js"
-    ],
-    "package": "./package.json",
-    "reporter": "spec",
-    "slow": "75",
-    "timeout": "5000",
-    "ui": "tdd",
-    "watch-files": [
-      "source/**/*.js",
-      "test/**/*.js"
-    ],
-    "watch-ignore": [
-      "lib/vendor"
-    ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://stevenvelozo@github.com/stevenvelozo/pict.git"
-  },
-  "author": "steven velozo <steven@velozo.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/stevenvelozo/pict/issues"
-  },
-  "homepage": "https://github.com/stevenvelozo/pict#readme",
-  "devDependencies": {
-    "@babel/core": "^7.22.1",
-    "@babel/preset-env": "^7.22.2",
-    "browserify": "^17.0.0",
-    "chai": "4.3.7",
-    "gulp": "^4.0.2",
-    "gulp-babel": "^8.0.0",
-    "gulp-env": "^0.4.0",
-    "gulp-sourcemaps": "^3.0.0",
-    "gulp-strip-comments": "^2.5.2",
-    "gulp-terser": "^2.1.0",
-    "gulp-util": "^3.0.8",
-    "jsdom": "^22.1.0",
-    "mocha": "10.2.0",
-    "nyc": "^15.1.0",
-    "retold-data-service": "^1.0.3",
-    "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0"
-  },
-  "dependencies": {
-    "cachetrax": "^1.0.3",
-    "fable": "^3.0.50"
-  }
+    "name": "pict",
+    "version": "1.0.67",
+    "description": "Pict browser library.",
+    "main": "source/Pict.js",
+    "scripts": {
+        "start": "node source/Pict.js",
+        "coverage": "./node_modules/.bin/nyc --reporter=lcov --reporter=text-lcov ./node_modules/mocha/bin/_mocha -- -u tdd -R spec",
+        "test": "./node_modules/.bin/mocha -u tdd -R spec",
+        "build": "./node_modules/.bin/gulp build",
+        "build-compatible": "GULP_CUSTOM_BUILD_TARGET=compatible ./node_modules/.bin/gulp build",
+        "api-server-harness": "node ./retold-harness/bookstore-serve-api.js",
+        "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t pict-image:local",
+        "docker-dev-run": "docker run -it -d --name pict-dev -p 60000:8080 -p 63306:3306 -p 8086:8086  -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-image:local",
+        "docker-dev-shell": "docker exec -it pict-dev /bin/bash"
+    },
+    "mocha": {
+        "diff": true,
+        "extension": [
+            "js"
+        ],
+        "package": "./package.json",
+        "reporter": "spec",
+        "slow": "75",
+        "timeout": "5000",
+        "ui": "tdd",
+        "watch-files": [
+            "source/**/*.js",
+            "test/**/*.js"
+        ],
+        "watch-ignore": [
+            "lib/vendor"
+        ]
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://stevenvelozo@github.com/stevenvelozo/pict.git"
+    },
+    "author": "steven velozo <steven@velozo.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/stevenvelozo/pict/issues"
+    },
+    "homepage": "https://github.com/stevenvelozo/pict#readme",
+    "devDependencies": {
+        "retold-data-service": "^1.0.3"
+    },
+    "dependencies": {
+        "cachetrax": "^1.0.3",
+        "fable": "^3.0.51",
+        "quackage": "^1.0.6"
+    }
 }

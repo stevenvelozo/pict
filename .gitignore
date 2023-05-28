@@ -1,3 +1,8 @@
+.browserslistrc-BACKUP
+.gulpfile-quackage-config.json
+.gulpfile-quackage.js
+.package.json.quackage.bak
+
 .nyc_output
 .DS_Store
 # Logs

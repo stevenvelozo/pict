@@ -18,6 +18,7 @@ class Pict extends libFable
 		this.serviceManager.addAndInstantiateServiceType('ContentAssignment',  require('./Pict-Content-Assignment.js'));
 
 		this.serviceManager.instantiateServiceProvider('MetaTemplate');
+		this.serviceManager.instantiateServiceProvider('DataGeneration');
 
 		this.manifest = this.serviceManager.instantiateServiceProvider('Manifest');
 
@@ -291,7 +292,6 @@ class Pict extends libFable
 					let tmpColumnData = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpHash);
 					return this.defaultServices.DataFormat.formatterDollars(tmpColumnData);
 				});
-
 			this.defaultServices.MetaTemplate.addPattern('{~Digits:', '~}',
 				(pHash, pData)=>
 				{
@@ -299,6 +299,31 @@ class Pict extends libFable
 					let tmpColumnData = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpHash);
 					return this.defaultServices.DataFormat.formatterAddCommasToNumber(this.defaultServices.DataFormat.formatterRoundNumber(tmpColumnData, 2));
 				});
+
+			let fRandomNumberString = (pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+
+					let tmpStringLength = 4;
+					let tmpMaxNumber = 9999;
+
+					if (tmpHash.length > 0)
+					{
+						let tmpHashParts = tmpHash.split(',');
+						if (tmpHashParts.length > 0)
+						{
+							tmpStringLength = parseInt(tmpHashParts[0]);
+						}
+						if (tmpHashParts.length > 1)
+						{
+							tmpMaxNumber = parseInt(tmpHashParts[1]);
+						}
+					}
+
+					return this.defaultServices.DataGeneration.randomNumericString(tmpStringLength, tmpMaxNumber);
+				};
+			this.defaultServices.MetaTemplate.addPattern('{~RandomNumberString:', '~}',fRandomNumberString);
+			this.defaultServices.MetaTemplate.addPattern('{~RNS:', '~}',fRandomNumberString);
 
 			this._DefaultPictTemplatesInitialized = true;
 		}

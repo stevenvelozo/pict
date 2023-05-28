@@ -67,6 +67,23 @@ suite
 				);
 				test
 				(
+					'Simple templates with generative data.',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+						let tmpTemplateOutput = testPict.parseTemplate('<p>{~RandomNumberString:10~}</p>', {});
+						Expect(tmpTemplateOutput.length).to.be.greaterThan(7);
+						tmpTemplateOutput = testPict.parseTemplate('<p>{~RandomNumberString:~}</p>', {});
+						Expect(tmpTemplateOutput.length).to.be.greaterThan(7);
+						tmpTemplateOutput = testPict.parseTemplate('<p>{~RandomNumberString:17,100~}</p>', {});
+						Expect(tmpTemplateOutput.length).to.be.greaterThan(7);
+						tmpTemplateOutput = testPict.parseTemplate('<p>{~RandomNumberString:10,999999999~}</p>', {});
+						Expect(tmpTemplateOutput.length).to.be.greaterThan(7);
+						fDone();
+					}
+				);
+				test
+				(
 					'Templates should be able to run on sets asynchronously.',
 					function(fDone)
 					{
