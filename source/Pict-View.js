@@ -22,7 +22,7 @@ const defaultPictViewSettings = (
 
 class PictView extends libFableServiceBase
 {
-	constructor(pFable, pOptions, pServiceHash)
+	constructor(pFable, pOptions, pServiceHash, fCallback)
 	{
         super(pFable, pOptions, pServiceHash);
         this.options = this.fable.Utility.extend(defaultPictViewSettings, this.options);
@@ -120,9 +120,15 @@ class PictView extends libFableServiceBase
                 if (pError)
                 {
                     this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} did not auto initialize/render properly: ${pError}`, pError);
+                }
+                if (typeof(fCallback) === 'function')
+                {
+                    return fCallback(pError);
+                }
+                else
+                {
                     return false;
                 }
-                return true;
             });
 	}
 

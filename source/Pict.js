@@ -66,7 +66,7 @@ class Pict extends libFable
 		}
 	}
 
-	initializePictTemplates(fExtraTemplateMethods)
+	initializePictTemplates()
 	{
 		/*
 		 *
