@@ -18,7 +18,7 @@ const defaultPictSettings = (
 
 class PictApplication extends libFableServiceBase
 {
-	constructor(pFable, pOptions, pServiceHash, fCallback)
+	constructor(pFable, pOptions, pServiceHash)
 	{
         super(pFable, pOptions, pServiceHash);
         this.options = this.fable.Utility.extend(defaultPictSettings, this.options);
@@ -39,75 +39,27 @@ class PictApplication extends libFableServiceBase
             }
         }
 
-        this.fable.Utility.waterfall(
-            [
-                (fStageComplete) =>
-                {
-                    if (this.options.InitializeOnLoad)
-                    {
-                        return this.initialize(fStageComplete);
-                    }
-
-                    return fStageComplete();
-                },
-                (fStageComplete) =>
-                {
-                    if (this.options.AutoRenderMainViewportView)
-                    {
-                        this.log.info(`Pict Application ${this.options.Name}[${this.UUID}]::[${this.Hash}] beginning auto render of [${this.options.MainViewportView}::${this.options.MainViewportRenderable}].`);
-                        return this.renderAsync(this.options.MainViewportView, this.options.MainViewportRenderable, this.options.MainViewportDestinationAddress, this.options.MainViewportDefaultDataAddress, fStageComplete);
-                    }
-                    return fStageComplete();
-                }
-            ],
-            (pError) =>
-            {
-                if (pError)
-                {
-                    this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} did not auto initialize/render properly: ${pError}`, pError);
-                }
-                if (typeof(fCallback) === 'function')
-                {
-                    return fCallback(pError);
-                }
-                else
-                {
-                    return false;
-                }
-            });
+        if (this.options.InitializeOnLoad)
+        {
+            return this.initialize();
+        }
+        if (this.options.AutoRenderMainViewportView)
+        {
+            this.log.info(`Pict Application ${this.options.Name}[${this.UUID}]::[${this.Hash}] beginning auto render of [${this.options.MainViewportView}::${this.options.MainViewportRenderable}].`);
+            return this.renderAsync(this.options.MainViewportView, this.options.MainViewportRenderable, this.options.MainViewportDestinationAddress, this.options.MainViewportDefaultDataAddress, fStageComplete);
+        }
 	}
 
-    internalInitialize(fCallback)
+    internalInitialize()
     {
-        return fCallback();
+        return true;
     }
 
     initialize(fCallback)
     {
-        this.fable.Utility.waterfall(
-            [
-                ...[(fStageComplete) =>
-                {
-                    this.log.info(`Pict Application ${this.options.Name}[${this.UUID}]::[${this.Hash}] beginning initialization...`);
-                    return fStageComplete();
-                },
-                this.internalInitialize],
-                ...this.initializationFunctionSet,
-                ...[
-                (fStageComplete) =>
-                {
-                    this.log.info(`Pict Application ${this.options.Name}[${this.UUID}]::[${this.Hash}] initialization complete.`);
-                    return fStageComplete();
-                }]
-            ],
-            (pError) =>
-            {
-                if (pError)
-                {
-                    this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} did not initialize properly: ${pError}`, pError);
-                }
-                return fCallback(pError);
-            });
+        this.log.info(`Pict Application ${this.options.Name}[${this.UUID}]::[${this.Hash}] beginning initialization...`);
+        this.internalInitialize();
+        this.log.info(`Pict Application ${this.options.Name}[${this.UUID}]::[${this.Hash}] initialization complete.`);
     }
 
     render(pViewHash, pRenderableHash, pRenderDestinationAddress, pTemplateDataAddress)

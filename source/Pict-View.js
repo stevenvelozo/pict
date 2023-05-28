@@ -22,7 +22,7 @@ const defaultPictViewSettings = (
 
 class PictView extends libFableServiceBase
 {
-	constructor(pFable, pOptions, pServiceHash, fCallback)
+	constructor(pFable, pOptions, pServiceHash)
 	{
         super(pFable, pOptions, pServiceHash);
         this.options = this.fable.Utility.extend(defaultPictViewSettings, this.options);
@@ -91,72 +91,26 @@ class PictView extends libFableServiceBase
             }
         }
 
-        // Array of Initialization Functions
-        this.initializationFunctionSet = [];
-        // This is here so we can easily have an inline initialize override
-        this.internalInitialize = (fStageComplete) => { return fStageComplete(); };
-
-        this.fable.Utility.waterfall(
-            [
-                (fStageComplete) =>
-                {
-                    if (this.options.InitializeOnLoad)
-                    {
-                        return this.initialize(fStageComplete);
-                    }
-
-                    return fStageComplete();
-                },
-                (fStageComplete) =>
-                {
-                    if (this.options.RenderOnLoad)
-                    {
-                        return this.renderAsync(this.options.DefaultRenderable, null, null, fStageComplete);
-                    }
-                }
-            ],
-            (pError) =>
-            {
-                if (pError)
-                {
-                    this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} did not auto initialize/render properly: ${pError}`, pError);
-                }
-                if (typeof(fCallback) === 'function')
-                {
-                    return fCallback(pError);
-                }
-                else
-                {
-                    return false;
-                }
-            });
+        if (this.options.InitializeOnLoad)
+        {
+            this.initialize();
+        }
+        if (this.options.RenderOnLoad)
+        {
+            return this.render(this.options.DefaultRenderable, this.options.DefaultDestinationAddress, this.options.DefaultTemplateRecordAddress);
+        }
 	}
 
-    initialize(fCallback)
+    internalInitialize()
     {
-        this.fable.Utility.waterfall(
-            [
-                ...[(fStageComplete) =>
-                {
-                    this.log.info(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} beginning initialization...`);
-                    return fStageComplete();
-                },
-                this.internalInitialize],
-                ...this.initializationFunctionSet,
-                ...[(fStageComplete) =>
-                {
-                    this.log.info(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} initialization complete.`);
-                    return fStageComplete();
-                }]
-            ],
-            (pError) =>
-            {
-                if (pError)
-                {
-                    this.log.error(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} did not initialize properly: ${pError}`, pError);
-                }
-                return fCallback(pError);
-            });
+        return true;
+    }
+
+    initialize()
+    {
+        this.log.info(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} beginning initialization...`);
+        this.internalInitialize();
+        this.log.info(`PictView [${this.UUID}]::[${this.Hash}] ${this.options.ViewIdentifier} initialization complete.`);
     }
 
     render(pRenderable, pRenderDestinationAddress, pTemplateDataAddress)
