@@ -32,7 +32,7 @@ class Pict extends libFable
 				{
 					// Load each manifest
 					let tmpManifestKey = tmpManifestKeys[i];
-					this.serviceManager.instantiateServiceProvider('Manifest', this.options.Manifests[tmpManifestKey], tmpManifestKey);
+					this.serviceManager.instantiateServiceProvider('Manifest', this.settings.Manifests[tmpManifestKey], tmpManifestKey);
 				}
 			}
 		}
