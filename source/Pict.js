@@ -9,6 +9,8 @@ class Pict extends libFable
 	{
 		super(pSettings);
 
+		this.isBrowser = new Function("try {return (this===window);} catch(pError) {return false;}");
+
 		// The templateProvider provides a basic key->template mapping with default fallback capabilities
 		this.serviceManager.addAndInstantiateServiceType('TemplateProvider', require('./Pict-Template-Provider.js'));
 		this.serviceManager.addAndInstantiateServiceType('EntityProvider',  require('./Pict-Meadow-EntityProvider.js'));
