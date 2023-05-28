@@ -28,6 +28,17 @@ class PictApplication extends libFableServiceBase
 
         this.initializationFunctionSet = [];
 
+        let tmpManifestKeys = Object.keys(this.options.Manifests);
+        if (tmpManifestKeys.length > 0)
+        {
+            for (let i = 0; i < tmpManifestKeys.length; i++ )
+            {
+                // Load each manifest
+                let tmpManifestKey = tmpManifestKeys[i];
+                this.fable.serviceManager.instantiateServiceProvider('Manifest', this.options.Manifests[tmpManifestKey], tmpManifestKey);
+            }
+        }
+
         this.fable.Utility.waterfall(
             [
                 (fStageComplete) =>
@@ -78,20 +89,6 @@ class PictApplication extends libFableServiceBase
                 ...[(fStageComplete) =>
                 {
                     this.log.info(`Pict Application ${this.options.Name}[${this.UUID}]::[${this.Hash}] beginning initialization...`);
-                    return fStageComplete();
-                },
-                (fStageComplete) =>
-                {
-                    let tmpManifestKeys = Object.keys(this.options.Manifests);
-                    if (tmpManifestKeys.length > 0)
-                    {
-                        for (let i = 0; i < tmpManifestKeys.length; i++ )
-                        {
-                            // Load each manifest
-                            let tmpManifestKey = tmpManifestKeys[i];
-                            this.fable.serviceManager.instantiateServiceProvider('Manifest', this.options.Manifests[tmpManifestKey], tmpManifestKey);
-                        }
-                    }
                     return fStageComplete();
                 },
                 this.internalInitialize],
