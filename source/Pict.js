@@ -390,5 +390,9 @@ class Pict extends libFable
 };
 
 module.exports = Pict;
+
 module.exports.PictApplicationClass = require('./Pict-Application.js');
 module.exports.PictViewClass = require('./Pict-View.js');
+
+// This is to help understand the type of enivironement we're executing in
+module.exports.isBrowser = new Function("try {return (this===window);} catch(pError) {return false;}");
