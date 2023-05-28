@@ -84,6 +84,17 @@ suite
 				);
 				test
 				(
+					'Generate identifiers',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+						let tmpTemplateOutput = testPict.parseTemplate('<p>{~PascalCaseIdentifier:Record.name~}</p>', {name:'meadow-endpoints'});
+						Expect(tmpTemplateOutput).to.equal('<p>MeadowEndpoints</p>');
+						fDone();
+					}
+				);
+				test
+				(
 					'Templates should be able to run on sets asynchronously.',
 					function(fDone)
 					{

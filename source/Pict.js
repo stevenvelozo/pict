@@ -325,6 +325,19 @@ class Pict extends libFable
 			this.defaultServices.MetaTemplate.addPattern('{~RandomNumberString:', '~}',fRandomNumberString);
 			this.defaultServices.MetaTemplate.addPattern('{~RNS:', '~}',fRandomNumberString);
 
+
+			let fPascalCaseIdentifier = (pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpValue = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpHash);
+					if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
+					{
+						return '';
+					}
+					return this.defaultServices.DataFormat.cleanNonAlphaCharacters(this.defaultServices.DataFormat.capitalizeEachWord(tmpValue));
+				};
+			this.defaultServices.MetaTemplate.addPattern('{~PascalCaseIdentifier:', '~}',fPascalCaseIdentifier);
+
 			this._DefaultPictTemplatesInitialized = true;
 		}
 	}
