@@ -23,6 +23,20 @@ class Pict extends libFable
 
 		this.Bundle = {};
 
+		if (typeof(this.settings.Manifests) == 'object')
+		{
+			let tmpManifestKeys = Object.keys(this.settings.Manifests);
+			if (tmpManifestKeys.length > 0)
+			{
+				for (let i = 0; i < tmpManifestKeys.length; i++ )
+				{
+					// Load each manifest
+					let tmpManifestKey = tmpManifestKeys[i];
+					this.serviceManager.instantiateServiceProvider('Manifest', this.options.Manifests[tmpManifestKey], tmpManifestKey);
+				}
+			}
+		}
+
 		this._DefaultPictTemplatesInitialized = false;
 		this.initializePictTemplates();
 
