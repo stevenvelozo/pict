@@ -97,7 +97,7 @@ class PictView extends libFableServiceBase
         }
         if (this.options.RenderOnLoad)
         {
-            return this.render(this.options.DefaultRenderable, this.options.DefaultDestinationAddress, this.options.DefaultTemplateRecordAddress);
+            this.render(this.options.DefaultRenderable, this.options.DefaultDestinationAddress, this.options.DefaultTemplateRecordAddress);
         }
 	}
 

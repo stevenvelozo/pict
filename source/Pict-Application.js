@@ -46,7 +46,7 @@ class PictApplication extends libFableServiceBase
         if (this.options.AutoRenderMainViewportView)
         {
             this.log.info(`Pict Application ${this.options.Name}[${this.UUID}]::[${this.Hash}] beginning auto render of [${this.options.MainViewportView}::${this.options.MainViewportRenderable}].`);
-            return this.renderAsync(this.options.MainViewportView, this.options.MainViewportRenderable, this.options.MainViewportDestinationAddress, this.options.MainViewportDefaultDataAddress, fStageComplete);
+            this.renderAsync(this.options.MainViewportView, this.options.MainViewportRenderable, this.options.MainViewportDestinationAddress, this.options.MainViewportDefaultDataAddress, ()=>{});
         }
 	}
 
