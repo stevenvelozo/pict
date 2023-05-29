@@ -55,7 +55,7 @@ class PictApplication extends libFableServiceBase
         return true;
     }
 
-    initialize(fCallback)
+    initialize()
     {
         this.log.info(`Pict Application ${this.options.Name}[${this.UUID}]::[${this.Hash}] beginning initialization...`);
         this.internalInitialize();

@@ -106,6 +106,8 @@ class Pict extends libFable
 			let fEntityRender = (pHash, pData, fCallback) =>
 				{
 					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+
 
 					let tmpEntity = false;
 					let tmpEntityID = false;
@@ -140,7 +142,7 @@ class Pict extends libFable
 					else
 					{
 						// This is an address, so we need to get the value at the address
-						tmpEntityID = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpEntityID);
+						tmpEntityID = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpEntityID);
 					}
 
 					// No Entity or EntityID
@@ -178,11 +180,12 @@ class Pict extends libFable
 			let fNotEmptyRender = (pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
 					// Should switch this to indexOf so pipes can be in the content.
 					let tmpHashParts = tmpHash.split('|');
 
 					// For now just check truthiness
-					if (this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpHashParts[0]))
+					if (this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHashParts[0]))
 					{
 						return tmpHashParts[1];
 					}
@@ -198,6 +201,7 @@ class Pict extends libFable
 			let fTemplateRender = (pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
 
 					let tmpTemplateHash = false;
 					let tmpAddressOfData = false;
@@ -228,7 +232,7 @@ class Pict extends libFable
 					}
 					else
 					{
-						return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpAddressOfData));
+						return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData));
 					}
 				};
 			this.defaultServices.MetaTemplate.addPattern('{~T:', '~}', fTemplateRender);
@@ -238,6 +242,7 @@ class Pict extends libFable
 			let fTemplateSetRender = (pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
 
 					let tmpTemplateHash = false;
 					let tmpAddressOfData = false;
@@ -268,7 +273,7 @@ class Pict extends libFable
 					}
 					else
 					{
-						return this.parseTemplateSetByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpAddressOfData));
+						return this.parseTemplateSetByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData));
 					}
 				};
 			this.defaultServices.MetaTemplate.addPattern('{~TS:', '~}', fTemplateSetRender);
@@ -278,7 +283,8 @@ class Pict extends libFable
 			let fDataRender = (pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
-					let tmpValue = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpHash);
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+					let tmpValue = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
 					if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
 					{
 						return '';
@@ -292,14 +298,16 @@ class Pict extends libFable
 				(pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
-					let tmpColumnData = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpHash);
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+					let tmpColumnData = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
 					return this.defaultServices.DataFormat.formatterDollars(tmpColumnData);
 				});
 			this.defaultServices.MetaTemplate.addPattern('{~Digits:', '~}',
 				(pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
-					let tmpColumnData = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpHash);
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+					let tmpColumnData = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
 					return this.defaultServices.DataFormat.formatterAddCommasToNumber(this.defaultServices.DataFormat.formatterRoundNumber(tmpColumnData, 2));
 				});
 
@@ -332,7 +340,8 @@ class Pict extends libFable
 			let fPascalCaseIdentifier = (pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
-					let tmpValue = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:pData}, tmpHash);
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+					let tmpValue = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
 					if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
 					{
 						return '';
