@@ -26,6 +26,9 @@ class Pict extends libFable
 
 		this.Bundle = {};
 
+		// Log noisness goes from 0 - 5, where 5 is show me everything.
+		this.LogNoisiness = 0;
+
 		if (typeof(this.settings.Manifests) == 'object')
 		{
 			let tmpManifestKeys = Object.keys(this.settings.Manifests);
@@ -344,7 +347,8 @@ class Pict extends libFable
 
 	parseTemplate (pTemplateString, pData, fCallback)
 	{
-		return this.defaultServices.MetaTemplate.parseString(pTemplateString, pData, fCallback);
+		let tmpData = (typeof(pData) === 'object') ? pData : {};
+		return this.defaultServices.MetaTemplate.parseString(pTemplateString, tmpData, fCallback);
 	}
 
 	parseTemplateByHash (pTemplateHash, pData, fCallback)
