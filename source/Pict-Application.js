@@ -50,6 +50,13 @@ class PictApplication extends libFableServiceBase
         }
 	}
 
+    // TODO: do we need an asynchronous version of this?
+    solve()
+    {
+        this.log.info(`Pict Application ${this.options.Name}[${this.UUID}]::[${this.Hash}] executing solve() function...`)
+        return true;
+    }
+
     internalInitialize()
     {
         return true;

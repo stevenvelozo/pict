@@ -50,7 +50,25 @@ class PictContentAssignment extends libFableServiceBase
 		}
 		else if (this.hasJquery)
 		{
-			return window.jQuery(pAddress);
+			let tmpElements = window.jQuery(pAddress);
+			if (tmpElements.length == 0)
+			{
+				return false
+			}
+			else if (tmpElements.length == 1)
+			{
+				return tmpElements[0];
+			}
+			else
+			{
+				// TODO: This isn't the most efficient method, but it is the most compatible.
+				let tmpElementSet = [];
+				for (let i = 0; i < tmpElements.length; i++)
+				{
+					tmpElementSet.push(tmpElements[i]);
+				}
+				return tmpElementSet;
+			}
 		}
 		else if (this.inBrowser && this.hasDocument)
 		{
