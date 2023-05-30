@@ -26,21 +26,19 @@ class Pict extends libFable
 
 		this.Bundle = {};
 
+		this.serviceManager.extraServiceInitialization = (pService) =>
+			{
+				// Decorate services with pict so we can use that instead of fable to eliminate confusion
+				pService.pict = this;
+				return pService;
+			}
 		// Log noisness goes from 0 - 5, where 5 is show me everything.
 		this.LogNoisiness = 0;
 
-		if (typeof(this.settings.Manifests) == 'object')
+		// Load manifest sets
+		if (this.settings.Manifests)
 		{
-			let tmpManifestKeys = Object.keys(this.settings.Manifests);
-			if (tmpManifestKeys.length > 0)
-			{
-				for (let i = 0; i < tmpManifestKeys.length; i++ )
-				{
-					// Load each manifest
-					let tmpManifestKey = tmpManifestKeys[i];
-					this.serviceManager.instantiateServiceProvider('Manifest', this.settings.Manifests[tmpManifestKey], tmpManifestKey);
-				}
-			}
+			this.loadManifestSet(this.settings.Manifests);
 		}
 
 		this._DefaultPictTemplatesInitialized = false;
@@ -48,6 +46,26 @@ class Pict extends libFable
 
 		this.serviceManager.addServiceType('PictView',  require('./Pict-View.js'));
 		this.serviceManager.addServiceType('PictApplication',  require('./Pict-Application.js'));
+	}
+
+	// Load manifests in as Hashed services
+	loadManifestSet (pManifestSet)
+	{
+		if (typeof(pManifestSet) != 'object')
+		{
+			this.log.warn(`PICT [${this.UUID}] could not load Manifest Set; pManifestSet was not an object.`);
+			return false;
+		}
+		let tmpManifestKeys = Object.keys(pManifestSet.Manifests);
+		if (tmpManifestKeys.length > 0)
+		{
+			for (let i = 0; i < tmpManifestKeys.length; i++ )
+			{
+				// Load each manifest
+				let tmpManifestKey = tmpManifestKeys[i];
+				this.serviceManager.instantiateServiceProvider('Manifest', pManifestSet[tmpManifestKey], tmpManifestKey);
+			}
+		}
 	}
 
 	// Just passing an options will construct one for us.
@@ -108,6 +126,14 @@ class Pict extends libFable
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
 
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fEntityRender]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 0)
+					{
+						this.log.trace(`PICT Template [fEntityRender]::[${tmpHash}]`);
+					}
 
 					let tmpEntity = false;
 					let tmpEntityID = false;
@@ -181,6 +207,16 @@ class Pict extends libFable
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fNotEmptyRender]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 2)
+					{
+						this.log.trace(`PICT Template [fNotEmptyRender]::[${tmpHash}]`);
+					}
+
 					// Should switch this to indexOf so pipes can be in the content.
 					let tmpHashParts = tmpHash.split('|');
 
@@ -202,6 +238,15 @@ class Pict extends libFable
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fTemplateRender]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 0)
+					{
+						this.log.trace(`PICT Template [fTemplateRender]::[${tmpHash}]`);
+					}
 
 					let tmpTemplateHash = false;
 					let tmpAddressOfData = false;
@@ -244,6 +289,15 @@ class Pict extends libFable
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
 
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fTemplateSetRender]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 0)
+					{
+						this.log.trace(`PICT Template [fTemplateSetRender]::[${tmpHash}]`);
+					}
+
 					let tmpTemplateHash = false;
 					let tmpAddressOfData = false;
 
@@ -284,6 +338,16 @@ class Pict extends libFable
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fDataRender]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 3)
+					{
+						this.log.trace(`PICT Template [fDataRender]::[${tmpHash}]`);
+					}
+
 					let tmpValue = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
 					if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
 					{
@@ -299,6 +363,16 @@ class Pict extends libFable
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fDollars]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 3)
+					{
+						this.log.trace(`PICT Template [fDollars]::[${tmpHash}]`);
+					}
+
 					let tmpColumnData = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
 					return this.defaultServices.DataFormat.formatterDollars(tmpColumnData);
 				});
@@ -307,6 +381,16 @@ class Pict extends libFable
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fDigits]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 3)
+					{
+						this.log.trace(`PICT Template [fDigits]::[${tmpHash}]`);
+					}
+
 					let tmpColumnData = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
 					return this.defaultServices.DataFormat.formatterAddCommasToNumber(this.defaultServices.DataFormat.formatterRoundNumber(tmpColumnData, 2));
 				});
@@ -314,6 +398,11 @@ class Pict extends libFable
 			let fRandomNumberString = (pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
+
+					if (this.LogNoisiness > 3)
+					{
+						this.log.trace(`PICT Template [fRandomNumberString]::[${tmpHash}]`);
+					}
 
 					let tmpStringLength = 4;
 					let tmpMaxNumber = 9999;
@@ -336,11 +425,50 @@ class Pict extends libFable
 			this.defaultServices.MetaTemplate.addPattern('{~RandomNumberString:', '~}',fRandomNumberString);
 			this.defaultServices.MetaTemplate.addPattern('{~RNS:', '~}',fRandomNumberString);
 
+			let fRandomNumber = (pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+
+					if (this.LogNoisiness > 3)
+					{
+						this.log.trace(`PICT Template [fRandomNumber]::[${tmpHash}]`);
+					}
+
+					let tmpMinimumNumber = 0;
+					let tmpMaxNumber = 9999999;
+
+					if (tmpHash.length > 0)
+					{
+						let tmpHashParts = tmpHash.split(',');
+						if (tmpHashParts.length > 0)
+						{
+							tmpMinimumNumber = parseInt(tmpHashParts[0]);
+						}
+						if (tmpHashParts.length > 1)
+						{
+							tmpMaxNumber = parseInt(tmpHashParts[1]);
+						}
+					}
+
+					return this.defaultServices.DataGeneration.randomIntegerBetween(tmpMinimumNumber, tmpMaxNumber);
+				};
+			this.defaultServices.MetaTemplate.addPattern('{~RandomNumber:', '~}',fRandomNumber);
+			this.defaultServices.MetaTemplate.addPattern('{~RN:', '~}',fRandomNumber);
 
 			let fPascalCaseIdentifier = (pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fPascalCaseIdentifier]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 3)
+					{
+						this.log.trace(`PICT Template [fPascalCaseIdentifier]::[${tmpHash}]`);
+					}
+
 					let tmpValue = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
 					if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
 					{
@@ -349,6 +477,50 @@ class Pict extends libFable
 					return this.defaultServices.DataFormat.cleanNonAlphaCharacters(this.defaultServices.DataFormat.capitalizeEachWord(tmpValue));
 				};
 			this.defaultServices.MetaTemplate.addPattern('{~PascalCaseIdentifier:', '~}',fPascalCaseIdentifier);
+
+			let fLogValue = (pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+
+					let tmpValue = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
+					let tmpValueType = typeof(tmpValue);
+					if ((tmpValue == null) || (tmpValueType == 'undefined'))
+					{
+						this.log.trace(`PICT Template Log Value: [${tmpHash}] is ${tmpValueType}.`);
+					}
+					else if (tmpValueType == 'object')
+					{
+						this.log.trace(`PICT Template Log Value: [${tmpHash}] is an obect.`, tmpValue);
+					}
+					else
+					{
+						this.log.trace(`PICT Template Log Value: [${tmpHash}] if a ${tmpValueType} = [${tmpValue}]`);
+					}
+					return '';
+				};
+			this.defaultServices.MetaTemplate.addPattern('{~LogValue:', '~}',fLogValue);
+			this.defaultServices.MetaTemplate.addPattern('{~LV:', '~}',fLogValue);
+
+
+			let fLogStatement = (pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+					this.log.trace(`PICT Template Log Message: ${tmpHash}`);
+					return '';
+				};
+			this.defaultServices.MetaTemplate.addPattern('{~LogStatement:', '~}',fLogStatement);
+			this.defaultServices.MetaTemplate.addPattern('{~LS:', '~}',fLogStatement);
+
+			let fBreakpoint = (pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpError = new Error(`PICT Template Breakpoint: ${tmpHash}`);
+					this.log.trace(`PICT Template Breakpoint: ${tmpHash}`, tmpError.stack);
+					debugger;
+					return '';
+				};
+			this.defaultServices.MetaTemplate.addPattern('{~Breakpoint', '~}',fBreakpoint);
 
 			this._DefaultPictTemplatesInitialized = true;
 		}

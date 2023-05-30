@@ -266,6 +266,8 @@ suite
 
 						testPict.AppData = {Records:_SampleChocoData, EntityName: 'Choco', Title: 'Choco Deluxe Records'};
 
+						testPict.LogNoisiness = 4;
+
 						testPict.TemplateProvider.addTemplate('Choco-Row', '<p>{~Data:Record.name~} is a file of {~Data:Record.size~} bytes big.</p>');
 						testPict.TemplateProvider.addTemplate('Choco-Screen', '<h1>{~D:AppData.Title~}</h1>{~TS:Choco-Row:AppData.Records.files~}');
 
