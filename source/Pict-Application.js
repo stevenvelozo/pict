@@ -20,8 +20,8 @@ class PictApplication extends libFableServiceBase
 {
 	constructor(pFable, pOptions, pServiceHash)
 	{
-        super(pFable, pOptions, pServiceHash);
-		this.options = this.fable.Utility.extend(JSON.parse(JSON.stringify(defaultPictSettings)), this.options);
+        let tmpOptions = Object.assign({}, defaultPictSettings, pOptions);
+        super(pFable, tmpOptions, pServiceHash);
         this.serviceType = 'PictApplication';
 
         this.AppData = this.fable.AppData;

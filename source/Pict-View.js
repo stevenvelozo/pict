@@ -24,8 +24,8 @@ class PictView extends libFableServiceBase
 {
 	constructor(pFable, pOptions, pServiceHash)
 	{
-		super(pFable, pOptions, pServiceHash);
-		this.options = this.fable.Utility.extend(JSON.parse(JSON.stringify(defaultPictViewSettings)), this.options);
+		let tmpOptions = Object.assign({}, defaultPictViewSettings, pOptions);
+		super(pFable, tmpOptions, pServiceHash);
 		this.serviceType = 'PictView';
 
 		// Wire in the essential Pict service
