@@ -3020,7 +3020,7 @@ this.serviceManager.addAndInstantiateServiceType('TemplateProvider',require('./P
 pService.pict=this;return pService;};// Log noisness goes from 0 - 5, where 5 is show me everything.
 this.LogNoisiness=0;// Load manifest sets
 if(this.settings.Manifests){this.loadManifestSet(this.settings.Manifests);}this._DefaultPictTemplatesInitialized=false;this.initializePictTemplates();this.serviceManager.addServiceType('PictView',require('./Pict-View.js'));this.serviceManager.addServiceType('PictApplication',require('./Pict-Application.js'));}// Load manifests in as Hashed services
-loadManifestSet(pManifestSet){if(typeof pManifestSet!='object'){this.log.warn("PICT [".concat(this.UUID,"] could not load Manifest Set; pManifestSet was not an object."));return false;}let tmpManifestKeys=Object.keys(pManifestSet.Manifests);if(tmpManifestKeys.length>0){for(let i=0;i<tmpManifestKeys.length;i++){// Load each manifest
+loadManifestSet(pManifestSet){if(typeof pManifestSet!='object'){this.log.warn("PICT [".concat(this.UUID,"] could not load Manifest Set; pManifestSet was not an object."));return false;}let tmpManifestKeys=Object.keys(pManifestSet);if(tmpManifestKeys.length>0){for(let i=0;i<tmpManifestKeys.length;i++){// Load each manifest
 let tmpManifestKey=tmpManifestKeys[i];this.serviceManager.instantiateServiceProvider('Manifest',pManifestSet[tmpManifestKey],tmpManifestKey);}}}// Just passing an options will construct one for us.
 // Passing a hash will set the hash.
 // Passing a prototype will use that!

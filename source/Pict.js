@@ -56,7 +56,7 @@ class Pict extends libFable
 			this.log.warn(`PICT [${this.UUID}] could not load Manifest Set; pManifestSet was not an object.`);
 			return false;
 		}
-		let tmpManifestKeys = Object.keys(pManifestSet.Manifests);
+		let tmpManifestKeys = Object.keys(pManifestSet);
 		if (tmpManifestKeys.length > 0)
 		{
 			for (let i = 0; i < tmpManifestKeys.length; i++ )
