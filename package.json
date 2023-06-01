@@ -49,6 +49,6 @@
         "cachetrax": "^1.0.3",
         "fable": "^3.0.62",
         "pict-application": "^1.0.0",
-        "pict-view": "^1.0.3"
+        "pict-view": "^1.0.4"
     }
 }
