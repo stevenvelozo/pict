@@ -47,7 +47,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			this.fable.Bundle[pEntity] = this.cache[pEntity].RecordMap;
 		}
 	}
-	
+
 	getEntity (pEntity, pIDRecord, fCallback)
 	{
 		this.initializeCache(pEntity);
@@ -56,7 +56,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			()=>
 			{
 				let tmpPossibleRecord = this.cache[pEntity].read(pIDRecord);
-				
+
 				if (tmpPossibleRecord)
 				{
 					return tmpPossibleRecord;
@@ -120,7 +120,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 						let tmpEntitySet = [];
 						// Now run these in series (it's possible to parallelize but no reason to)
-						this.fable.Utility.eachLimit(tmpDownloadURIFragments, 1, 
+						this.fable.Utility.eachLimit(tmpDownloadURIFragments, 1,
 							(pURIFragment, fDownloadCallback)=>
 							{
 								let tmpOptions = (

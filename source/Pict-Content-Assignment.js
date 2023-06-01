@@ -53,11 +53,11 @@ class PictContentAssignment extends libFableServiceBase
 			let tmpElements = window.jQuery(pAddress);
 			if (tmpElements.length == 0)
 			{
-				return false
+				return [];
 			}
 			else if (tmpElements.length == 1)
 			{
-				return tmpElements[0];
+				return [tmpElements[0]];
 			}
 			else
 			{
@@ -77,8 +77,8 @@ class PictContentAssignment extends libFableServiceBase
 		else
 		{
 			// Just log it out for now
-			this.log.trace(`PICT Content GET ELEMENT for [${pAddress}]`);
-			return false;
+			this.log.trace(`PICT Content GET ELEMENT for [${pAddress}] will return empty because none of the browser methods are available`);
+			return [];
 		}
 	}
 
