@@ -199,8 +199,8 @@ class Pict extends libFable
 							}
 						});
 				};
-			this.defaultServices.MetaTemplate.addPatternAsync('{~E:', '~}', fEntityRender);
-			this.defaultServices.MetaTemplate.addPatternAsync('{~Entity:', '~}', fEntityRender);
+			this.MetaTemplate.addPatternAsync('{~E:', '~}', fEntityRender);
+			this.MetaTemplate.addPatternAsync('{~Entity:', '~}', fEntityRender);
 
 			// {NE~Some.Address|If the left value is truthy, render this value.~}
 			let fNotEmptyRender = (pHash, pData)=>
@@ -230,8 +230,8 @@ class Pict extends libFable
 						return '';
 					}
 				};
-			this.defaultServices.MetaTemplate.addPattern('{~NotEmpty:', '~}', fNotEmptyRender);
-			this.defaultServices.MetaTemplate.addPattern('{~NE:', '~}', fNotEmptyRender);
+			this.MetaTemplate.addPattern('{~NotEmpty:', '~}', fNotEmptyRender);
+			this.MetaTemplate.addPattern('{~NE:', '~}', fNotEmptyRender);
 
 			// {~T:Template:AddressOfData~}
 			let fTemplateRender = (pHash, pData)=>
@@ -280,8 +280,8 @@ class Pict extends libFable
 						return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData));
 					}
 				};
-			this.defaultServices.MetaTemplate.addPattern('{~T:', '~}', fTemplateRender);
-			this.defaultServices.MetaTemplate.addPattern('{~Template:', '~}', fTemplateRender);
+			this.MetaTemplate.addPattern('{~T:', '~}', fTemplateRender);
+			this.MetaTemplate.addPattern('{~Template:', '~}', fTemplateRender);
 
 			// {~TS:Template:AddressOfDataSet~}
 			let fTemplateSetRender = (pHash, pData)=>
@@ -330,8 +330,8 @@ class Pict extends libFable
 						return this.parseTemplateSetByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData));
 					}
 				};
-			this.defaultServices.MetaTemplate.addPattern('{~TS:', '~}', fTemplateSetRender);
-			this.defaultServices.MetaTemplate.addPattern('{~TemplateSet:', '~}', fTemplateSetRender);
+			this.MetaTemplate.addPattern('{~TS:', '~}', fTemplateSetRender);
+			this.MetaTemplate.addPattern('{~TemplateSet:', '~}', fTemplateSetRender);
 
 			//{~Data:AppData.Some.Value.to.Render~}
 			let fDataRender = (pHash, pData)=>
@@ -355,10 +355,10 @@ class Pict extends libFable
 					}
 					return tmpValue;
 				};
-			this.defaultServices.MetaTemplate.addPattern('{~D:', '~}', fDataRender);
-			this.defaultServices.MetaTemplate.addPattern('{~Data:', '~}', fDataRender);
+			this.MetaTemplate.addPattern('{~D:', '~}', fDataRender);
+			this.MetaTemplate.addPattern('{~Data:', '~}', fDataRender);
 
-			this.defaultServices.MetaTemplate.addPattern('{~Dollars:', '~}',
+			this.MetaTemplate.addPattern('{~Dollars:', '~}',
 				(pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
@@ -374,9 +374,9 @@ class Pict extends libFable
 					}
 
 					let tmpColumnData = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
-					return this.defaultServices.DataFormat.formatterDollars(tmpColumnData);
+					return this.DataFormat.formatterDollars(tmpColumnData);
 				});
-			this.defaultServices.MetaTemplate.addPattern('{~Digits:', '~}',
+			this.MetaTemplate.addPattern('{~Digits:', '~}',
 				(pHash, pData)=>
 				{
 					let tmpHash = pHash.trim();
@@ -392,7 +392,7 @@ class Pict extends libFable
 					}
 
 					let tmpColumnData = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
-					return this.defaultServices.DataFormat.formatterAddCommasToNumber(this.defaultServices.DataFormat.formatterRoundNumber(tmpColumnData, 2));
+					return this.DataFormat.formatterAddCommasToNumber(this.DataFormat.formatterRoundNumber(tmpColumnData, 2));
 				});
 
 			let fRandomNumberString = (pHash, pData)=>
@@ -420,10 +420,10 @@ class Pict extends libFable
 						}
 					}
 
-					return this.defaultServices.DataGeneration.randomNumericString(tmpStringLength, tmpMaxNumber);
+					return this.DataGeneration.randomNumericString(tmpStringLength, tmpMaxNumber);
 				};
-			this.defaultServices.MetaTemplate.addPattern('{~RandomNumberString:', '~}',fRandomNumberString);
-			this.defaultServices.MetaTemplate.addPattern('{~RNS:', '~}',fRandomNumberString);
+			this.MetaTemplate.addPattern('{~RandomNumberString:', '~}',fRandomNumberString);
+			this.MetaTemplate.addPattern('{~RNS:', '~}',fRandomNumberString);
 
 			let fRandomNumber = (pHash, pData)=>
 				{
@@ -450,10 +450,10 @@ class Pict extends libFable
 						}
 					}
 
-					return this.defaultServices.DataGeneration.randomIntegerBetween(tmpMinimumNumber, tmpMaxNumber);
+					return this.DataGeneration.randomIntegerBetween(tmpMinimumNumber, tmpMaxNumber);
 				};
-			this.defaultServices.MetaTemplate.addPattern('{~RandomNumber:', '~}',fRandomNumber);
-			this.defaultServices.MetaTemplate.addPattern('{~RN:', '~}',fRandomNumber);
+			this.MetaTemplate.addPattern('{~RandomNumber:', '~}',fRandomNumber);
+			this.MetaTemplate.addPattern('{~RN:', '~}',fRandomNumber);
 
 			let fPascalCaseIdentifier = (pHash, pData)=>
 				{
@@ -474,9 +474,9 @@ class Pict extends libFable
 					{
 						return '';
 					}
-					return this.defaultServices.DataFormat.cleanNonAlphaCharacters(this.defaultServices.DataFormat.capitalizeEachWord(tmpValue));
+					return this.DataFormat.cleanNonAlphaCharacters(this.DataFormat.capitalizeEachWord(tmpValue));
 				};
-			this.defaultServices.MetaTemplate.addPattern('{~PascalCaseIdentifier:', '~}',fPascalCaseIdentifier);
+			this.MetaTemplate.addPattern('{~PascalCaseIdentifier:', '~}',fPascalCaseIdentifier);
 
 			let fLogValue = (pHash, pData)=>
 				{
@@ -499,8 +499,8 @@ class Pict extends libFable
 					}
 					return '';
 				};
-			this.defaultServices.MetaTemplate.addPattern('{~LogValue:', '~}',fLogValue);
-			this.defaultServices.MetaTemplate.addPattern('{~LV:', '~}',fLogValue);
+			this.MetaTemplate.addPattern('{~LogValue:', '~}',fLogValue);
+			this.MetaTemplate.addPattern('{~LV:', '~}',fLogValue);
 
 
 			let fLogStatement = (pHash, pData)=>
@@ -509,8 +509,8 @@ class Pict extends libFable
 					this.log.trace(`PICT Template Log Message: ${tmpHash}`);
 					return '';
 				};
-			this.defaultServices.MetaTemplate.addPattern('{~LogStatement:', '~}',fLogStatement);
-			this.defaultServices.MetaTemplate.addPattern('{~LS:', '~}',fLogStatement);
+			this.MetaTemplate.addPattern('{~LogStatement:', '~}',fLogStatement);
+			this.MetaTemplate.addPattern('{~LS:', '~}',fLogStatement);
 
 			let fBreakpoint = (pHash, pData)=>
 				{
@@ -520,7 +520,7 @@ class Pict extends libFable
 					debugger;
 					return '';
 				};
-			this.defaultServices.MetaTemplate.addPattern('{~Breakpoint', '~}',fBreakpoint);
+			this.MetaTemplate.addPattern('{~Breakpoint', '~}',fBreakpoint);
 
 			this._DefaultPictTemplatesInitialized = true;
 		}
@@ -529,12 +529,12 @@ class Pict extends libFable
 	parseTemplate (pTemplateString, pData, fCallback)
 	{
 		let tmpData = (typeof(pData) === 'object') ? pData : {};
-		return this.defaultServices.MetaTemplate.parseString(pTemplateString, tmpData, fCallback);
+		return this.MetaTemplate.parseString(pTemplateString, tmpData, fCallback);
 	}
 
 	parseTemplateByHash (pTemplateHash, pData, fCallback)
 	{
-		let tmpTemplateString = this.defaultServices.TemplateProvider.getTemplate(pTemplateHash);
+		let tmpTemplateString = this.TemplateProvider.getTemplate(pTemplateHash);
 
 		// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
 		if (!tmpTemplateString)
@@ -552,7 +552,7 @@ class Pict extends libFable
 		{
 			if (Array.isArray(pDataSet) || typeof(pDataSet) == 'object')
 			{
-				this.defaultServices.Utility.eachLimit(pDataSet, 1,
+				this.Utility.eachLimit(pDataSet, 1,
 					(pRecord, fRecordTemplateCallback)=>
 					{
 						return this.parseTemplate(pTemplateString, pRecord,
@@ -603,7 +603,7 @@ class Pict extends libFable
 
 	parseTemplateSetByHash (pTemplateHash, pDataSet, fCallback)
 	{
-		let tmpTemplateString = this.defaultServices.TemplateProvider.getTemplate(pTemplateHash);
+		let tmpTemplateString = this.TemplateProvider.getTemplate(pTemplateHash);
 
 		// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
 		if (!tmpTemplateString)

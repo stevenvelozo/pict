@@ -1,6 +1,6 @@
 {
     "name": "pict",
-    "version": "1.0.87",
+    "version": "1.0.89",
     "description": "Pict browser library.",
     "main": "source/Pict.js",
     "scripts": {
@@ -43,11 +43,11 @@
     },
     "homepage": "https://github.com/stevenvelozo/pict#readme",
     "devDependencies": {
-        "quackage": "^1.0.13"
+        "quackage": "^1.0.14"
     },
     "dependencies": {
         "cachetrax": "^1.0.3",
-        "fable": "^3.0.62",
+        "fable": "^3.0.66",
         "pict-application": "^1.0.0",
         "pict-view": "^1.0.4"
     }
