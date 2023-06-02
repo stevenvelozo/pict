@@ -2976,8 +2976,8 @@ this.hasJquery=false;this.jQuery=false;if(this.inBrowser&&typeof window.jQuery!=
 this.customAssignFunction=false;// API Consumers can also craft their own append function
 this.customAppendFunction=false;// API Consumers can also craft their own read function
 this.customReadFunction=false;// API Consumers can even craft their own get element function.
-this.customGetElementFunction=false;}getElement(pAddress){if(this.customGetElementFunction){return this.customGetElementFunction(pAddress);}else if(this.hasJquery){let tmpElements=window.jQuery(pAddress);if(tmpElements.length==0){return[];}else if(tmpElements.length==1){return[tmpElements[0]];}else{// TODO: This isn't the most efficient method, but it is the most compatible.
-let tmpElementSet=[];for(let i=0;i<tmpElements.length;i++){tmpElementSet.push(tmpElements[i]);}return tmpElementSet;}}else if(this.inBrowser&&this.hasDocument){return window.document.querySelectorAll(pAddress);}else{// Just log it out for now
+this.customGetElementFunction=false;}getElement(pAddress){if(this.customGetElementFunction){return this.customGetElementFunction(pAddress);}else if(this.hasJquery){let tmpElements=window.jQuery(pAddress);if(tmpElements.length==0){return[];}else{// TODO: This isn't the most efficient method, but it is the most compatible.
+let tmpElementSet=[];for(let i=0;i<tmpElements.length;i++){tmpElementSet.push(tmpElements[0]);}return tmpElementSet;}}else if(this.inBrowser&&this.hasDocument){return window.document.querySelectorAll(pAddress);}else{// Just log it out for now
 this.log.trace("PICT Content GET ELEMENT for [".concat(pAddress,"] will return empty because none of the browser methods are available"));return[];}}assignContent(pAddress,pContent){if(this.customAssignFunction){return this.customAssignFunction(pAddress,pContent);}else if(this.hasJquery){// Get the element
 let tmpTargetElement=window.jQuery(pAddress);// Should we ensure we matched 1 and exactly 1 element?
 //if (tmpTargetElement && tmpTargetElement.length == 1)
