@@ -25,12 +25,6 @@ class Pict extends libFable
 		this.AppData = {};
 		this.Bundle = {};
 
-		this.serviceManager.extraServiceInitialization = (pService) =>
-			{
-				// Decorate services with pict so we can use that instead of fable to eliminate confusion
-				pService.pict = this;				
-				return pService;
-			}
 		// Log noisness goes from 0 - 5, where 5 is show me everything.
 		this.LogNoisiness = 0;
 
@@ -41,12 +35,12 @@ class Pict extends libFable
 		}
 
 		this._DefaultPictTemplatesInitialized = false;
-		this.initializePictTemplates();
+		this.initializePictTemplateEngine();
 
 		this.serviceManager.addServiceType('PictView',  require('./Pict-View.js'));
 		this.serviceManager.addServiceType('PictApplication',  require('./Pict-Application.js'));
 
-		// Expose the views directly
+		// Expose the named views directly, through a convenience accessor
 		this.views = this.serviceManager.servicesMap.PictView;
 	}
 
@@ -106,7 +100,7 @@ class Pict extends libFable
 		}
 	}
 
-	initializePictTemplates()
+	initializePictTemplateEngine()
 	{
 		/*
 		 *
