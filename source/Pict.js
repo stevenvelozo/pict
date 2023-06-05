@@ -23,13 +23,12 @@ class Pict extends libFable
 		this.manifest = this.serviceManager.instantiateServiceProvider('Manifest');
 
 		this.AppData = {};
-
 		this.Bundle = {};
 
 		this.serviceManager.extraServiceInitialization = (pService) =>
 			{
 				// Decorate services with pict so we can use that instead of fable to eliminate confusion
-				pService.pict = this;
+				pService.pict = this;				
 				return pService;
 			}
 		// Log noisness goes from 0 - 5, where 5 is show me everything.
@@ -46,6 +45,9 @@ class Pict extends libFable
 
 		this.serviceManager.addServiceType('PictView',  require('./Pict-View.js'));
 		this.serviceManager.addServiceType('PictApplication',  require('./Pict-Application.js'));
+
+		// Expose the views directly
+		this.views = this.serviceManager.servicesMap.PictView;
 	}
 
 	// Load manifests in as Hashed services
