@@ -138,6 +138,32 @@ class PictContentAssignment extends libFableServiceBase
 		}
 	}
 
+	prependContent(pAddress, pContent)
+	{
+		if (this.customAppendFunction)
+		{
+			return this.customAppendFunction(pAddress, pContent);
+		}
+		else if (this.hasJquery)
+		{
+			let tmpTargetElement = window.jQuery(pAddress);
+			tmpTargetElement.prepend(pContent);
+		}
+		else if (this.inBrowser && this.hasDocument)
+		{
+			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+			for (let i = 0; i < tmpTargetElementSet.length; i++)
+			{
+				tmpTargetElementSet[i].insertAdjacentHTML("afterbegin", pContent);
+			}
+		}
+		else
+		{
+			// Just log it out for now -- nothing browser in our mix.
+			this.log.trace(`PICT Content PREPEND in [${pAddress}]:`, pContent);
+		}
+	}
+
 	readContent(pAddress, pContentType)
 	{
 		let tmpContentType = (typeof (pContentType) == 'string') ? pContentType : 'value';
