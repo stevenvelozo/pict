@@ -105,7 +105,7 @@ suite
 							(pError, pRecord) =>
 							{
 								Expect(pRecord.length).to.equal(84, 'There should be 84 records returned.');
-								//testPict.log.info('Rest response: ', pRecord);
+								testPict.log.info('Rest response: ', pRecord);
 								return fDone();
 							});
 					}
