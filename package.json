@@ -48,7 +48,7 @@
     "dependencies": {
         "cachetrax": "^1.0.4",
         "fable": "^3.0.72",
-        "pict-application": "^1.0.3",
-        "pict-view": "^1.0.10"
+        "pict-application": "^1.0.5",
+        "pict-view": "^1.0.19"
     }
 }
