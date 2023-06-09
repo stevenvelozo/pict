@@ -15,6 +15,8 @@ const libPict = require('../source/Pict.js');
 //const _RetoldTestPort = 60086;
 const _RetoldTestPort = 8086;
 
+const _BasicConfigurationView = require('./configurations/Pict-View-BasicConfigurationOnly.json');
+
 const _MockSettings = (
 {
 	Product: 'MockPict',
@@ -47,33 +49,9 @@ suite
 					{
 						var testPict = new libPict(_MockSettings);
 
-                        let tmpView = testPict.serviceManager.instantiateServiceProvider('PictView',
-                        {
-                                    ViewIdentifier: "Example",
-                                    RenderOnLoad: false,
+						let tmpEnvironment = new libPict.EnvironmentLog(testPict, {});
 
-                                    DefaultRenderable:"ExampleView-Print",
-                                    DefaultDestinationAddress:"#Example-Print-Container",
-
-                                    Templates: [
-                                        {
-                                            Hash: "ExampleView-Print-Box",
-                                            Template: /*html*/`<div><h1>Example!</h1{~TemplateSet:ExampleView-Print-Row:AppData.ExampleData~}</div>`
-                                        },
-                                        {
-                                            Hash: "ExampleView-Print-Row",
-                                            Template: /*html*/`<ul>{~Data:Record.Name~}</ul>`
-                                        }
-                                    ],
-                                    Renderables:[
-                                        {
-                                            RenderableHash: "ExampleView-Print",
-                                            TemplateHash: "ExampleView-Print-Box",
-                                            DestinationAddress: "#ExampleView-Print-Container"
-                                        }
-                                    ]
-
-                                },'ExampleView');
+                        let tmpView = testPict.serviceManager.instantiateServiceProvider('PictView', _BasicConfigurationView, 'ExampleView');
 
                         testPict.AppData.ExampleData = [ { Name: 'One' }, { Name: 'Two' }, { Name: 'Three' } ];
 

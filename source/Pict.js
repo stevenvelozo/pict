@@ -37,8 +37,8 @@ class Pict extends libFable
 		this._DefaultPictTemplatesInitialized = false;
 		this.initializePictTemplateEngine();
 
-		this.serviceManager.addServiceType('PictView',  require('./Pict-View.js'));
-		this.serviceManager.addServiceType('PictApplication',  require('./Pict-Application.js'));
+		this.serviceManager.addServiceType('PictView',  require('pict-view'));
+		this.serviceManager.addServiceType('PictApplication',  require('pict-application'));
 
 		// Expose the named views directly, through a convenience accessor
 		this.views = this.serviceManager.servicesMap.PictView;
@@ -612,8 +612,10 @@ class Pict extends libFable
 
 module.exports = Pict;
 
-module.exports.PictApplicationClass = require('./Pict-Application.js');
-module.exports.PictViewClass = require('./Pict-View.js');
+module.exports.PictApplicationClass = require('pict-application');
+module.exports.PictViewClass = require('pict-view');
+
+module.exports.EnvironmentLog = require('./environments/Pict-Environment-Log.js');
 
 // This is to help understand the type of enivironement we're executing in
 module.exports.isBrowser = new Function("try {return (this===window);} catch(pError) {return false;}");
