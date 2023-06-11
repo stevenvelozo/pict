@@ -48,7 +48,7 @@ suite
 						var testPict = new libPict(_MockSettings);
 
                         // Now initialize the views
-                        let tmpView = testPict.addView(
+                        let tmpView = testPict.addView( 'ExampleView',
                             {
                                 ViewIdentifier: "Example",
                                 RenderOnLoad: false,
@@ -73,7 +73,7 @@ suite
                                         DestinationAddress: "#ExampleView-Print-Container"
                                     }
                                 ]
-                            }, 'ExampleView');
+                            });
 
                         testPict.AppData.ExampleData = [ { Name: 'One' }, { Name: 'Two' }, { Name: 'Three' } ];
 

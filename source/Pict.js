@@ -67,13 +67,18 @@ class Pict extends libFable
 	// Just passing an options will construct one for us.
 	// Passing a hash will set the hash.
 	// Passing a prototype will use that!
-	addView(pOptions, pViewHash, pViewPrototype)
+	addView(pViewHash, pOptions, pViewPrototype)
 	{
 		let tmpOptions = (typeof(pOptions) == 'object') ? pOptions : {};
 		let tmpViewHash = (typeof(pViewHash) == 'string') ? pViewHash : this.fable.getUUID();
 
 		if (typeof(pViewPrototype) != 'undefined')
 		{
+			// If the prototype has a default_configuration, it will be merged with options.
+			if (pViewPrototype.hasOwnProperty('default_configuration'))
+			{
+				tmpOptions = this.fable.Utility.extend({}, tmpOptions, pViewPrototype.default_configuration);
+			}
 			return this.serviceManager.instantiateServiceProviderFromPrototype('PictView', tmpOptions, tmpViewHash, pViewPrototype);
 		}
 		else
@@ -85,7 +90,7 @@ class Pict extends libFable
 	// Just passing an options will construct one for us.
 	// Passing a hash will set the hash.
 	// Passing a prototype will use that!
-	addApplication(pOptions, pApplicationHash, pApplicationPrototype)
+	addApplication(pApplicationHash, pOptions, pApplicationPrototype)
 	{
 		let tmpOptions = (typeof(pOptions) == 'object') ? pOptions : {};
 		let tmpApplicationHash = (typeof(pApplicationHash) == 'string') ? pApplicationHash : this.fable.getUUID();
