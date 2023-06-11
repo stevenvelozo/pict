@@ -1,17 +1,17 @@
 /**
 * Pict browser shim loader
 * @author <steven@velozo.com>
-* 
-* This was born after writing about 10 views and copying basically the same 
-* mock environment read/write functions into the test harnesses.  It allows 
+*
+* This was born after writing about 10 views and copying basically the same
+* mock environment read/write functions into the test harnesses.  It allows
 * mocks or other types of communications back-and-forth to be configured
 * as an environment for views and applications.
-* 
+*
 * To use this:
-* 
+*
 * 1. Construct a pict object in your favorite fashion:
 *        let _Pict = new libPict({...Environment})
-* 2. Require this; it's exported as a static subobject of the pict library, 
+* 2. Require this; it's exported as a static subobject of the pict library,
 *    so you can do:
 *        const libPictEnvironmentLog = require('pict').EnvironmentLog;
 * 3. Create an object that is your custom read data.  Any key that is requested
@@ -42,7 +42,7 @@ class PictEnvironmentLog
 		this.eventLog.Assign = [];
 
 		this.pict.ContentAssignment.customGetElementFunction = this.customGetElementFunction.bind(this);
-		this.pict.ContentAssignment.customReadFunction = this.customGetElementFunction.bind(this);
+		this.pict.ContentAssignment.customReadFunction = this.customReadFunction.bind(this);
 		this.pict.ContentAssignment.customAppendFunction = this.customAppendFunction.bind(this);
 		this.pict.ContentAssignment.customPrependFunction = this.customPrependFunction.bind(this)
 		this.pict.ContentAssignment.customAssignFunction = this.customAssignFunction.bind(this);
