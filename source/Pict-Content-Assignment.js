@@ -101,7 +101,21 @@ class PictContentAssignment extends libFableServiceBase
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
-				tmpTargetElementSet[i].innerHTML = pContent;
+				switch (tmpTargetElementSet[i].tagName)
+				{
+					case 'INPUT':
+					case 'BUTTON':
+					case 'TEXTAREA':
+						tmpTargetElementSet[i].value = pContent;
+						break;
+					case 'SCRIPT':
+					case 'A':
+						tmpTargetElementSet[i].text = pContent;
+						break;
+					default:
+						tmpTargetElementSet[i].innerHTML = pContent;
+						break;
+				}
 			}
 		}
 		else
@@ -179,11 +193,22 @@ class PictContentAssignment extends libFableServiceBase
 			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
 			if (tmpTargetElementSet.length < 1)
 			{
-				return '';
+				return null;
 			}
 			else if (tmpTargetElementSet.length == 1)
 			{
-				return tmpTargetElementSet[0].innerHTML;
+				if ((tmpTargetElementSet[0].tagName == 'INPUT') || (tmpTargetElementSet[0].tagName == 'TEXTAREA'))
+				{
+					return tmpTargetElementSet[0].value;
+				}
+				else if (tmpTargetElementSet[0].tagName == 'SCRIPT')
+				{
+					return tmpTargetElementSet[0].text;
+				}
+				else
+				{
+					return tmpTargetElementSet[0].innerHTML;
+				}
 			}
 		}
 		else

@@ -16,6 +16,7 @@ class Pict extends libFable
 		this.serviceManager.addAndInstantiateServiceType('EntityProvider',  require('./Pict-Meadow-EntityProvider.js'));
 		this.serviceManager.addAndInstantiateServiceType('DataProvider',  require('./Pict-DataProvider.js'));
 		this.serviceManager.addAndInstantiateServiceType('ContentAssignment',  require('./Pict-Content-Assignment.js'));
+		this.serviceManager.addAndInstantiateServiceType('CSSMap', require('./Pict-CSS.js'));
 
 		this.serviceManager.instantiateServiceProvider('MetaTemplate');
 		this.serviceManager.instantiateServiceProvider('DataGeneration');

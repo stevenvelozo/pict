@@ -9,6 +9,10 @@
 
         <title>Sample Form</title>`
 
+        <style id="PICT-CSS">
+
+        </style>
+
         <script type="text/javascript">
 //<![CDATA[
         console.log('Good luck!');
@@ -17,6 +21,7 @@
         {
             window._Pict.log.info('doFirstThing()');
             window._Pict.ContentAssignment.assignContent('#applicationContainer', '<h1>Test Application Complete -- you USED ME</h1>');
+            window._Pict.ContentAssignment.assignContent('#PICT-CSS', window._Pict.ContentAssignment.readContent('#dataTop'));
         }
 
         function doSecondThing()
