@@ -35,10 +35,13 @@ class PictContentAssignment extends libFableServiceBase
 		this.customPrependFunction = false;
 		// API Consumers can also craft their own append function
 		this.customAppendFunction = false;
+
 		// API Consumers can also craft their own read function
 		this.customReadFunction = false;
 		// API Consumers can even craft their own get element function.
 		this.customGetElementFunction = false;
+
+
 	}
 
 	getElement(pAddress)
@@ -218,6 +221,72 @@ class PictContentAssignment extends libFableServiceBase
 			return '';
 		}
 	}
+
+
+	addClass(pAddress, pClass)
+	{
+		if (this.customAddClassFunction)
+		{
+			return this.customAddClassFunction(pAddress, pClass);
+		}
+		else if (this.hasJquery)
+		{
+			// Get the element
+			let tmpTargetElement = window.jQuery(pAddress);
+			tmpTargetElement.addClass(pClass);
+		}
+		else if (this.inBrowser && this.hasDocument)
+		{
+			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+
+			for (let i = 0; i < tmpTargetElementSet.length; i++)
+			{
+				tmpTargetElementSet[i].classList.add(pClass);
+			}
+		}
+		else
+		{
+			this.log.trace(`PICT Content ADDCLASS to [${pAddress}]:`, pClass);
+		}
+	}
+
+	removeClass(pAddress, pClass)
+	{
+		if (this.customRemoveClassFunction)
+		{
+			return this.customRemoveClassFunction(pAddress, pClass);
+		}
+		else if (this.hasJquery)
+		{
+			// Get the element
+			let tmpTargetElement = window.jQuery(pAddress);
+			tmpTargetElement.removeClass(pClass);
+		}
+		else if (this.inBrowser && this.hasDocument)
+		{
+			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+
+			for (let i = 0; i < tmpTargetElementSet.length; i++)
+			{
+				tmpTargetElementSet[i].classList.remove(pClass);
+			}
+		}
+		else
+		{
+			this.log.trace(`PICT Content REMOVECLASS from [${pAddress}]:`, pClass);
+		}
+	}
+
+	toggleClass(pAddress, pClass)
+	{
+		// STUB
+	}
+
+	hasClass(pAddress, pClass)
+	{
+		// STUB
+	}
+
 }
 
 module.exports = PictContentAssignment;
