@@ -3,6 +3,8 @@
 .gulpfile-quackage.js
 .package.json.quackage.bak
 
+package-lock.json
+
 .nyc_output
 .DS_Store
 
