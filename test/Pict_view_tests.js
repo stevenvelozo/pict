@@ -51,7 +51,7 @@ suite
 
 						let tmpEnvironment = new libPict.EnvironmentLog(testPict, {});
 
-                        let tmpView = testPict.serviceManager.instantiateServiceProvider('PictView', _BasicConfigurationView, 'ExampleView');
+                        let tmpView = testPict.instantiateServiceProvider('PictView', _BasicConfigurationView, 'ExampleView');
 
                         testPict.AppData.ExampleData = [ { Name: 'One' }, { Name: 'Two' }, { Name: 'Three' } ];
 

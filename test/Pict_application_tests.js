@@ -77,7 +77,7 @@ suite
 
                         testPict.AppData.ExampleData = [ { Name: 'One' }, { Name: 'Two' }, { Name: 'Three' } ];
 
-                        testPict.serviceManager.instantiateServiceProvider('PictApplication',
+                        testPict.instantiateServiceProvider('PictApplication',
                             {
                                 MainViewportView: 'ExampleView',
                                 MainViewportRenderable: 'ExampleView-Print',

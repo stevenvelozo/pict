@@ -12,16 +12,16 @@ class Pict extends libFable
 		this.isBrowser = new Function("try {return (this===window);} catch(pError) {return false;}");
 
 		// The templateProvider provides a basic key->template mapping with default fallback capabilities
-		this.serviceManager.addAndInstantiateServiceType('TemplateProvider', require('./Pict-Template-Provider.js'));
-		this.serviceManager.addAndInstantiateServiceType('EntityProvider',  require('./Pict-Meadow-EntityProvider.js'));
-		this.serviceManager.addAndInstantiateServiceType('DataProvider',  require('./Pict-DataProvider.js'));
-		this.serviceManager.addAndInstantiateServiceType('ContentAssignment',  require('./Pict-Content-Assignment.js'));
-		this.serviceManager.addAndInstantiateServiceType('CSSMap', require('./Pict-CSS.js'));
+		this.addAndInstantiateServiceType('TemplateProvider', require('./Pict-Template-Provider.js'));
+		this.addAndInstantiateServiceType('EntityProvider',  require('./Pict-Meadow-EntityProvider.js'));
+		this.addAndInstantiateServiceType('DataProvider',  require('./Pict-DataProvider.js'));
+		this.addAndInstantiateServiceType('ContentAssignment',  require('./Pict-Content-Assignment.js'));
+		this.addAndInstantiateServiceType('CSSMap', require('./Pict-CSS.js'));
 
-		this.serviceManager.instantiateServiceProvider('MetaTemplate');
-		this.serviceManager.instantiateServiceProvider('DataGeneration');
+		this.instantiateServiceProvider('MetaTemplate');
+		this.instantiateServiceProvider('DataGeneration');
 
-		this.manifest = this.serviceManager.instantiateServiceProvider('Manifest');
+		this.manifest = this.instantiateServiceProvider('Manifest');
 
 		this.AppData = {};
 		this.Bundle = {};
@@ -38,11 +38,11 @@ class Pict extends libFable
 		this._DefaultPictTemplatesInitialized = false;
 		this.initializePictTemplateEngine();
 
-		this.serviceManager.addServiceType('PictView',  require('pict-view'));
-		this.serviceManager.addServiceType('PictApplication',  require('pict-application'));
+		this.addServiceType('PictView',  require('pict-view'));
+		this.addServiceType('PictApplication',  require('pict-application'));
 
 		// Expose the named views directly, through a convenience accessor
-		this.views = this.serviceManager.servicesMap.PictView;
+		this.views = this.servicesMap.PictView;
 	}
 
 	// Load manifests in as Hashed services
@@ -60,7 +60,7 @@ class Pict extends libFable
 			{
 				// Load each manifest
 				let tmpManifestKey = tmpManifestKeys[i];
-				this.serviceManager.instantiateServiceProvider('Manifest', pManifestSet[tmpManifestKey], tmpManifestKey);
+				this.instantiateServiceProvider('Manifest', pManifestSet[tmpManifestKey], tmpManifestKey);
 			}
 		}
 	}
@@ -80,11 +80,11 @@ class Pict extends libFable
 			{
 				tmpOptions = this.fable.Utility.extend({}, pViewPrototype.default_configuration, tmpOptions);
 			}
-			return this.serviceManager.instantiateServiceProviderFromPrototype('PictView', tmpOptions, tmpViewHash, pViewPrototype);
+			return this.instantiateServiceProviderFromPrototype('PictView', tmpOptions, tmpViewHash, pViewPrototype);
 		}
 		else
 		{
-			return this.serviceManager.instantiateServiceProvider('PictView', tmpOptions, tmpViewHash);
+			return this.instantiateServiceProvider('PictView', tmpOptions, tmpViewHash);
 		}
 	}
 
@@ -104,11 +104,11 @@ class Pict extends libFable
 				tmpOptions = this.fable.Utility.extend({}, pApplicationPrototype.default_configuration, tmpOptions);
 			}
 
-			return this.serviceManager.instantiateServiceProviderFromPrototype('PictApplication', tmpOptions, tmpApplicationHash, pApplicationPrototype);
+			return this.instantiateServiceProviderFromPrototype('PictApplication', tmpOptions, tmpApplicationHash, pApplicationPrototype);
 		}
 		else
 		{
-			return this.serviceManager.instantiateServiceProvider('PictApplication', tmpOptions, tmpApplicationHash);
+			return this.instantiateServiceProvider('PictApplication', tmpOptions, tmpApplicationHash);
 		}
 	}
 

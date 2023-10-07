@@ -26,7 +26,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			this.options.downloadBatchSize = 100;
 		}
 
-		this.restClient = this.fable.serviceManager.instantiateServiceProviderWithoutRegistration('RestClient');
+		this.restClient = this.fable.instantiateServiceProviderWithoutRegistration('RestClient');
 
 		this.cache = {};
 
@@ -38,7 +38,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		// This should not be happening as often as it's happening.
 		if (!this.cache.hasOwnProperty(pEntity))
 		{
-			this.cache[pEntity] = this.fable.serviceManager.instantiateServiceProviderWithoutRegistration('ObjectCache');
+			this.cache[pEntity] = this.fable.instantiateServiceProviderWithoutRegistration('ObjectCache');
 			// TODO: Make this a configuration?
 			// For now cache for 30 seconds.
 			this.cache[pEntity].maxAge = 30000;
