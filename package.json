@@ -43,11 +43,11 @@
     },
     "homepage": "https://github.com/stevenvelozo/pict#readme",
     "devDependencies": {
-        "quackage": "^1.0.19"
+        "quackage": "^1.0.22"
     },
     "dependencies": {
         "cachetrax": "^1.0.4",
-        "fable": "^3.0.87",
+        "fable": "^3.0.90",
         "pict-application": "^1.0.10",
         "pict-view": "^1.0.29"
     }
