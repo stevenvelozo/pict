@@ -766,7 +766,9 @@ _this13.UUID=new libFableUUID(_this13.SettingsManager.settings);// Instantiate t
 _this13.Logging=new libFableLog(_this13.SettingsManager.settings);_this13.Logging.initialize();// Initialization Phase 1.5: Instantiate the service manager
 // This is the start actual bootstrapping point for fable.
 // For consistency fable is treated as a service.
-_this13.ServiceManager=_assertThisInitialized(_this13);_this13.connectFable(_assertThisInitialized(_this13));// --> Bootstrapping of fable into the Service Manager is complete
+_this13.ServiceManager=_assertThisInitialized(_this13);// TODO: Remove this when Orator and meadow-endpoints are shifted to this new pattern
+_this13.serviceManager=_assertThisInitialized(_this13);// END TODO
+_this13.connectFable(_assertThisInitialized(_this13));// --> Bootstrapping of fable into the Service Manager is complete
 // Initialization Phase 2: Map in the default services.
 // They will then be available in the Default service provider set as well.
 _this13.connectPreinitServiceProviderInstance(_this13.UUID);_this13.connectPreinitServiceProviderInstance(_this13.Logging);_this13.connectPreinitServiceProviderInstance(_this13.SettingsManager);// Initialize and instantiate the default baked-in Data Arithmatic service
