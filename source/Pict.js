@@ -628,7 +628,7 @@ module.exports.PictApplicationClass = require('pict-application');
 module.exports.PictViewClass = require('pict-view');
 
 module.exports.EnvironmentLog = require('./environments/Pict-Environment-Log.js');
-module.exports.EnvironmentObject = require('./environments/Pict-Environment-Log.js');
+module.exports.EnvironmentObject = require('./environments/Pict-Environment-Object.js');
 
 // This is to help understand the type of enivironement we're executing in
 module.exports.isBrowser = new Function("try {return (this===window);} catch(pError) {return false;}");
