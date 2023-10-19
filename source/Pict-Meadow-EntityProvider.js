@@ -48,12 +48,12 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 	}
 
-	getEntity (pEntity, pIDRecord, fCallback)
+	getEntity(pEntity, pIDRecord, fCallback)
 	{
 		this.initializeCache(pEntity);
 		// Discard anything from the cache that has expired or is over size.
 		this.cache[pEntity].prune(
-			()=>
+			() =>
 			{
 				let tmpPossibleRecord = this.cache[pEntity].read(pIDRecord);
 
@@ -81,33 +81,61 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		);
 	}
 
-	getEntitySet = function (pEntity, pMeadowFilterExpression, fCallback)
+	getEntitySetPage(pEntity, pMeadowFilterExpression, pRecordStartCursor, pRecordCount, fCallback)
 	{
+		let tmpURL = `${this.options.urlPrefix}${pEntity}s/FilteredTo/${pMeadowFilterExpression}/${pRecordStartCursor}/${pRecordCount}`;
+
+		return this.restClient.getJSON(tmpURL,
+			(pDownloadError, pDownloadResponse, pDownloadBody) =>
+			{
+				return fCallback(pDownloadError, pDownloadBody);
+			});
+	}
+
+	getEntitySetRecordCount(pEntity, pMeadowFilterExpression, fCallback)
+	{
+		let tmpURL = `${this.options.urlPrefix}${pEntity}s/Count/FilteredTo/${pMeadowFilterExpression}`;
+
+		return this.restClient.getJSON(tmpURL,
+			(pError, pResponse, pBody) =>
+			{
+				if (pError)
+				{
+					this.log.error(`Error getting entity count of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${tmpURL}]: ${pError}`);
+					return fCallback(pError);
+				}
+				let tmpRecordCount = 0;
+				if (pBody.Count)
+				{
+					tmpRecordCount = pBody.Count;
+				}
+				return fCallback(pError, tmpRecordCount);
+			});
+	}
+
+	getEntitySet(pEntity, pMeadowFilterExpression, fCallback)
+	{
+		// TODO: Should we test for too many record IDs here by string length in pMeadowFilterExpression?
+		//       FBL~ID${pDestinationEntity}~INN~${tmpIDRecordsCommaSeparated}
+		//       If the list is mega-long we can parse it and break it into chunks.
 		this.initializeCache(pEntity);
-		// TODO: Should we test for too many record IDs here by string length?
-		// FBL~ID${pDestinationEntity}~INN~${tmpIDRecordsCommaSeparated}
 		// Discard anything from the cache that has expired or is over size.
 		this.cache[pEntity].prune(
-			()=>
+			() =>
 			{
-				let tmpCountOptions = (
+				return this.getEntitySetRecordCount(pEntity, pMeadowFilterExpression,
+					(pRecordCountError, pRecordCount) =>
 					{
-						url: `${this.options.urlPrefix}${pEntity}s/Count/FilteredTo/${pMeadowFilterExpression}`
-					});
-				tmpCountOptions = this.prepareRequestOptions(tmpCountOptions);
-
-				return this.restClient.getJSON(tmpCountOptions,
-					(pError, pResponse, pBody) =>
-					{
-						if (pError)
+						if (pRecordCountError)
 						{
-							this.log.error(`Error getting bulk entity count of [${pEntity}] filtered to [${pMeadowFilterExpression}] from server [${tmpCountOptions.url}]: ${pError}`);
-							return fCallback(pError);
+							return fCallback(pRecordCountError);
 						}
-						let tmpRecordCount = 0;
-						if (pBody.Count)
+						let tmpRecordCount = pRecordCount;
+
+						if (isNaN(pRecordCount))
 						{
-							tmpRecordCount = pBody.Count;
+							this.log.error(`Entity count did not return a number for [${pEntity}] filtered to [${pMeadowFilterExpression}]... something is fatally wrong from the server accessed in getEntitySet call.`);
+							return fCallback(new Error('Entity count did not return a number in getEntitySet.'));
 						}
 
 						let tmpDownloadURIFragments = [];
@@ -115,29 +143,24 @@ class PictMeadowEntityProvider extends libFableServiceBase
 						for (let i = 0; i < (tmpRecordCount / tmpDownloadBatchSize); i++)
 						{
 							// Generate each of the URI fragments to download
-							tmpDownloadURIFragments.push(`${this.options.urlPrefix}${pEntity}s/FilteredTo/${pMeadowFilterExpression}/${i*tmpDownloadBatchSize}/${tmpDownloadBatchSize}`);
+							tmpDownloadURIFragments.push(`${this.options.urlPrefix}${pEntity}s/FilteredTo/${pMeadowFilterExpression}/${i * tmpDownloadBatchSize}/${tmpDownloadBatchSize}`);
 						}
 
 						let tmpEntitySet = [];
-						// Now run these in series (it's possible to parallelize but no reason to)
-						this.fable.Utility.eachLimit(tmpDownloadURIFragments, 1,
-							(pURIFragment, fDownloadCallback)=>
-							{
-								let tmpOptions = (
-								{
-									url: `${this.options.urlPrefix}${pURIFragment}`
-								});
-								tmpOptions = this.prepareRequestOptions(tmpOptions);
 
+						// Now run these in series (it's possible to parallelize the requests but they would not be in server order)
+						this.fable.Utility.eachLimit(tmpDownloadURIFragments, 1,
+							(pURIFragment, fDownloadCallback) =>
+							{
 								this.restClient.getJSON(pURIFragment,
-									(pDownloadError, pDownloadResponse, pDownloadBody)=>
+									(pDownloadError, pDownloadResponse, pDownloadBody) =>
 									{
 										tmpEntitySet = tmpEntitySet.concat(pDownloadBody);
 										// Should we be caching each record?
 										return fDownloadCallback(pDownloadError);
 									});
 							},
-							(pFullDownloadError)=>
+							(pFullDownloadError) =>
 							{
 								return fCallback(pFullDownloadError, tmpEntitySet);
 							})
