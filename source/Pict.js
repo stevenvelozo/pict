@@ -123,11 +123,7 @@ class Pict extends libFable
 		if (!this._DefaultPictTemplatesInitialized)
 		{
 			// Expects one of the following:
-			// 		{~Entity:Book:1~}
-			//          ...meaning GET BOOK 1
-			// 		{~Entity:Book:AppData.Some.Address.IDBook~}
-			//          ...meaning GET BOOK with IDBook FROM AppData.Some.Address.IDBook
-			// 		{~E:Book:AppData.Some.Address.IDBook:Render-Book-Template~}
+			// 		{~E:Book^AppData.Some.Address.IDBook^Render-Book-Template~}
 			//          ...meaning GET BOOK with IDBook FROM AppData.Some.Address.IDBook and render it to Render-Book-Template
 			let fEntityRender = (pHash, pData, fCallback) =>
 				{
@@ -148,26 +144,17 @@ class Pict extends libFable
 					let tmpEntityTemplate = false;
 
 					// This expression requires 2 parts -- a third is optional, and, if present, is the template to render to.
-					let tmpHashSeparator = tmpHash.indexOf('|');
+					let tmpAddressParts = tmpHash.split('^');
 
-					if (tmpHashSeparator < 0)
+					if (tmpAddressParts.length < 2)
 					{
-						// This is just a simple 2 part hash (the entity and the ID)
-						let tmpHashEntitySeparator = tmpHash.indexOf(':');
-						tmpEntity = tmpHash.substring(0, tmpHashEntitySeparator);
-						tmpEntityID = tmpHash.substring(tmpHashEntitySeparator + 1);
+						this.log.warn(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]`);
+						return fCallback(Error(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]`), '');
 					}
-					else
-					{
-						// This is a 3 part hash (the entity, the ID, and the template)
-						let tmpHashEntitySeparator = tmpHash.indexOf(':');
-						tmpEntity = tmpHash.substring(0, tmpHashEntitySeparator);
 
-						let tmpHashTemplateSeparator = tmpHash.indexOf('|');
-						tmpEntityID = tmpHash.substring(tmpHashEntitySeparator + 1, tmpHashTemplateSeparator);
-
-						tmpEntityTemplate = tmpHash.substring(tmpHashTemplateSeparator + 1);
-					}
+					tmpEntity = tmpAddressParts[0].trim();
+					tmpEntityID = tmpAddressParts[1].trim();
+					tmpEntityTemplate = tmpAddressParts[2].trim();
 
 					if (!isNaN(tmpEntityID))
 					{
@@ -182,8 +169,8 @@ class Pict extends libFable
 					// No Entity or EntityID
 					if (!tmpEntity || !tmpEntityID)
 					{
-						this.log.warn(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]`);
-						return fCallback(Error(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]`), '');
+						this.log.warn(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]  Entity: ${tmpEntity} ID: ${tmpEntityID}`);
+						return fCallback(Error(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]  Entity: ${tmpEntity} ID: ${tmpEntityID}`), '');
 					}
 
 					// Now try to get the entity

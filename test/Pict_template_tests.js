@@ -201,8 +201,8 @@ suite
 						var testPict = new libPict(_MockSettings);
 
 						testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~Data:Record.Title~}: {~Dollars:Record.IDBook~}</h1>');
-						testPict.TemplateProvider.addTemplate('Book-Author-Content', '<p>{~E:Book:1|Book-Author-Title~}</p>');
-						testPict.TemplateProvider.addTemplate('Book-Author-Load', '<p>{~E:Book:100~}{~D:Record.itemnumber~}</p>');
+						testPict.TemplateProvider.addTemplate('Book-Author-Content', '<p>{~E:Book^1^Book-Author-Title~}</p>');
+						testPict.TemplateProvider.addTemplate('Book-Author-Load', '<p>{~E:Book^100^Book-Author-Title~} {~D:Record.itemnumber~}</p>');
 
 						testPict.parseTemplateByHash('Book-Author-Content', {IDBook: 100},
 							(pError, pValue) =>
@@ -220,7 +220,7 @@ suite
 						var testPict = new libPict(_MockSettings);
 
 						testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~Data:Record.Title~}: {~Dollars:Record.IDBook~}</h1>');
-						testPict.TemplateProvider.addTemplate('Book-Author-Content', '<p>{~E:Book:Record.Header.IDBook|Book-Author-Title~}</p>');
+						testPict.TemplateProvider.addTemplate('Book-Author-Content', '<p>{~E:Book^Record.Header.IDBook^Book-Author-Title~}</p>');
 
 						testPict.parseTemplateByHash('Book-Author-Content', {Header: {IDBook: 100}},
 							(pError, pValue) =>
@@ -240,7 +240,7 @@ suite
 						testPict.AppData.RecordSet = {IDAnimal: 1, Name: 'Fido', Type: 'Dog', Age: 3};
 
 						testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~Data:Record.Title~}: {~Dollars:Record.IDBook~}</h1>');
-						testPict.TemplateProvider.addTemplate('Book-Author-Content', '{~T:Book-Author-Title~}<p>{~E:Book:777|Book-Author-Title~}</p>');
+						testPict.TemplateProvider.addTemplate('Book-Author-Content', '{~T:Book-Author-Title~}<p>{~E:Book^777^Book-Author-Title~}</p>');
 
 						testPict.TemplateProvider.addTemplate('Animal-View', '<p>{~Data:Record.Name~} is a {~Data:Record.Type~} that is {~Data:Record.Age~} years old.</p>');
 						testPict.TemplateProvider.addTemplate('Animal-Screen', '<h1>{~D:AppData.RecordSet.Type~}</h1>{~T:Animal-View:AppData.RecordSet~}');
