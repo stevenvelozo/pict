@@ -191,15 +191,15 @@ class PictContentAssignment extends libFableServiceBase
 			let tmpTargetElement = window.jQuery(pAddress);
 			if ((tmpTargetElement.prop('tagName') == 'INPUT') || (tmpTargetElement.prop('tagName') == 'TEXTAREA'))
 			{
-				return tmpTargetElementSet[0].val();
+				return tmpTargetElement.val();
 			}
 			else if (tmpTargetElement.prop('tagName') == 'SCRIPT')
 			{
-				return tmpTargetElementSet[0].html();
+				return tmpTargetElement.html();
 			}
 			else
 			{
-				return tmpTargetElementSet[0].html();
+				return tmpTargetElement.html();
 			}
 		}
 		else if (this.inBrowser && this.hasDocument)
