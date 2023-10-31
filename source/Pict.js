@@ -186,7 +186,7 @@ class Pict extends libFable
 							// Now render the template
 							if (tmpEntityTemplate)
 							{
-								return fCallback(null, this.parseTemplateByHash(tmpEntityTemplate, pRecord));
+								return this.parseTemplateByHash(tmpEntityTemplate, pRecord, fCallback);
 							}
 							else
 							{
