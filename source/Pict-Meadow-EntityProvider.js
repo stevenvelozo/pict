@@ -53,13 +53,13 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		this.initializeCache(pEntity);
 		// Discard anything from the cache that has expired or is over size.
 		this.cache[pEntity].prune(
-			() =>
+			function ()
 			{
 				let tmpPossibleRecord = this.cache[pEntity].read(pIDRecord);
 
 				if (tmpPossibleRecord)
 				{
-					return tmpPossibleRecord;
+					return fCallback(null, tmpPossibleRecord);
 				}
 
 				let tmpOptions = (
@@ -77,8 +77,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 						}
 						return fCallback(pError, pBody);
 					});
-			}
-		);
+			}.bind(this));
 	}
 
 	getEntitySetPage(pEntity, pMeadowFilterExpression, pRecordStartCursor, pRecordCount, fCallback)
@@ -86,10 +85,10 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		let tmpURL = `${this.options.urlPrefix}${pEntity}s/FilteredTo/${pMeadowFilterExpression}/${pRecordStartCursor}/${pRecordCount}`;
 
 		return this.restClient.getJSON(tmpURL,
-			(pDownloadError, pDownloadResponse, pDownloadBody) =>
+			function (pDownloadError, pDownloadResponse, pDownloadBody)
 			{
 				return fCallback(pDownloadError, pDownloadBody);
-			});
+			}.bind(this));
 	}
 
 	getEntitySetRecordCount(pEntity, pMeadowFilterExpression, fCallback)
@@ -97,7 +96,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		let tmpURL = `${this.options.urlPrefix}${pEntity}s/Count/FilteredTo/${pMeadowFilterExpression}`;
 
 		return this.restClient.getJSON(tmpURL,
-			(pError, pResponse, pBody) =>
+			function (pError, pResponse, pBody)
 			{
 				if (pError)
 				{
@@ -110,7 +109,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 					tmpRecordCount = pBody.Count;
 				}
 				return fCallback(pError, tmpRecordCount);
-			});
+			}.bind(this));
 	}
 
 	getEntitySet(pEntity, pMeadowFilterExpression, fCallback)
@@ -121,7 +120,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		this.initializeCache(pEntity);
 		// Discard anything from the cache that has expired or is over size.
 		this.cache[pEntity].prune(
-			() =>
+			function ()
 			{
 				return this.getEntitySetRecordCount(pEntity, pMeadowFilterExpression,
 					(pRecordCountError, pRecordCount) =>
@@ -165,7 +164,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 								return fCallback(pFullDownloadError, tmpEntitySet);
 							})
 					});
-			});
+			}.bind(this));
 	}
 }
 

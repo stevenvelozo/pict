@@ -129,6 +129,7 @@ class Pict extends libFable
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
+					let tmpCallback = (typeof(fCallback) === 'function') ? fCallback : () => { return ''; };
 
 					if (this.LogNoisiness > 4)
 					{
@@ -149,7 +150,7 @@ class Pict extends libFable
 					if (tmpAddressParts.length < 2)
 					{
 						this.log.warn(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]`);
-						return fCallback(Error(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]`), '');
+						return tmpCallback(Error(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]`), '');
 					}
 
 					tmpEntity = tmpAddressParts[0].trim();
@@ -170,63 +171,34 @@ class Pict extends libFable
 					if (!tmpEntity || !tmpEntityID)
 					{
 						this.log.warn(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]  Entity: ${tmpEntity} ID: ${tmpEntityID}`);
-						return fCallback(Error(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]  Entity: ${tmpEntity} ID: ${tmpEntityID}`), '');
+						return tmpCallback(Error(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]  Entity: ${tmpEntity} ID: ${tmpEntityID}`), '');
 					}
+
+					this.log.trace(`Pict: Entity Render: Entity [${tmpEntity}] with ID [${tmpEntityID}] as template [${tmpEntityTemplate}] from [${tmpHash}]`);
 
 					// Now try to get the entity
 					this.EntityProvider.getEntity(tmpEntity, tmpEntityID,
-						(pError, pRecord) =>
+						function (pError, pRecord)
 						{
 							if (pError)
 							{
 								this.log.error(`Pict: Entity Render: Error getting entity [${tmpEntity}] with ID [${tmpEntityID}] for [${tmpHash}]: ${pError}`, pError);
-								return fCallback(pError, '');
+								return tmpCallback(pError, '');
 							}
 
 							// Now render the template
 							if (tmpEntityTemplate)
 							{
-								return this.parseTemplateByHash(tmpEntityTemplate, pRecord, fCallback);
+								return this.parseTemplateByHash(tmpEntityTemplate, pRecord, tmpCallback);
 							}
 							else
 							{
-								return fCallback(null, '');
+								return tmpCallback(null, '');
 							}
-						});
+						}.bind(this));
 				};
 			this.MetaTemplate.addPatternAsync('{~E:', '~}', fEntityRender);
 			this.MetaTemplate.addPatternAsync('{~Entity:', '~}', fEntityRender);
-
-			// {NE~Some.Address|If the left value is truthy, render this value.~}
-			let fNotEmptyRender = (pHash, pData)=>
-				{
-					let tmpHash = pHash.trim();
-					let tmpData = (typeof(pData) === 'object') ? pData : {};
-
-					if (this.LogNoisiness > 4)
-					{
-						this.log.trace(`PICT Template [fNotEmptyRender]::[${tmpHash}] with tmpData:`, tmpData);
-					}
-					else if (this.LogNoisiness > 2)
-					{
-						this.log.trace(`PICT Template [fNotEmptyRender]::[${tmpHash}]`);
-					}
-
-					// Should switch this to indexOf so pipes can be in the content.
-					let tmpHashParts = tmpHash.split('|');
-
-					// For now just check truthiness
-					if (this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHashParts[0]))
-					{
-						return tmpHashParts[1];
-					}
-					else
-					{
-						return '';
-					}
-				};
-			this.MetaTemplate.addPattern('{~NotEmpty:', '~}', fNotEmptyRender);
-			this.MetaTemplate.addPattern('{~NE:', '~}', fNotEmptyRender);
 
 			// {~T:Template:AddressOfData~}
 			let fTemplateRender = (pHash, pData)=>
@@ -275,8 +247,72 @@ class Pict extends libFable
 						return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData));
 					}
 				};
-			this.MetaTemplate.addPattern('{~T:', '~}', fTemplateRender);
-			this.MetaTemplate.addPattern('{~Template:', '~}', fTemplateRender);
+			let fTemplateRenderAsync = (pHash, pData, fCallback)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+					let tmpCallback = (typeof(fCallback) === 'function') ? fCallback : () => { return ''; };
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fTemplateRenderAsync]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 0)
+					{
+						this.log.trace(`PICT Template [fTemplateRenderAsync]::[${tmpHash}]`);
+					}
+
+					let tmpTemplateHash = false;
+					let tmpAddressOfData = false;
+
+					// This is just a simple 2 part hash (the entity and the ID)
+					let tmpHashTemplateSeparator = tmpHash.indexOf(':');
+					tmpTemplateHash = tmpHash.substring(0, tmpHashTemplateSeparator);
+					if (tmpHashTemplateSeparator > -1)
+					{
+						tmpAddressOfData = tmpHash.substring(tmpHashTemplateSeparator + 1);
+					}
+					else
+					{
+						tmpTemplateHash = tmpHash;
+					}
+
+					// No template hash
+					if (!tmpTemplateHash)
+					{
+						this.log.warn(`Pict: Template Render Async: TemplateHash not resolved for [${tmpHash}]`);
+						return `Pict: Template Render Async: TemplateHash not resolved for [${tmpHash}]`;
+					}
+
+					if (!tmpAddressOfData)
+					{
+						// No address was provided, just render the template with what this template has.
+						// The async portion of this is a mind bender because of how entry can happen dynamically from templates
+						return this.parseTemplateByHash(tmpTemplateHash, pData,
+							(pError, pValue) =>
+							{
+								if (pError)
+								{
+									return tmpCallback(pError, '');
+								}
+								return tmpCallback(null, pValue);
+							});
+					}
+					else
+					{
+						return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData),
+							(pError, pValue) =>
+							{
+								if (pError)
+								{
+									return tmpCallback(pError, '');
+								}
+								return tmpCallback(null, pValue);
+							});
+					}
+				};
+			this.MetaTemplate.addPatternBoth('{~T:', '~}', fTemplateRender, fTemplateRenderAsync);
+			this.MetaTemplate.addPatternBoth('{~Template:', '~}', fTemplateRender, fTemplateRenderAsync);
 
 			// {~TS:Template:AddressOfDataSet~}
 			let fTemplateSetRender = (pHash, pData)=>
@@ -325,8 +361,72 @@ class Pict extends libFable
 						return this.parseTemplateSetByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData));
 					}
 				};
-			this.MetaTemplate.addPattern('{~TS:', '~}', fTemplateSetRender);
-			this.MetaTemplate.addPattern('{~TemplateSet:', '~}', fTemplateSetRender);
+			let fTemplateSetRenderAsync = (pHash, pData, fCallback)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+					let tmpCallback = (typeof(fCallback) === 'function') ? fCallback : () => { return ''; };
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fTemplateSetRenderAsync]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 0)
+					{
+						this.log.trace(`PICT Template [fTemplateSetRenderAsync]::[${tmpHash}]`);
+					}
+
+					let tmpTemplateHash = false;
+					let tmpAddressOfData = false;
+
+					// This is just a simple 2 part hash (the entity and the ID)
+					let tmpHashTemplateSeparator = tmpHash.indexOf(':');
+					tmpTemplateHash = tmpHash.substring(0, tmpHashTemplateSeparator);
+					if (tmpHashTemplateSeparator > -1)
+					{
+						tmpAddressOfData = tmpHash.substring(tmpHashTemplateSeparator + 1);
+					}
+					else
+					{
+						tmpTemplateHash = tmpHash;
+					}
+
+					// No template hash
+					if (!tmpTemplateHash)
+					{
+						this.log.warn(`Pict: Template Render Async: TemplateHash not resolved for [${tmpHash}]`);
+						return tmpCallback(new Error(`Pict: Template Render Async: TemplateHash not resolved for [${tmpHash}]`), '');
+					}
+
+					if (!tmpAddressOfData)
+					{
+						// No address was provided, just render the template with what this template has.
+						// The async portion of this is a mind bender because of how entry can happen dynamically from templates
+						return this.parseTemplateSetByHash(tmpTemplateHash, pData,
+							(pError, pValue) =>
+							{
+								if (pError)
+								{
+									return tmpCallback(pError, '');
+								}
+								return tmpCallback(null, pValue);
+							});
+					}
+					else
+					{
+						return this.parseTemplateSetByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData),
+							(pError, pValue) =>
+							{
+								if (pError)
+								{
+									return tmpCallback(pError, '');
+								}
+								return tmpCallback(null, pValue);
+							});
+					}
+				};
+			this.MetaTemplate.addPatternBoth('{~TS:', '~}', fTemplateSetRender, fTemplateSetRenderAsync);
+			this.MetaTemplate.addPatternBoth('{~TemplateSet:', '~}', fTemplateSetRender, fTemplateSetRenderAsync);
 
 			//{~Data:AppData.Some.Value.to.Render~}
 			let fDataRender = (pHash, pData)=>
@@ -389,6 +489,129 @@ class Pict extends libFable
 					let tmpColumnData = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
 					return this.DataFormat.formatterAddCommasToNumber(this.DataFormat.formatterRoundNumber(tmpColumnData, 2));
 				});
+			
+			// Output the date as a YYYY-MM-DD string
+			this.MetaTemplate.addPattern('{~DateYMD:', '~}',
+				(pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+					let tmpDateValue = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
+
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fDateFormat]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 3)
+					{
+						this.log.trace(`PICT Template [fDateFormat]::[${tmpHash}]`);
+					}
+
+					// TODO: Modularize this
+					let tmpDayJS = this.fable.Dates.dayJS.utc(tmpDateValue);
+					try
+					{
+						// Try to cast the day to be a specific timezone if one is set for the app
+						if (this.options.Timezone)
+						{
+							tmpDayJS = tmpDayJS.tz(this.options.Timezone);
+						}
+						else
+						{
+							tmpDayJS = tmpDayJS.tz(this.fable.Dates.dayJS.tz.guess());
+						}
+					}
+					catch
+					{
+						this.log.error(`Error casting Document date ${tmpSQLDateTime} to the Document timezone using tz in this.AppData.DocumentData.Timezone: [${this.AppData.DocumentData.Timezone}] .. casting to the browser guess which is [${this.fable.Dates.dayJS.tz.guess()}].`);
+						// Day.js will try to guess the user's timezone for us
+						tmpDayJS = tmpDayJS.tz(this.fable.Dates.dayJS.tz.guess());
+					}
+
+					return tmpDayJS.format('YYYY-MM-DD');
+				});
+
+			
+			// Output the date as a YYYY-MM-DD string
+			// Takes in the format as the second parameter: {~DateYMD:AppData.Some.Date^YYYY-MM-DD~}
+			this.MetaTemplate.addPattern('{~DateFormat:', '~}',
+				(pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+					let tmpDateValueSet = tmpHash.split('^');
+
+					if (tmpDateValueSet.length < 2)
+					{
+						this.log.error(`PICT Template [fDateFormat]::[${tmpHash}] did not have a valid format string and date.`);
+						return '';
+					}
+
+					let tmpDateValue = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpDateValueSet[0]);
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fDateFormat]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 3)
+					{
+						this.log.trace(`PICT Template [fDateFormat]::[${tmpHash}]`);
+					}
+
+					// TODO: Modularize this
+					let tmpDayJS = this.fable.Dates.dayJS.utc(tmpDateValue);
+					try
+					{
+						// Try to cast the day to be a specific timezone if one is set for the app
+						if (this.options.Timezone)
+						{
+							tmpDayJS = tmpDayJS.tz(this.options.Timezone);
+						}
+						else
+						{
+							tmpDayJS = tmpDayJS.tz(this.fable.Dates.dayJS.tz.guess());
+						}
+					}
+					catch
+					{
+						this.log.error(`Error casting Document date ${tmpSQLDateTime} to the Document timezone using tz in this.AppData.DocumentData.Timezone: [${this.AppData.DocumentData.Timezone}] .. casting to the browser guess which is [${this.fable.Dates.dayJS.tz.guess()}].`);
+						// Day.js will try to guess the user's timezone for us
+						tmpDayJS = tmpDayJS.tz(this.fable.Dates.dayJS.tz.guess());
+					}
+
+					return tmpDayJS.format(tmpDateValueSet[1]);
+				});
+			// {NE~Some.Address|If the left value is truthy, render this value.~}
+			let fNotEmptyRender = (pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fNotEmptyRender]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 2)
+					{
+						this.log.trace(`PICT Template [fNotEmptyRender]::[${tmpHash}]`);
+					}
+
+					// Should switch this to indexOf so pipes can be in the content.
+					let tmpHashParts = tmpHash.split('|');
+
+					// For now just check truthiness
+					if (this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHashParts[0]))
+					{
+						return tmpHashParts[1];
+					}
+					else
+					{
+						return '';
+					}
+				};
+			this.MetaTemplate.addPattern('{~NotEmpty:', '~}', fNotEmptyRender);
+			this.MetaTemplate.addPattern('{~NE:', '~}', fNotEmptyRender);
 
 			let fRandomNumberString = (pHash, pData)=>
 				{
@@ -490,7 +713,7 @@ class Pict extends libFable
 					}
 					else
 					{
-						this.log.trace(`PICT Template Log Value: [${tmpHash}] if a ${tmpValueType} = [${tmpValue}]`);
+						this.log.trace(`PICT Template Log Value: [${tmpHash}] is a ${tmpValueType} = [${tmpValue}]`);
 					}
 					return '';
 				};
@@ -534,7 +757,7 @@ class Pict extends libFable
 		// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
 		if (!tmpTemplateString)
 		{
-			return '';
+			tmpTemplateString = '';
 		}
 		return this.parseTemplate(tmpTemplateString, pData, fCallback);
 	}
@@ -603,7 +826,7 @@ class Pict extends libFable
 		// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
 		if (!tmpTemplateString)
 		{
-			return '';
+			tmpTemplateString = '';
 		}
 		return this.parseTemplateSet(tmpTemplateString, pDataSet, fCallback);
 	}
