@@ -46,6 +46,9 @@ class PictEnvironmentLog
 		this.pict.ContentAssignment.customAppendFunction = this.customAppendFunction.bind(this);
 		this.pict.ContentAssignment.customPrependFunction = this.customPrependFunction.bind(this)
 		this.pict.ContentAssignment.customAssignFunction = this.customAssignFunction.bind(this);
+
+		this.pict.ContentAssignment.customReadAttributeFunction = this.customReadAttributeFunction.bind(this);
+		this.pict.ContentAssignment.customSetAttributeFunction = this.customSetAttributeFunction.bind(this);
 	}
 
 	createEventLogEntry(pAddress, pContent)
@@ -116,6 +119,25 @@ class PictEnvironmentLog
 		else
 		{
 			this.pict.log.info(`Mocking an ASSIGN to Address -> [${pAddress}]`, {Content: pContent});
+		}
+		return '';
+	}
+
+	customReadAttributeFunction (pAddress, pAttribute)
+	{
+		this.pict.log.info(`Mocking an READ ATTRIBUTE from Address -> [${pAddress}]`, {Attribute: pAttribute});
+		return '';
+	}
+
+	customSetAttributeFunction (pAddress, pAttribute, pContent)
+	{
+		if (pContent.length > this.truncateContentLength)
+		{
+			this.pict.log.info(`Mocking an SET ATTRIBUTE to Address -> [${pAddress}] (log truncated to first ${this.truncateContentLength} characters)`, {Attribute: pAttribute, Content: pContent.substring(0, this.truncateContentLength)});
+		}
+		else
+		{
+			this.pict.log.info(`Mocking an SET ATTRIBUTE to Address -> [${pAddress}]`, {Attribute: pAttribute, Content: pContent});
 		}
 		return '';
 	}

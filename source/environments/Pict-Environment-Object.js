@@ -28,6 +28,8 @@ class PictEnvironmentObject
 	{
 		this.contentMap = (typeof(pContentMap) == 'object') ? pContentMap : {};
 
+		this.contentMap._ATTRIBUTE_MAP = {};
+
 		this.pict = pPict;
 
 		// If this is set to false, we won't keep an array-based log of every read, assignment, append or get.
@@ -40,12 +42,18 @@ class PictEnvironmentObject
 		this.eventLog.Prepend = [];
 		this.eventLog.Append = [];
 		this.eventLog.Assign = [];
+		this.eventLog.ReadAttribute = [];
+		this.eventLog.SetAttribute = [];
+		this.eventLog.RemoveAttribute = [];
 
 		this.pict.ContentAssignment.customGetElementFunction = this.customGetElementFunction.bind(this);
 		this.pict.ContentAssignment.customReadFunction = this.customReadFunction.bind(this);
 		this.pict.ContentAssignment.customAppendFunction = this.customAppendFunction.bind(this);
 		this.pict.ContentAssignment.customPrependFunction = this.customPrependFunction.bind(this)
 		this.pict.ContentAssignment.customAssignFunction = this.customAssignFunction.bind(this);
+		this.pict.ContentAssignment.customReadAttributeFunction = this.customReadAttributeFunction.bind(this);
+		this.pict.ContentAssignment.customSetAttributeFunction = this.customSetAttributeFunction.bind(this);
+		this.pict.ContentAssignment.customRemoveAttributeFunction = this.customRemoveAttributeFunction.bind(this);
 	}
 
 	createEventLogEntry(pAddress, pContent)
@@ -125,6 +133,75 @@ class PictEnvironmentObject
 			this.pict.log.info(`Mocking an ASSIGN to Address -> [${pAddress}]`, {Content: pContent});
 		}
 		return '';
+	}
+
+	initializeAttributeMapLocation(pAddress, pAttribute)
+	{
+		if (!this.contentMap._ATTRIBUTE_MAP.hasOwnProperty(pAddress))
+		{
+			this.contentMap._ATTRIBUTE_MAP[pAddress] = {};
+		}
+		if (!this.contentMap._ATTRIBUTE_MAP[pAddress].hasOwnProperty(pAttribute))
+		{
+			this.contentMap._ATTRIBUTE_MAP[pAddress][pAttribute] = false;
+		}
+	}
+
+	customReadAttributeFunction (pAddress, pAttribute)
+	{
+		this.initializeAttributeMapLocation(pAddress, pAttribute);
+
+		let tmpContent = this.contentMap._ATTRIBUTE_MAP[pAddress][pAttribute];
+
+		if (this.storeEventLog) this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pAttribute));
+		if (tmpContent.length > this.truncateContentLength)
+		{
+			this.pict.log.info(`Mocking an ATTRIBUTE READ for Address -> [${pAddress}] (log truncated to first ${this.truncateContentLength} characters)`, {Content: tmpContent.substring(0, this.truncateContentLength)});
+		}
+		else
+		{
+			this.pict.log.info(`Mocking an ATTRIBUTE READ for Address -> [${pAddress}]::[${pAttribute}]`, {Content: tmpContent});
+		}
+		return tmpContent;
+	}
+
+	customSetAttributeFunction (pAddress, pAttribute, pValue)
+	{
+		this.initializeAttributeMapLocation(pAddress, pAttribute);
+
+		this.contentMap._ATTRIBUTE_MAP[pAddress][pAttribute] = pValue;
+
+		if (this.storeEventLog) this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pAttribute));
+		if (pValue.length > this.truncateContentLength)
+		{
+			this.pict.log.info(`Mocking an ATTRIBUTE SET for Address -> [${pAddress}] (log truncated to first ${this.truncateContentLength} characters)`, {Content: pValue.substring(0, this.truncateContentLength)});
+		}
+		else
+		{
+			this.pict.log.info(`Mocking an ATTRIBUTE SET for Address -> [${pAddress}]::[${pAttribute}]`, {Content: pValue});
+		}
+		return pValue;
+	}
+
+	customRemoveAttributeFunction (pAddress, pAttribute)
+	{
+		this.initializeAttributeMapLocation(pAddress, pAttribute);
+
+		let tmpContent = this.contentMap._ATTRIBUTE_MAP[pAddress][pAttribute];
+
+		if (this.storeEventLog) this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pAttribute));
+		if (tmpContent.length > this.truncateContentLength)
+		{
+			this.pict.log.info(`Mocking an ATTRIBUTE REMOVE for Address -> [${pAddress}] (log truncated to first ${this.truncateContentLength} characters)`, {Content: tmpContent.substring(0, this.truncateContentLength)});
+		}
+		else
+		{
+			this.pict.log.info(`Mocking an ATTRIBUTE REMOVE for Address -> [${pAddress}]::[${pAttribute}]`, {Content: tmpContent});
+		}
+
+		delete this.contentMap._ATTRIBUTE_MAP[pAddress][pAttribute];
+
+		return true;
 	}
 }
 

@@ -41,7 +41,12 @@ class PictContentAssignment extends libFableServiceBase
 		// API Consumers can even craft their own get element function.
 		this.customGetElementFunction = false;
 
-
+		// API Consumers can also craft their own attribute read function
+		this.customReadAttributeFunction = false;
+		// API Consumers can also craft their own attribute set function
+		this.customSetAttributeFunction = false;
+		// API Consumers can also craft their own attribute remove function
+		this.customRemoveAttributeFunction = false;
 	}
 
 	getElement(pAddress)
@@ -288,16 +293,105 @@ class PictContentAssignment extends libFableServiceBase
 		}
 	}
 
-	toggleClass(pAddress, pClass)
+	readAttribute(pAddress, pAttribute)
 	{
-		// STUB
+		if (this.customReadAttributeFunction)
+		{
+			return this.customReadAttributeFunction(pAddress, pAttribute);
+		}
+		else if (this.hasJquery)
+		{
+			let tmpTargetElement = window.jQuery(pAddress);
+			tmpTargetElement.attr(pAttribute);
+		}
+		else if (this.inBrowser && this.hasDocument)
+		{
+			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+
+			for (let i = 0; i < tmpTargetElementSet.length; i++)
+			{
+				tmpTargetElementSet[i].getAttribute(pAttribute);
+			}
+		}
+		else
+		{
+			this.log.trace(`PICT Content READATTRIBUTE from [${pAddress}]:`, pAttribute);
+		}
+	}
+
+	setAttribute(pAddress, pAttribute, pValue)
+	{
+		if (this.customSetAttributeFunction)
+		{
+			return this.customSetAttributeFunction(pAddress, pAttribute, pValue);
+		}
+		else if (this.hasJquery)
+		{
+			let tmpTargetElement = window.jQuery(pAddress);
+			tmpTargetElement.attr(pAttribute, pValue);
+		}
+		else if (this.inBrowser && this.hasDocument)
+		{
+			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+
+			for (let i = 0; i < tmpTargetElementSet.length; i++)
+			{
+				tmpTargetElementSet[i].setAttribute(pAttribute, pValue);
+			}
+		}
+		else
+		{
+			this.log.trace(`PICT Content SETATTRIBUTE for [${pAddress}] ATTRIBUTE [${pAttribute}]:`, pValue);
+		}
+	}
+
+	removeAttribute(pAddress, pAttribute)
+	{
+		if (this.customRemoveAttributeFunction)
+		{
+			return this.customRemoveAttributeFunction(pAddress, pAttribute);
+		}
+		else if (this.hasJquery)
+		{
+			let tmpTargetElement = window.jQuery(pAddress);
+			tmpTargetElement.removeAttr(pAttribute);
+		}
+		else if (this.inBrowser && this.hasDocument)
+		{
+			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+
+			for (let i = 0; i < tmpTargetElementSet.length; i++)
+			{
+				tmpTargetElementSet[i].removeAttribute(pAttribute);
+			}
+		}
+		else
+		{
+			this.log.trace(`PICT Content REMOVEATTRIBUTE for [${pAddress}] ATTRIBUTE [${pAttribute}]`);
+		}
 	}
 
 	hasClass(pAddress, pClass)
 	{
-		// STUB
-	}
+		if (this.hasJquery)
+		{
+			let tmpTargetElement = window.jQuery(pAddress);
+			tmpTargetElement.hasClass(pClass);
+		}
+		else if (this.inBrowser && this.hasDocument)
+		{
+			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
 
+			for (let i = 0; i < tmpTargetElementSet.length; i++)
+			{
+				tmpTargetElementSet[i].classList.contains(pClass);
+			}
+		}
+		else
+		{
+			this.log.trace(`PICT Content HASCLASS for [${pAddress}] CLASS [${pClass}]:`);
+		}
+	}
 }
 
 module.exports = PictContentAssignment;
