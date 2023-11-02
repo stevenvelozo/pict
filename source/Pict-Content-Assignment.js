@@ -47,6 +47,13 @@ class PictContentAssignment extends libFableServiceBase
 		this.customSetAttributeFunction = false;
 		// API Consumers can also craft their own attribute remove function
 		this.customRemoveAttributeFunction = false;
+
+		// API Consumers can also craft their own class read function
+		this.customReadClassFunction = false;
+		// API Consumers can also craft their own class set function
+		this.customSetClassFunction = false;
+		// API Consumers can also craft their own class remove function
+		this.customRemoveClassFunction = false;
 	}
 
 	getElement(pAddress)
@@ -241,9 +248,9 @@ class PictContentAssignment extends libFableServiceBase
 
 	addClass(pAddress, pClass)
 	{
-		if (this.customAddClassFunction)
+		if (this.customSetClassFunction)
 		{
-			return this.customAddClassFunction(pAddress, pClass);
+			return this.customSetClassFunction(pAddress, pClass);
 		}
 		else if (this.hasJquery)
 		{
@@ -373,10 +380,14 @@ class PictContentAssignment extends libFableServiceBase
 
 	hasClass(pAddress, pClass)
 	{
+		if (this.customReadClassFunction)
+		{
+			return this.customReadClassFunction(pAddress, pClass);
+		}
 		if (this.hasJquery)
 		{
 			let tmpTargetElement = window.jQuery(pAddress);
-			tmpTargetElement.hasClass(pClass);
+			return tmpTargetElement.hasClass(pClass);
 		}
 		else if (this.inBrowser && this.hasDocument)
 		{
@@ -384,7 +395,7 @@ class PictContentAssignment extends libFableServiceBase
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
-				tmpTargetElementSet[i].classList.contains(pClass);
+				return tmpTargetElementSet[i].classList.contains(pClass);
 			}
 		}
 		else
