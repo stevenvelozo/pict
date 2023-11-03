@@ -64,10 +64,10 @@ suite
 						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'mustard');
 						Expect(tmpCondimentMatch).to.equal(true);
 						Expect(tmpSandwich).to.contain('mustard');
-						tmpSandwich = testPict.ContentAssignment.addClass('#MySandwich', 'mayo');
-						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'mayo');
+						tmpSandwich = testPict.ContentAssignment.addClass('#MySandwich', 'vegan mayo');
+						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'vegan mayo');
 						Expect(tmpCondimentMatch).to.equal(true);
-						Expect(tmpSandwich).to.contain('mayo');
+						Expect(tmpSandwich).to.contain('vegan mayo');
 						tmpSandwich = testPict.ContentAssignment.addClass('#MySandwich', 'pickles');
 						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'pickles');
 						Expect(tmpCondimentMatch).to.equal(true);
