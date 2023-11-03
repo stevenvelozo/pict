@@ -221,7 +221,7 @@ class PictEnvironmentObject
 
 	customReadClassFunction (pAddress, pClass)
 	{
-		let tmpContent = this.contentMap._CLASS_LIST.indexOf(pClass) > -1 ? true : false;
+		const tmpContent = this.contentMap._CLASS_LIST.indexOf(pClass) > -1;
 
 		if (this.storeEventLog) this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pClass));
 		this.pict.log.info(`Mocking an CLASS READ for Address -> [${pAddress}]::[${pClass}]`, {Content: tmpContent});
