@@ -31,7 +31,24 @@ suite
 			{
 				test
 				(
-					'Set content into an address',
+					'Set, read, and replace some content at an address',
+					(fDone) =>
+					{
+						let testPict = new libPict(_MockSettings);
+						let testEnvironment = new libPict.EnvironmentObject(testPict);
+
+						let tmpBox = testPict.ContentAssignment.assignContent('#MyBox', 'toy');
+						tmpBox = testPict.ContentAssignment.readContent('#MyBox');
+						Expect(tmpBox).to.equal('toy');
+						tmpBox = testPict.ContentAssignment.assignContent('#MyBox', '');
+						Expect(tmpBox).to.equal('');
+						fDone();
+					}
+				);
+
+				test
+				(
+					'Set, read, and remove an attribute at an address',
 					(fDone) =>
 					{
 						let testPict = new libPict(_MockSettings);
@@ -51,7 +68,7 @@ suite
 
 				test
 				(
-					'Check an element for a class name, then add and remove classes',
+					'Set, read, and remove a class at an address',
 					(fDone) =>
 					{
 						let testPict = new libPict(_MockSettings);
