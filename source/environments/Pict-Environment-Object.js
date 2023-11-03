@@ -238,7 +238,7 @@ class PictEnvironmentObject
 		}
 
 		if (this.storeEventLog) this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pClass));
-		this.pict.log.info(`Mocking an CLASS SET for Address -> [${pAddress}]::[${pClass}]`, {Content: tmpContent.join()});
+		this.pict.log.info(`Mocking an CLASS SET for Address -> [${pAddress}]::[${pClass}]`, {Content: tmpContent.join(' ')});
 		return tmpContent;
 	}
 
