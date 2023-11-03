@@ -100,18 +100,29 @@ class PictContentAssignment extends libFableServiceBase
 		}
 		else if (this.hasJquery)
 		{
-			// Get the element
-			let tmpTargetElement = window.jQuery(pAddress);
+			// Get the element(s)
+			let tmpTargetElementSet = window.jQuery(pAddress);
 
-			// Should we ensure we matched 1 and exactly 1 element?
-			//if (tmpTargetElement && tmpTargetElement.length == 1)
-			//{
-			// Set the content
-			tmpTargetElement.html(pContent);
-			//}
+			for (let i = 0; i < tmpTargetElementSet.length; i++)
+			{
+				switch (tmpTargetElementSet[i].tagName)
+				{
+					case 'INPUT':
+					case 'SELECT':
+						tmpTargetElementSet[i].value = pContent;
+						break;
+					case 'TEXTAREA':
+					case 'SCRIPT':
+						tmpTargetElementSet[i].text = pContent;
+						break;
+					default:
+						tmpTargetElementSet[i].innerHTML = pContent;
+				}
+			}
 		}
 		else if (this.inBrowser && this.hasDocument)
 		{
+			// Get the element(s)
 			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
@@ -119,17 +130,15 @@ class PictContentAssignment extends libFableServiceBase
 				switch (tmpTargetElementSet[i].tagName)
 				{
 					case 'INPUT':
-					case 'BUTTON':
-					case 'TEXTAREA':
+					case 'SELECT':
 						tmpTargetElementSet[i].value = pContent;
 						break;
+					case 'TEXTAREA':
 					case 'SCRIPT':
-					case 'A':
 						tmpTargetElementSet[i].text = pContent;
 						break;
 					default:
 						tmpTargetElementSet[i].innerHTML = pContent;
-						break;
 				}
 			}
 		}
