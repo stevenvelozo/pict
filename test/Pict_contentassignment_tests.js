@@ -48,6 +48,36 @@ suite
 						fDone();
 					}
 				);
+
+				test
+				(
+					'Check an element for a class name, then add and remove classes',
+					(fDone) =>
+					{
+						let testPict = new libPict(_MockSettings);
+						let testEnvironment = new libPict.EnvironmentObject(testPict);
+						let tmpCondimentMatch;
+						let tmpSandwich;
+
+						// dress a sandwich
+						tmpSandwich = testPict.ContentAssignment.addClass('#MySandwich', 'mustard');
+						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'mustard');
+						Expect(tmpCondimentMatch).to.equal(true);
+						Expect(tmpSandwich).to.contain('mustard');
+						tmpSandwich = testPict.ContentAssignment.addClass('#MySandwich', 'vegan mayo');
+						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'vegan mayo');
+						Expect(tmpCondimentMatch).to.equal(true);
+						Expect(tmpSandwich).to.contain('vegan mayo');
+						tmpSandwich = testPict.ContentAssignment.addClass('#MySandwich', 'pickles');
+						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'pickles');
+						Expect(tmpCondimentMatch).to.equal(true);
+						tmpSandwich = testPict.ContentAssignment.removeClass('#MySandwich', 'pickles');
+						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'pickles');
+						Expect(tmpCondimentMatch).to.equal(false);
+						fDone();
+					}
+				);
+				
 			}
 		);
 	}

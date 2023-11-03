@@ -29,6 +29,7 @@ class PictEnvironmentObject
 		this.contentMap = (typeof(pContentMap) == 'object') ? pContentMap : {};
 
 		this.contentMap._ATTRIBUTE_MAP = {};
+		this.contentMap._CLASS_MAP = {};
 
 		this.pict = pPict;
 
@@ -45,6 +46,9 @@ class PictEnvironmentObject
 		this.eventLog.ReadAttribute = [];
 		this.eventLog.SetAttribute = [];
 		this.eventLog.RemoveAttribute = [];
+		this.eventLog.ReadClass = [];
+		this.eventLog.SetClass = [];
+		this.eventLog.RemoveClass = [];
 
 		this.pict.ContentAssignment.customGetElementFunction = this.customGetElementFunction.bind(this);
 		this.pict.ContentAssignment.customReadFunction = this.customReadFunction.bind(this);
@@ -54,6 +58,9 @@ class PictEnvironmentObject
 		this.pict.ContentAssignment.customReadAttributeFunction = this.customReadAttributeFunction.bind(this);
 		this.pict.ContentAssignment.customSetAttributeFunction = this.customSetAttributeFunction.bind(this);
 		this.pict.ContentAssignment.customRemoveAttributeFunction = this.customRemoveAttributeFunction.bind(this);
+		this.pict.ContentAssignment.customReadClassFunction = this.customReadClassFunction.bind(this);
+		this.pict.ContentAssignment.customSetClassFunction = this.customSetClassFunction.bind(this);
+		this.pict.ContentAssignment.customRemoveClassFunction = this.customRemoveClassFunction.bind(this);
 	}
 
 	createEventLogEntry(pAddress, pContent)
@@ -69,14 +76,22 @@ class PictEnvironmentObject
 
 	customGetElementFunction (pAddress)
 	{
-		if (this.storeEventLog) this.eventLog.GetElement.push(this.createEventLogEntry(pAddress));
+		if (this.storeEventLog) 
+		{
+			this.eventLog.GetElement.push(this.createEventLogEntry(pAddress));
+		}
+
 		this.pict.log.info(`Mocking an GET of Address -> [${pAddress}]`);
 		return '';
 	}
 
 	customReadFunction (pAddress)
 	{
-		if (this.storeEventLog) this.eventLog.Read.push(this.createEventLogEntry(pAddress));
+		if (this.storeEventLog) 
+		{
+			this.eventLog.Read.push(this.createEventLogEntry(pAddress));
+		}
+
 		this.pict.log.info(`Mocking an READ from Address -> [${pAddress}]`);
 		if (this.contentMap.hasOwnProperty(pAddress))
 		{
@@ -91,7 +106,10 @@ class PictEnvironmentObject
 	{
 		this.contentMap[pAddress] = (typeof(this.contentMap[pAddress]) == 'undefined') ? pContent : this.contentMap[pAddress] + pContent;
 
-		if (this.storeEventLog) this.eventLog.Append.push(this.createEventLogEntry(pAddress, pContent));
+		if (this.storeEventLog) 
+		{
+			this.eventLog.Append.push(this.createEventLogEntry(pAddress, pContent));
+		}
 
 		if (pContent.length > this.truncateContentLength)
 		{
@@ -107,7 +125,11 @@ class PictEnvironmentObject
 	{
 		this.contentMap[pAddress] = (typeof(this.contentMap[pAddress]) == 'undefined') ? pContent : pContent + this.contentMap[pAddress];
 
-		if (this.storeEventLog) this.eventLog.Prepend.push(this.createEventLogEntry(pAddress, pContent));
+		if (this.storeEventLog) 
+		{
+			this.eventLog.Prepend.push(this.createEventLogEntry(pAddress, pContent));
+		}
+		
 		if (pContent.length > this.truncateContentLength)
 		{
 			this.pict.log.info(`Mocking an PREPEND to Address -> [${pAddress}] (log truncated to first ${this.truncateContentLength} characters)`, {Content: pContent.substring(0, this.truncateContentLength)});
@@ -123,7 +145,11 @@ class PictEnvironmentObject
 	{
 		this.contentMap[pAddress] = pContent;
 
-		if (this.storeEventLog) this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pContent));
+		if (this.storeEventLog) 
+		{
+			this.eventLog.Prepend.push(this.createEventLogEntry(pAddress, pContent));
+		}
+		
 		if (pContent.length > this.truncateContentLength)
 		{
 			this.pict.log.info(`Mocking an ASSIGN to Address -> [${pAddress}] (log truncated to first ${this.truncateContentLength} characters)`, {Content: pContent.substring(0, this.truncateContentLength)});
@@ -147,13 +173,25 @@ class PictEnvironmentObject
 		}
 	}
 
+	initializeClassMapLocation(pAddress)
+	{
+		if (!this.contentMap._CLASS_MAP.hasOwnProperty(pAddress))
+		{
+			this.contentMap._CLASS_MAP[pAddress] = [];
+		}
+	}
+
 	customReadAttributeFunction (pAddress, pAttribute)
 	{
 		this.initializeAttributeMapLocation(pAddress, pAttribute);
 
 		let tmpContent = this.contentMap._ATTRIBUTE_MAP[pAddress][pAttribute];
 
-		if (this.storeEventLog) this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pAttribute));
+		if (this.storeEventLog) 
+		{
+			this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pAttribute));
+		}
+
 		if (tmpContent.length > this.truncateContentLength)
 		{
 			this.pict.log.info(`Mocking an ATTRIBUTE READ for Address -> [${pAddress}] (log truncated to first ${this.truncateContentLength} characters)`, {Content: tmpContent.substring(0, this.truncateContentLength)});
@@ -171,7 +209,11 @@ class PictEnvironmentObject
 
 		this.contentMap._ATTRIBUTE_MAP[pAddress][pAttribute] = pValue;
 
-		if (this.storeEventLog) this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pAttribute));
+		if (this.storeEventLog) 
+		{
+			this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pAttribute));
+		}
+
 		if (pValue.length > this.truncateContentLength)
 		{
 			this.pict.log.info(`Mocking an ATTRIBUTE SET for Address -> [${pAddress}] (log truncated to first ${this.truncateContentLength} characters)`, {Content: pValue.substring(0, this.truncateContentLength)});
@@ -189,7 +231,11 @@ class PictEnvironmentObject
 
 		let tmpContent = this.contentMap._ATTRIBUTE_MAP[pAddress][pAttribute];
 
-		if (this.storeEventLog) this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pAttribute));
+		if (this.storeEventLog) 
+		{
+			this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pAttribute));
+		}
+
 		if (tmpContent.length > this.truncateContentLength)
 		{
 			this.pict.log.info(`Mocking an ATTRIBUTE REMOVE for Address -> [${pAddress}] (log truncated to first ${this.truncateContentLength} characters)`, {Content: tmpContent.substring(0, this.truncateContentLength)});
@@ -202,6 +248,58 @@ class PictEnvironmentObject
 		delete this.contentMap._ATTRIBUTE_MAP[pAddress][pAttribute];
 
 		return true;
+	}
+
+	customReadClassFunction (pAddress, pClass)
+	{
+		this.initializeClassMapLocation(pAddress);
+
+		const tmpContent = this.contentMap._CLASS_MAP[pAddress].indexOf(pClass) > -1;
+
+		if (this.storeEventLog) 
+		{
+			this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pClass));
+		}
+		this.pict.log.info(`Mocking an CLASS READ for Address -> [${pAddress}]::[${pClass}]`, {Content: tmpContent});
+		
+		return tmpContent;
+	}
+
+	customSetClassFunction (pAddress, pClass)
+	{
+		this.initializeClassMapLocation(pAddress);
+
+		let tmpContent = this.contentMap._CLASS_MAP[pAddress];
+
+		if (!this.contentMap._CLASS_MAP[pAddress].indexOf(pClass) > -1)
+		{
+			this.contentMap._CLASS_MAP[pAddress].push(pClass);
+		}
+
+		if (this.storeEventLog) 
+		{
+			this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pClass));
+		}
+		this.pict.log.info(`Mocking an CLASS SET for Address -> [${pAddress}]::[${pClass}]`, {Content: tmpContent.join(' ')});
+		
+		return tmpContent;
+	}
+
+	customRemoveClassFunction (pAddress, pClass)
+	{
+		this.initializeClassMapLocation(pAddress);
+
+		let tmpContent = this.contentMap._CLASS_MAP[pAddress];
+
+		this.contentMap._CLASS_MAP[pAddress].splice(pClass);
+
+		if (this.storeEventLog) 
+		{
+			this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pClass));
+		}
+		this.pict.log.info(`Mocking an CLASS REMOVE for Address -> [${pAddress}]::[${pClass}]`, {Content: tmpContent.join(' ')});
+
+		return tmpContent;
 	}
 }
 
