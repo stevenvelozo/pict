@@ -156,7 +156,7 @@ class PictEnvironmentObject
 
 	initializeClassMapLocation(pAddress, pClass)
 	{
-		if (!this.contentMap._CLASS_LIST.indexOf(pClass) > -1)
+		if (this.contentMap._CLASS_LIST.indexOf(pClass) === -1)
 		{
 			this.contentMap._CLASS_LIST.push(pClass);
 		}
