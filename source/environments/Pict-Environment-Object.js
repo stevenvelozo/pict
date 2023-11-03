@@ -297,7 +297,7 @@ class PictEnvironmentObject
 		{
 			this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pClass));
 		}
-		this.pict.log.info(`Mocking an CLASS REMOVE for Address -> [${pAddress}]::[${pClass}]`, {Content: tmpContent.join()});
+		this.pict.log.info(`Mocking an CLASS REMOVE for Address -> [${pAddress}]::[${pClass}]`, {Content: tmpContent.join(' ')});
 
 		return tmpContent;
 	}
