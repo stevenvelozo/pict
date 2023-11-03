@@ -55,53 +55,25 @@ suite
 					(fDone) =>
 					{
 						let testPict = new libPict(_MockSettings);
-						let classMap = {};
-						// for 'hasClass'
-						testPict.ContentAssignment.customReadClassFunction = (pAddress, pClass) =>
-						{ 
-							if (pClass === 'mustard') 
-							{
-								return true;
-							} 
-							else 
-							{
-								return false;
-							}
-						}
-						// for 'addClass'
-						testPict.ContentAssignment.customSetClassFunction = (pAddress, pClass) =>
-						{ 
-							if (!classMap[pAddress]) 
-							{
-								classMap[pAddress] = [];
-							} 
-							if (!classMap[pAddress].hasOwnProperty(pClass)) 
-							{
-								classMap[pAddress].push(pClass);
-							}
-						}
-						// for 'removeClass'
-						testPict.ContentAssignment.customRemoveClassFunction = (pAddress, pClass) =>
-						{ 
-							if (!classMap[pAddress]) 
-							{
-								classMap[pAddress] = [];
-							} 
-							if (!classMap[pAddress].hasOwnProperty(pClass)) 
-							{
-								classMap[pAddress].splice(pClass);
-							}
-						}
+						let testEnvironment = new libPict.EnvironmentObject(testPict);
+						let tmpCondimentMatch;
+						let tmpSandwich;
+
 						// dress a sandwich
-						let tmpSandwich = testPict.ContentAssignment.hasClass('#MySandwich', 'mustard');
-						Expect(tmpSandwich).to.equal(true);
-						tmpSandwich = testPict.ContentAssignment.hasClass('#MySandwich', 'mayo');
-						Expect(tmpSandwich).to.equal(false);
-						testPict.ContentAssignment.addClass('#MySandwich', 'pickles');
-						testPict.ContentAssignment.addClass('#MySandwich', 'mayo');
-						Expect(classMap['#MySandwich']).to.contain('mayo');
-						testPict.ContentAssignment.removeClass('#MySandwich', 'pickles');
-						Expect(classMap['#MySandwich']).to.not.contain('pickles');
+						tmpSandwich = testPict.ContentAssignment.addClass('#MySandwich', 'mustard');
+						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'mustard');
+						Expect(tmpCondimentMatch).to.equal(true);
+						Expect(tmpSandwich).to.contain('mustard');
+						tmpSandwich = testPict.ContentAssignment.addClass('#MySandwich', 'mayo');
+						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'mayo');
+						Expect(tmpCondimentMatch).to.equal(true);
+						Expect(tmpSandwich).to.contain('mayo');
+						tmpSandwich = testPict.ContentAssignment.addClass('#MySandwich', 'pickles');
+						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'pickles');
+						Expect(tmpCondimentMatch).to.equal(true);
+						tmpSandwich = testPict.ContentAssignment.removeClass('#MySandwich', 'pickles');
+						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'pickles');
+						Expect(tmpCondimentMatch).to.equal(false);
 						fDone();
 					}
 				);

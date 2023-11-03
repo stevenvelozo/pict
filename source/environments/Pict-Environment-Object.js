@@ -29,6 +29,7 @@ class PictEnvironmentObject
 		this.contentMap = (typeof(pContentMap) == 'object') ? pContentMap : {};
 
 		this.contentMap._ATTRIBUTE_MAP = {};
+		this.contentMap._CLASS_LIST = [];
 
 		this.pict = pPict;
 
@@ -45,6 +46,9 @@ class PictEnvironmentObject
 		this.eventLog.ReadAttribute = [];
 		this.eventLog.SetAttribute = [];
 		this.eventLog.RemoveAttribute = [];
+		this.eventLog.ReadClass = [];
+		this.eventLog.SetClass = [];
+		this.eventLog.RemoveClass = [];
 
 		this.pict.ContentAssignment.customGetElementFunction = this.customGetElementFunction.bind(this);
 		this.pict.ContentAssignment.customReadFunction = this.customReadFunction.bind(this);
@@ -54,6 +58,9 @@ class PictEnvironmentObject
 		this.pict.ContentAssignment.customReadAttributeFunction = this.customReadAttributeFunction.bind(this);
 		this.pict.ContentAssignment.customSetAttributeFunction = this.customSetAttributeFunction.bind(this);
 		this.pict.ContentAssignment.customRemoveAttributeFunction = this.customRemoveAttributeFunction.bind(this);
+		this.pict.ContentAssignment.customReadClassFunction = this.customReadClassFunction.bind(this);
+		this.pict.ContentAssignment.customSetClassFunction = this.customSetClassFunction.bind(this);
+		this.pict.ContentAssignment.customRemoveClassFunction = this.customRemoveClassFunction.bind(this);
 	}
 
 	createEventLogEntry(pAddress, pContent)
@@ -147,6 +154,14 @@ class PictEnvironmentObject
 		}
 	}
 
+	initializeClassMapLocation(pAddress, pClass)
+	{
+		if (!this.contentMap._CLASS_LIST.indexOf(pClass) > -1)
+		{
+			this.contentMap._CLASS_LIST.push(pClass);
+		}
+	}
+
 	customReadAttributeFunction (pAddress, pAttribute)
 	{
 		this.initializeAttributeMapLocation(pAddress, pAttribute);
@@ -202,6 +217,41 @@ class PictEnvironmentObject
 		delete this.contentMap._ATTRIBUTE_MAP[pAddress][pAttribute];
 
 		return true;
+	}
+
+	customReadClassFunction (pAddress, pClass)
+	{
+		let tmpContent = this.contentMap._CLASS_LIST.indexOf(pClass) > -1 ? true : false;
+
+		if (this.storeEventLog) this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pClass));
+		this.pict.log.info(`Mocking an CLASS READ for Address -> [${pAddress}]::[${pClass}]`, {Content: tmpContent});
+		return tmpContent;
+	}
+
+	customSetClassFunction (pAddress, pClass)
+	{
+		let tmpContent = this.contentMap._CLASS_LIST;
+
+		if (!this.contentMap._CLASS_LIST.indexOf(pClass) > -1)
+		{
+			this.contentMap._CLASS_LIST.push(pClass);
+		}
+
+		if (this.storeEventLog) this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pClass));
+		this.pict.log.info(`Mocking an CLASS SET for Address -> [${pAddress}]::[${pClass}]`, {Content: tmpContent.join()});
+		return tmpContent;
+	}
+
+	customRemoveClassFunction (pAddress, pClass)
+	{
+		let tmpContent = this.contentMap._CLASS_LIST;
+
+		tmpContent = this.contentMap._CLASS_LIST.splice(pClass);
+
+		if (this.storeEventLog) this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pClass));
+		this.pict.log.info(`Mocking an CLASS REMOVE for Address -> [${pAddress}]::[${pClass}]`, {Content: tmpContent.join()});
+
+		return tmpContent;
 	}
 }
 
