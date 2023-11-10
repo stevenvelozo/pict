@@ -1,8 +1,55 @@
 # Pict
 
-Behaviors and access to Retold stuff in the browser.
+Pict is a non-opinionated set of tools to provide the disparate parts of Model, View and Controller patterns to web, console and other applications where the UI is primarily represented as text strings.
 
-Uses browserify to generate dist/pict.* and such from node modules.
+
+## What is Model-View-Controller
+
+Wow what a contentious question.  Just like Thanksgiving dinner.  Aaaanyway the pict framework doesn't care what you think Model-View-Controller (MVC) is; it lacks opinionation and is designed to work in odd circumstances.  Each tool can be used discretely, or, they just work together if you want to use them as designed.
+
+
+### According to the original Inventor, Model-View-Controller is:
+
+Trygve Reenskaug, originator of MVC at PARC, has written that "MVC was conceived as a general solution to the problem of users controlling a large and complex data set."
+
+
+### According to Wikipedia, Model-View-Controller is:
+
+_(Wikipedia being the acknowledged universal source of truth for humanity?)_
+
+> Model–view–controller (MVC) is a software design pattern[1] commonly used for developing user interfaces that divides the related program logic into three interconnected elements. These elements are the internal representations of information (the Model), the interface (the View) that presents information to and accepts it from the user, and the Controller software linking the two.
+
+> Traditionally used for desktop graphical user interfaces (GUIs), this pattern became popular for designing web applications. Popular programming languages have MVC frameworks that facilitate the implementation of the pattern.
+
+
+## A software Model is:
+
+_(according to Wikipedia)_
+
+> The central component of the pattern. It is the application's dynamic data structure, independent of the user interface.[14] It directly manages the data, logic and rules of the application. In Smalltalk-80, the design of a model type is left entirely to the programmer. With WebObjects, Rails, and Django, a model type typically represents a table in the application's database.
+
+
+## A software View is:
+
+_(according to Wikipedia)_
+
+> Any representation of information such as a chart, diagram or table. Multiple views of the same information are possible, such as a bar chart for management and a tabular view for accountants.
+> 
+> In Smalltalk-80, a view is just a visual representation of a model, and does not handle user input. With WebObjects, a view represents a complete user interface element such as a menu or button, and does receive input from the user. In both Smalltalk-80 and WebObjects, however, views are meant to be general-purpose and composable.
+> 
+> With Rails and Django, the role of the view is played by HTML templates, so in their scheme a view specifies an in-browser user interface rather than representing a user interface widget directly. (Django opts to call this kind of object a "template" in light of this.) This approach puts relatively less emphasis on small, composable views; a typical Rails view has a one-to-one relationship with a controller action.
+> 
+> Smalltalk-80 views communicate with both a model and a controller, whereas with WebObjects, a view talks only to a controller, which then talks to a model. With Rails and Django, a view/template is used by a controller/view when preparing a response to the client.
+
+
+## A software Controller is
+
+_(according to Wikipedia)_:
+
+> Accepts input and converts it to commands for the model or view.
+
+... and then a bunch of deviance 
+
 
 ## Luxury Code
 
@@ -36,6 +83,7 @@ An easy shortcut to shell into the docker environment is provided, giving you a 
 bash terminal to the instance:
 
 `npm run docker-dev-shell`
+
 
 ## Unit Tests
 
