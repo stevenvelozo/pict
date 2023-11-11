@@ -236,6 +236,44 @@ suite
 							);
 						test
 							(
+								'Templates should be able to join values with a separator.',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+									let tmpTemplateOutput;
+									
+									_SampleChocoData.emptypromises = '';
+
+									tmpTemplateOutput = testPict.parseTemplate('<p>{~Join: - ^Record.d1^Record.d1~}</p>', _SampleChocoData);
+									Expect(tmpTemplateOutput).to.equal("<p>ia600202.us.archive.org - ia600202.us.archive.org</p>");
+									tmpTemplateOutput = testPict.parseTemplate('<p>{~J: - ^Record.d1^Record.d1~}</p>', _SampleChocoData);
+									Expect(tmpTemplateOutput).to.equal("<p>ia600202.us.archive.org - ia600202.us.archive.org</p>");
+									tmpTemplateOutput = testPict.parseTemplate('<p>{~J: - ^Record.d1^Record.emptypromises^Record.d1~}</p>', _SampleChocoData);
+									Expect(tmpTemplateOutput).to.equal("<p>ia600202.us.archive.org - ia600202.us.archive.org</p>");
+									tmpTemplateOutput = testPict.parseTemplate('<p>{~J: - ^Record.d1^Record.uniq^Record.d1~}</p>', _SampleChocoData);
+									Expect(tmpTemplateOutput).to.equal('<p>ia600202.us.archive.org - 1957612749 - ia600202.us.archive.org</p>');
+
+									fDone();
+								}
+							);
+						test
+							(
+								'Templates should be able to join unique values with a separator.',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+									let tmpTemplateOutput;
+									
+									_SampleChocoData.emptypromises = '';
+
+									tmpTemplateOutput = testPict.parseTemplate('<p>{~JoinUnique: - ^Record.d1^Record.d2^Record.d1~}</p>', _SampleChocoData);
+									Expect(tmpTemplateOutput).to.equal('<p>ia600202.us.archive.org - ia800202.us.archive.org</p>');
+
+									fDone();
+								}
+							);
+						test
+							(
 								'Use the template manager a bit...',
 								function (fDone)
 								{

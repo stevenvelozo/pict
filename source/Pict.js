@@ -453,6 +453,89 @@ class Pict extends libFable
 			this.MetaTemplate.addPattern('{~D:', '~}', fDataRender);
 			this.MetaTemplate.addPattern('{~Data:', '~}', fDataRender);
 
+			//<p>{~Join: - ^Record.d1^Record.d1~}</p>
+			let fJoinDataRender = (pHash, pData)=>
+				{
+					let tmpHash = pHash;
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Join [fDataRender]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 3)
+					{
+						this.log.trace(`PICT Join [fDataRender]::[${tmpHash}]`);
+					}
+
+					let tmpDataAddresses = tmpHash.split('^');
+					if (tmpDataAddresses.length < 2)
+					{
+						return '';
+					}
+
+					// Get the separator string
+					let tmpSeparator = tmpDataAddresses.shift();
+
+					let tmpValueList = [];
+					for (let i = 0; i < tmpDataAddresses.length; i++)
+					{
+						let tmpValue = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpDataAddresses[i]);
+						if (tmpValue)
+						{
+							tmpValueList.push(tmpValue);
+						}
+					}
+
+					return tmpValueList.join(tmpSeparator);
+				};
+			this.MetaTemplate.addPattern('{~J:', '~}', fJoinDataRender);
+			this.MetaTemplate.addPattern('{~Join:', '~}', fJoinDataRender);
+
+			//<p>{~JoinUnique: - ^Record.d1^Record.d1~}</p>
+			let fJoinUniqueDataRender = (pHash, pData)=>
+				{
+					let tmpHash = pHash;
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Join Unique [fDataRender]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 3)
+					{
+						this.log.trace(`PICT Join Unique [fDataRender]::[${tmpHash}]`);
+					}
+
+					let tmpDataAddresses = tmpHash.split('^');
+					if (tmpDataAddresses.length < 2)
+					{
+						return '';
+					}
+
+					// Get the separator string
+					let tmpSeparator = tmpDataAddresses.shift();
+
+					let tmpValueList = [];
+					let tmpValueMap = {};
+					for (let i = 0; i < tmpDataAddresses.length; i++)
+					{
+						let tmpValue = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpDataAddresses[i]);
+						if (tmpValue)
+						{
+							if (!tmpValueMap.hasOwnProperty(tmpValue))
+							{
+								tmpValueMap[tmpValue] = true;
+								tmpValueList.push(tmpValue);
+							}
+						}
+					}
+
+					return tmpValueList.join(tmpSeparator);
+				};
+			this.MetaTemplate.addPattern('{~JU:', '~}', fJoinUniqueDataRender);
+			this.MetaTemplate.addPattern('{~JoinUnique:', '~}', fJoinUniqueDataRender);
+
 			this.MetaTemplate.addPattern('{~Dollars:', '~}',
 				(pHash, pData)=>
 				{
