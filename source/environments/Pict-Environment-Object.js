@@ -76,7 +76,7 @@ class PictEnvironmentObject
 
 	customGetElementFunction (pAddress)
 	{
-		if (this.storeEventLog) 
+		if (this.storeEventLog)
 		{
 			this.eventLog.GetElement.push(this.createEventLogEntry(pAddress));
 		}
@@ -87,7 +87,7 @@ class PictEnvironmentObject
 
 	customReadFunction (pAddress)
 	{
-		if (this.storeEventLog) 
+		if (this.storeEventLog)
 		{
 			this.eventLog.Read.push(this.createEventLogEntry(pAddress));
 		}
@@ -106,7 +106,7 @@ class PictEnvironmentObject
 	{
 		this.contentMap[pAddress] = (typeof(this.contentMap[pAddress]) == 'undefined') ? pContent : this.contentMap[pAddress] + pContent;
 
-		if (this.storeEventLog) 
+		if (this.storeEventLog)
 		{
 			this.eventLog.Append.push(this.createEventLogEntry(pAddress, pContent));
 		}
@@ -125,11 +125,11 @@ class PictEnvironmentObject
 	{
 		this.contentMap[pAddress] = (typeof(this.contentMap[pAddress]) == 'undefined') ? pContent : pContent + this.contentMap[pAddress];
 
-		if (this.storeEventLog) 
+		if (this.storeEventLog)
 		{
 			this.eventLog.Prepend.push(this.createEventLogEntry(pAddress, pContent));
 		}
-		
+
 		if (pContent.length > this.truncateContentLength)
 		{
 			this.pict.log.info(`Mocking an PREPEND to Address -> [${pAddress}] (log truncated to first ${this.truncateContentLength} characters)`, {Content: pContent.substring(0, this.truncateContentLength)});
@@ -145,11 +145,11 @@ class PictEnvironmentObject
 	{
 		this.contentMap[pAddress] = pContent;
 
-		if (this.storeEventLog) 
+		if (this.storeEventLog)
 		{
 			this.eventLog.Prepend.push(this.createEventLogEntry(pAddress, pContent));
 		}
-		
+
 		if (pContent.length > this.truncateContentLength)
 		{
 			this.pict.log.info(`Mocking an ASSIGN to Address -> [${pAddress}] (log truncated to first ${this.truncateContentLength} characters)`, {Content: pContent.substring(0, this.truncateContentLength)});
@@ -187,7 +187,7 @@ class PictEnvironmentObject
 
 		let tmpContent = this.contentMap._ATTRIBUTE_MAP[pAddress][pAttribute];
 
-		if (this.storeEventLog) 
+		if (this.storeEventLog)
 		{
 			this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pAttribute));
 		}
@@ -209,7 +209,7 @@ class PictEnvironmentObject
 
 		this.contentMap._ATTRIBUTE_MAP[pAddress][pAttribute] = pValue;
 
-		if (this.storeEventLog) 
+		if (this.storeEventLog)
 		{
 			this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pAttribute));
 		}
@@ -231,7 +231,7 @@ class PictEnvironmentObject
 
 		let tmpContent = this.contentMap._ATTRIBUTE_MAP[pAddress][pAttribute];
 
-		if (this.storeEventLog) 
+		if (this.storeEventLog)
 		{
 			this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pAttribute));
 		}
@@ -256,12 +256,12 @@ class PictEnvironmentObject
 
 		const tmpContent = this.contentMap._CLASS_MAP[pAddress].indexOf(pClass) > -1;
 
-		if (this.storeEventLog) 
+		if (this.storeEventLog)
 		{
 			this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pClass));
 		}
 		this.pict.log.info(`Mocking an CLASS READ for Address -> [${pAddress}]::[${pClass}]`, {Content: tmpContent});
-		
+
 		return tmpContent;
 	}
 
@@ -276,12 +276,12 @@ class PictEnvironmentObject
 			this.contentMap._CLASS_MAP[pAddress].push(pClass);
 		}
 
-		if (this.storeEventLog) 
+		if (this.storeEventLog)
 		{
 			this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pClass));
 		}
 		this.pict.log.info(`Mocking an CLASS SET for Address -> [${pAddress}]::[${pClass}]`, {Content: tmpContent.join(' ')});
-		
+
 		return tmpContent;
 	}
 
@@ -293,7 +293,7 @@ class PictEnvironmentObject
 
 		this.contentMap._CLASS_MAP[pAddress].splice(pClass);
 
-		if (this.storeEventLog) 
+		if (this.storeEventLog)
 		{
 			this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pClass));
 		}

@@ -50,6 +50,56 @@ _(according to Wikipedia)_:
 
 ... and then a bunch of deviance 
 
+## Setting up a View for testing:
+
+Sometimes you want to unit test stuff, and don't want to load the whole module into a browser.  Here is a way to do so:
+
+```js
+// This library just sets up node to run like a browser.
+// It isn't necessary but allows you to use jquery.
+//const libBrowserEnv = require('browser-env')
+//libBrowserEnv();
+
+const Chai = require('chai');
+const Expect = Chai.expect;
+
+const libPict = require('pict');
+
+const libMyPictView = require(`../source/Pict-View-Sourcecode.js`);
+
+suite
+(
+    'PictView Basic',
+    () =>
+    {
+        setup(() => { });
+
+        suite
+            (
+                'Basic Tests',
+                () =>
+                {
+                    test(
+                            'Basic Initialization',
+                            (fDone) =>
+                            {
+                                // Initialize pict
+                                let _Pict = new libPict();
+                                // Setup an "environment" which allows us to inspect the activity -- pict has built in EnvironmentObject and EnvironmentLog
+                                let _PictEnvironment = new libPict.EnvironmentObject(_Pict);
+                                // Add our view to pict now that the environment is set up
+                                let _PictView = _Pict.addView({ Configurated:'Value' }, 'Pict-View-Name',  libMyPictView);
+                                // We might expect something more creative and unique to our view but this is a good start.
+                                Expect(_PictView).to.be.an('object');
+                                return fDone();
+                            }
+                        );
+                }
+            );
+    }
+);
+```
+
 
 ## Luxury Code
 
@@ -89,11 +139,15 @@ bash terminal to the instance:
 
 The unit tests require a running API server with the retold-harness data in it.  The
 luxury code docker image provides this for free, or you can use the scripts in the
-`retold-harness` folder to run them locally.
+`retold-harness` folder to run them locally... find some folder on your machine you
+want to run the harness from.
 
 ```shell
+git clone https://github.com/stevenvelozo/retold-harness
+cd retold-harness
 npm install
-npm run api-server-harness
+npm run docker-dev-build
+npm run docker-dev-run
 ```
 
 You can test that the service is running by executing the following curl command:
@@ -117,6 +171,7 @@ Which should return the following JSON:
     "Name": "John Green"
 }
 ```
+
 If you are into using paw files to play around with API endpoints, there is a fairly
 complete file in `retold-harness/model/bookstore-api-endpoint-exercises.paw` to 
 navigate the meadow-endpoints.
@@ -125,10 +180,6 @@ It is annoying to keep the terminal running to have API endpoints.  An easy and 
 extremely, awesomely stable way to run it in the background within the docker container
 is through the tmux command.
 
-```shell
-tmux
-npm run api-server-harness
-```
 
 Then you can press [ctrl-b] and then [d] to detach from the tmux terminal.  If you
 ever want to go back and watch the REST logs, or, restart the service, you can run
@@ -154,7 +205,3 @@ source maps.
 npm run build
 npm run build-compatible
 ```
-
-## A Manifesto for Anti-Frameworks in Service of Patterns
-
-(more to come)
