@@ -62,7 +62,7 @@ suite
 								{
 									var testPict = new libPict(_MockSettings);
 									testPict.options.Timezone = 'America/Los_Angeles';
-									let tmpTemplateOutput = testPict.parseTemplate('<p>{~DateYMD:Record.MagicDate~}</p>', {MagicDate: '2023-05-24T17:54:46.000Z'});
+									let tmpTemplateOutput = testPict.parseTemplate('<p>{~DateYMD:Record.MagicDate~}</p>', { MagicDate: '2023-05-24T17:54:46.000Z' });
 									Expect(tmpTemplateOutput).to.equal("<p>2023-05-24</p>");
 									fDone();
 								}
@@ -73,7 +73,7 @@ suite
 								function (fDone)
 								{
 									var testPict = new libPict(_MockSettings);
-									let tmpTemplateOutput = testPict.parseTemplate('<p>{~DateYMD:Record.MagicDate~}</p>', {MagicDate: 'This is not a valid date!'});
+									let tmpTemplateOutput = testPict.parseTemplate('<p>{~DateYMD:Record.MagicDate~}</p>', { MagicDate: 'This is not a valid date!' });
 									Expect(tmpTemplateOutput).to.equal("<p>Invalid Date</p>");
 									fDone();
 								}
@@ -86,7 +86,7 @@ suite
 								{
 									var testPict = new libPict(_MockSettings);
 									testPict.options.Timezone = 'America/Los_Angeles';
-									let tmpTemplateOutput = testPict.parseTemplate('<p>{~DateYMD:Record.MagicDate~} which is {~DateFormat:Record.MagicDate^dddd MMMM Do YYYY~}</p>', {MagicDate: '2023-05-24T17:54:46.000Z'});
+									let tmpTemplateOutput = testPict.parseTemplate('<p>{~DateYMD:Record.MagicDate~} which is {~DateFormat:Record.MagicDate^dddd MMMM Do YYYY~}</p>', { MagicDate: '2023-05-24T17:54:46.000Z' });
 									Expect(tmpTemplateOutput).to.equal("<p>2023-05-24 which is Wednesday May 24th 2023</p>");
 									fDone();
 								}
@@ -151,7 +151,7 @@ suite
 											testPict.log.info('Rest response: ', pRecord);
 
 											// Now use the 32 records to generate a template set
-											testPict.parseTemplate('<div>{~TS:Book-Author-Row:Record.JoinRecords~}</div>', {JoinRecords: pRecord},
+											testPict.parseTemplate('<div>{~TS:Book-Author-Row:Record.JoinRecords~}</div>', { JoinRecords: pRecord },
 												(pError, pValue) =>
 												{
 													Expect(pValue).to.equal(tmpExpectedOutput);
@@ -241,7 +241,7 @@ suite
 								{
 									var testPict = new libPict(_MockSettings);
 									let tmpTemplateOutput;
-									
+
 									_SampleChocoData.emptypromises = '';
 
 									tmpTemplateOutput = testPict.parseTemplate('<p>{~Join: - ^Record.d1^Record.d1~}</p>', _SampleChocoData);
@@ -263,7 +263,7 @@ suite
 								{
 									var testPict = new libPict(_MockSettings);
 									let tmpTemplateOutput;
-									
+
 									_SampleChocoData.emptypromises = '';
 
 									tmpTemplateOutput = testPict.parseTemplate('<p>{~JoinUnique: - ^Record.d1^Record.d2^Record.d1~}</p>', _SampleChocoData);
@@ -424,6 +424,91 @@ suite
 
 									Expect(tmpTemplateOutput).to.equal("<h1>Choco Deluxe Records</h1><p>FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000001.jpg is a file of 838 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000004.jpg is a file of 6843 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000009.jpg is a file of 8388 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000014.jpg is a file of 5993 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000019.jpg is a file of 4951 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000024.jpg is a file of 3383 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000029.jpg is a file of 3503 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971_archive.torrent is a file of 4093 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971_files.xml is a file of  bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971_meta.xml is a file of 1371 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971_reviews.xml is a file of 620 bytes big.</p><p>__ia_thumb.jpg is a file of 7481 bytes big.</p><p>frankerberry_countchockula_1971.0001.gif is a file of 101114 bytes big.</p><p>frankerberry_countchockula_1971.0001.mpg is a file of 31625216 bytes big.</p><p>frankerberry_countchockula_1971.0001.mpg.idx is a file of 31141 bytes big.</p><p>frankerberry_countchockula_1971.0001.ogv is a file of 2248166 bytes big.</p><p>frankerberry_countchockula_1971.0001_512kb.mp4 is a file of 2378677 bytes big.</p>");
 									return fDone();
+								}
+							);
+						test
+							(
+								'Template from Map Address',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+									let tmpTemplateOutput;
+
+									testPict.AppData.MySpecialMap =  (
+										{
+											'Dino-01': {Name: 'BRONTO EFFIN SAURUS' },
+											'Dino-02': {Name: 'T-Rex' },
+											'Dino-03': {Name: 'Triceratops' },
+											'Dino-04': {Name: 'Velociraptor' },
+											5: {Name: 'Godzilla' }
+										});
+
+									let tmpSampleRecord_1 = { IDDinosaur: 'Dino-01' };
+									let tmpSampleRecord_2 = { IDDinosaur: null };
+									let tmpSampleRecord_3 = { IDDinosaur: 5 };
+									let tmpSampleRecord_4 = { IDDinosaur: '5' };
+
+									testPict.TemplateProvider.addTemplate('DinosaurName', 'My dino is a {~D:Record.Name~}');
+
+									tmpTemplateOutput = testPict.parseTemplate('<p>{~TemplateFromMap:DinosaurName:AppData.MySpecialMap:Record.IDDinosaur~}</p>', tmpSampleRecord_1);
+									Expect(tmpTemplateOutput).to.equal('<p>My dino is a BRONTO EFFIN SAURUS</p>');
+									tmpTemplateOutput = testPict.parseTemplate('<p>{~TemplateFromMap:DinosaurName:AppData.MySpecialMap:Record.IDDinosaur~}</p>', tmpSampleRecord_2);
+									Expect(tmpTemplateOutput).to.equal('<p>My dino is a </p>');
+									tmpTemplateOutput = testPict.parseTemplate('<p>{~TemplateFromMap:DinosaurName:AppData.MySpecialMap:Record.IDDinosaur~}</p>', tmpSampleRecord_3);
+									Expect(tmpTemplateOutput).to.equal('<p>My dino is a Godzilla</p>');
+									tmpTemplateOutput = testPict.parseTemplate('<p>{~TemplateFromMap:DinosaurName:AppData.MySpecialMap:Record.IDDinosaur~}</p>', tmpSampleRecord_4);
+									Expect(tmpTemplateOutput).to.equal('<p>My dino is a Godzilla</p>');
+
+									// Try the same thing async to exercise that function
+									tmpTemplateOutput = testPict.parseTemplate('<p>{~TemplateFromMap:DinosaurName:AppData.MySpecialMap:Record.IDDinosaur~}</p>', tmpSampleRecord_1,
+										(pError, pResult) =>
+										{
+											Expect(pResult).to.equal('<p>My dino is a BRONTO EFFIN SAURUS</p>');
+											return fDone();
+										
+										});
+								}
+							);
+						test
+							(
+								'TemplateSet from Map Address',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+									let tmpTemplateOutput;
+
+									testPict.AppData.MyTeamMap =  (
+										{
+											'Team-1': [ {Name: 'BRONTO EFFIN SAURUS' }, {Name: 'T-Rex' } ],
+											'Category-2': [ {Name: 'Triceratops' }, {Name: 'Velociraptor' }, {Name: 'Godzilla' } ]
+										});
+
+									let tmpSampleDataSet_1 = (
+										[
+											{ IDTeam: 'Team-1' },
+//											{ IDTeam: null },
+											{ IDTeam: 'Category-2' }
+										]);
+
+									testPict.TemplateProvider.addTemplate('DinosaurName', '<p>My dino is a {~D:Record.Name~}</p>');
+
+									tmpTemplateOutput = testPict.parseTemplate('<div>{~TSFM:DinosaurName:AppData.MyTeamMap:Record.IDTeam~}</div>', tmpSampleDataSet_1[0]);
+									Expect(tmpTemplateOutput).to.equal('<div><p>My dino is a BRONTO EFFIN SAURUS</p><p>My dino is a T-Rex</p></div>');
+
+									tmpTemplateOutput = testPict.parseTemplate('<div>{~TSFM:DinosaurName:AppData.MyTeamMap:Record.IDTeam~}</div>', tmpSampleDataSet_1[1]);
+									Expect(tmpTemplateOutput).to.equal('<div><p>My dino is a Triceratops</p><p>My dino is a Velociraptor</p><p>My dino is a Godzilla</p></div>');
+
+//									tmpTemplateOutput = testPict.parseTemplate('<div>{~TSFM:DinosaurName:AppData.MyTeamMap:Record.IDTeam~}</div>', tmpSampleDataSet_1[2]);
+//									Expect(tmpTemplateOutput).to.equal('<div><p>My dino is a BRONTO EFFIN SAURUS</p><p>My dino is a T-Rex</p></div>');
+
+									// Try the same thing async to exercise that function
+									tmpTemplateOutput = testPict.parseTemplate('<div>{~TSFM:DinosaurName:AppData.MyTeamMap:Record.IDTeam~}</div>', tmpSampleDataSet_1[0],
+										(pError, pResult) =>
+										{
+											Expect(pResult).to.equal('<div><p>My dino is a BRONTO EFFIN SAURUS</p><p>My dino is a T-Rex</p></div>');
+											return fDone();
+										
+										});
 								}
 							);
 					}
