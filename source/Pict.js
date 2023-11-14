@@ -460,7 +460,7 @@ class Pict extends libFable
 						return ''
 					}
 
-					tmpTemplateFromMapHash = tmpTemplateHashPart[0]
+					tmpTemplateFromMapHash = tmpTemplateHashPart[0];
 					tmpAddressOfMap = tmpTemplateHashPart[1];
 					tmpAddressOfKey = tmpTemplateHashPart[2];
 
@@ -521,7 +521,7 @@ class Pict extends libFable
 						return fCallback(null, '');
 					}
 
-					tmpTemplateFromMapHash = tmpTemplateHashPart[0]
+					tmpTemplateFromMapHash = tmpTemplateHashPart[0];
 					tmpAddressOfMap = tmpTemplateHashPart[1];
 					tmpAddressOfKey = tmpTemplateHashPart[2];
 
@@ -602,7 +602,7 @@ class Pict extends libFable
 						return fCallback(null, '');
 					}
 
-					tmpTemplateFromMapHash = tmpTemplateHashPart[0]
+					tmpTemplateFromMapHash = tmpTemplateHashPart[0];
 					tmpAddressOfMap = tmpTemplateHashPart[1];
 					tmpAddressOfKey = tmpTemplateHashPart[2];
 
@@ -663,7 +663,7 @@ class Pict extends libFable
 						return fCallback(null, '');
 					}
 
-					tmpTemplateFromMapHash = tmpTemplateHashPart[0]
+					tmpTemplateFromMapHash = tmpTemplateHashPart[0];
 					tmpAddressOfMap = tmpTemplateHashPart[1];
 					tmpAddressOfKey = tmpTemplateHashPart[2];
 
