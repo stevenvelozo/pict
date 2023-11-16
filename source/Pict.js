@@ -174,7 +174,10 @@ class Pict extends libFable
 						return tmpCallback(Error(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]  Entity: ${tmpEntity} ID: ${tmpEntityID}`), '');
 					}
 
-					this.log.trace(`Pict: Entity Render: Entity [${tmpEntity}] with ID [${tmpEntityID}] as template [${tmpEntityTemplate}] from [${tmpHash}]`);
+					if (this.LogNoisiness > 3)
+					{
+						this.log.trace(`Pict: Entity Render: Entity [${tmpEntity}] with ID [${tmpEntityID}] as template [${tmpEntityTemplate}] from [${tmpHash}]`);
+					}
 
 					// Now try to get the entity
 					this.EntityProvider.getEntity(tmpEntity, tmpEntityID,
