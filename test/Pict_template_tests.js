@@ -511,6 +511,41 @@ suite
 										});
 								}
 							);
+						test
+							(
+								'TemplateValueSet from Array',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+									let tmpTemplateOutput;
+
+									testPict.AppData.MyTeamMap =  (
+										{
+											'UserIdentityKeys': [ 100, 400, 10, 3 ],
+											'UserIdentities': { 1: 'Jim', 'Godzilla': 'Jane', 3: 'Jill', 4: 'Jack' }
+										});
+
+									testPict.TemplateProvider.addTemplate('Users', '<p>{~D:Record.Value~}</p>');
+
+									tmpTemplateOutput = testPict.parseTemplate('<div>{~TVS:Users:AppData.MyTeamMap.UserIdentityKeys~}</div>');
+									Expect(tmpTemplateOutput).to.equal('<div><p>100</p><p>400</p><p>10</p><p>3</p></div>');
+
+									tmpTemplateOutput = testPict.parseTemplate('<div>{~TVS:Users:AppData.MyTeamMap.UserIdentities~}</div>');
+									Expect(tmpTemplateOutput).to.equal('<div><p>Jim</p><p>Jill</p><p>Jack</p><p>Jane</p></div>');
+
+//									tmpTemplateOutput = testPict.parseTemplate('<div>{~TSFM:DinosaurName:AppData.MyTeamMap:Record.IDTeam~}</div>', tmpSampleDataSet_1[2]);
+//									Expect(tmpTemplateOutput).to.equal('<div><p>My dino is a BRONTO EFFIN SAURUS</p><p>My dino is a T-Rex</p></div>');
+
+									// Try the same thing async to exercise that function
+									tmpTemplateOutput = testPict.parseTemplate('<div>{~TVS:Users:AppData.MyTeamMap.UserIdentities~}</div>', null,
+										(pError, pResult) =>
+										{
+											Expect(pResult).to.equal('<div><p>Jim</p><p>Jill</p><p>Jack</p><p>Jane</p></div>');
+											return fDone();
+										
+										});
+								}
+							);
 					}
 				);
 		}

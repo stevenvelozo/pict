@@ -432,6 +432,169 @@ class Pict extends libFable
 			this.MetaTemplate.addPatternBoth('{~TemplateSet:', '~}', fTemplateSetRender, fTemplateSetRenderAsync);
 
 // Refactor: #### DRY PROBLEM Too much dry needing fixed at this point
+			// {~TS:Template:AddressOfDataSet~}
+			let fTemplateValueSetRender = (pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fTemplateValueSetRender]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 0)
+					{
+						this.log.trace(`PICT Template [fTemplateValueSetRender]::[${tmpHash}]`);
+					}
+
+					let tmpTemplateHash = false;
+					let tmpAddressOfData = false;
+
+					// This is just a simple 2 part hash (the entity and the ID)
+					let tmpHashTemplateSeparator = tmpHash.indexOf(':');
+					tmpTemplateHash = tmpHash.substring(0, tmpHashTemplateSeparator);
+					if (tmpHashTemplateSeparator > -1)
+					{
+						tmpAddressOfData = tmpHash.substring(tmpHashTemplateSeparator + 1);
+					}
+					else
+					{
+						tmpTemplateHash = tmpHash;
+					}
+
+					// No template hash
+					if (!tmpTemplateHash)
+					{
+						this.log.warn(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`);
+						return `Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`;
+					}
+
+					tmpData = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData);
+
+					let tmpDataValueSet = [];
+					if (Array.isArray(tmpData))
+					{
+						for (let i = 0; i < tmpData.length; i++)
+						{
+							tmpDataValueSet.push({ Value: tmpData[i]});
+						}
+					}
+					else if (typeof(tmpData) === 'object')
+					{
+						let tmpValueKeys = Object.keys(tmpData);
+						for (let i = 0; i < tmpValueKeys.length; i++)
+						{
+							tmpDataValueSet.push({ Value: tmpData[tmpValueKeys[i]]});
+						}
+					}
+					else
+					{
+						tmpDataValueSet.push({ Value: tmpData});
+					}
+					tmpData = tmpDataValueSet;
+
+					if (!tmpData)
+					{
+						// No address was provided, just render the template with what this template has.
+						return this.parseTemplateSetByHash(tmpTemplateHash, pData);
+					}
+					else
+					{
+						return this.parseTemplateSetByHash(tmpTemplateHash, tmpData);
+					}
+				};
+			let fTemplateValueSetRenderAsync = (pHash, pData, fCallback)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+					let tmpCallback = (typeof(fCallback) === 'function') ? fCallback : () => { return ''; };
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fTemplateValueSetRenderAsync]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 0)
+					{
+						this.log.trace(`PICT Template [fTemplateValueSetRenderAsync]::[${tmpHash}]`);
+					}
+
+					let tmpTemplateFromMapHash = false;
+					let tmpAddressOfData = false;
+
+					// This is a 3 part hash with the map address and the key address both
+					let tmpTemplateHashPart = tmpHash.split(':');
+
+					if (tmpTemplateHashPart.length < 2)
+					{
+						this.log.trace(`PICT TemplateFromMap [fTemplateRenderAsync]::[${tmpHash}] failed because there were not three stanzas in the expression [${pHash}]`);
+						return fCallback(null, '');
+					}
+
+					tmpTemplateFromMapHash = tmpTemplateHashPart[0]
+					tmpAddressOfData = tmpTemplateHashPart[1];
+
+					// No TemplateFromMap hash
+					if (!tmpTemplateFromMapHash)
+					{
+						this.log.warn(`Pict: TemplateFromMap Render Async: TemplateFromMapHash not resolved for [${tmpHash}]`);
+						return fCallback(null, '');
+					}
+
+					// Now resolve the data
+					tmpData = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData);
+
+					let tmpDataValueSet = [];
+					if (Array.isArray(tmpData))
+					{
+						for (let i = 0; i < tmpData.length; i++)
+						{
+							tmpDataValueSet.push({ Value: tmpData[i]});
+						}
+					}
+					else if (typeof(tmpData) === 'object')
+					{
+						let tmpValueKeys = Object.keys(tmpData);
+						for (let i = 0; i < tmpValueKeys.length; i++)
+						{
+							tmpDataValueSet.push({ Value: tmpData[tmpValueKeys[i]]});
+						}
+					}
+					else
+					{
+						tmpDataValueSet.push({ Value: tmpData});
+					}
+					tmpData = tmpDataValueSet;
+
+					if (!tmpData)
+					{
+						// No address was provided, just render the template with what this template has.
+						// The async portion of this is a mind bender because of how entry can happen dynamically from templates
+						return this.parseTemplateSetByHash(tmpTemplateFromMapHash, pData,
+							(pError, pValue) =>
+							{
+								if (pError)
+								{
+									return tmpCallback(pError, '');
+								}
+								return tmpCallback(null, pValue);
+							});
+					}
+					else
+					{
+						return this.parseTemplateSetByHash(tmpTemplateFromMapHash, tmpData,
+							(pError, pValue) =>
+							{
+								if (pError)
+								{
+									return tmpCallback(pError, '');
+								}
+								return tmpCallback(null, pValue);
+							});
+					}
+				};
+			this.MetaTemplate.addPatternBoth('{~TVS:', '~}', fTemplateValueSetRender, fTemplateValueSetRenderAsync);
+			this.MetaTemplate.addPatternBoth('{~TemplateValueSet:', '~}', fTemplateValueSetRender, fTemplateValueSetRenderAsync);
+
 			// {~T:TemplateFromMap:AddressOfData~}
 			let fTemplateFromMapRender = (pHash, pData)=>
 				{
@@ -599,7 +762,7 @@ class Pict extends libFable
 					if (tmpTemplateHashPart.length < 3)
 					{
 						this.log.trace(`PICT TemplateFromMap [fTemplateFromMapRenderAsync]::[${tmpHash}] failed because there were not three stanzas in the expression [${pHash}]`);
-						return fCallback(null, '');
+						return '';
 					}
 
 					tmpTemplateFromMapHash = tmpTemplateHashPart[0];
@@ -610,7 +773,7 @@ class Pict extends libFable
 					if (!tmpTemplateFromMapHash)
 					{
 						this.log.warn(`Pict: TemplateFromMap Render Async: TemplateFromMapHash not resolved for [${tmpHash}]`);
-						return fCallback(null, '');
+						return '';
 					}
 
 					// Now resolve the data
