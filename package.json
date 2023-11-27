@@ -1,6 +1,6 @@
 {
     "name": "pict",
-    "version": "1.0.149",
+    "version": "1.0.150",
     "description": "Pict browser library.",
     "main": "source/Pict.js",
     "scripts": {
@@ -50,6 +50,6 @@
         "cachetrax": "^1.0.4",
         "fable": "^3.0.107",
         "pict-application": "^1.0.13",
-        "pict-view": "^1.0.34"
+        "pict-view": "^1.0.35"
     }
 }
