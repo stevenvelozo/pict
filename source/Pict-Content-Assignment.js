@@ -109,9 +109,9 @@ class PictContentAssignment extends libFableServiceBase
 				{
 					case 'INPUT':
 					case 'SELECT':
+					case 'TEXTAREA':
 						tmpTargetElementSet[i].value = pContent;
 						break;
-					case 'TEXTAREA':
 					case 'SCRIPT':
 						tmpTargetElementSet[i].text = pContent;
 						break;
@@ -131,9 +131,9 @@ class PictContentAssignment extends libFableServiceBase
 				{
 					case 'INPUT':
 					case 'SELECT':
+					case 'TEXTAREA':
 						tmpTargetElementSet[i].value = pContent;
 						break;
-					case 'TEXTAREA':
 					case 'SCRIPT':
 						tmpTargetElementSet[i].text = pContent;
 						break;
@@ -210,18 +210,17 @@ class PictContentAssignment extends libFableServiceBase
 		else if (this.hasJquery)
 		{
 			let tmpTargetElement = window.jQuery(pAddress);
-			if ((tmpTargetElement.prop('tagName') == 'INPUT') || (tmpTargetElement.prop('tagName') == 'TEXTAREA'))
-			{
-				return tmpTargetElement.val();
-			}
-			else if (tmpTargetElement.prop('tagName') == 'SCRIPT')
-			{
-				return tmpTargetElement.html();
-			}
-			else
-			{
-				return tmpTargetElement.html();
-			}
+			switch (tmpTargetElement.prop('tagName'))
+				{
+					case 'INPUT':
+					case 'SELECT':
+					case 'TEXTAREA':
+						return tmpTargetElement.val();
+					case 'SCRIPT':
+						return tmpTargetElement.text();
+					default:
+						return tmpTargetElement.html();
+				}
 		}
 		else if (this.inBrowser && this.hasDocument)
 		{
@@ -232,17 +231,16 @@ class PictContentAssignment extends libFableServiceBase
 			}
 			else if (tmpTargetElementSet.length == 1)
 			{
-				if ((tmpTargetElementSet[0].tagName == 'INPUT') || (tmpTargetElementSet[0].tagName == 'TEXTAREA'))
+				switch (tmpTargetElementSet[0].tagName)
 				{
-					return tmpTargetElementSet[0].value;
-				}
-				else if (tmpTargetElementSet[0].tagName == 'SCRIPT')
-				{
-					return tmpTargetElementSet[0].text;
-				}
-				else
-				{
-					return tmpTargetElementSet[0].innerHTML;
+					case 'INPUT':
+					case 'SELECT':
+					case 'TEXTAREA':
+						return tmpTargetElementSet[0].value;
+					case 'SCRIPT':
+						return tmpTargetElementSet[0].text;
+					default:
+						return tmpTargetElementSet[0].innerHTML;
 				}
 			}
 		}
