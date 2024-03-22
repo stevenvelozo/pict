@@ -50,7 +50,7 @@ suite
                         // Now initialize the views
                         let tmpView = testPict.addView( 'ExampleView',
                             {
-                                ViewIdentifier: "Example",
+                                ViewIdentifier: "ExampleView",
                                 RenderOnLoad: false,
 
                                 DefaultRenderable:"ExampleView-Print",
@@ -79,7 +79,7 @@ suite
 
                         testPict.instantiateServiceProvider('PictApplication',
                             {
-                                MainViewportView: 'ExampleView',
+                                MainViewportViewIdentifier: 'ExampleView',
                                 MainViewportRenderable: 'ExampleView-Print',
                                 MainViewportDefaultDataAddress: 'ExampleData',
                                 AutoRenderMainViewportView: true
@@ -95,6 +95,9 @@ suite
 					{
 						var testPict = new libPict(_MockSettings);
                         testPict.LogControlFlow = true;
+                        testPict.LogControlFlowWatchAddressList.push('AppData.ExampleData[0].Name');
+                        testPict.LogControlFlowWatchAddressList.push('AppData.ExampleData[2].Name');
+                        testPict.LogControlFlowWatchAddressList.push('AppData.ExampleData[55].Name');
 
                         // Now initialize the views
                         let tmpView = testPict.addView( 'ExampleView',
@@ -128,7 +131,7 @@ suite
 
                         testPict.instantiateServiceProvider('PictApplication',
                             {
-                                MainViewportView: 'ExampleView',
+                                MainViewportViewIdentifier: 'ExampleView',
                                 MainViewportRenderable: 'ExampleView-Print',
                                 MainViewportDefaultDataAddress: 'ExampleData',
                                 AutoRenderMainViewportView: true

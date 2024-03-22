@@ -28,8 +28,10 @@ class Pict extends libFable
 
 		// Log noisness goes from 0 - 5, where 5 is show me everything.
 		this.LogNoisiness = 0;
-		// Although we have log noisiness, sometimes we need control flow without all the other noise.
+		// Although we have log noisiness, sometimes we need control flow without all the other noise for hard to diagnose interpreters.
 		this.LogControlFlow = false;
+		// And an easy way to be introspective about data at various locations
+		this.LogControlFlowWatchAddressList = [];
 
 		// Load manifest sets
 		if (this.settings.Manifests)
@@ -1491,18 +1493,45 @@ class Pict extends libFable
 	parseTemplate (pTemplateString, pData, fCallback)
 	{
 		let tmpData = (typeof(pData) === 'object') ? pData : {};
+		let tmpParseUUID;
 		if (this.LogControlFlow)
 		{
+			tmpParseUUID = this.fable.getUUID();
+			this.log.info(`PICT-ControlFlow parseTemplate ${tmpParseUUID} [${pTemplateString.substring(0, 50).replace('\n', '\\n')}...${pTemplateString.length}] (fCallback: ${typeof(fCallback)}) with data size [${JSON.stringify(tmpData).length}]`);
 			if (this.LogNoisiness > 1)
 			{
-				this.log.info(`PICT-ControlFlow parseTemplate [${pTemplateString.substring(0, 50)}...]:`, {Template:pTemplateString, Data:tmpData});
+				this.log.info(`PICT-ControlFlow parseTemplate ${tmpParseUUID} template:\n${pTemplateString}`);
 			}
-			else
+			if (this.LogControlFlowWatchAddressList.length > 0)
 			{
-				this.log.info(`PICT-ControlFlow parseTemplate [${pTemplateString.substring(0, 50)}...] with data size [${JSON.stringify(tmpData).length}]`);
+				for (let i = 0; i < this.LogControlFlowWatchAddressList.length; i++)
+				{
+					this.log.info(`PICT-ControlFlow parseTemplate ${tmpParseUUID} Watch Value: [${this.LogControlFlowWatchAddressList[i]}]=>[${this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, this.LogControlFlowWatchAddressList[i])}]`);
+				}
 			}
 		}
-		return this.MetaTemplate.parseString(pTemplateString, tmpData, fCallback);
+
+		if (typeof(fCallback) === 'function')
+		{
+			this.MetaTemplate.parseString(pTemplateString, tmpData,
+				(pError, pParsedTemplate) =>
+				{
+					if (this.LogControlFlow && this.LogNoisiness > 1)
+					{
+						this.log.info(`PICT-ControlFlow parseTemplate ${tmpParseUUID} Template Async Return Value:\n${pParsedTemplate}`);
+					}
+					return fCallback(pError, pParsedTemplate);
+				});			
+		}
+		else
+		{
+			let tmpResult = this.MetaTemplate.parseString(pTemplateString, tmpData);
+			if (this.LogControlFlow && this.LogNoisiness > 1)
+			{
+					this.log.info(`PICT-ControlFlow parseTemplate ${tmpParseUUID} Template Return Value:\n${tmpResult}`);
+			}
+			return tmpResult;
+		}
 	}
 
 	parseTemplateByHash (pTemplateHash, pData, fCallback)
