@@ -88,6 +88,57 @@ suite
 						return fDone();
 					}
 				);
+				test
+				(
+					'Basic application containing a view with a list, showing control flow.',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+                        testPict.LogControlFlow = true;
+
+                        // Now initialize the views
+                        let tmpView = testPict.addView( 'ExampleView',
+                            {
+                                ViewIdentifier: "Example",
+                                RenderOnLoad: false,
+
+                                DefaultRenderable:"ExampleView-Print",
+                                DefaultDestinationAddress:"#Example-Print-Container",
+
+                                Templates: [
+                                    {
+                                        Hash: "ExampleView-Print-Box",
+                                        Template: /*html*/`<div><h1>Example!</h1{~TemplateSet:ExampleView-Print-Row:AppData.ExampleData~}</div>`
+                                    },
+                                    {
+                                        Hash: "ExampleView-Print-Row",
+                                        Template: /*html*/`<ul>{~Data:Record.Name~}</ul>`
+                                    }
+                                ],
+                                Renderables:[
+                                    {
+                                        RenderableHash: "ExampleView-Print",
+                                        TemplateHash: "ExampleView-Print-Box",
+                                        DestinationAddress: "#ExampleView-Print-Container"
+                                    }
+                                ]
+                            });
+
+                        testPict.AppData.ExampleData = [ { Name: 'One' }, { Name: 'Two' }, { Name: 'Three' } ];
+
+                        testPict.instantiateServiceProvider('PictApplication',
+                            {
+                                MainViewportView: 'ExampleView',
+                                MainViewportRenderable: 'ExampleView-Print',
+                                MainViewportDefaultDataAddress: 'ExampleData',
+                                AutoRenderMainViewportView: true
+                            });
+                        
+                        testPict.PictApplication.initialize();
+
+						return fDone();
+					}
+				);
 			}
 		);
 	}

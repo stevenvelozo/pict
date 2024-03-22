@@ -56,6 +56,56 @@ suite
 					{
 						test
 							(
+								'Value trees can log.',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+									testPict.AppData.ChocoData = _SampleChocoData;
+									let tmpTemplateOutput = testPict.parseTemplate('<p>{~LVT:AppData.ChocoData~}</p>');
+									Expect(tmpTemplateOutput).to.equal("<p></p>");
+									fDone();
+								}
+							);
+						test
+							(
+								'Value trees can log with specified depth.',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+									testPict.AppData.ChocoData = _SampleChocoData;
+									let tmpTemplateOutput = testPict.parseTemplate('<p>{~LVT:AppData.ChocoData^1~}</p>');
+									Expect(tmpTemplateOutput).to.equal("<p></p>");
+									fDone();
+								}
+							);
+						test
+							(
+								'Templates can render data trees.',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+									testPict.AppData.ChocoData = _SampleChocoData;
+									let tmpTemplateOutput = testPict.parseTemplate('{~DT:AppData.ChocoData~}');
+									Expect(tmpTemplateOutput.indexOf('<div class="PICTObjectBranchDepth_1"><div class="PICTObjectBranch">title</div><div class="PICTObjectBranchValue">Franken Berry / Count Chocula : Tevevision Commercial 1971</div></div>')).to.be.greaterThan(0);
+									fDone();
+								}
+							);
+						test
+							(
+								'Templates can render data trees with arbitrary depth.',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+									testPict.AppData.ChocoData = _SampleChocoData;
+									let tmpTemplateOutput = testPict.parseTemplate('{~DT:AppData.ChocoData^0~}');
+									Expect(tmpTemplateOutput.indexOf('<div class="PICTObjectBranchDepth_0"><div class="PICTObjectBranch">item_size</div><div class="PICTObjectBranchValue">36431778</div></div>')).to.be.greaterThan(0);
+									Expect(tmpTemplateOutput.indexOf('<div class="PICTObjectBranchDepth_0"><div class="PICTObjectBranch">metadata</div><div class="PICTObjectBranchValue">...</div></div>')).to.be.greaterThan(0);
+									Expect(tmpTemplateOutput.indexOf('<div class="PICTObjectBranchDepth_1"><div class="PICTObjectBranch">title</div><div class="PICTObjectBranchValue">Franken Berry / Count Chocula : Tevevision Commercial 1971</div></div>')).to.be.lessThan(0);
+									fDone();
+								}
+							);
+						test
+							(
 								// Date library uses time zones from here: https://www.iana.org/time-zones
 								'Dates in YYYY-MM-DD with timezone.',
 								function (fDone)

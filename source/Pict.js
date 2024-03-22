@@ -28,6 +28,8 @@ class Pict extends libFable
 
 		// Log noisness goes from 0 - 5, where 5 is show me everything.
 		this.LogNoisiness = 0;
+		// Although we have log noisiness, sometimes we need control flow without all the other noise.
+		this.LogControlFlow = false;
 
 		// Load manifest sets
 		if (this.settings.Manifests)
@@ -73,6 +75,18 @@ class Pict extends libFable
 		let tmpOptions = (typeof(pOptions) == 'object') ? pOptions : {};
 		let tmpViewHash = (typeof(pViewHash) == 'string') ? pViewHash : this.fable.getUUID();
 
+		if (this.LogControlFlow)
+		{
+			if (this.LogNoisiness > 1)
+			{
+				this.log.info(`PICT-ControlFlow addView [${tmpViewHash}]:`, {Options:tmpOptions});
+			}
+			else
+			{
+				this.log.info(`PICT-ControlFlow addView [${tmpViewHash}]`)
+			}
+		}
+
 		if (typeof(pViewPrototype) != 'undefined')
 		{
 			// If the prototype has a default_configuration, it will be merged with options.
@@ -95,6 +109,18 @@ class Pict extends libFable
 	{
 		let tmpOptions = (typeof(pOptions) == 'object') ? pOptions : {};
 		let tmpApplicationHash = (typeof(pApplicationHash) == 'string') ? pApplicationHash : this.fable.getUUID();
+
+		if (this.LogControlFlow)
+		{
+			if (this.LogNoisiness > 1)
+			{
+				this.log.info(`PICT-ControlFlow addApplication [${tmpApplicationHash}]:`, {Options:tmpOptions});
+			}
+			else
+			{
+				this.log.info(`PICT-ControlFlow addApplication [${tmpApplicationHash}]`)
+			}
+		}
 
 		if (typeof(pApplicationPrototype) != 'undefined')
 		{
@@ -883,7 +909,110 @@ class Pict extends libFable
 			this.MetaTemplate.addPatternBoth('{~TemplateSetFromMap:', '~}', fTemplateFromMapSetRender, fTemplateFromMapSetRenderAsync);
 // Refactor: #### END OF DRY PROBLEM
 
+			let fDataValueTree = (pHash, pData)=>
+				{
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+					tmpData.TemplateHash = pHash.trim();
 
+					tmpData.ValueTreeParameters = tmpData.TemplateHash.split('^');
+					if (tmpData.ValueTreeParameters.length < 1)
+					{
+						return '';
+					}
+					tmpData.ResolvedValue = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpData.ValueTreeParameters[0]);
+					tmpData.ResolvedValueType = typeof(tmpData.ResolvedValue);
+
+
+					tmpData.TreeMaxDepth = (tmpData.ValueTreeParameters.length < 2) ? 1 : parseInt(tmpData.ValueTreeParameters[1]);
+
+					let tmpPictObjectWrapTemplate = this.TemplateProvider.getTemplate('PICT-Object-Wrap');
+					if (!tmpPictObjectWrapTemplate)
+					{
+						// This template is here because it is a default template.  Users can override this template by providing their own as PICT-Object-Wrap
+						tmpPictObjectWrapTemplate = `<div class="PICT PICTObjectSet">{~D:Record.ObjectValueTree~}</div>`;
+					}
+
+					if (tmpData.ResolvedValueType == 'object')
+					{
+						tmpData.ObjectValueTree = fDataValueTreeObjectSet(tmpData.ResolvedValue, tmpData.ResolvedValue, 0, tmpData.TreeMaxDepth);
+					}
+					else
+					{
+						this.log.trace(`PICT Template Log Value Tree: [${tmpData.TemplateHash}] resolved data is not an object.`, tmpData.ResolvedValue);
+						tmpData.ObjectValueTree = tmpData.ResolveValue;
+					}
+
+					return this.parseTemplate(tmpPictObjectWrapTemplate, tmpData);
+				};
+			let fDataValueTreeObjectSet = (pObject, pRootObject, pCurrentDepth, pMaxDepth)=>
+				{
+					let tmpTemplateResult = '';
+
+					if (typeof(pObject) !== 'object')
+					{
+						return tmpTemplateResult;
+					}
+
+					let tmpObjectValueKeys = Object.keys(pObject);
+
+					let tmpPictObjectBranchTemplate = this.TemplateProvider.getTemplate('PICT-Object-Branch');
+					if (!tmpPictObjectBranchTemplate)
+					{
+						// This template is here because it is a default template.  Users can override this template by providing their own as PICT-Object-Branch
+						tmpPictObjectBranchTemplate = `
+<div class="PICTObjectBranchDepth_{~D:Record.CurrentDepth~}"><div class="PICTObjectBranch">{~D:Record.BranchKey~}</div><div class="PICTObjectBranchValue">{~D:Record.BranchValue~}</div></div>
+`
+					}
+
+					for (let i = 0; i < tmpObjectValueKeys.length; i++)
+					{
+						let tmpBranchType = typeof(pObject[tmpObjectValueKeys[i]]);
+
+						let tmpBranchValue = '';
+
+						switch(tmpBranchType)
+						{
+							case 'object':
+								if (pCurrentDepth + 1 > pMaxDepth)
+								{
+									tmpBranchValue = '...';
+								}
+								else
+								{
+									tmpBranchValue = fDataValueTreeObjectSet(pObject[tmpObjectValueKeys[i]], pRootObject, pCurrentDepth + 1, pMaxDepth);
+								}
+								break;
+
+							default:
+								tmpBranchValue = pObject[tmpObjectValueKeys[i]];
+								break;
+						}
+
+						let tmpDataValue = 
+							{
+								AppData:this.AppData,
+								Bundle:this.Bundle,
+
+								RootContainer:pRootObject,
+
+								Container:pObject,
+								BranchEntryCount:tmpObjectValueKeys.length,
+
+								BranchIndex:i,
+								BranchKey: tmpObjectValueKeys[i],
+								BranchValue: tmpBranchValue,
+								BranchDataType: tmpBranchType,
+
+								CurrentDepth: pCurrentDepth,
+								MaxDepth: pMaxDepth
+							};
+						tmpTemplateResult += this.parseTemplate(tmpPictObjectBranchTemplate, tmpDataValue);
+					}
+
+					return tmpTemplateResult;
+				};
+			this.MetaTemplate.addPattern('{~DataTree:', '~}',fDataValueTree);
+			this.MetaTemplate.addPattern('{~DT:', '~}',fDataValueTree);
 
 			//{~Data:AppData.Some.Value.to.Render~}
 			let fDataRender = (pHash, pData)=>
@@ -913,6 +1042,7 @@ class Pict extends libFable
 				};
 			this.MetaTemplate.addPattern('{~D:', '~}', fDataRender);
 			this.MetaTemplate.addPattern('{~Data:', '~}', fDataRender);
+
 
 			//<p>{~Join: - ^Record.d1^Record.d1~}</p>
 			let fJoinDataRender = (pHash, pData)=>
@@ -1253,7 +1383,7 @@ class Pict extends libFable
 					}
 					else if (tmpValueType == 'object')
 					{
-						this.log.trace(`PICT Template Log Value: [${tmpHash}] is an obect.`, tmpValue);
+						this.log.trace(`PICT Template Log Value: [${tmpHash}] is an object.`, tmpValue);
 					}
 					else
 					{
@@ -1264,6 +1394,76 @@ class Pict extends libFable
 			this.MetaTemplate.addPattern('{~LogValue:', '~}',fLogValue);
 			this.MetaTemplate.addPattern('{~LV:', '~}',fLogValue);
 
+
+			let fLogValueTree = (pHash, pData)=>
+				{
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+					tmpData.TemplateHash = pHash.trim();
+
+					tmpData.ValueTreeParameters = tmpData.TemplateHash.split('^');
+					if (tmpData.ValueTreeParameters.length < 1)
+					{
+						return '';
+					}
+					tmpData.ResolvedValue = this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpData.ValueTreeParameters[0]);
+					tmpData.ResolvedValueType = typeof(tmpData.ResolvedValue);
+
+
+					tmpData.TreeMaxDepth = (tmpData.ValueTreeParameters.length < 2) ? 1 : parseInt(tmpData.ValueTreeParameters[1]);
+
+					if (tmpData.ResolvedValueType == 'object')
+					{
+						fLogValueTreeObjectSet(tmpData.ResolvedValue, tmpData.ValueTreeParameters[0], tmpData.ResolvedValue, 0, tmpData.TreeMaxDepth);
+					}
+					else
+					{
+						this.log.trace(`PICT Template Log Value Tree: [${tmpData.TemplateHash}] resolved data is not an object.`, tmpData.ResolvedValue);
+					}
+
+					return '';
+				};
+			let fLogValueTreeObjectSet = (pObject, pBaseAddress, pRootObject, pCurrentDepth, pMaxDepth)=>
+				{
+					let tmpTemplateResult = '';
+
+					if (typeof(pObject) !== 'object')
+					{
+						return tmpTemplateResult;
+					}
+
+					let tmpObjectValueKeys = Object.keys(pObject);
+
+					for (let i = 0; i < tmpObjectValueKeys.length; i++)
+					{
+						let tmpBranchType = typeof(pObject[tmpObjectValueKeys[i]]);
+						let tmpBranchValue = '';
+
+						switch(tmpBranchType)
+						{
+							case 'object':
+								tmpBranchValue = '...';
+								break;
+
+							default:
+								tmpBranchValue = pObject[tmpObjectValueKeys[i]];
+								break;
+						}
+						this.log.trace(`[${pBaseAddress}.${tmpObjectValueKeys[i]}] (${tmpBranchType}):  ${tmpBranchValue}`);
+
+						if (pCurrentDepth + 1 > pMaxDepth)
+						{
+							return '';
+						}
+						else if (tmpBranchType == 'object')
+						{
+							tmpBranchValue = fLogValueTreeObjectSet(pObject[tmpObjectValueKeys[i]], `${pBaseAddress}.${tmpObjectValueKeys[i]}`, pRootObject, pCurrentDepth + 1, pMaxDepth);
+						}
+					}
+
+					return '';
+				};
+			this.MetaTemplate.addPattern('{~LogValueTree:', '~}',fLogValueTree);
+			this.MetaTemplate.addPattern('{~LVT:', '~}',fLogValueTree);
 
 			let fLogStatement = (pHash, pData)=>
 				{
@@ -1291,6 +1491,17 @@ class Pict extends libFable
 	parseTemplate (pTemplateString, pData, fCallback)
 	{
 		let tmpData = (typeof(pData) === 'object') ? pData : {};
+		if (this.LogControlFlow)
+		{
+			if (this.LogNoisiness > 1)
+			{
+				this.log.info(`PICT-ControlFlow parseTemplate [${pTemplateString.substring(0, 50)}...]:`, {Template:pTemplateString, Data:tmpData});
+			}
+			else
+			{
+				this.log.info(`PICT-ControlFlow parseTemplate [${pTemplateString.substring(0, 50)}...] with data size [${JSON.stringify(pData).length}]`);
+			}
+		}
 		return this.MetaTemplate.parseString(pTemplateString, tmpData, fCallback);
 	}
 
