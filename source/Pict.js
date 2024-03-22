@@ -1499,7 +1499,7 @@ class Pict extends libFable
 			}
 			else
 			{
-				this.log.info(`PICT-ControlFlow parseTemplate [${pTemplateString.substring(0, 50)}...] with data size [${JSON.stringify(pData).length}]`);
+				this.log.info(`PICT-ControlFlow parseTemplate [${pTemplateString.substring(0, 50)}...] with data size [${JSON.stringify(tmpData).length}]`);
 			}
 		}
 		return this.MetaTemplate.parseString(pTemplateString, tmpData, fCallback);
