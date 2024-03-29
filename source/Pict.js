@@ -187,7 +187,15 @@ class Pict extends libFable
 
 					if (!isNaN(tmpEntityID))
 					{
-						tmpEntityID = parseInt(tmpEntityID);
+						try
+						{
+							tmpEntityID = parseInt(tmpEntityID);							
+						}
+						catch
+						{
+							this.log.warn(`Pict: Entity Render: Could not parse entity ID.`);
+							tmpEntityID = 0;
+						}
 					}
 					else
 					{
@@ -925,7 +933,14 @@ class Pict extends libFable
 					tmpData.ResolvedValueType = typeof(tmpData.ResolvedValue);
 
 
-					tmpData.TreeMaxDepth = (tmpData.ValueTreeParameters.length < 2) ? 1 : parseInt(tmpData.ValueTreeParameters[1]);
+					try
+					{
+						tmpData.TreeMaxDepth = (tmpData.ValueTreeParameters.length < 2) ? 1 : parseInt(tmpData.ValueTreeParameters[1]);
+					}
+					catch
+					{
+						tmpData.TreeMaxDepth = 1;
+					}
 
 					let tmpPictObjectWrapTemplate = this.TemplateProvider.getTemplate('PICT-Object-Wrap');
 					if (!tmpPictObjectWrapTemplate)
@@ -1306,11 +1321,25 @@ class Pict extends libFable
 						let tmpHashParts = tmpHash.split(',');
 						if (tmpHashParts.length > 0)
 						{
-							tmpStringLength = parseInt(tmpHashParts[0]);
+							try
+							{
+								tmpStringLength = parseInt(tmpHashParts[0]);								
+							}
+							catch
+							{
+								tmpStringLength = 4;
+							}
 						}
 						if (tmpHashParts.length > 1)
 						{
-							tmpMaxNumber = parseInt(tmpHashParts[1]);
+							try
+							{
+								tmpMaxNumber = parseInt(tmpHashParts[1]);
+							}
+							catch
+							{
+								tmpMaxNumber = 9999;
+							}
 						}
 					}
 
@@ -1336,11 +1365,26 @@ class Pict extends libFable
 						let tmpHashParts = tmpHash.split(',');
 						if (tmpHashParts.length > 0)
 						{
-							tmpMinimumNumber = parseInt(tmpHashParts[0]);
+							try
+							{
+								tmpMinimumNumber = parseInt(tmpHashParts[0]);
+							}
+							catch
+							{
+								tmpMinimumNumber = 0;
+							}
 						}
 						if (tmpHashParts.length > 1)
 						{
-							tmpMaxNumber = parseInt(tmpHashParts[1]);
+							try
+							{
+								tmpMaxNumber = parseInt(tmpHashParts[1]);
+							}
+							catch
+							{
+								tmpMaxNumber = 9999999;
+							}
+
 						}
 					}
 
@@ -1411,7 +1455,14 @@ class Pict extends libFable
 					tmpData.ResolvedValueType = typeof(tmpData.ResolvedValue);
 
 
-					tmpData.TreeMaxDepth = (tmpData.ValueTreeParameters.length < 2) ? 1 : parseInt(tmpData.ValueTreeParameters[1]);
+					try
+					{
+						tmpData.TreeMaxDepth = (tmpData.ValueTreeParameters.length < 2) ? 1 : parseInt(tmpData.ValueTreeParameters[1]);
+					}
+					catch
+					{
+						tmpData.TreeMaxDepth = 1;
+					}
 
 					if (tmpData.ResolvedValueType == 'object')
 					{

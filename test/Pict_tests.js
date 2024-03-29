@@ -110,6 +110,24 @@ suite
 							});
 					}
 				);
+
+				test
+				(
+					'Math test',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+
+
+						Expect(testPict.Math.parsePrecise(1)).to.equal('1');
+						// 3.3333333333333333333333333333333 in the current node.js implementation collapses to 3.3333333333333335
+						Expect(testPict.Math.parsePrecise('4.33333333333333333333333332133333333')).to.equal('4.33333333333333333333333332133333333');
+						Expect(testPict.Math.parsePrecise(undefined)).to.equal('0.0');
+						
+						return fDone();
+						return fDone();
+					}
+				);
 			}
 		);
 	}
