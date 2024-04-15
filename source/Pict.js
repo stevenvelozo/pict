@@ -1215,7 +1215,7 @@ class Pict extends libFable
 					}
 					catch
 					{
-						this.log.error(`Error casting Document date ${tmpSQLDateTime} to the Document timezone using tz in this.AppData.DocumentData.Timezone: [${this.AppData.DocumentData.Timezone}] .. casting to the browser guess which is [${this.fable.Dates.dayJS.tz.guess()}].`);
+						//this.log.error(`Error casting timezone using tz .. casting to the browser guess which is [${this.fable.Dates.dayJS.tz.guess()}].`);
 						// Day.js will try to guess the user's timezone for us
 						tmpDayJS = tmpDayJS.tz(this.fable.Dates.dayJS.tz.guess());
 					}
@@ -1266,7 +1266,7 @@ class Pict extends libFable
 					}
 					catch
 					{
-						this.log.error(`Error casting Document date ${tmpSQLDateTime} to the Document timezone using tz in this.AppData.DocumentData.Timezone: [${this.AppData.DocumentData.Timezone}] .. casting to the browser guess which is [${this.fable.Dates.dayJS.tz.guess()}].`);
+						//this.log.error(`Error casting date passed timezone using tz .. casting to the browser guess which is [${this.fable.Dates.dayJS.tz.guess()}].`);
 						// Day.js will try to guess the user's timezone for us
 						tmpDayJS = tmpDayJS.tz(this.fable.Dates.dayJS.tz.guess());
 					}
