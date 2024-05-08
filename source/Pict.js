@@ -1210,14 +1210,28 @@ class Pict extends libFable
 						}
 						else
 						{
-							tmpDayJS = tmpDayJS.tz(this.fable.Dates.dayJS.tz.guess());
+							try
+							{
+								tmpDayJS = tmpDayJS.tz(this.fable.Dates.dayJS.tz.guess());
+							}
+							catch (pError)
+							{
+								this.log.error(`Error guessing dayJS guess() function; dates may be formatted to GMT by default.`);
+							}
 						}
 					}
 					catch
 					{
 						//this.log.error(`Error casting timezone using tz .. casting to the browser guess which is [${this.fable.Dates.dayJS.tz.guess()}].`);
 						// Day.js will try to guess the user's timezone for us
-						tmpDayJS = tmpDayJS.tz(this.fable.Dates.dayJS.tz.guess());
+						try
+						{
+							tmpDayJS = tmpDayJS.tz(this.fable.Dates.dayJS.tz.guess());
+						}
+						catch (pError)
+						{
+							this.log.error(`Error guessing dayJS guess() function; dates may be formatted to GMT by default.`);
+						}
 					}
 
 					return tmpDayJS.format('YYYY-MM-DD');
@@ -1261,14 +1275,28 @@ class Pict extends libFable
 						}
 						else
 						{
-							tmpDayJS = tmpDayJS.tz(this.fable.Dates.dayJS.tz.guess());
+							try
+							{
+								tmpDayJS = tmpDayJS.tz(this.fable.Dates.dayJS.tz.guess());
+							}
+							catch (pError)
+							{
+								this.log.error(`Error guessing dayJS guess() function; dates may be formatted to GMT by default.`);
+							}
 						}
 					}
 					catch
 					{
 						//this.log.error(`Error casting date passed timezone using tz .. casting to the browser guess which is [${this.fable.Dates.dayJS.tz.guess()}].`);
 						// Day.js will try to guess the user's timezone for us
-						tmpDayJS = tmpDayJS.tz(this.fable.Dates.dayJS.tz.guess());
+						try
+						{
+							tmpDayJS = tmpDayJS.tz(this.fable.Dates.dayJS.tz.guess());
+						}
+						catch (pError)
+						{
+							this.log.error(`Error guessing dayJS guess() function; dates may be formatted to GMT by default.`);
+						}
 					}
 
 					return tmpDayJS.format(tmpDateValueSet[1]);
