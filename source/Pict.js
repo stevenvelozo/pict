@@ -1060,7 +1060,6 @@ class Pict extends libFable
 			this.MetaTemplate.addPattern('{~D:', '~}', fDataRender);
 			this.MetaTemplate.addPattern('{~Data:', '~}', fDataRender);
 
-
 			//<p>{~Join: - ^Record.d1^Record.d1~}</p>
 			let fJoinDataRender = (pHash, pData)=>
 				{
@@ -1099,7 +1098,6 @@ class Pict extends libFable
 				};
 			this.MetaTemplate.addPattern('{~J:', '~}', fJoinDataRender);
 			this.MetaTemplate.addPattern('{~Join:', '~}', fJoinDataRender);
-
 			//<p>{~JoinUnique: - ^Record.d1^Record.d1~}</p>
 			let fJoinUniqueDataRender = (pHash, pData)=>
 				{
@@ -1237,7 +1235,6 @@ class Pict extends libFable
 					return tmpDayJS.format('YYYY-MM-DD');
 				});
 
-			
 			// Output the date as a YYYY-MM-DD string
 			// Takes in the format as the second parameter: {~DateYMD:AppData.Some.Date^YYYY-MM-DD~}
 			this.MetaTemplate.addPattern('{~DateFormat:', '~}',
