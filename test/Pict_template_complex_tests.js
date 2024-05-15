@@ -99,28 +99,12 @@ suite
 									Expect(tmpTemplateOutput2).to.equal("<div><p>/7/items/FrankenberryCountChoculaTevevisionCommercial1971</p></div>");
 
 									// This number equality should render the template
-									let tmpTemplateOutput3 = testPict.parseTemplate(`<div>{~TemplateIf:ChocoTemplate:AppData.ChocoData:AppData.ChocoData.files[1].size^<=^AppData.ChocoData.files[2].size~}</div>`, {},
+									testPict.parseTemplate(`<div>{~TemplateIf:ChocoTemplate:AppData.ChocoData:AppData.ChocoData.files[1].size^<=^AppData.ChocoData.files[2].size~}</div>`, {},
 										(pError, pOutput) =>
 										{
 											Expect(pOutput).to.equal("<div><p>/7/items/FrankenberryCountChoculaTevevisionCommercial1971</p></div>");
 											return fDone();
 										});
-
-									// // This number equality should render the template (the numeric value is == 838)
-									// let tmpTemplateOutput4 = testPict.parseTemplate(`<div>{~TemplateIfAbsolute:ChocoTemplate:AppData.ChocoData:AppData.ChocoData.files[0].size^>^837~}</div>`);
-									// Expect(tmpTemplateOutput4).to.equal("<div><p>/7/items/FrankenberryCountChoculaTevevisionCommercial1971</p></div>");
-
-									// // This number equality should render the template (the numeric value is == 838)
-									// let tmpTemplateOutput5 = testPict.parseTemplate(`<div>{~TemplateIfAbsolute:ChocoTemplate:AppData.ChocoData:AppData.ChocoData.files[0].size^<^839~}</div>`);
-									// Expect(tmpTemplateOutput5).to.equal("<div><p>/7/items/FrankenberryCountChoculaTevevisionCommercial1971</p></div>");
-
-									// // This number equality should render the template (the numeric value is == 838)
-									// let tmpTemplateOutput6 = testPict.parseTemplate(`<div>{~TIfAbs:ChocoTemplate:AppData.ChocoData:AppData.ChocoData.files[0].size^<^838~}</div>`, {},
-									// 	(pError, pOutput) =>
-									// 	{
-									// 		Expect(pOutput).to.equal("<div></div>");
-									// 		fDone();
-									// 	});
 								}
 							);
 						}
