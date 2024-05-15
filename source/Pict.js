@@ -470,6 +470,419 @@ class Pict extends libFable
 			this.MetaTemplate.addPatternBoth('{~TS:', '~}', fTemplateSetRender, fTemplateSetRenderAsync);
 			this.MetaTemplate.addPatternBoth('{~TemplateSet:', '~}', fTemplateSetRender, fTemplateSetRenderAsync);
 
+			// {~TemplateIfAbsolute:Template:AddressOfData:AppData.Some.Address.IDBook^OPERATOR^Absolute_Value~}
+			// {~TIfAbs:Template:AddressOfData:AppData.Some.Address.IDBook^OPERATOR^Absolute_Value~}
+			let compareValues = (pValueLeft, pOperator, pValueRight)=>
+			{
+				switch(pOperator)
+				{
+					case 'TRUE':
+						return (pValueLeft === true);
+					case 'FALSE':
+						return (pValueLeft === false);
+					case 'LNGT':
+					case 'LENGTH_GREATER_THAN':
+						switch(typeof(pValueLeft))
+						{
+							case 'string':
+								return (pValueLeft.length > pValueRight);
+							case 'object':
+								return (pValueLeft.length > pValueRight);
+							default:
+								return false;
+						}
+					case 'LNLT':
+					case 'LENGTH_LESS_THAN':
+						switch(typeof(pValueLeft))
+						{
+							case 'string':
+								return (pValueLeft.length < pValueRight);
+							case 'object':
+								return (pValueLeft.length < pValueRight);
+							default:
+								return false;
+						}
+					case '!=':
+						return (pValueLeft != pValueRight);
+					case '<':
+						return (pValueLeft < pValueRight);
+					case '>':
+						return (pValueLeft > pValueRight);
+					case '<=':
+						return (pValueLeft <= pValueRight);
+					case '>=':
+						return (pValueLeft >= pValueRight);
+					case '===':
+						return (pValueLeft === pValueRight);
+					case '==':
+						return (pValueLeft == pValueRight);
+					default:
+						return false;
+				}
+			}
+			let fTemplateIfAbsoluteValueRender = (pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fTemplateIfAbsoluteValueRender]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 0)
+					{
+						this.log.trace(`PICT Template [fTemplateIfAbsoluteValueRender]::[${tmpHash}]`);
+					}
+
+					let tmpTemplateHash = false;
+					let tmpAddressOfData = false;
+					let tmpComparisonOperation = false;
+
+					let tmpHashParts = tmpHash.split(':');
+
+					if (tmpHashParts.length < 3)
+					{
+						this.log.warn(`Pict: Template If Absolute Value Render: TemplateHash not complete for [${tmpHash}]`);
+						return `Pict: Template If Absolute Value Render: TemplateHash not complete for [${tmpHash}]`;
+					}
+
+					tmpTemplateHash = tmpHashParts[0];
+					tmpAddressOfData = tmpHashParts[1];
+					tmpComparisonOperation = tmpHashParts[2];
+
+					// No template hash
+					if (!tmpTemplateHash)
+					{
+						this.log.warn(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`);
+						return `Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`;
+					}
+					// No comparison operation
+					if (!tmpComparisonOperation)
+					{
+						this.log.warn(`Pict: Template Render: Comparison Operation not resolved for [${tmpHash}]`);
+						return `Pict: Template Render: Comparison Operation not resolved for [${tmpHash}]`;
+					}
+
+					// Now try to break the comparison into three parts...
+					let tmpComparisonParts = tmpComparisonOperation.split('^');
+					if (tmpComparisonParts.length < 3)
+					{
+						this.log.warn(`Pict: Template Render: Comparison Operation not complete (three parts expected) for [${tmpHash}]`);
+						return `Pict: Template Render: Comparison Operation not complete (three parts expected) for [${tmpHash}]`;
+					}
+
+					// Now look up the data at the comparison location
+					try
+					{
+						let tmpComparisonResult = compareValues(this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpComparisonParts[0]), tmpComparisonParts[1], tmpComparisonParts[2]);
+						if (!tmpComparisonResult)
+						{
+							return '';
+						}
+						else
+						{
+							if (!tmpAddressOfData)
+							{
+								// No address was provided, just render the template with what this template has.
+								return this.parseTemplateByHash(tmpTemplateHash, pData);
+							}
+							else
+							{
+								return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData));
+							}
+						}
+					}
+					catch (pError)
+					{
+						this.log.error(`Pict: Template Render: Error looking up comparison data for [${tmpHash}]: ${pError}`, pError);
+						return `Pict: Template Render: Error looking up comparison data for [${tmpHash}]: ${pError}`;
+					}
+				};
+			let fTemplateIfAbsoluteValueRenderAsync = (pHash, pData, fCallback)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+					let tmpCallback = (typeof(fCallback) === 'function') ? fCallback : () => { return ''; };
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fTemplateIfAbsoluteValueRender]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 0)
+					{
+						this.log.trace(`PICT Template [fTemplateIfAbsoluteValueRender]::[${tmpHash}]`);
+					}
+
+					let tmpTemplateHash = false;
+					let tmpAddressOfData = false;
+					let tmpComparisonOperation = false;
+
+					let tmpHashParts = tmpHash.split(':');
+
+					if (tmpHashParts.length < 3)
+					{
+						this.log.warn(`Pict: Template If Absolute Value Render: TemplateHash not complete for [${tmpHash}]`);
+						return tmpCallback(new Error(`Pict: Template If Absolute Value Render: TemplateHash not complete for [${tmpHash}]`));
+					}
+
+					tmpTemplateHash = tmpHashParts[0];
+					tmpAddressOfData = tmpHashParts[1];
+					tmpComparisonOperation = tmpHashParts[2];
+
+					// No template hash
+					if (!tmpTemplateHash)
+					{
+						this.log.warn(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`);
+						return tmpCallback(new Error(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`));
+					}
+					// No comparison operation
+					if (!tmpComparisonOperation)
+					{
+						this.log.warn(`Pict: Template Render: Comparison Operation not resolved for [${tmpHash}]`);
+						return tmpCallback(new Error(`Pict: Template Render: Comparison Operation not resolved for [${tmpHash}]`));
+					}
+
+					// Now try to break the comparison into three parts...
+					let tmpComparisonParts = tmpComparisonOperation.split('^');
+					if (tmpComparisonParts.length < 3)
+					{
+						this.log.warn(`Pict: Template Render: Comparison Operation not complete (three parts expected) for [${tmpHash}]`);
+						return tmpCallback(new Error(`Pict: Template Render: Comparison Operation not complete (three parts expected) for [${tmpHash}]`));
+					}
+
+					// Now look up the data at the comparison location
+					try
+					{
+						let tmpComparisonResult = compareValues(this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpComparisonParts[0]), tmpComparisonParts[1], tmpComparisonParts[2]);
+						if (!tmpComparisonResult)
+						{
+							return tmpCallback(null, '');
+						}
+						else
+						{
+							if (!tmpAddressOfData)
+							{
+								return this.parseTemplateByHash(tmpTemplateHash, pData,
+									(pError, pValue) =>
+									{
+										if (pError)
+										{
+											return tmpCallback(pError, '');
+										}
+										return tmpCallback(null, pValue);
+									});
+							}
+							else
+							{
+								return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData),
+									(pError, pValue) =>
+									{
+										if (pError)
+										{
+											return tmpCallback(pError, '');
+										}
+										return tmpCallback(null, pValue);
+									});
+							}
+						}
+					}
+					catch (pError)
+					{
+						this.log.error(`Pict: Template Render: Error looking up comparison data for [${tmpHash}]: ${pError}`, pError);
+						return tmpCallback(pError, '');
+					}
+				};
+			// {~TemplateIfAbsolute:Template:AddressOfData:AppData.Some.Address.IDBook^OPERATOR^Absolute_Value~}
+			// {~TIfAbs:Template:AddressOfData:AppData.Some.Address.IDBook^OPERATOR^Absolute_Value~}
+			this.MetaTemplate.addPatternBoth('{~TemplateIfAbsolute:', '~}', fTemplateIfAbsoluteValueRender, fTemplateIfAbsoluteValueRenderAsync);
+			this.MetaTemplate.addPatternBoth('{~TIfAbs:', '~}', fTemplateIfAbsoluteValueRender, fTemplateIfAbsoluteValueRenderAsync);
+
+			let fTemplateIfRender = (pHash, pData)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fTemplateIfAbsoluteValueRender]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 0)
+					{
+						this.log.trace(`PICT Template [fTemplateIfAbsoluteValueRender]::[${tmpHash}]`);
+					}
+
+					let tmpTemplateHash = false;
+					let tmpAddressOfData = false;
+					let tmpComparisonOperation = false;
+
+					let tmpHashParts = tmpHash.split(':');
+
+					if (tmpHashParts.length < 3)
+					{
+						this.log.warn(`Pict: Template If Absolute Value Render: TemplateHash not complete for [${tmpHash}]`);
+						return `Pict: Template If Absolute Value Render: TemplateHash not complete for [${tmpHash}]`;
+					}
+
+					tmpTemplateHash = tmpHashParts[0];
+					tmpAddressOfData = tmpHashParts[1];
+					tmpComparisonOperation = tmpHashParts[2];
+
+					// No template hash
+					if (!tmpTemplateHash)
+					{
+						this.log.warn(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`);
+						return `Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`;
+					}
+					// No comparison operation
+					if (!tmpComparisonOperation)
+					{
+						this.log.warn(`Pict: Template Render: Comparison Operation not resolved for [${tmpHash}]`);
+						return `Pict: Template Render: Comparison Operation not resolved for [${tmpHash}]`;
+					}
+
+					// Now try to break the comparison into three parts...
+					let tmpComparisonParts = tmpComparisonOperation.split('^');
+					if (tmpComparisonParts.length < 3)
+					{
+						this.log.warn(`Pict: Template Render: Comparison Operation not complete (three parts expected) for [${tmpHash}]`);
+						return `Pict: Template Render: Comparison Operation not complete (three parts expected) for [${tmpHash}]`;
+					}
+
+					// Now look up the data at the comparison location
+					try
+					{
+						let tmpComparisonResult = compareValues(
+								this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpComparisonParts[0]),
+								tmpComparisonParts[1],
+								this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpComparisonParts[2]));
+
+						if (!tmpComparisonResult)
+						{
+							return '';
+						}
+						else
+						{
+							if (!tmpAddressOfData)
+							{
+								// No address was provided, just render the template with what this template has.
+								return this.parseTemplateByHash(tmpTemplateHash, pData);
+							}
+							else
+							{
+								return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData));
+							}
+						}
+					}
+					catch (pError)
+					{
+						this.log.error(`Pict: Template Render: Error looking up comparison data for [${tmpHash}]: ${pError}`, pError);
+						return `Pict: Template Render: Error looking up comparison data for [${tmpHash}]: ${pError}`;
+					}
+				};
+			let fTemplateIfRenderAsync = (pHash, pData, fCallback)=>
+				{
+					let tmpHash = pHash.trim();
+					let tmpData = (typeof(pData) === 'object') ? pData : {};
+					let tmpCallback = (typeof(fCallback) === 'function') ? fCallback : () => { return ''; };
+
+					if (this.LogNoisiness > 4)
+					{
+						this.log.trace(`PICT Template [fTemplateIfAbsoluteValueRender]::[${tmpHash}] with tmpData:`, tmpData);
+					}
+					else if (this.LogNoisiness > 0)
+					{
+						this.log.trace(`PICT Template [fTemplateIfAbsoluteValueRender]::[${tmpHash}]`);
+					}
+
+					let tmpTemplateHash = false;
+					let tmpAddressOfData = false;
+					let tmpComparisonOperation = false;
+
+					let tmpHashParts = tmpHash.split(':');
+
+					if (tmpHashParts.length < 3)
+					{
+						this.log.warn(`Pict: Template If Absolute Value Render: TemplateHash not complete for [${tmpHash}]`);
+						return tmpCallback(new Error(`Pict: Template If Absolute Value Render: TemplateHash not complete for [${tmpHash}]`));
+					}
+
+					tmpTemplateHash = tmpHashParts[0];
+					tmpAddressOfData = tmpHashParts[1];
+					tmpComparisonOperation = tmpHashParts[2];
+
+					// No template hash
+					if (!tmpTemplateHash)
+					{
+						this.log.warn(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`);
+						return tmpCallback(new Error(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`));
+					}
+					// No comparison operation
+					if (!tmpComparisonOperation)
+					{
+						this.log.warn(`Pict: Template Render: Comparison Operation not resolved for [${tmpHash}]`);
+						return tmpCallback(new Error(`Pict: Template Render: Comparison Operation not resolved for [${tmpHash}]`));
+					}
+
+					// Now try to break the comparison into three parts...
+					let tmpComparisonParts = tmpComparisonOperation.split('^');
+					if (tmpComparisonParts.length < 3)
+					{
+						this.log.warn(`Pict: Template Render: Comparison Operation not complete (three parts expected) for [${tmpHash}]`);
+						return tmpCallback(new Error(`Pict: Template Render: Comparison Operation not complete (three parts expected) for [${tmpHash}]`));
+					}
+
+					// Now look up the data at the comparison location
+					try
+					{
+						// This is the only thing that's different from the absolute value function above.  Collapse these.
+						let tmpComparisonResult = compareValues(
+								this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpComparisonParts[0]),
+								tmpComparisonParts[1],
+								this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpComparisonParts[2]));
+
+						if (!tmpComparisonResult)
+						{
+							return tmpCallback(null, '');
+						}
+						else
+						{
+							if (!tmpAddressOfData)
+							{
+								return this.parseTemplateByHash(tmpTemplateHash, pData,
+									(pError, pValue) =>
+									{
+										if (pError)
+										{
+											return tmpCallback(pError, '');
+										}
+										return tmpCallback(null, pValue);
+									});
+							}
+							else
+							{
+								return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData),
+									(pError, pValue) =>
+									{
+										if (pError)
+										{
+											return tmpCallback(pError, '');
+										}
+										return tmpCallback(null, pValue);
+									});
+							}
+						}
+					}
+					catch (pError)
+					{
+						this.log.error(`Pict: Template Render: Error looking up comparison data for [${tmpHash}]: ${pError}`, pError);
+						return tmpCallback(pError, '');
+					}
+				};
+			// {~TemplateIf:Template:AddressOfData:AppData.Some.Address.IDBook^OPERATOR^AppData.Some.Address2.IDBook~}
+			// {~TIf:Template:AddressOfData:AppData.Some.Address.IDBook^OPERATOR^AppData.Some.Address2.IDBook~}
+			this.MetaTemplate.addPatternBoth('{~TemplateIf:', '~}', fTemplateIfRender, fTemplateIfRenderAsync);
+			this.MetaTemplate.addPatternBoth('{~TIf:', '~}', fTemplateIfRender, fTemplateIfRenderAsync);
+
 // Refactor: #### DRY PROBLEM Too much dry needing fixed at this point
 			// {~TS:Template:AddressOfDataSet~}
 			let fTemplateValueSetRender = (pHash, pData)=>
