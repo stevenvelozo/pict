@@ -1,18 +1,17 @@
 {
     "name": "pict",
-    "version": "1.0.164",
+    "version": "1.0.166",
     "description": "Pict browser library.",
     "main": "source/Pict.js",
     "scripts": {
         "start": "node source/Pict.js",
-        "coverage": "./node_modules/.bin/nyc --reporter=lcov --reporter=text-lcov ./node_modules/mocha/bin/_mocha -- -u tdd -R spec",
-        "test": "./node_modules/.bin/mocha -u tdd -R spec",
+        "test": "npx mocha -u tdd -R spec",
+        "tests": "npx mocha -u tdd --exit -R spec --grep",
+        "coverage": "npx nyc --reporter=lcov --reporter=text-lcov npx mocha -- -u tdd -R spec",
         "build": "npx quack build",
-        "api-server-harness": "node ./retold-harness/bookstore-serve-api.js",
         "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t pict-image:local",
-        "docker-dev-run": "docker run -it -d --name pict-dev -p 60000:8080 -p 63306:3306 -p 60086:8086  -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-image:local",
-        "docker-dev-shell": "docker exec -it pict-dev /bin/bash",
-        "tests": "./node_modules/mocha/bin/_mocha -u tdd --exit -R spec --grep"
+        "docker-dev-run": "docker run -it -d --name pict-dev -p 37447:8080 -p 19506:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-image:local",
+        "docker-dev-shell": "docker exec -it pict-dev /bin/bash"
     },
     "mocha": {
         "diff": true,
@@ -47,7 +46,7 @@
     },
     "dependencies": {
         "cachetrax": "^1.0.4",
-        "fable": "^3.0.120",
+        "fable": "^3.0.123",
         "pict-application": "^1.0.14",
         "pict-view": "^1.0.40"
     }

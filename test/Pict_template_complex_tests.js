@@ -107,6 +107,60 @@ suite
 										});
 								}
 							);
+						test
+							(
+								'Functions and Services and Conditionals',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+
+									testPict.AppData.ChocoData = _SampleChocoData;
+
+									testPict.services.MockService = {
+										testValue: 0,
+										testMessagePrefix: 'This was a test... Value?',
+										getTestValue: function () { return this.testValue; },
+										testFunction:
+											function(pNewTestValue)
+											{
+												// Pick a random number from 1-100 unless something explicit is passed in
+												let tmpNewTestValue = (typeof(pNewTestValue) === 'undefined') ? Math.floor(Math.random() * (100 - 1)) + 1 : pNewTestValue;
+												this.testValue = tmpNewTestValue;
+												return tmpNewTestValue;
+											},
+										testDataFunction:
+											function()
+											{
+												return { Message: this.testMessagePrefix, Code: 808 };
+											},
+										metaData:
+											{
+												bigNumber: 50000,
+												smallNumber: 11
+											}
+									};
+
+									testPict.TemplateProvider.addTemplate('FunctionTestTemplate', '<review>{~D:Record.reviews[0].reviewtitle~}</review><rating>{~D:Pict.services.MockService.getTestValue()~}</rating>');
+									let tmpTemplateOutputFunctionsWithConditionals = testPict.parseTemplate(`<div>{~TemplateIfAbsolute:FunctionTestTemplate:AppData.ChocoData:Pict.services.MockService.testFunction()^>=^50~}</div>`);
+									
+									// This test exercises a function that isn't deterministic -- it randomly generates a value between 1 and 100 and only shows the review if it's >0 50
+									let tmpTemplateResult = `<div><review>pre booberry</review><rating>${testPict.services.MockService.testValue}</rating></div>`;
+									if (testPict.services.MockService.testValue < 50)
+										tmpTemplateResult = "<div></div>";
+									Expect(tmpTemplateOutputFunctionsWithConditionals).to.equal(tmpTemplateResult);
+
+									// This template is complicated ... it uses midpoint functions that return an object
+									testPict.TemplateProvider.addTemplate('MultiFunctionTestTemplate', '<dog>{~D:Pict.services.MockService.testDataFunction().Message~} {~D:Record.d1~} {~D:Pict.services.MockService.testValue~}</dog>');
+									// Pass in the Count Chocula json data as the Record object
+									// Set the value to 8675309
+									testPict.services.MockService.testValue = 8675309;
+									tmpTemplateOutput = testPict.parseTemplate(`<div>{~Template:MultiFunctionTestTemplate:AppData.ChocoData~}</div>`);
+									Expect(tmpTemplateOutput).to.equal("<div><dog>This was a test... Value? ia600202.us.archive.org 8675309</dog></div>");
+
+									return fDone();
+
+								}
+							);
 						}
 				);
 		}
