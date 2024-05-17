@@ -1500,12 +1500,18 @@ class Pict extends libFable
 					let tmpValueList = [];
 					for (let i = 0; i < tmpDataAddresses.length; i++)
 					{
-						let tmpValue = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpDataAddresses[i]);
-						if (tmpValue)
+						let tmpValueSet = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpDataAddresses[i]);
+						if (tmpValueSet && Array.isArray(tmpValueSet))
 						{
-							tmpValueList.push(tmpValue);
+							for (let j = 0; j < tmpValueSet.length; j++)
+							{
+								tmpValueList.push(tmpValueSet[j]);
+							}
 						}
-					}
+						else if (tmpValueSet)
+						{
+							tmpValueList.push(tmpValueSet);
+						}					}
 
 					return tmpValueList.join(tmpSeparator);
 				};
