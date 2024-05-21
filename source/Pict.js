@@ -43,10 +43,12 @@ class Pict extends libFable
 		this.initializePictTemplateEngine();
 
 		this.addServiceType('PictView',  require('pict-view'));
+		this.addServiceType('PictProvider',  require('pict-provider'));
 		this.addServiceType('PictApplication',  require('pict-application'));
 
 		// Expose the named views directly, through a convenience accessor
 		this.views = this.servicesMap.PictView;
+		this.providers = this.servicesMap.PictProvider;
 	}
 
 	// Load manifests in as Hashed services
@@ -101,6 +103,41 @@ class Pict extends libFable
 		else
 		{
 			return this.instantiateServiceProvider('PictView', tmpOptions, tmpViewHash);
+		}
+	}
+
+	// Just passing an options will construct one for us.
+	// Passing a hash will set the hash.
+	// Passing a prototype will use that!
+	addProvider(pProviderHash, pOptions, pProviderPrototype)
+	{
+		let tmpOptions = (typeof(pOptions) == 'object') ? pOptions : {};
+		let tmpProviderHash = (typeof(pProviderHash) == 'string') ? pProviderHash : this.fable.getUUID();
+
+		if (this.LogControlFlow)
+		{
+			if (this.LogNoisiness > 1)
+			{
+				this.log.info(`PICT-ControlFlow addProvider [${tmpProviderHash}]:`, {Options:tmpOptions});
+			}
+			else
+			{
+				this.log.info(`PICT-ControlFlow addProvider [${tmpProviderHash}]`)
+			}
+		}
+
+		if (typeof(pProviderPrototype) != 'undefined')
+		{
+			// If the prototype has a default_configuration, it will be merged with options.
+			if (pProviderPrototype.hasOwnProperty('default_configuration'))
+			{
+				tmpOptions = this.fable.Utility.extend({}, pProviderPrototype.default_configuration, tmpOptions);
+			}
+			return this.instantiateServiceProviderFromPrototype('PictProvider', tmpOptions, tmpProviderHash, pProviderPrototype);
+		}
+		else
+		{
+			return this.instantiateServiceProvider('PictProvider', tmpOptions, tmpProviderHash);
 		}
 	}
 
@@ -2114,7 +2151,9 @@ class Pict extends libFable
 module.exports = Pict;
 
 module.exports.PictApplicationClass = require('pict-application');
+
 module.exports.PictViewClass = require('pict-view');
+module.exports.PictProviderClass = require('pict-provider');
 
 module.exports.EnvironmentLog = require('./environments/Pict-Environment-Log.js');
 module.exports.EnvironmentObject = require('./environments/Pict-Environment-Object.js');

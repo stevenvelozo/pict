@@ -1,5 +1,5 @@
 {
-	"ViewIdentifier": "Example",
+	"ViewIdentifier": "ExampleView",
 	"RenderOnLoad": false,
 	"DefaultRenderable": "ExampleView-Print",
 	"DefaultDestinationAddress": "#Example-Print-Container",

@@ -1,0 +1,8 @@
+{
+	"ProviderIdentifier": "ExampleProvider",
+
+	"AutoInitialize": true,
+	"AutoInitializeOrdinal": 0,
+
+	"Manifests": {}
+}
