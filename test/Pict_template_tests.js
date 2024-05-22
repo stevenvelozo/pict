@@ -413,6 +413,24 @@ suite
 							);
 						test
 							(
+								'Entity template rendering with reverse context lookup...',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+
+									testPict.TemplateProvider.addTemplate('Book-Author-Title', '{~D:Context[0].log.info(Record.Title, Context[0].fable.SettingsManager.settings)~}<h1>{~Data:Context[0].fable.SettingsManager.settings.Product~} {~Data:Record.Title~}: {~Dollars:Record.IDBook~} {~Data:Context.length~}</h1>');
+									testPict.TemplateProvider.addTemplate('Book-Author-Content', '<p>{~E:Book^1^Book-Author-Title~}</p>');
+
+									testPict.parseTemplateByHash('Book-Author-Content', { IDBook: 102 },
+										(pError, pValue) =>
+										{
+											Expect(pValue).to.equal('<p><h1>MockPict Angels & Demons: $1.00 3</h1></p>');
+											return fDone();
+										});
+								}
+							);
+						test
+							(
 								'Entity template rendering with Parameterized Location...',
 								function (fDone)
 								{

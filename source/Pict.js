@@ -190,7 +190,7 @@ class Pict extends libFable
 			// Expects one of the following:
 			// 		{~E:Book^AppData.Some.Address.IDBook^Render-Book-Template~}
 			//          ...meaning GET BOOK with IDBook FROM AppData.Some.Address.IDBook and render it to Render-Book-Template
-			let fEntityRender = (pHash, pData, fCallback) =>
+			let fEntityRender = (pHash, pData, fCallback, pContextArray) =>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -237,7 +237,7 @@ class Pict extends libFable
 					else
 					{
 						// This is an address, so we need to get the value at the address
-						tmpEntityID = this.resolveStateFromAddress(tmpEntityID, tmpData);
+						tmpEntityID = this.resolveStateFromAddress(tmpEntityID, tmpData, pContextArray);
 					}
 
 					// No Entity or EntityID
@@ -265,7 +265,7 @@ class Pict extends libFable
 							// Now render the template
 							if (tmpEntityTemplate)
 							{
-								return this.parseTemplateByHash(tmpEntityTemplate, pRecord, tmpCallback);
+								return this.parseTemplateByHash(tmpEntityTemplate, pRecord, tmpCallback, pContextArray);
 							}
 							else
 							{
@@ -277,7 +277,7 @@ class Pict extends libFable
 			this.MetaTemplate.addPatternAsync('{~Entity:', '~}', fEntityRender);
 
 			// {~T:Template:AddressOfData~}
-			let fTemplateRender = (pHash, pData)=>
+			let fTemplateRender = (pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -316,14 +316,14 @@ class Pict extends libFable
 					if (!tmpAddressOfData)
 					{
 						// No address was provided, just render the template with what this template has.
-						return this.parseTemplateByHash(tmpTemplateHash, pData);
+						return this.parseTemplateByHash(tmpTemplateHash, pData, pContextArray);
 					}
 					else
 					{
-						return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData));
+						return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), pContextArray);
 					}
 				};
-			let fTemplateRenderAsync = (pHash, pData, fCallback)=>
+			let fTemplateRenderAsync = (pHash, pData, fCallback, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -372,11 +372,11 @@ class Pict extends libFable
 									return tmpCallback(pError, '');
 								}
 								return tmpCallback(null, pValue);
-							});
+							}, pContextArray);
 					}
 					else
 					{
-						return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData),
+						return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray),
 							(pError, pValue) =>
 							{
 								if (pError)
@@ -384,14 +384,14 @@ class Pict extends libFable
 									return tmpCallback(pError, '');
 								}
 								return tmpCallback(null, pValue);
-							});
+							}, pContextArray);
 					}
 				};
 			this.MetaTemplate.addPatternBoth('{~T:', '~}', fTemplateRender, fTemplateRenderAsync);
 			this.MetaTemplate.addPatternBoth('{~Template:', '~}', fTemplateRender, fTemplateRenderAsync);
 
 			// {~TS:Template:AddressOfDataSet~}
-			let fTemplateSetRender = (pHash, pData)=>
+			let fTemplateSetRender = (pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -430,14 +430,14 @@ class Pict extends libFable
 					if (!tmpAddressOfData)
 					{
 						// No address was provided, just render the template with what this template has.
-						return this.parseTemplateSetByHash(tmpTemplateHash, pData);
+						return this.parseTemplateSetByHash(tmpTemplateHash, pData, pContextArray);
 					}
 					else
 					{
-						return this.parseTemplateSetByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData));
+						return this.parseTemplateSetByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), pContextArray);
 					}
 				};
-			let fTemplateSetRenderAsync = (pHash, pData, fCallback)=>
+			let fTemplateSetRenderAsync = (pHash, pData, fCallback, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -475,7 +475,7 @@ class Pict extends libFable
 					}
 
 					// Now resolve the data
-					tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData);
+					tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray);
 
 					if (!tmpData)
 					{
@@ -489,7 +489,7 @@ class Pict extends libFable
 									return tmpCallback(pError, '');
 								}
 								return tmpCallback(null, pValue);
-							});
+							}, pContextArray);
 					}
 					else
 					{
@@ -501,7 +501,7 @@ class Pict extends libFable
 									return tmpCallback(pError, '');
 								}
 								return tmpCallback(null, pValue);
-							});
+							}, pContextArray);
 					}
 				};
 			this.MetaTemplate.addPatternBoth('{~TS:', '~}', fTemplateSetRender, fTemplateSetRenderAsync);
@@ -557,7 +557,7 @@ class Pict extends libFable
 						return false;
 				}
 			}
-			let fTemplateIfAbsoluteValueRender = (pHash, pData)=>
+			let fTemplateIfAbsoluteValueRender = (pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -611,7 +611,7 @@ class Pict extends libFable
 					// Now look up the data at the comparison location
 					try
 					{
-						let tmpComparisonResult = compareValues(this.resolveStateFromAddress(tmpComparisonParts[0], tmpData), tmpComparisonParts[1], tmpComparisonParts[2]);
+						let tmpComparisonResult = compareValues(this.resolveStateFromAddress(tmpComparisonParts[0], tmpData, pContextArray), tmpComparisonParts[1], tmpComparisonParts[2]);
 						if (!tmpComparisonResult)
 						{
 							return '';
@@ -621,11 +621,11 @@ class Pict extends libFable
 							if (!tmpAddressOfData)
 							{
 								// No address was provided, just render the template with what this template has.
-								return this.parseTemplateByHash(tmpTemplateHash, pData);
+								return this.parseTemplateByHash(tmpTemplateHash, pData, pContextArray);
 							}
 							else
 							{
-								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData));
+								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), pContextArray);
 							}
 						}
 					}
@@ -635,7 +635,7 @@ class Pict extends libFable
 						return `Pict: Template Render: Error looking up comparison data for [${tmpHash}]: ${pError}`;
 					}
 				};
-			let fTemplateIfAbsoluteValueRenderAsync = (pHash, pData, fCallback)=>
+			let fTemplateIfAbsoluteValueRenderAsync = (pHash, pData, fCallback, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -690,7 +690,7 @@ class Pict extends libFable
 					// Now look up the data at the comparison location
 					try
 					{
-						let tmpComparisonResult = compareValues(this.resolveStateFromAddress(tmpComparisonParts[0], tmpData), tmpComparisonParts[1], tmpComparisonParts[2]);
+						let tmpComparisonResult = compareValues(this.resolveStateFromAddress(tmpComparisonParts[0], tmpData, pContextArray), tmpComparisonParts[1], tmpComparisonParts[2]);
 						if (!tmpComparisonResult)
 						{
 							return tmpCallback(null, '');
@@ -707,11 +707,11 @@ class Pict extends libFable
 											return tmpCallback(pError, '');
 										}
 										return tmpCallback(null, pValue);
-									});
+									}, pContextArray);
 							}
 							else
 							{
-								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData),
+								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray),
 									(pError, pValue) =>
 									{
 										if (pError)
@@ -719,7 +719,7 @@ class Pict extends libFable
 											return tmpCallback(pError, '');
 										}
 										return tmpCallback(null, pValue);
-									});
+									}, pContextArray);
 							}
 						}
 					}
@@ -734,7 +734,7 @@ class Pict extends libFable
 			this.MetaTemplate.addPatternBoth('{~TemplateIfAbsolute:', '~}', fTemplateIfAbsoluteValueRender, fTemplateIfAbsoluteValueRenderAsync);
 			this.MetaTemplate.addPatternBoth('{~TIfAbs:', '~}', fTemplateIfAbsoluteValueRender, fTemplateIfAbsoluteValueRenderAsync);
 
-			let fTemplateIfRender = (pHash, pData)=>
+			let fTemplateIfRender = (pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -789,9 +789,9 @@ class Pict extends libFable
 					try
 					{
 						let tmpComparisonResult = compareValues(
-								this.resolveStateFromAddress(tmpComparisonParts[0], tmpData),
+								this.resolveStateFromAddress(tmpComparisonParts[0], tmpData, pContextArray),
 								tmpComparisonParts[1],
-								this.resolveStateFromAddress(tmpComparisonParts[2], tmpData));
+								this.resolveStateFromAddress(tmpComparisonParts[2], tmpData, pContextArray));
 
 						if (!tmpComparisonResult)
 						{
@@ -802,11 +802,11 @@ class Pict extends libFable
 							if (!tmpAddressOfData)
 							{
 								// No address was provided, just render the template with what this template has.
-								return this.parseTemplateByHash(tmpTemplateHash, pData);
+								return this.parseTemplateByHash(tmpTemplateHash, pData, pContextArray);
 							}
 							else
 							{
-								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData));
+								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), pContextArray);
 							}
 						}
 					}
@@ -816,7 +816,7 @@ class Pict extends libFable
 						return `Pict: Template Render: Error looking up comparison data for [${tmpHash}]: ${pError}`;
 					}
 				};
-			let fTemplateIfRenderAsync = (pHash, pData, fCallback)=>
+			let fTemplateIfRenderAsync = (pHash, pData, fCallback, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -873,9 +873,9 @@ class Pict extends libFable
 					{
 						// This is the only thing that's different from the absolute value function above.  Collapse these.
 						let tmpComparisonResult = compareValues(
-								this.resolveStateFromAddress(tmpComparisonParts[0], tmpData),
+								this.resolveStateFromAddress(tmpComparisonParts[0], tmpData, pContextArray),
 								tmpComparisonParts[1],
-								this.resolveStateFromAddress(tmpComparisonParts[2], tmpData));
+								this.resolveStateFromAddress(tmpComparisonParts[2], tmpData, pContextArray));
 
 						if (!tmpComparisonResult)
 						{
@@ -893,11 +893,11 @@ class Pict extends libFable
 											return tmpCallback(pError, '');
 										}
 										return tmpCallback(null, pValue);
-									});
+									}, pContextArray);
 							}
 							else
 							{
-								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData),
+								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray),
 									(pError, pValue) =>
 									{
 										if (pError)
@@ -905,7 +905,7 @@ class Pict extends libFable
 											return tmpCallback(pError, '');
 										}
 										return tmpCallback(null, pValue);
-									});
+									}, pContextArray);
 							}
 						}
 					}
@@ -922,7 +922,7 @@ class Pict extends libFable
 
 // Refactor: #### DRY PROBLEM Too much dry needing fixed at this point
 			// {~TS:Template:AddressOfDataSet~}
-			let fTemplateValueSetRender = (pHash, pData)=>
+			let fTemplateValueSetRender = (pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -958,7 +958,7 @@ class Pict extends libFable
 						return `Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`;
 					}
 
-					tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData);
+					tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray);
 
 					let tmpDataValueSet = [];
 					if (Array.isArray(tmpData))
@@ -985,14 +985,14 @@ class Pict extends libFable
 					if (!tmpData)
 					{
 						// No address was provided, just render the template with what this template has.
-						return this.parseTemplateSetByHash(tmpTemplateHash, pData);
+						return this.parseTemplateSetByHash(tmpTemplateHash, pData, pContextArray);
 					}
 					else
 					{
-						return this.parseTemplateSetByHash(tmpTemplateHash, tmpData);
+						return this.parseTemplateSetByHash(tmpTemplateHash, tmpData, pContextArray);
 					}
 				};
-			let fTemplateValueSetRenderAsync = (pHash, pData, fCallback)=>
+			let fTemplateValueSetRenderAsync = (pHash, pData, fCallback, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -1030,7 +1030,7 @@ class Pict extends libFable
 					}
 
 					// Now resolve the data
-					tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData);
+					tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray);
 
 					let tmpDataValueSet = [];
 					if (Array.isArray(tmpData))
@@ -1066,7 +1066,7 @@ class Pict extends libFable
 									return tmpCallback(pError, '');
 								}
 								return tmpCallback(null, pValue);
-							});
+							}, pContextArray);
 					}
 					else
 					{
@@ -1078,14 +1078,14 @@ class Pict extends libFable
 									return tmpCallback(pError, '');
 								}
 								return tmpCallback(null, pValue);
-							});
+							}, pContextArray);
 					}
 				};
 			this.MetaTemplate.addPatternBoth('{~TVS:', '~}', fTemplateValueSetRender, fTemplateValueSetRenderAsync);
 			this.MetaTemplate.addPatternBoth('{~TemplateValueSet:', '~}', fTemplateValueSetRender, fTemplateValueSetRenderAsync);
 
 			// {~T:TemplateFromMap:AddressOfData~}
-			let fTemplateFromMapRender = (pHash, pData)=>
+			let fTemplateFromMapRender = (pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -1124,8 +1124,8 @@ class Pict extends libFable
 					}
 
 					// Now resolve the data
-					let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData);
-					let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData);
+					let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData, pContextArray);
+					let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData, pContextArray);
 
 					if (!tmpMap)
 					{
@@ -1138,14 +1138,14 @@ class Pict extends libFable
 					if (!tmpData)
 					{
 						// No address was provided, just render the TemplateFromMap with what this TemplateFromMap has.
-						return this.parseTemplateByHash(tmpTemplateFromMapHash, pData);
+						return this.parseTemplateByHash(tmpTemplateFromMapHash, pData, pContextArray);
 					}
 					else
 					{
-						return this.parseTemplateByHash(tmpTemplateFromMapHash, tmpData);
+						return this.parseTemplateByHash(tmpTemplateFromMapHash, tmpData, pContextArray);
 					}
 				};
-			let fTemplateFromMapRenderAsync = (pHash, pData, fCallback)=>
+			let fTemplateFromMapRenderAsync = (pHash, pData, fCallback, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -1185,8 +1185,8 @@ class Pict extends libFable
 					}
 
 					// Now resolve the data
-					let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData);
-					let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData);
+					let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData, pContextArray);
+					let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData, pContextArray);
 
 					if (!tmpMap)
 					{
@@ -1208,7 +1208,7 @@ class Pict extends libFable
 									return tmpCallback(pError, '');
 								}
 								return tmpCallback(null, pValue);
-							});
+							}, pContextArray);
 					}
 					else
 					{
@@ -1220,14 +1220,14 @@ class Pict extends libFable
 									return tmpCallback(pError, '');
 								}
 								return tmpCallback(null, pValue);
-							});
+							}, pContextArray);
 					}
 				};
 			this.MetaTemplate.addPatternBoth('{~TFM:', '~}', fTemplateFromMapRender, fTemplateFromMapRenderAsync);
 			this.MetaTemplate.addPatternBoth('{~TemplateFromMap:', '~}', fTemplateFromMapRender, fTemplateFromMapRenderAsync);
 
 			// {~TS:TemplateFromMap:AddressOfDataSet~}
-			let fTemplateFromMapSetRender = (pHash, pData)=>
+			let fTemplateFromMapSetRender = (pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -1266,8 +1266,8 @@ class Pict extends libFable
 					}
 
 					// Now resolve the data
-					let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData);
-					let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData);
+					let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData, pContextArray);
+					let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData, pContextArray);
 
 					if (!tmpMap)
 					{
@@ -1280,14 +1280,14 @@ class Pict extends libFable
 					if (!tmpData)
 					{
 						// No address was provided, just render the TemplateFromMap with what this TemplateFromMap has.
-						return this.parseTemplateSetByHash(tmpTemplateFromMapHash, pData);
+						return this.parseTemplateSetByHash(tmpTemplateFromMapHash, pData, pContextArray);
 					}
 					else
 					{
-						return this.parseTemplateSetByHash(tmpTemplateFromMapHash, tmpData);
+						return this.parseTemplateSetByHash(tmpTemplateFromMapHash, tmpData, pContextArray);
 					}
 				};
-			let fTemplateFromMapSetRenderAsync = (pHash, pData, fCallback)=>
+			let fTemplateFromMapSetRenderAsync = (pHash, pData, fCallback, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -1327,8 +1327,8 @@ class Pict extends libFable
 					}
 
 					// Now resolve the data
-					let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData);
-					let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData);
+					let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData, pContextArray);
+					let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData, pContextArray);
 
 					if (!tmpMap)
 					{
@@ -1350,7 +1350,7 @@ class Pict extends libFable
 									return tmpCallback(pError, '');
 								}
 								return tmpCallback(null, pValue);
-							});
+							}, pContextArray);
 					}
 					else
 					{
@@ -1362,14 +1362,14 @@ class Pict extends libFable
 									return tmpCallback(pError, '');
 								}
 								return tmpCallback(null, pValue);
-							});
+							}, pContextArray);
 					}
 				};
 			this.MetaTemplate.addPatternBoth('{~TSFM:', '~}', fTemplateFromMapSetRender, fTemplateFromMapSetRenderAsync);
 			this.MetaTemplate.addPatternBoth('{~TemplateSetFromMap:', '~}', fTemplateFromMapSetRender, fTemplateFromMapSetRenderAsync);
-// Refactor: #### END OF DRY PROBLEM
 
-			let fDataValueTree = (pHash, pData)=>
+			// {~DataTree:AppData.Some.Value.to.Render~}
+			let fDataValueTree = (pHash, pData, pContextArray)=>
 				{
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
 					tmpData.TemplateHash = pHash.trim();
@@ -1379,7 +1379,7 @@ class Pict extends libFable
 					{
 						return '';
 					}
-					tmpData.ResolvedValue = this.resolveStateFromAddress(tmpData.ValueTreeParameters[0], tmpData);
+					tmpData.ResolvedValue = this.resolveStateFromAddress(tmpData.ValueTreeParameters[0], tmpData, pContextArray);
 					tmpData.ResolvedValueType = typeof(tmpData.ResolvedValue);
 
 					try
@@ -1400,7 +1400,7 @@ class Pict extends libFable
 
 					if (tmpData.ResolvedValueType == 'object')
 					{
-						tmpData.ObjectValueTree = fDataValueTreeObjectSet(tmpData.ResolvedValue, tmpData.ResolvedValue, 0, tmpData.TreeMaxDepth);
+						tmpData.ObjectValueTree = fDataValueTreeObjectSet(tmpData.ResolvedValue, tmpData.ResolvedValue, 0, tmpData.TreeMaxDepth, pContextArray);
 					}
 					else
 					{
@@ -1408,9 +1408,9 @@ class Pict extends libFable
 						tmpData.ObjectValueTree = tmpData.ResolveValue;
 					}
 
-					return this.parseTemplate(tmpPictObjectWrapTemplate, tmpData);
+					return this.parseTemplate(tmpPictObjectWrapTemplate, tmpData, pContextArray);
 				};
-			let fDataValueTreeObjectSet = (pObject, pRootObject, pCurrentDepth, pMaxDepth)=>
+			let fDataValueTreeObjectSet = (pObject, pRootObject, pCurrentDepth, pMaxDepth, pContextArray)=>
 				{
 					let tmpTemplateResult = '';
 
@@ -1445,7 +1445,7 @@ class Pict extends libFable
 								}
 								else
 								{
-									tmpBranchValue = fDataValueTreeObjectSet(pObject[tmpObjectValueKeys[i]], pRootObject, pCurrentDepth + 1, pMaxDepth);
+									tmpBranchValue = fDataValueTreeObjectSet(pObject[tmpObjectValueKeys[i]], pRootObject, pCurrentDepth + 1, pMaxDepth, pContextArray);
 								}
 								break;
 
@@ -1472,7 +1472,7 @@ class Pict extends libFable
 								CurrentDepth: pCurrentDepth,
 								MaxDepth: pMaxDepth
 							};
-						tmpTemplateResult += this.parseTemplate(tmpPictObjectBranchTemplate, tmpDataValue);
+						tmpTemplateResult += this.parseTemplate(tmpPictObjectBranchTemplate, tmpDataValue, pContextArray);
 					}
 
 					return tmpTemplateResult;
@@ -1481,7 +1481,7 @@ class Pict extends libFable
 			this.MetaTemplate.addPattern('{~DT:', '~}',fDataValueTree);
 
 			//{~Data:AppData.Some.Value.to.Render~}
-			let fDataRender = (pHash, pData)=>
+			let fDataRender = (pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -1498,7 +1498,7 @@ class Pict extends libFable
 					let tmpValue = '';
 					if (tmpHash != null)
 					{
-						tmpValue = this.resolveStateFromAddress(tmpHash, tmpData);
+						tmpValue = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray);
 					}
 					if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
 					{
@@ -1510,7 +1510,7 @@ class Pict extends libFable
 			this.MetaTemplate.addPattern('{~Data:', '~}', fDataRender);
 
 			//<p>{~Join: - ^Record.d1^Record.d1~}</p>
-			let fJoinDataRender = (pHash, pData)=>
+			let fJoinDataRender = (pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash;
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -1536,7 +1536,7 @@ class Pict extends libFable
 					let tmpValueList = [];
 					for (let i = 0; i < tmpDataAddresses.length; i++)
 					{
-						let tmpValueSet = this.resolveStateFromAddress(tmpDataAddresses[i], tmpData);
+						let tmpValueSet = this.resolveStateFromAddress(tmpDataAddresses[i], tmpData, pContextArray);
 						if (tmpValueSet && Array.isArray(tmpValueSet))
 						{
 							for (let j = 0; j < tmpValueSet.length; j++)
@@ -1554,7 +1554,7 @@ class Pict extends libFable
 			this.MetaTemplate.addPattern('{~J:', '~}', fJoinDataRender);
 			this.MetaTemplate.addPattern('{~Join:', '~}', fJoinDataRender);
 			//<p>{~JoinUnique: - ^Record.d1^Record.d1~}</p>
-			let fJoinUniqueDataRender = (pHash, pData)=>
+			let fJoinUniqueDataRender = (pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash;
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -1581,13 +1581,25 @@ class Pict extends libFable
 					let tmpValueMap = {};
 					for (let i = 0; i < tmpDataAddresses.length; i++)
 					{
-						let tmpValue = this.resolveStateFromAddress(tmpDataAddresses[i], tmpData);
-						if (tmpValue)
+						let tmpValueSet = this.resolveStateFromAddress(tmpDataAddresses[i], tmpData, pContextArray);
+
+						if (tmpValueSet && Array.isArray(tmpValueSet))
 						{
-							if (!tmpValueMap.hasOwnProperty(tmpValue))
+							for (let j = 0; j < tmpValueSet.length; j++)
 							{
-								tmpValueMap[tmpValue] = true;
-								tmpValueList.push(tmpValue);
+								if (!tmpValueMap.hasOwnProperty(tmpValueSet[j]))
+								{
+									tmpValueMap[tmpValueSet[j]] = true;
+									tmpValueList.push(tmpValueSet[j]);
+								}
+							}
+						}
+						else if (tmpValueSet)
+						{
+							if (!tmpValueMap.hasOwnProperty(tmpValueSet))
+							{
+								tmpValueMap[tmpValueSet] = true;
+								tmpValueList.push(tmpValueSet);
 							}
 						}
 					}
@@ -1598,7 +1610,7 @@ class Pict extends libFable
 			this.MetaTemplate.addPattern('{~JoinUnique:', '~}', fJoinUniqueDataRender);
 
 			this.MetaTemplate.addPattern('{~Dollars:', '~}',
-				(pHash, pData)=>
+				(pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -1612,11 +1624,11 @@ class Pict extends libFable
 						this.log.trace(`PICT Template [fDollars]::[${tmpHash}]`);
 					}
 
-					let tmpColumnData = this.resolveStateFromAddress(tmpHash, tmpData);
+					let tmpColumnData = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray);
 					return this.DataFormat.formatterDollars(tmpColumnData);
 				});
 			this.MetaTemplate.addPattern('{~Digits:', '~}',
-				(pHash, pData)=>
+				(pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -1630,17 +1642,17 @@ class Pict extends libFable
 						this.log.trace(`PICT Template [fDigits]::[${tmpHash}]`);
 					}
 
-					let tmpColumnData = this.resolveStateFromAddress(tmpHash, tmpData);
+					let tmpColumnData = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray);
 					return this.DataFormat.formatterAddCommasToNumber(this.DataFormat.formatterRoundNumber(tmpColumnData, 2));
 				});
 			
 			// Output the date as a YYYY-MM-DD string
 			this.MetaTemplate.addPattern('{~DateYMD:', '~}',
-				(pHash, pData)=>
+				(pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
-					let tmpDateValue = this.resolveStateFromAddress(tmpHash, tmpData);
+					let tmpDateValue = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray);
 
 
 					if (this.LogNoisiness > 4)
@@ -1693,7 +1705,7 @@ class Pict extends libFable
 			// Output the date as a YYYY-MM-DD string
 			// Takes in the format as the second parameter: {~DateYMD:AppData.Some.Date^YYYY-MM-DD~}
 			this.MetaTemplate.addPattern('{~DateFormat:', '~}',
-				(pHash, pData)=>
+				(pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -1705,7 +1717,7 @@ class Pict extends libFable
 						return '';
 					}
 
-					let tmpDateValue = this.resolveStateFromAddress(tmpDateValueSet[0], tmpData);
+					let tmpDateValue = this.resolveStateFromAddress(tmpDateValueSet[0], tmpData, pContextArray);
 
 					if (this.LogNoisiness > 4)
 					{
@@ -1754,7 +1766,7 @@ class Pict extends libFable
 					return tmpDayJS.format(tmpDateValueSet[1]);
 				});
 			// {NE~Some.Address|If the left value is truthy, render this value.~}
-			let fNotEmptyRender = (pHash, pData)=>
+			let fNotEmptyRender = (pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -1772,7 +1784,7 @@ class Pict extends libFable
 					let tmpHashParts = tmpHash.split('|');
 
 					// For now just check truthiness
-					if (this.resolveStateFromAddress(tmpHashParts[0], tmpData))
+					if (this.resolveStateFromAddress(tmpHashParts[0], tmpData, pContextArray))
 					{
 						return tmpHashParts[1];
 					}
@@ -1784,7 +1796,7 @@ class Pict extends libFable
 			this.MetaTemplate.addPattern('{~NotEmpty:', '~}', fNotEmptyRender);
 			this.MetaTemplate.addPattern('{~NE:', '~}', fNotEmptyRender);
 
-			let fRandomNumberString = (pHash, pData)=>
+			let fRandomNumberString = (pHash)=>
 				{
 					let tmpHash = pHash.trim();
 
@@ -1828,7 +1840,7 @@ class Pict extends libFable
 			this.MetaTemplate.addPattern('{~RandomNumberString:', '~}',fRandomNumberString);
 			this.MetaTemplate.addPattern('{~RNS:', '~}',fRandomNumberString);
 
-			let fRandomNumber = (pHash, pData)=>
+			let fRandomNumber = (pHash)=>
 				{
 					let tmpHash = pHash.trim();
 
@@ -1873,7 +1885,7 @@ class Pict extends libFable
 			this.MetaTemplate.addPattern('{~RandomNumber:', '~}',fRandomNumber);
 			this.MetaTemplate.addPattern('{~RN:', '~}',fRandomNumber);
 
-			let fPascalCaseIdentifier = (pHash, pData)=>
+			let fPascalCaseIdentifier = (pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -1887,7 +1899,7 @@ class Pict extends libFable
 						this.log.trace(`PICT Template [fPascalCaseIdentifier]::[${tmpHash}]`);
 					}
 
-					let tmpValue = this.resolveStateFromAddress(tmpHash, tmpData);
+					let tmpValue = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray);
 					if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
 					{
 						return '';
@@ -1896,12 +1908,12 @@ class Pict extends libFable
 				};
 			this.MetaTemplate.addPattern('{~PascalCaseIdentifier:', '~}',fPascalCaseIdentifier);
 
-			let fLogValue = (pHash, pData)=>
+			let fLogValue = (pHash, pData, pContextArray)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
 
-					let tmpValue = this.resolveStateFromAddress(tmpHash, tmpData);
+					let tmpValue = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray);
 					let tmpValueType = typeof(tmpValue);
 					if ((tmpValue == null) || (tmpValueType == 'undefined'))
 					{
@@ -1921,7 +1933,7 @@ class Pict extends libFable
 			this.MetaTemplate.addPattern('{~LV:', '~}',fLogValue);
 
 
-			let fLogValueTree = (pHash, pData)=>
+			let fLogValueTree = (pHash, pData, pContextArray)=>
 				{
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
 					tmpData.TemplateHash = pHash.trim();
@@ -1931,7 +1943,7 @@ class Pict extends libFable
 					{
 						return '';
 					}
-					tmpData.ResolvedValue = this.resolveStateFromAddress(tmpData.ValueTreeParameters[0], tmpData);
+					tmpData.ResolvedValue = this.resolveStateFromAddress(tmpData.ValueTreeParameters[0], tmpData, pContextArray);
 					tmpData.ResolvedValueType = typeof(tmpData.ResolvedValue);
 
 
@@ -2021,14 +2033,17 @@ class Pict extends libFable
 		}
 	}
 
-	resolveStateFromAddress(pAddress, pRecord)
+	resolveStateFromAddress(pAddress, pRecord, pContextArray)
 	{
-		return this.manifest.getValueByHash({Pict:this, AppData:this.AppData, Bundle:this.Bundle, Record:pRecord}, pAddress);
+		let tmpContextArray = (Array.isArray(pContextArray)) ? pContextArray : [this];
+
+		return this.manifest.getValueByHash({Pict:this, AppData:this.AppData, Bundle:this.Bundle, Context:tmpContextArray, Record:pRecord}, pAddress);
 	}
 
-	parseTemplate (pTemplateString, pData, fCallback)
+	parseTemplate (pTemplateString, pData, fCallback, pContextArray)
 	{
 		let tmpData = (typeof(pData) === 'object') ? pData : {};
+		let tmpContextArray = (Array.isArray(pContextArray)) ? pContextArray : [this];
 		let tmpParseUUID;
 		if (this.LogControlFlow)
 		{
@@ -2057,11 +2072,11 @@ class Pict extends libFable
 						this.log.info(`PICT-ControlFlow parseTemplate ${tmpParseUUID} Template Async Return Value:\n${pParsedTemplate}`);
 					}
 					return fCallback(pError, pParsedTemplate);
-				});			
+				}, tmpContextArray);			
 		}
 		else
 		{
-			let tmpResult = this.MetaTemplate.parseString(pTemplateString, tmpData);
+			let tmpResult = this.MetaTemplate.parseString(pTemplateString, tmpData, tmpContextArray);
 			if (this.LogControlFlow && this.LogNoisiness > 1)
 			{
 					this.log.info(`PICT-ControlFlow parseTemplate ${tmpParseUUID} Template Return Value:\n${tmpResult}`);
@@ -2070,7 +2085,7 @@ class Pict extends libFable
 		}
 	}
 
-	parseTemplateByHash (pTemplateHash, pData, fCallback)
+	parseTemplateByHash (pTemplateHash, pData, fCallback, pContextArray)
 	{
 		let tmpTemplateString = this.TemplateProvider.getTemplate(pTemplateHash);
 
@@ -2079,10 +2094,10 @@ class Pict extends libFable
 		{
 			tmpTemplateString = '';
 		}
-		return this.parseTemplate(tmpTemplateString, pData, fCallback);
+		return this.parseTemplate(tmpTemplateString, pData, fCallback, pContextArray);
 	}
 
-	parseTemplateSet (pTemplateString, pDataSet, fCallback)
+	parseTemplateSet (pTemplateString, pDataSet, fCallback, pContextArray)
 	{
 		// TODO: This will need streaming -- for now janky old string append does the trick
 		let tmpValue = '';
@@ -2118,7 +2133,7 @@ class Pict extends libFable
 				{
 					for (let i = 0; i < pDataSet.length; i++)
 					{
-						tmpValue += this.parseTemplate(pTemplateString, pDataSet[i]);
+						tmpValue += this.parseTemplate(pTemplateString, pDataSet[i], pContextArray);
 					}
 				}
 				else
@@ -2126,7 +2141,7 @@ class Pict extends libFable
 					let tmpKeys = Object.keys(pDataSet);
 					for (let i = 0; i < tmpKeys.length; i++)
 					{
-						tmpValue += this.parseTemplate(pTemplateString, pDataSet[tmpKeys[i]]);
+						tmpValue += this.parseTemplate(pTemplateString, pDataSet[tmpKeys[i]], pContextArray);
 					}
 				}
 
@@ -2139,7 +2154,7 @@ class Pict extends libFable
 		}
 	}
 
-	parseTemplateSetByHash (pTemplateHash, pDataSet, fCallback)
+	parseTemplateSetByHash (pTemplateHash, pDataSet, fCallback, pContextArray)
 	{
 		let tmpTemplateString = this.TemplateProvider.getTemplate(pTemplateHash);
 
@@ -2148,7 +2163,7 @@ class Pict extends libFable
 		{
 			tmpTemplateString = '';
 		}
-		return this.parseTemplateSet(tmpTemplateString, pDataSet, fCallback);
+		return this.parseTemplateSet(tmpTemplateString, pDataSet, fCallback, pContextArray);
 	}
 };
 
