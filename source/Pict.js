@@ -2076,7 +2076,7 @@ class Pict extends libFable
 		}
 		else
 		{
-			let tmpResult = this.MetaTemplate.parseString(pTemplateString, tmpData, tmpContextArray);
+			let tmpResult = this.MetaTemplate.parseString(pTemplateString, tmpData, null, tmpContextArray);
 			if (this.LogControlFlow && this.LogNoisiness > 1)
 			{
 					this.log.info(`PICT-ControlFlow parseTemplate ${tmpParseUUID} Template Return Value:\n${tmpResult}`);
