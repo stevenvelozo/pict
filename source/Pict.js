@@ -237,7 +237,7 @@ class Pict extends libFable
 					else
 					{
 						// This is an address, so we need to get the value at the address
-						tmpEntityID = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpEntityID);
+						tmpEntityID = this.resolveStateFromAddress(tmpEntityID, tmpData);
 					}
 
 					// No Entity or EntityID
@@ -320,7 +320,7 @@ class Pict extends libFable
 					}
 					else
 					{
-						return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData));
+						return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData));
 					}
 				};
 			let fTemplateRenderAsync = (pHash, pData, fCallback)=>
@@ -376,7 +376,7 @@ class Pict extends libFable
 					}
 					else
 					{
-						return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData),
+						return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData),
 							(pError, pValue) =>
 							{
 								if (pError)
@@ -434,7 +434,7 @@ class Pict extends libFable
 					}
 					else
 					{
-						return this.parseTemplateSetByHash(tmpTemplateHash, this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData));
+						return this.parseTemplateSetByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData));
 					}
 				};
 			let fTemplateSetRenderAsync = (pHash, pData, fCallback)=>
@@ -475,7 +475,7 @@ class Pict extends libFable
 					}
 
 					// Now resolve the data
-					tmpData = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData);
+					tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData);
 
 					if (!tmpData)
 					{
@@ -611,7 +611,7 @@ class Pict extends libFable
 					// Now look up the data at the comparison location
 					try
 					{
-						let tmpComparisonResult = compareValues(this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpComparisonParts[0]), tmpComparisonParts[1], tmpComparisonParts[2]);
+						let tmpComparisonResult = compareValues(this.resolveStateFromAddress(tmpComparisonParts[0], tmpData), tmpComparisonParts[1], tmpComparisonParts[2]);
 						if (!tmpComparisonResult)
 						{
 							return '';
@@ -625,7 +625,7 @@ class Pict extends libFable
 							}
 							else
 							{
-								return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData));
+								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData));
 							}
 						}
 					}
@@ -690,7 +690,7 @@ class Pict extends libFable
 					// Now look up the data at the comparison location
 					try
 					{
-						let tmpComparisonResult = compareValues(this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpComparisonParts[0]), tmpComparisonParts[1], tmpComparisonParts[2]);
+						let tmpComparisonResult = compareValues(this.resolveStateFromAddress(tmpComparisonParts[0], tmpData), tmpComparisonParts[1], tmpComparisonParts[2]);
 						if (!tmpComparisonResult)
 						{
 							return tmpCallback(null, '');
@@ -711,7 +711,7 @@ class Pict extends libFable
 							}
 							else
 							{
-								return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData),
+								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData),
 									(pError, pValue) =>
 									{
 										if (pError)
@@ -789,9 +789,9 @@ class Pict extends libFable
 					try
 					{
 						let tmpComparisonResult = compareValues(
-								this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpComparisonParts[0]),
+								this.resolveStateFromAddress(tmpComparisonParts[0], tmpData),
 								tmpComparisonParts[1],
-								this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpComparisonParts[2]));
+								this.resolveStateFromAddress(tmpComparisonParts[2], tmpData));
 
 						if (!tmpComparisonResult)
 						{
@@ -806,7 +806,7 @@ class Pict extends libFable
 							}
 							else
 							{
-								return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData));
+								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData));
 							}
 						}
 					}
@@ -873,9 +873,9 @@ class Pict extends libFable
 					{
 						// This is the only thing that's different from the absolute value function above.  Collapse these.
 						let tmpComparisonResult = compareValues(
-								this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpComparisonParts[0]),
+								this.resolveStateFromAddress(tmpComparisonParts[0], tmpData),
 								tmpComparisonParts[1],
-								this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpComparisonParts[2]));
+								this.resolveStateFromAddress(tmpComparisonParts[2], tmpData));
 
 						if (!tmpComparisonResult)
 						{
@@ -897,7 +897,7 @@ class Pict extends libFable
 							}
 							else
 							{
-								return this.parseTemplateByHash(tmpTemplateHash, this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData),
+								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData),
 									(pError, pValue) =>
 									{
 										if (pError)
@@ -958,7 +958,7 @@ class Pict extends libFable
 						return `Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`;
 					}
 
-					tmpData = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData);
+					tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData);
 
 					let tmpDataValueSet = [];
 					if (Array.isArray(tmpData))
@@ -1030,7 +1030,7 @@ class Pict extends libFable
 					}
 
 					// Now resolve the data
-					tmpData = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfData);
+					tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData);
 
 					let tmpDataValueSet = [];
 					if (Array.isArray(tmpData))
@@ -1124,8 +1124,8 @@ class Pict extends libFable
 					}
 
 					// Now resolve the data
-					let tmpMap = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfMap);
-					let tmpKey = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfKey);
+					let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData);
+					let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData);
 
 					if (!tmpMap)
 					{
@@ -1185,8 +1185,8 @@ class Pict extends libFable
 					}
 
 					// Now resolve the data
-					let tmpMap = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfMap);
-					let tmpKey = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfKey);
+					let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData);
+					let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData);
 
 					if (!tmpMap)
 					{
@@ -1266,8 +1266,8 @@ class Pict extends libFable
 					}
 
 					// Now resolve the data
-					let tmpMap = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfMap);
-					let tmpKey = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfKey);
+					let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData);
+					let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData);
 
 					if (!tmpMap)
 					{
@@ -1327,8 +1327,8 @@ class Pict extends libFable
 					}
 
 					// Now resolve the data
-					let tmpMap = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfMap);
-					let tmpKey = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpAddressOfKey);
+					let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData);
+					let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData);
 
 					if (!tmpMap)
 					{
@@ -1379,9 +1379,8 @@ class Pict extends libFable
 					{
 						return '';
 					}
-					tmpData.ResolvedValue = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpData.ValueTreeParameters[0]);
+					tmpData.ResolvedValue = this.resolveStateFromAddress(tmpData.ValueTreeParameters[0], tmpData);
 					tmpData.ResolvedValueType = typeof(tmpData.ResolvedValue);
-
 
 					try
 					{
@@ -1499,7 +1498,7 @@ class Pict extends libFable
 					let tmpValue = '';
 					if (tmpHash != null)
 					{
-						tmpValue = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
+						tmpValue = this.resolveStateFromAddress(tmpHash, tmpData);
 					}
 					if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
 					{
@@ -1537,7 +1536,7 @@ class Pict extends libFable
 					let tmpValueList = [];
 					for (let i = 0; i < tmpDataAddresses.length; i++)
 					{
-						let tmpValueSet = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpDataAddresses[i]);
+						let tmpValueSet = this.resolveStateFromAddress(tmpDataAddresses[i], tmpData);
 						if (tmpValueSet && Array.isArray(tmpValueSet))
 						{
 							for (let j = 0; j < tmpValueSet.length; j++)
@@ -1582,7 +1581,7 @@ class Pict extends libFable
 					let tmpValueMap = {};
 					for (let i = 0; i < tmpDataAddresses.length; i++)
 					{
-						let tmpValue = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpDataAddresses[i]);
+						let tmpValue = this.resolveStateFromAddress(tmpDataAddresses[i], tmpData);
 						if (tmpValue)
 						{
 							if (!tmpValueMap.hasOwnProperty(tmpValue))
@@ -1613,7 +1612,7 @@ class Pict extends libFable
 						this.log.trace(`PICT Template [fDollars]::[${tmpHash}]`);
 					}
 
-					let tmpColumnData = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
+					let tmpColumnData = this.resolveStateFromAddress(tmpHash, tmpData);
 					return this.DataFormat.formatterDollars(tmpColumnData);
 				});
 			this.MetaTemplate.addPattern('{~Digits:', '~}',
@@ -1631,7 +1630,7 @@ class Pict extends libFable
 						this.log.trace(`PICT Template [fDigits]::[${tmpHash}]`);
 					}
 
-					let tmpColumnData = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
+					let tmpColumnData = this.resolveStateFromAddress(tmpHash, tmpData);
 					return this.DataFormat.formatterAddCommasToNumber(this.DataFormat.formatterRoundNumber(tmpColumnData, 2));
 				});
 			
@@ -1641,7 +1640,7 @@ class Pict extends libFable
 				{
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
-					let tmpDateValue = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
+					let tmpDateValue = this.resolveStateFromAddress(tmpHash, tmpData);
 
 
 					if (this.LogNoisiness > 4)
@@ -1706,7 +1705,7 @@ class Pict extends libFable
 						return '';
 					}
 
-					let tmpDateValue = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpDateValueSet[0]);
+					let tmpDateValue = this.resolveStateFromAddress(tmpDateValueSet[0], tmpData);
 
 					if (this.LogNoisiness > 4)
 					{
@@ -1773,7 +1772,7 @@ class Pict extends libFable
 					let tmpHashParts = tmpHash.split('|');
 
 					// For now just check truthiness
-					if (this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHashParts[0]))
+					if (this.resolveStateFromAddress(tmpHashParts[0], tmpData))
 					{
 						return tmpHashParts[1];
 					}
@@ -1888,7 +1887,7 @@ class Pict extends libFable
 						this.log.trace(`PICT Template [fPascalCaseIdentifier]::[${tmpHash}]`);
 					}
 
-					let tmpValue = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
+					let tmpValue = this.resolveStateFromAddress(tmpHash, tmpData);
 					if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
 					{
 						return '';
@@ -1902,7 +1901,7 @@ class Pict extends libFable
 					let tmpHash = pHash.trim();
 					let tmpData = (typeof(pData) === 'object') ? pData : {};
 
-					let tmpValue = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpHash);
+					let tmpValue = this.resolveStateFromAddress(tmpHash, tmpData);
 					let tmpValueType = typeof(tmpValue);
 					if ((tmpValue == null) || (tmpValueType == 'undefined'))
 					{
@@ -1932,7 +1931,7 @@ class Pict extends libFable
 					{
 						return '';
 					}
-					tmpData.ResolvedValue = this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, tmpData.ValueTreeParameters[0]);
+					tmpData.ResolvedValue = this.resolveStateFromAddress(tmpData.ValueTreeParameters[0], tmpData);
 					tmpData.ResolvedValueType = typeof(tmpData.ResolvedValue);
 
 
@@ -2022,6 +2021,11 @@ class Pict extends libFable
 		}
 	}
 
+	resolveStateFromAddress(pAddress, pRecord)
+	{
+		return this.manifest.getValueByHash({Pict:this, AppData:this.AppData, Bundle:this.Bundle, Record:pRecord}, pAddress);
+	}
+
 	parseTemplate (pTemplateString, pData, fCallback)
 	{
 		let tmpData = (typeof(pData) === 'object') ? pData : {};
@@ -2038,7 +2042,7 @@ class Pict extends libFable
 			{
 				for (let i = 0; i < this.LogControlFlowWatchAddressList.length; i++)
 				{
-					this.log.info(`PICT-ControlFlow parseTemplate ${tmpParseUUID} Watch Value: [${this.LogControlFlowWatchAddressList[i]}]=>[${this.manifest.getValueByHash({Pict: this, AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, this.LogControlFlowWatchAddressList[i])}]`);
+					this.log.info(`PICT-ControlFlow parseTemplate ${tmpParseUUID} Watch Value: [${this.LogControlFlowWatchAddressList[i]}]=>[${this.resolveStateFromAddress(this.LogControlFlowWatchAddressList[i], tmpData)}]`);
 				}
 			}
 		}
