@@ -8,7 +8,7 @@ const libPict = require('./Pict.js');
 
 if (typeof(window) === 'object')
 {
-    window.Pict = libPict;
+	window.Pict = libPict;
 }
 
 module.exports = libPict;

@@ -2179,3 +2179,6 @@ module.exports.EnvironmentObject = require('./environments/Pict-Environment-Obje
 
 // This is to help understand the type of enivironement we're executing in
 module.exports.isBrowser = new Function("try {return (this===window);} catch(pError) {return false;}");
+
+module.exports.safeOnDocumentReady = require(`./Pict-Browser-SafeOnDocumentReady.js`);
+module.exports.safeLoadPictApplication = require(`./Pict-Browser-SafeLoad.js`);
