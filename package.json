@@ -1,6 +1,6 @@
 {
     "name": "pict",
-    "version": "1.0.175",
+    "version": "1.0.176",
     "description": "Pict browser library.",
     "main": "source/Pict.js",
     "scripts": {
@@ -49,6 +49,6 @@
         "fable": "^3.0.125",
         "pict-application": "^1.0.15",
         "pict-provider": "^1.0.2",
-        "pict-view": "^1.0.40"
+        "pict-view": "^1.0.41"
     }
 }

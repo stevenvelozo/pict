@@ -96,7 +96,7 @@ class Pict extends libFable
 			// If the prototype has a default_configuration, it will be merged with options.
 			if (pViewPrototype.hasOwnProperty('default_configuration'))
 			{
-				tmpOptions = this.fable.Utility.extend({}, pViewPrototype.default_configuration, tmpOptions);
+				tmpOptions = this.fable.Utility.extend({}, JSON.parse(JSON.stringify(pViewPrototype.default_configuration)), tmpOptions);
 			}
 			return this.instantiateServiceProviderFromPrototype('PictView', tmpOptions, tmpViewHash, pViewPrototype);
 		}
