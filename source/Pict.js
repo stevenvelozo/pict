@@ -316,11 +316,11 @@ class Pict extends libFable
 					if (!tmpAddressOfData)
 					{
 						// No address was provided, just render the template with what this template has.
-						return this.parseTemplateByHash(tmpTemplateHash, pData, pContextArray);
+						return this.parseTemplateByHash(tmpTemplateHash, pData, null, pContextArray);
 					}
 					else
 					{
-						return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), pContextArray);
+						return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), null, pContextArray);
 					}
 				};
 			let fTemplateRenderAsync = (pHash, pData, fCallback, pContextArray)=>
@@ -621,11 +621,11 @@ class Pict extends libFable
 							if (!tmpAddressOfData)
 							{
 								// No address was provided, just render the template with what this template has.
-								return this.parseTemplateByHash(tmpTemplateHash, pData, pContextArray);
+								return this.parseTemplateByHash(tmpTemplateHash, pData, null, pContextArray);
 							}
 							else
 							{
-								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), pContextArray);
+								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), null, pContextArray);
 							}
 						}
 					}
@@ -802,11 +802,11 @@ class Pict extends libFable
 							if (!tmpAddressOfData)
 							{
 								// No address was provided, just render the template with what this template has.
-								return this.parseTemplateByHash(tmpTemplateHash, pData, pContextArray);
+								return this.parseTemplateByHash(tmpTemplateHash, pData, null, pContextArray);
 							}
 							else
 							{
-								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), pContextArray);
+								return this.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), null, pContextArray);
 							}
 						}
 					}
@@ -1138,11 +1138,11 @@ class Pict extends libFable
 					if (!tmpData)
 					{
 						// No address was provided, just render the TemplateFromMap with what this TemplateFromMap has.
-						return this.parseTemplateByHash(tmpTemplateFromMapHash, pData, pContextArray);
+						return this.parseTemplateByHash(tmpTemplateFromMapHash, pData, null, pContextArray);
 					}
 					else
 					{
-						return this.parseTemplateByHash(tmpTemplateFromMapHash, tmpData, pContextArray);
+						return this.parseTemplateByHash(tmpTemplateFromMapHash, tmpData, null, pContextArray);
 					}
 				};
 			let fTemplateFromMapRenderAsync = (pHash, pData, fCallback, pContextArray)=>
