@@ -75,7 +75,7 @@ class PictContentAssignment extends libFableServiceBase
 				let tmpElementSet = [];
 				for (let i = 0; i < tmpElements.length; i++)
 				{
-					tmpElementSet.push(tmpElements[0]);
+					tmpElementSet.push(tmpElements[i]);
 				}
 				return tmpElementSet;
 			}
