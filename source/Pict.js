@@ -65,6 +65,11 @@ class Pict extends libFable
 		this.manifest = this.instantiateServiceProvider('Manifest');
 
 		this.AppData = {};
+		if (this.fable.settings.hasOwnProperty('DefaultAppData'))
+		{
+			this.AppData = this.fable.settings.DefaultAppData;
+		}
+
 		this.Bundle = {};
 
 		// Log noisness goes from 0 - 5, where 5 is show me everything.

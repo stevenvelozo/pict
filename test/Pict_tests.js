@@ -52,6 +52,20 @@ suite
 				);
 				test
 				(
+					'The class should initialize itself into a happy little object with a default AppData.',
+					function(fDone)
+					{
+						let tmpSettings = JSON.parse(JSON.stringify(_MockSettings));
+						tmpSettings.DefaultAppData = { Value:'Jimbo',ObjectValue:{Count:10,DisasterType:'Very Disasterous'}}
+						var testPict = new libPict(tmpSettings);
+						Expect(testPict).to.be.an('object', 'Pict should initialize as an object directly from the require statement.');
+						Expect(testPict.AppData.Value).to.equal('Jimbo');
+						Expect(testPict.AppData.ObjectValue.Count).to.equal(10);
+						fDone();
+					}
+				);
+				test
+				(
 					'How about a little template for the road...',
 					function(fDone)
 					{
