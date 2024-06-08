@@ -1,4 +1,12 @@
-// Simple function to load a pict Application
+// This assumes Pict has been required in the browser. Delcare these as globals so linter can do its job.
+/* global Pict, _Pict: writeable */
+
+/**
+ * Simple function to load a pict Application
+ *
+ * @param {import('pict-application')} pPictApplication - The pict application to load.
+ * @param {number} pLogNoisiness - The log noisiness level.
+ */
 module.exports = function (pPictApplication, pLogNoisiness)
 {
 	let tmpLogNoisiness = (typeof(pLogNoisiness) == 'undefined') ? 0 : pLogNoisiness;

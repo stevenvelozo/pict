@@ -2,21 +2,62 @@
 * @author <steven@velozo.com>
 */
 const libFable = require('fable');
+const PictTemplateProvider = require('./Pict-Template-Provider.js');
+const PictContentAssignment = require('./Pict-Content-Assignment.js');
+const PictDataProvider = require('./Pict-DataProvider.js');
+const PictCSS = require('./Pict-CSS.js');
+const PictMeadowEntityProvider = require('./Pict-Meadow-EntityProvider.js');
 
+/**
+ * Pict management object.
+ */
 class Pict extends libFable
 {
+	/**
+	 * @param {Object} pSettings - The settings for the Pict instance.
+	 */
 	constructor(pSettings)
 	{
 		super(pSettings);
 
 		this.isBrowser = new Function("try {return (this===window);} catch(pError) {return false;}");
 
-		// The templateProvider provides a basic key->template mapping with default fallback capabilities
-		this.addAndInstantiateServiceType('TemplateProvider', require('./Pict-Template-Provider.js'));
-		this.addAndInstantiateServiceType('EntityProvider',  require('./Pict-Meadow-EntityProvider.js'));
-		this.addAndInstantiateServiceType('DataProvider',  require('./Pict-DataProvider.js'));
-		this.addAndInstantiateServiceType('ContentAssignment',  require('./Pict-Content-Assignment.js'));
-		this.addAndInstantiateServiceType('CSSMap', require('./Pict-CSS.js'));
+		/**
+		 * The templateProvider provides a basic key->template mapping with default fallback capabilities
+		 *
+		 * @type {PictTemplateProvider}
+		 */
+		this.TemplateProvider = null;
+		this.addAndInstantiateServiceType('TemplateProvider', PictTemplateProvider);
+		/**
+		 * The meadow entity provider.
+		 *
+		 * @type {PictMeadowEntityProvider}
+		 */
+		this.EntityProvider = null;
+		this.addAndInstantiateServiceType('EntityProvider', PictMeadowEntityProvider);
+		/**
+		 * The data provider.
+		 *
+		 * @type {PictDataProvider}
+		 */
+		this.DataProvider = null;
+		this.addAndInstantiateServiceType('DataProvider', PictDataProvider);
+		/**
+		 * The content assignment module.
+		 *
+		 * @type {PictContentAssignment}
+		 */
+		this.ContentAssignment = null;
+		this.addAndInstantiateServiceType('ContentAssignment', PictContentAssignment);
+		/**
+		 * The CSS module.
+		 *
+		 * @type {PictCSS}
+		 * @public
+		 */
+		this.CSSMap = null;
+		this.addAndInstantiateServiceType('CSSMap', PictCSS);
 
 		this.instantiateServiceProvider('MetaTemplate');
 		this.instantiateServiceProvider('DataGeneration');
@@ -42,17 +83,21 @@ class Pict extends libFable
 		this._DefaultPictTemplatesInitialized = false;
 		this.initializePictTemplateEngine();
 
-		this.addServiceType('PictView',  require('pict-view'));
-		this.addServiceType('PictProvider',  require('pict-provider'));
-		this.addServiceType('PictApplication',  require('pict-application'));
+		this.addServiceType('PictView', require('pict-view'));
+		this.addServiceType('PictProvider', require('pict-provider'));
+		this.addServiceType('PictApplication', require('pict-application'));
 
 		// Expose the named views directly, through a convenience accessor
 		this.views = this.servicesMap.PictView;
 		this.providers = this.servicesMap.PictProvider;
 	}
 
-	// Load manifests in as Hashed services
-	loadManifestSet (pManifestSet)
+	/**
+	 * Load manifests in as Hashed services
+	 *
+	 * @param {Object} pManifestSet - The manifest set to load.
+	 */
+	loadManifestSet(pManifestSet)
 	{
 		if (typeof(pManifestSet) != 'object')
 		{
@@ -71,9 +116,15 @@ class Pict extends libFable
 		}
 	}
 
-	// Just passing an options will construct one for us.
-	// Passing a hash will set the hash.
-	// Passing a prototype will use that!
+	/**
+	 * Just passing an options will construct one for us.
+	 * Passing a hash will set the hash.
+	 * Passing a prototype will use that!
+	 *
+	 * @param {String} pViewHash - The hash of the view.
+	 * @param {Object} pOptions - The options for the view.
+	 * @param {Object} pViewPrototype - The prototype for the view.
+	 */
 	addView(pViewHash, pOptions, pViewPrototype)
 	{
 		let tmpOptions = (typeof(pOptions) == 'object') ? pOptions : {};
@@ -141,9 +192,15 @@ class Pict extends libFable
 		}
 	}
 
-	// Just passing an options will construct one for us.
-	// Passing a hash will set the hash.
-	// Passing a prototype will use that!
+	/**
+	 * Just passing an options will construct one for us.
+	 * Passing a hash will set the hash.
+	 * Passing a prototype will use that!
+	 *
+	 * @param {String} pApplicationHash - The hash of the application.
+	 * @param {Object} pOptions - The options for the application.
+	 * @param {Object} pApplicationPrototype - The prototype for the application.
+	 */
 	addApplication(pApplicationHash, pOptions, pApplicationPrototype)
 	{
 		let tmpOptions = (typeof(pOptions) == 'object') ? pOptions : {};
@@ -177,6 +234,11 @@ class Pict extends libFable
 		}
 	}
 
+	/**
+	 * Attach the default template engine renderers.
+	 *
+	 * @private
+	 */
 	initializePictTemplateEngine()
 	{
 		/*
@@ -226,7 +288,7 @@ class Pict extends libFable
 					{
 						try
 						{
-							tmpEntityID = parseInt(tmpEntityID);							
+							tmpEntityID = parseInt(tmpEntityID);
 						}
 						catch
 						{
@@ -1454,7 +1516,7 @@ class Pict extends libFable
 								break;
 						}
 
-						let tmpDataValue = 
+						let tmpDataValue =
 							{
 								AppData:this.AppData,
 								Bundle:this.Bundle,
@@ -1645,7 +1707,7 @@ class Pict extends libFable
 					let tmpColumnData = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray);
 					return this.DataFormat.formatterAddCommasToNumber(this.DataFormat.formatterRoundNumber(tmpColumnData, 2));
 				});
-			
+
 			// Output the date as a YYYY-MM-DD string
 			this.MetaTemplate.addPattern('{~DateYMD:', '~}',
 				(pHash, pData, pContextArray)=>
@@ -1681,7 +1743,7 @@ class Pict extends libFable
 							}
 							catch (pError)
 							{
-								this.log.error(`Error guessing dayJS guess() function; dates may be formatted to GMT by default.`);
+								this.log.error(`Error guessing dayJS guess() function; dates may be formatted to GMT by default. (${pError.message || pError})`);
 							}
 						}
 					}
@@ -1695,7 +1757,7 @@ class Pict extends libFable
 						}
 						catch (pError)
 						{
-							this.log.error(`Error guessing dayJS guess() function; dates may be formatted to GMT by default.`);
+							this.log.error(`Error guessing dayJS guess() function; dates may be formatted to GMT by default. (${pError.message || pError})`);
 						}
 					}
 
@@ -1745,7 +1807,7 @@ class Pict extends libFable
 							}
 							catch (pError)
 							{
-								this.log.error(`Error guessing dayJS guess() function; dates may be formatted to GMT by default.`);
+								this.log.error(`Error guessing dayJS guess() function; dates may be formatted to GMT by default. (${pError.message || pError})`);
 							}
 						}
 					}
@@ -1759,7 +1821,7 @@ class Pict extends libFable
 						}
 						catch (pError)
 						{
-							this.log.error(`Error guessing dayJS guess() function; dates may be formatted to GMT by default.`);
+							this.log.error(`Error guessing dayJS guess() function; dates may be formatted to GMT by default. (${pError.message || pError})`);
 						}
 					}
 
@@ -1815,7 +1877,7 @@ class Pict extends libFable
 						{
 							try
 							{
-								tmpStringLength = parseInt(tmpHashParts[0]);								
+								tmpStringLength = parseInt(tmpHashParts[0]);
 							}
 							catch
 							{
@@ -2010,7 +2072,7 @@ class Pict extends libFable
 			this.MetaTemplate.addPattern('{~LogValueTree:', '~}',fLogValueTree);
 			this.MetaTemplate.addPattern('{~LVT:', '~}',fLogValueTree);
 
-			let fLogStatement = (pHash, pData)=>
+			let fLogStatement = (pHash)=>
 				{
 					let tmpHash = pHash.trim();
 					this.log.trace(`PICT Template Log Message: ${tmpHash}`);
@@ -2019,12 +2081,12 @@ class Pict extends libFable
 			this.MetaTemplate.addPattern('{~LogStatement:', '~}',fLogStatement);
 			this.MetaTemplate.addPattern('{~LS:', '~}',fLogStatement);
 
-			let fBreakpoint = (pHash, pData)=>
+			let fBreakpoint = (pHash)=>
 				{
 					let tmpHash = pHash.trim();
 					let tmpError = new Error(`PICT Template Breakpoint: ${tmpHash}`);
 					this.log.trace(`PICT Template Breakpoint: ${tmpHash}`, tmpError.stack);
-					debugger;
+					debugger; // eslint-disable-line no-debugger
 					return '';
 				};
 			this.MetaTemplate.addPattern('{~Breakpoint', '~}',fBreakpoint);
@@ -2033,6 +2095,15 @@ class Pict extends libFable
 		}
 	}
 
+	/**
+	 * Read a value from a nested object using a dot notation string.
+	 *
+	 * @param {string} pAddress - The address to resolve
+	 * @param {object} pRecord - The record to resolve
+	 * @param {Array<any>} pContextArray - The context array to resolve
+	 *
+	 * @returns {any} The value at the given address, or undefined
+	 */
 	resolveStateFromAddress(pAddress, pRecord, pContextArray)
 	{
 		let tmpContextArray = (Array.isArray(pContextArray)) ? pContextArray : [this];
@@ -2040,7 +2111,15 @@ class Pict extends libFable
 		return this.manifest.getValueByHash({Pict:this, AppData:this.AppData, Bundle:this.Bundle, Context:tmpContextArray, Record:pRecord}, pAddress);
 	}
 
-	parseTemplate (pTemplateString, pData, fCallback, pContextArray)
+	/**
+	 * Parse a template.
+	 *
+	 * @param {String} pTemplateString - The template string to parse
+	 * @param {Object} pData - The data to use in the template
+	 * @param {Function} fCallback - The callback to call when the template is parsed
+	 * @param {Array<any>} pContextArray - The context array to use in the template
+	 */
+	parseTemplate(pTemplateString, pData, fCallback, pContextArray)
 	{
 		let tmpData = (typeof(pData) === 'object') ? pData : {};
 		let tmpContextArray = (Array.isArray(pContextArray)) ? pContextArray : [this];
@@ -2072,7 +2151,7 @@ class Pict extends libFable
 						this.log.info(`PICT-ControlFlow parseTemplate ${tmpParseUUID} Template Async Return Value:\n${pParsedTemplate}`);
 					}
 					return fCallback(pError, pParsedTemplate);
-				}, tmpContextArray);			
+				}, tmpContextArray);
 		}
 		else
 		{
@@ -2085,7 +2164,15 @@ class Pict extends libFable
 		}
 	}
 
-	parseTemplateByHash (pTemplateHash, pData, fCallback, pContextArray)
+	/**
+	 * Parse a template by hash.
+	 *
+	 * @param {String} pTemplateHash - The hash of the template to parse
+	 * @param {Object} pData - The data to use in the template
+	 * @param {Function} fCallback - The callback to call when the template is parsed
+	 * @param {Array<any>} pContextArray - The context array to use in the template
+	 */
+	parseTemplateByHash(pTemplateHash, pData, fCallback, pContextArray)
 	{
 		let tmpTemplateString = this.TemplateProvider.getTemplate(pTemplateHash);
 
@@ -2097,7 +2184,15 @@ class Pict extends libFable
 		return this.parseTemplate(tmpTemplateString, pData, fCallback, pContextArray);
 	}
 
-	parseTemplateSet (pTemplateString, pDataSet, fCallback, pContextArray)
+	/**
+	 * Parse a template set.
+	 *
+	 * @param {String} pTemplateString - The template string to parse
+	 * @param {Array|Object} pDataSet - The data set to use in the template
+	 * @param {Function} fCallback - The callback to call when the template is parsed
+	 * @param {Array<any>} pContextArray - The context array to use in the template
+	 */
+	parseTemplateSet(pTemplateString, pDataSet, fCallback, pContextArray)
 	{
 		// TODO: This will need streaming -- for now janky old string append does the trick
 		let tmpValue = '';
@@ -2150,11 +2245,19 @@ class Pict extends libFable
 			else
 			{
 				return '';
-			}			
+			}
 		}
 	}
 
-	parseTemplateSetByHash (pTemplateHash, pDataSet, fCallback, pContextArray)
+	/**
+	 * Parse a template set by hash.
+	 *
+	 * @param {String} pTemplateHash - The hash of the template to parse
+	 * @param {Array|Object} pDataSet - The data set to use in the template
+	 * @param {Function} fCallback - The callback to call when the template is parsed
+	 * @param {Array<any>} pContextArray - The context array to use in the template
+	 */
+	parseTemplateSetByHash(pTemplateHash, pDataSet, fCallback, pContextArray)
 	{
 		let tmpTemplateString = this.TemplateProvider.getTemplate(pTemplateHash);
 

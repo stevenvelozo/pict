@@ -1,7 +1,15 @@
 const libFableServiceBase = require('fable').ServiceProviderBase;
 
+/**
+ * Class for moving content around in the DOM.
+ */
 class PictContentAssignment extends libFableServiceBase
 {
+	/**
+	 * @param {object} pFable - The Fable library instance.
+	 * @param {object} pOptions - The options for the service.
+	 * @param {object} pServiceHash - The hash of services.
+	 */
 	constructor(pFable, pOptions, pServiceHash)
 	{
 		super(pFable, pOptions, pServiceHash);
@@ -29,16 +37,46 @@ class PictContentAssignment extends libFableServiceBase
 			this.hasJquery = true;
 		}
 
-		// API Consumers can craft their own assign function
+		/**
+		 * Set this to override the default mechanism for setting the content of a DOM element.
+		 *
+		 * @type {Function}
+		 * @param {string} pAddress - The address of the element. (a CSS selector)
+		 * @param {string} pContent - The content to set.
+		 */
 		this.customAssignFunction = false;
-		// API Consumers can also craft their own prepend function
+		/**
+		 * Set this to override the default mechanism for prepend content to a DOM element.
+		 *
+		 * @type {Function}
+		 * @param {string} pAddress - The address of the element. (a CSS selector)
+		 * @param {string} pContent - The content to prepend.
+		 */
 		this.customPrependFunction = false;
-		// API Consumers can also craft their own append function
+		/**
+		 * Set this to override the default mechanism for appending content to a DOM element.
+		 *
+		 * @type {Function}
+		 * @param {string} pAddress - The address of the element. (a CSS selector)
+		 * @param {string} pContent - The content to append.
+		 */
 		this.customAppendFunction = false;
 
-		// API Consumers can also craft their own read function
+		/**
+		 * Set this to override the default mechanism for reading content from the DOM.
+		 *
+		 * @type {Function}
+		 * @param {string} pAddress - The address of the element. (a CSS selector)
+		 * @return {string} - The content of the element.
+		 */
 		this.customReadFunction = false;
-		// API Consumers can even craft their own get element function.
+		/**
+		 * Set this to override the default mechanism for getting elements.
+		 *
+		 * @type {Function}
+		 * @param {string} pAddress - The address of the element.
+		 * @return {Array<any>} - The matched elements.
+		 */
 		this.customGetElementFunction = false;
 
 		// API Consumers can also craft their own attribute read function
@@ -56,6 +94,12 @@ class PictContentAssignment extends libFableServiceBase
 		this.customRemoveClassFunction = false;
 	}
 
+	/**
+	 * Get an element from the DOM.
+	 *
+	 * @param {string} pAddress - The address of the element.
+	 * @return {Array<any>} - The matched elements.
+	 */
 	getElement(pAddress)
 	{
 		if (this.customGetElementFunction)
@@ -149,6 +193,12 @@ class PictContentAssignment extends libFableServiceBase
 		}
 	}
 
+	/**
+	 * Append content to an element.
+	 *
+	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string} pContent - The content to append.
+	 */
 	appendContent(pAddress, pContent)
 	{
 		if (this.customAppendFunction)
@@ -175,6 +225,12 @@ class PictContentAssignment extends libFableServiceBase
 		}
 	}
 
+	/**
+	 * Prepend content to an element.
+	 *
+	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string} pContent - The content to prepend.
+	 */
 	prependContent(pAddress, pContent)
 	{
 		if (this.customAppendFunction)
@@ -201,6 +257,13 @@ class PictContentAssignment extends libFableServiceBase
 		}
 	}
 
+	/**
+	 * Read content from an element.
+	 *
+	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 *
+	 * @return {string} - The content of the element.
+	 */
 	readContent(pAddress)
 	{
 		if (this.customReadFunction)
@@ -252,7 +315,12 @@ class PictContentAssignment extends libFableServiceBase
 		}
 	}
 
-
+	/**
+	 * Add a class to an element.
+	 *
+	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string} pClass - The class to add.
+	 */
 	addClass(pAddress, pClass)
 	{
 		if (this.customSetClassFunction)
@@ -280,6 +348,12 @@ class PictContentAssignment extends libFableServiceBase
 		}
 	}
 
+	/**
+	 * Remove a class from an element.
+	 *
+	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string} pClass - The class to remove.
+	 */
 	removeClass(pAddress, pClass)
 	{
 		if (this.customRemoveClassFunction)
@@ -307,6 +381,12 @@ class PictContentAssignment extends libFableServiceBase
 		}
 	}
 
+	/**
+	 * Read an attribute from an element.
+	 *
+	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string} pAttribute - The attribute name to read.
+	 */
 	readAttribute(pAddress, pAttribute)
 	{
 		if (this.customReadAttributeFunction)
@@ -316,7 +396,7 @@ class PictContentAssignment extends libFableServiceBase
 		else if (this.hasJquery)
 		{
 			let tmpTargetElement = window.jQuery(pAddress);
-			tmpTargetElement.attr(pAttribute);
+			return tmpTargetElement.attr(pAttribute);
 		}
 		else if (this.inBrowser && this.hasDocument)
 		{
@@ -326,6 +406,7 @@ class PictContentAssignment extends libFableServiceBase
 			{
 				tmpTargetElementSet[i].getAttribute(pAttribute);
 			}
+			return tmpTargetElementSet;
 		}
 		else
 		{
@@ -333,6 +414,13 @@ class PictContentAssignment extends libFableServiceBase
 		}
 	}
 
+	/**
+	 * Set an attribute on an element.
+	 *
+	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string} pAttribute - The attribute name to set.
+	 * @param {string} pValue - The value to set.
+	 */
 	setAttribute(pAddress, pAttribute, pValue)
 	{
 		if (this.customSetAttributeFunction)
@@ -359,6 +447,12 @@ class PictContentAssignment extends libFableServiceBase
 		}
 	}
 
+	/**
+	 * Remove an attribute from an element.
+	 *
+	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string} pAttribute - The attribute name to remove.
+	 */
 	removeAttribute(pAddress, pAttribute)
 	{
 		if (this.customRemoveAttributeFunction)
@@ -385,6 +479,14 @@ class PictContentAssignment extends libFableServiceBase
 		}
 	}
 
+	/**
+	 * Check if an element has a class.
+	 *
+	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string} pClass - The class to check for.
+	 *
+	 * @return {boolean} - Whether the element has the class. If multiple elements are matched, returns true if any have the class.
+	 */
 	hasClass(pAddress, pClass)
 	{
 		if (this.customReadClassFunction)
@@ -402,8 +504,12 @@ class PictContentAssignment extends libFableServiceBase
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
-				return tmpTargetElementSet[i].classList.contains(pClass);
+				if (tmpTargetElementSet[i].classList.contains(pClass))
+				{
+					return true;
+				}
 			}
+			return false;
 		}
 		else
 		{

@@ -21,9 +21,15 @@
 *        let tmpMockEnvironment = new libPictEnvironmentLog(_Pict, tmpContentMap);
 * 5. Now you can use your pict as normal, and it will log all of the read/write events out and keep a log of when they occurred.
 */
-
 class PictEnvironmentObject
 {
+	/**
+	 * @typedef {import('../Pict')} Pict
+	 */
+	/**
+	 * @param {Pict} pPict - The pict object to attach the custom read/write functions to.q
+	 * @param {Map<String, any>} pContentMap - The content map to use for custom reads.
+	 */
 	constructor(pPict, pContentMap)
 	{
 		this.contentMap = (typeof(pContentMap) == 'object') ? pContentMap : {};
