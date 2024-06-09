@@ -1,0 +1,26 @@
+{
+    "template": {
+        "Hash": "template",
+        "Name": "Template",
+        "Description": "A template set for template ...",
+        "Files": [
+            {
+                "Hash": "PictTemplateQUACKAGESCOPEjs",
+                "Path": "Pict-Template-QUACKAGESCOPE.js",
+                "Content": "const libPictTemplate = require('../Pict-Template.js');\n\nclass PictTemplateProvider{~PascalCaseIdentifier:Record.Scope~} extends libPictTemplate\n{\n\t/**\n\t * @param {Object} pFable - The Fable Framework instance\n\t * @param {Object} pOptions - The options for the service\n\t * @param {String} pServiceHash - The hash of the service\n\t */\n\tconstructor(pFable, pOptions, pServiceHash)\n\t{\n\t\tsuper(pFable, pOptions, pServiceHash);\n\n\t\t//this.addPattern('', '');\n\t}\n\n\t//render(pHash, pRecord, pContextArray)\n\n\t// Optionally...\n\t//renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)\n}\n\nmodule.exports = PictTemplateProvider{~PascalCaseIdentifier:Record.Scope~};\n\n/*\n# DEAR DEAD CODE DIARY:\n\n```javascript\n\n```\n*/\n\n"
+            }
+        ]
+    },
+    "tpvw": {
+        "Hash": "tpvw",
+        "Name": "Tpvw",
+        "Description": "A template set for tpvw ...",
+        "Files": [
+            {
+                "Hash": "PictTemplateQUACKAGESCOPEjs",
+                "Path": "Pict-Template-QUACKAGESCOPE.js",
+                "Content": "const libPictTemplate = require('../../Pict-Template.js');\n\nclass PictTemplateProvider{~PascalCaseIdentifier:Record.Scope~} extends libPictTemplate\n{\n\t/**\n\t * @param {Object} pFable - The Fable Framework instance\n\t * @param {Object} pOptions - The options for the service\n\t * @param {String} pServiceHash - The hash of the service\n\t */\n\tconstructor(pFable, pOptions, pServiceHash)\n\t{\n\t\tsuper(pFable, pOptions, pServiceHash);\n\t}\n\n\t//render\n}\n\nmodule.exports = PictTemplateProvider{~PascalCaseIdentifier:Record.Scope~};\n"
+            }
+        ]
+    }
+}

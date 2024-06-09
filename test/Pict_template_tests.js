@@ -366,13 +366,13 @@ suite
 										}
 									};
 
-									Expect(testPict.TemplateProvider.templates.hasOwnProperty('Foo-List-Title')).to.equal(false, 'No template should exist before it is either set explicitly or accessed from a default.');
+									Expect(('Foo-List-Title' in testPict.TemplateProvider.templates)).to.equal(false, 'No template should exist before it is either set explicitly or accessed from a default.');
 									testPict.TemplateProvider.loadTemplate('Foo-List-Title');
-									Expect(testPict.TemplateProvider.templates.hasOwnProperty('Foo-List-Title')).to.equal(true, 'The template system should have a default template set for Foo-List-Title after loading it.');
+									Expect(('Foo-List-Title' in testPict.TemplateProvider.templates)).to.equal(true, 'The template system should have a default template set for Foo-List-Title after loading it.');
 
 									testPict.AppData = { Dog: { Name: 'Wilco', Age: 14, Owner: 'Jack' } }
 
-									testPict.TemplateProvider.addTemplate('DogNameStuff', 'If this dog has a name, breakdance! {~NE:AppData.Dog.Name|<br/>~}');
+									testPict.TemplateProvider.addTemplate('DogNameStuff', 'If this dog has a name, breakdance! {~NE:AppData.Dog.Name^<br/>~}');
 
 									Expect(testPict.parseTemplateByHash('DogNameStuff')).to.equal('If this dog has a name, breakdance! <br/>');
 
@@ -382,11 +382,11 @@ suite
 
 									testPict.AppData.EntityName = 'Band';
 
-									Expect(testPict.TemplateProvider.templates.hasOwnProperty('Quantity-List-Title')).to.equal(false, 'No template should exist before it is either set explicitly or accessed from a default.');
+									Expect(('Quantity-List-Title' in testPict.TemplateProvider.templates)).to.equal(false, 'No template should exist before it is either set explicitly or accessed from a default.');
 									Expect(testPict.parseTemplateByHash('Quantity-List-Title', _QuantityRecord)).to.equal('<h1>List of Bands</h1>', 'The template system should parse a simple default template from a hash.');
 
 									// The second path should have the template set!
-									Expect(testPict.TemplateProvider.templates.hasOwnProperty('Quantity-List-Title')).to.equal(true, 'The template system should have a default template set for Quantity-List-Title after accessing it once.');
+									Expect(('Quantity-List-Title' in testPict.TemplateProvider.templates)).to.equal(true, 'The template system should have a default template set for Quantity-List-Title after accessing it once.');
 									Expect(testPict.parseTemplateByHash('Quantity-List-Title', _QuantityRecord)).to.equal('<h1>List of Bands</h1>', 'The template system should parse a simple default template from a hash.');
 
 									return fDone();

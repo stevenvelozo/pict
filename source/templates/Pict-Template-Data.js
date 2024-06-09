@@ -1,6 +1,6 @@
 const libPictTemplate = require('../Pict-Template.js');
 
-class PictTemplateProvider extends libPictTemplate
+class PictTemplateProviderData extends libPictTemplate
 {
 	/**
 	 * @param {Object} pFable - The Fable Framework instance
@@ -42,39 +42,4 @@ class PictTemplateProvider extends libPictTemplate
 	}
 }
 
-module.exports = PictTemplateProvider;
-
-/*
-# DEAR DEAD CODE DIARY:
-
-```javascript
-//{~Data:AppData.Some.Value.to.Render~}
-let fDataRender = (pHash, pData, pContextArray)=>
-	{
-		let tmpHash = pHash.trim();
-		let tmpData = (typeof(pData) === 'object') ? pData : {};
-
-		if (this.LogNoisiness > 4)
-		{
-			this.log.trace(`PICT Template [fDataRender]::[${tmpHash}] with tmpData:`, tmpData);
-		}
-		else if (this.LogNoisiness > 3)
-		{
-			this.log.trace(`PICT Template [fDataRender]::[${tmpHash}]`);
-		}
-
-		let tmpValue = '';
-		if (tmpHash != null)
-		{
-			tmpValue = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray);
-		}
-		if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
-		{
-			return '';
-		}
-		return tmpValue;
-	};
-this.MetaTemplate.addPattern('{~D:', '~}', fDataRender);
-this.MetaTemplate.addPattern('{~Data:', '~}', fDataRender);
-```
-*/
+module.exports = PictTemplateProviderData;
