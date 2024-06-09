@@ -59,6 +59,7 @@ class Pict extends libFable
 		this.CSSMap = null;
 		this.addAndInstantiateServiceType('CSSMap', PictCSS);
 
+		this.addServiceType('PictTemplate', require('./Pict-Template.js'));
 		this.instantiateServiceProvider('MetaTemplate');
 		this.instantiateServiceProvider('DataGeneration');
 
@@ -93,8 +94,8 @@ class Pict extends libFable
 		this.addServiceType('PictApplication', require('pict-application'));
 
 		// Expose the named views directly, through a convenience accessor
-		this.views = this.servicesMap.PictView;
 		this.providers = this.servicesMap.PictProvider;
+		this.views = this.servicesMap.PictView;
 	}
 
 	/**
@@ -119,6 +120,29 @@ class Pict extends libFable
 				this.instantiateServiceProvider('Manifest', pManifestSet[tmpManifestKey], tmpManifestKey);
 			}
 		}
+	}
+
+	/**
+	 * Add a template expression to the template engine from the PictTemplate service.
+	 *
+	 * @param {Object} pTemplatePrototype - The prototype class for the template expression
+	 */
+	addTemplate(pTemplatePrototype)
+	{
+		if (typeof(pTemplatePrototype) != 'function')
+		{
+			this.log.warn(`PICT [${this.UUID}] could not add Template; pTemplatePrototype was not a class it was ${typeof(pTemplatePrototype)}.`);
+			return false;
+		}
+
+		let tmpTemplateHash = pTemplatePrototype.template_hash;
+
+		if (this.LogNoisiness > 1)
+		{
+			this.log.info(`PICT-ControlFlow addTemplate [${tmpTemplateHash}]`)
+		}
+
+		return this.instantiateServiceProviderFromPrototype('PictTemplate', {}, tmpTemplateHash, pTemplatePrototype);
 	}
 
 	/**
@@ -246,12 +270,9 @@ class Pict extends libFable
 	 */
 	initializePictTemplateEngine()
 	{
-		/*
-		 *
-		 * To stave off madness, these are inefficient for now.  The wkhtmltopdf renderer leaves much to be desired
-		 * in the way of feedback with regards to javascript compatibility.
-		 *
-		 */
+		//{~Data:AppData.Some.Value.to.Render~}
+		this.addTemplate(require(`./templates/Pict-Template-Data.js`));
+
 		if (!this._DefaultPictTemplatesInitialized)
 		{
 			// Expects one of the following:
@@ -1547,34 +1568,7 @@ class Pict extends libFable
 			this.MetaTemplate.addPattern('{~DataTree:', '~}',fDataValueTree);
 			this.MetaTemplate.addPattern('{~DT:', '~}',fDataValueTree);
 
-			//{~Data:AppData.Some.Value.to.Render~}
-			let fDataRender = (pHash, pData, pContextArray)=>
-				{
-					let tmpHash = pHash.trim();
-					let tmpData = (typeof(pData) === 'object') ? pData : {};
 
-					if (this.LogNoisiness > 4)
-					{
-						this.log.trace(`PICT Template [fDataRender]::[${tmpHash}] with tmpData:`, tmpData);
-					}
-					else if (this.LogNoisiness > 3)
-					{
-						this.log.trace(`PICT Template [fDataRender]::[${tmpHash}]`);
-					}
-
-					let tmpValue = '';
-					if (tmpHash != null)
-					{
-						tmpValue = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray);
-					}
-					if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
-					{
-						return '';
-					}
-					return tmpValue;
-				};
-			this.MetaTemplate.addPattern('{~D:', '~}', fDataRender);
-			this.MetaTemplate.addPattern('{~Data:', '~}', fDataRender);
 
 			//<p>{~Join: - ^Record.d1^Record.d1~}</p>
 			let fJoinDataRender = (pHash, pData, pContextArray)=>
