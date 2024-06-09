@@ -125,7 +125,6 @@ suite
 						Expect(testPict.Math.parsePrecise(undefined)).to.equal('0.0');
 						
 						return fDone();
-						return fDone();
 					}
 				);
 			}

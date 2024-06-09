@@ -11,8 +11,11 @@
         "build": "npx quack build",
         "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t pict-image:local",
         "docker-dev-run": "docker run -it -d --name pict-dev -p 37447:8080 -p 19506:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-image:local",
-        "docker-dev-shell": "docker exec -it pict-dev /bin/bash"
+        "docker-dev-shell": "docker exec -it pict-dev /bin/bash",
+        "lint": "eslint source/**/*.js",
+        "types": "npx -p typescript tsc -p . --declaration --allowJs --emitDeclarationOnly --outDir types"
     },
+    "types": "types/index.d.ts",
     "mocha": {
         "diff": true,
         "extension": [
@@ -42,6 +45,12 @@
     },
     "homepage": "https://github.com/stevenvelozo/pict#readme",
     "devDependencies": {
+        "@eslint/js": "^9.4.0",
+        "chai": "^4.4.1",
+        "eslint": "^9.4.0",
+        "globals": "^15.4.0",
+        "mocha": "^10.4.0",
+        "nyc": "^15.1.0",
         "quackage": "^1.0.29"
     },
     "dependencies": {

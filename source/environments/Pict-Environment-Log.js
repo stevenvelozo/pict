@@ -21,9 +21,15 @@
 *        let tmpMockEnvironment = new libPictEnvironmentLog(_Pict, tmpContentMap);
 * 5. Now you can use your pict as normal, and it will log all of the read/write events out and keep a log of when they occurred.
 */
-
 class PictEnvironmentLog
 {
+	/**
+	 * @typedef {import('../Pict')} Pict
+	 */
+	/**
+	 * @param {Pict} pPict - The pict object to attach the custom read/write functions to.
+	 * @param {Map<String, any>} pContentMap - The content map to use for custom reads.
+	 */
 	constructor(pPict, pContentMap)
 	{
 		this.contentMap = (typeof(pContentMap) == 'object') ? pContentMap : {};
@@ -51,6 +57,12 @@ class PictEnvironmentLog
 		this.pict.ContentAssignment.customSetAttributeFunction = this.customSetAttributeFunction.bind(this);
 	}
 
+	/**
+	 * Create an event log entry.
+	 *
+	 * @param {string} pAddress - The address of the event.
+	 * @param {string} pContent - The content of the event.
+	 */
 	createEventLogEntry(pAddress, pContent)
 	{
 		let tmpContent = (typeof(pContent) == 'undefined') ? '' : pContent;
@@ -62,14 +74,24 @@ class PictEnvironmentLog
 			});
 	}
 
-	customGetElementFunction (pAddress)
+	/**
+	 * Custom GetElement function.
+	 *
+	 * @param {string} pAddress - The address of the element.
+	 */
+	customGetElementFunction(pAddress)
 	{
 		if (this.storeEventLog) this.eventLog.GetElement.push(this.createEventLogEntry(pAddress));
 		this.pict.log.info(`Mocking an GET of Address -> [${pAddress}]`);
 		return '';
 	}
 
-	customReadFunction (pAddress)
+	/**
+	 * Custom Read function.
+	 *
+	 * @param {string} pAddress - The address of the element.
+	 */
+	customReadFunction(pAddress)
 	{
 		if (this.storeEventLog) this.eventLog.Read.push(this.createEventLogEntry(pAddress));
 		this.pict.log.info(`Mocking an READ from Address -> [${pAddress}]`);
@@ -82,7 +104,13 @@ class PictEnvironmentLog
 		return '';
 	}
 
-	customAppendFunction (pAddress, pContent)
+	/**
+	 * Custom Append function.
+	 *
+	 * @param {string} pAddress - The address of the element.
+	 * @param {string} pContent - The content to append.
+	 */
+	customAppendFunction(pAddress, pContent)
 	{
 		if (this.storeEventLog) this.eventLog.Append.push(this.createEventLogEntry(pAddress, pContent));
 		if (pContent.length > this.truncateContentLength)
@@ -95,7 +123,14 @@ class PictEnvironmentLog
 		}
 		return '';
 	}
-	customPrependFunction (pAddress, pContent)
+
+	/**
+	 * Custom Prepend function.
+	 *
+	 * @param {string} pAddress - The address of the element.
+	 * @param {string} pContent - The content to prepend.
+	 */
+	customPrependFunction(pAddress, pContent)
 	{
 		if (this.storeEventLog) this.eventLog.Prepend.push(this.createEventLogEntry(pAddress, pContent));
 		if (pContent.length > this.truncateContentLength)
@@ -109,7 +144,13 @@ class PictEnvironmentLog
 		return '';
 	}
 
-	customAssignFunction (pAddress, pContent)
+	/**
+	 * Custom Assign function.
+	 *
+	 * @param {string} pAddress - The address of the element.
+	 * @param {string} pContent - The content to assign.
+	 */
+	customAssignFunction(pAddress, pContent)
 	{
 		if (this.storeEventLog) this.eventLog.Assign.push(this.createEventLogEntry(pAddress, pContent));
 		if (pContent.length > this.truncateContentLength)
@@ -123,13 +164,25 @@ class PictEnvironmentLog
 		return '';
 	}
 
-	customReadAttributeFunction (pAddress, pAttribute)
+	/**
+	 * Custom Read Attribute function.
+	 *
+	 * @param {string} pAddress - The address of the element.
+	 * @param {string} pAttribute - The attribute to read.
+	 */
+	customReadAttributeFunction(pAddress, pAttribute)
 	{
 		this.pict.log.info(`Mocking an READ ATTRIBUTE from Address -> [${pAddress}]`, {Attribute: pAttribute});
 		return '';
 	}
 
-	customSetAttributeFunction (pAddress, pAttribute, pContent)
+	/**
+	 * Custom Set Attribute function.
+	 *
+	 * @param {string} pAddress - The address of the element.
+	 * @param {string} pAttribute - The attribute to set.
+	 */
+	customSetAttributeFunction(pAddress, pAttribute, pContent)
 	{
 		if (pContent.length > this.truncateContentLength)
 		{
