@@ -12,7 +12,7 @@ module.exports = function (pPictApplication, pLogNoisiness)
 	let tmpLogNoisiness = (typeof(pLogNoisiness) == 'undefined') ? 0 : pLogNoisiness;
 
 	// Set up a basal pict on the window object
-	if (pPictApplication && pPictApplication.hasOwnProperty('default_configuration') && pPictApplication.default_configuration.hasOwnProperty('pict_configuration'))
+	if (pPictApplication && ('default_configuration' in pPictApplication) && ('pict_configuration' in pPictApplication.default_configuration))
 	{
 		window._Pict = new Pict(pPictApplication.default_configuration.pict_configuration);
 	}
@@ -26,11 +26,11 @@ module.exports = function (pPictApplication, pLogNoisiness)
 	let tmpApplicationHash = 'DefaultApplication';
 	let tmpDefaultConfiguration = {};
 
-	if (pPictApplication.hasOwnProperty('default_configuration'))
+	if ('default_configuration' in pPictApplication)
 	{
 		tmpDefaultConfiguration = pPictApplication.default_configuration;
 
-		if (pPictApplication.default_configuration.hasOwnProperty('Hash'))
+		if ('Hash' in pPictApplication.default_configuration)
 		{
 			tmpDefaultConfiguration = pPictApplication.default_configuration;
 			tmpApplicationHash = pPictApplication.default_configuration.Hash;

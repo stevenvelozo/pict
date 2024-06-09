@@ -112,16 +112,16 @@ class PictTemplateProvider extends libFableServiceBase
 	{
 		// TODO: Optimize this.
 		// If the template doesn't exist, try to load it with the loading function
-		if (!this.templates.hasOwnProperty(pTemplateHash))
+		if (!(pTemplateHash in this.templates))
 		{
 			this.loadTemplate(pTemplateHash);
 		}
 		// If the loading function fails, try to load it from the default templates
-		if (!this.templates.hasOwnProperty(pTemplateHash))
+		if (!(pTemplateHash in this.templates))
 		{
 			this.checkDefaultTemplateHash(pTemplateHash);
 		}
-		if (this.templates.hasOwnProperty(pTemplateHash))
+		if ((pTemplateHash in this.templates))
 		{
 			return this.templates[pTemplateHash];
 		}

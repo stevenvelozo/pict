@@ -36,7 +36,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	initializeCache(pEntity)
 	{
 		// This should not be happening as often as it's happening.
-		if (!this.cache.hasOwnProperty(pEntity))
+		if (!(pEntity in this.cache))
 		{
 			this.cache[pEntity] = this.fable.instantiateServiceProviderWithoutRegistration('ObjectCache');
 			// TODO: Make this a configuration?

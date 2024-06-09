@@ -66,7 +66,7 @@ class Pict extends libFable
 		this.manifest = this.instantiateServiceProvider('Manifest');
 
 		this.AppData = {};
-		if (this.fable.settings.hasOwnProperty('DefaultAppData'))
+		if ('DefaultAppData' in this.fable.settings)
 		{
 			this.AppData = this.fable.settings.DefaultAppData;
 		}
@@ -174,7 +174,7 @@ class Pict extends libFable
 		if (typeof(pViewPrototype) != 'undefined')
 		{
 			// If the prototype has a default_configuration, it will be merged with options.
-			if (pViewPrototype.hasOwnProperty('default_configuration'))
+			if ('default_configuration' in pViewPrototype)
 			{
 				tmpOptions = this.fable.Utility.extend({}, JSON.parse(JSON.stringify(pViewPrototype.default_configuration)), tmpOptions);
 			}
@@ -209,7 +209,7 @@ class Pict extends libFable
 		if (typeof(pProviderPrototype) != 'undefined')
 		{
 			// If the prototype has a default_configuration, it will be merged with options.
-			if (pProviderPrototype.hasOwnProperty('default_configuration'))
+			if ('default_configuration' in pProviderPrototype)
 			{
 				tmpOptions = this.fable.Utility.extend({}, pProviderPrototype.default_configuration, tmpOptions);
 			}
@@ -250,7 +250,7 @@ class Pict extends libFable
 		if (typeof(pApplicationPrototype) != 'undefined')
 		{
 			// If the prototype has a default_configuration, it will be merged with options.
-			if (pApplicationPrototype.hasOwnProperty('default_configuration'))
+			if ('default_configuration' in pApplicationPrototype)
 			{
 				tmpOptions = this.fable.Utility.extend({}, pApplicationPrototype.default_configuration, tmpOptions);
 			}
@@ -1648,7 +1648,7 @@ class Pict extends libFable
 						{
 							for (let j = 0; j < tmpValueSet.length; j++)
 							{
-								if (!tmpValueMap.hasOwnProperty(tmpValueSet[j]))
+								if (!(tmpValueSet[j] in tmpValueMap))
 								{
 									tmpValueMap[tmpValueSet[j]] = true;
 									tmpValueList.push(tmpValueSet[j]);
@@ -1657,7 +1657,7 @@ class Pict extends libFable
 						}
 						else if (tmpValueSet)
 						{
-							if (!tmpValueMap.hasOwnProperty(tmpValueSet))
+							if (!(tmpValueSet in tmpValueMap))
 							{
 								tmpValueMap[tmpValueSet] = true;
 								tmpValueList.push(tmpValueSet);

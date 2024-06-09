@@ -99,7 +99,7 @@ class PictEnvironmentObject
 		}
 
 		this.pict.log.info(`Mocking an READ from Address -> [${pAddress}]`);
-		if (this.contentMap.hasOwnProperty(pAddress))
+		if (pAddress in this.contentMap)
 		{
 			// The data is in the content map!
 			return this.contentMap[pAddress];
@@ -169,11 +169,11 @@ class PictEnvironmentObject
 
 	initializeAttributeMapLocation(pAddress, pAttribute)
 	{
-		if (!this.contentMap._ATTRIBUTE_MAP.hasOwnProperty(pAddress))
+		if (!(pAddress in this.contentMap._ATTRIBUTE_MAP))
 		{
 			this.contentMap._ATTRIBUTE_MAP[pAddress] = {};
 		}
-		if (!this.contentMap._ATTRIBUTE_MAP[pAddress].hasOwnProperty(pAttribute))
+		if (!(pAttribute in this.contentMap._ATTRIBUTE_MAP[pAddress]))
 		{
 			this.contentMap._ATTRIBUTE_MAP[pAddress][pAttribute] = false;
 		}
@@ -181,7 +181,7 @@ class PictEnvironmentObject
 
 	initializeClassMapLocation(pAddress)
 	{
-		if (!this.contentMap._CLASS_MAP.hasOwnProperty(pAddress))
+		if (!(pAddress in this.contentMap._CLASS_MAP))
 		{
 			this.contentMap._CLASS_MAP[pAddress] = [];
 		}

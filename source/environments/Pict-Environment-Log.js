@@ -95,7 +95,7 @@ class PictEnvironmentLog
 	{
 		if (this.storeEventLog) this.eventLog.Read.push(this.createEventLogEntry(pAddress));
 		this.pict.log.info(`Mocking an READ from Address -> [${pAddress}]`);
-		if (this.contentMap.hasOwnProperty(pAddress))
+		if (pAddress in this.contentMap)
 		{
 			// The data is in the content map!
 			return this.contentMap[pAddress];
