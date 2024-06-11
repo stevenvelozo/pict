@@ -461,7 +461,7 @@ class Pict extends libFable
 				{
 					for (let i = 0; i < pDataSet.length; i++)
 					{
-						tmpValue += this.parseTemplate(pTemplateString, pDataSet[i], pContextArray);
+						tmpValue += this.parseTemplate(pTemplateString, pDataSet[i], null, pContextArray);
 					}
 				}
 				else
@@ -469,7 +469,7 @@ class Pict extends libFable
 					let tmpKeys = Object.keys(pDataSet);
 					for (let i = 0; i < tmpKeys.length; i++)
 					{
-						tmpValue += this.parseTemplate(pTemplateString, pDataSet[tmpKeys[i]], pContextArray);
+						tmpValue += this.parseTemplate(pTemplateString, pDataSet[tmpKeys[i]], null, pContextArray);
 					}
 				}
 
