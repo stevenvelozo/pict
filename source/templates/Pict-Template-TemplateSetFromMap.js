@@ -68,11 +68,11 @@ class PictTemplateProviderTemplateSetFromMap extends libPictTemplate
 		if (!tmpData)
 		{
 			// No address was provided, just render the TemplateFromMap with what this TemplateFromMap has.
-			return this.pict.parseTemplateSetByHash(tmpTemplateFromMapHash, pData, pContextArray);
+			return this.pict.parseTemplateSetByHash(tmpTemplateFromMapHash, pData, null, pContextArray);
 		}
 		else
 		{
-			return this.pict.parseTemplateSetByHash(tmpTemplateFromMapHash, tmpData, pContextArray);
+			return this.pict.parseTemplateSetByHash(tmpTemplateFromMapHash, tmpData, null, pContextArray);
 		}
 	}
 

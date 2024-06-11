@@ -54,7 +54,7 @@ class PictTemplateProviderDataValueTree extends libPictTemplate
 			tmpData.ObjectValueTree = tmpData.ResolveValue;
 		}
 
-		return this.pict.parseTemplate(tmpPictObjectWrapTemplate, tmpData, pContextArray);
+		return this.pict.parseTemplate(tmpPictObjectWrapTemplate, tmpData, null, pContextArray);
 	}
 	dataValueTreeObjectSet(pObject, pRootObject, pCurrentDepth, pMaxDepth, pContextArray)
 	{
@@ -118,7 +118,7 @@ class PictTemplateProviderDataValueTree extends libPictTemplate
 				CurrentDepth: pCurrentDepth,
 				MaxDepth: pMaxDepth
 			};
-			tmpTemplateResult += this.pict.parseTemplate(tmpPictObjectBranchTemplate, tmpDataValue, pContextArray);
+			tmpTemplateResult += this.pict.parseTemplate(tmpPictObjectBranchTemplate, tmpDataValue, null, pContextArray);
 		}
 
 		return tmpTemplateResult;

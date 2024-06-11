@@ -54,11 +54,11 @@ class PictTemplateProviderTemplateSet extends libPictTemplate
 		if (!tmpAddressOfData)
 		{
 			// No address was provided, just render the template with what this template has.
-			return this.pict.parseTemplateSetByHash(tmpTemplateHash, pData, pContextArray);
+			return this.pict.parseTemplateSetByHash(tmpTemplateHash, pData, null, pContextArray);
 		}
 		else
 		{
-			return this.pict.parseTemplateSetByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), pContextArray);
+			return this.pict.parseTemplateSetByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), null, pContextArray);
 		}
 	}
 
