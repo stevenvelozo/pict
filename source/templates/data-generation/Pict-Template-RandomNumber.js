@@ -15,11 +15,11 @@ class PictTemplateProviderRandomNumber extends libPictTemplate
 		this.addPattern('{~RN:', '~}');
 	}
 
-	render(pHash)
+	render(pTemplateHash, pRecord, pContextArray)
 	{
-		let tmpHash = pHash.trim();
+		let tmpHash = pTemplateHash.trim();
 
-		if (this.LogNoisiness > 3)
+		if (this.pict.LogNoisiness > 3)
 		{
 			this.log.trace(`PICT Template [fRandomNumber]::[${tmpHash}]`);
 		}

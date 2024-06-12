@@ -14,16 +14,16 @@ class PictTemplateProviderDigits extends libPictTemplate
 		this.addPattern('{~Digits:', '~}');
 	}
 
-	render(pHash, pData, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray)
 	{
-		let tmpHash = pHash.trim();
-		let tmpData = (typeof (pData) === 'object') ? pData : {};
+		let tmpHash = pTemplateHash.trim();
+		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 
-		if (this.LogNoisiness > 4)
+		if (this.pict.LogNoisiness > 4)
 		{
 			this.log.trace(`PICT Template [fDigits]::[${tmpHash}] with tmpData:`, tmpData);
 		}
-		else if (this.LogNoisiness > 3)
+		else if (this.pict.LogNoisiness > 3)
 		{
 			this.log.trace(`PICT Template [fDigits]::[${tmpHash}]`);
 		}

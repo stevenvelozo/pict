@@ -15,9 +15,9 @@ class PictTemplateProviderData extends libPictTemplate
 		this.addPattern('{~D:', '~}');
 	}
 
-	render(pHash, pRecord, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray)
 	{
-		let tmpHash = pHash.trim();
+		let tmpHash = pTemplateHash.trim();
 		let tmpRecord = (typeof(pRecord) === 'object') ? pRecord : {};
 
 		if (this.pict.LogNoisiness > 4)

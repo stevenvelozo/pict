@@ -15,9 +15,9 @@ class PictTemplateProviderLogStatement extends libPictTemplate
 		this.addPattern('{~LS:', '~}');
 	}
 
-	render(pHash)
+	render(pTemplateHash, pRecord, pContextArray)
 	{
-		let tmpHash = pHash.trim();
+		let tmpHash = pTemplateHash.trim();
 		this.log.trace(`PICT Template Log Message: ${tmpHash}`);
 		return '';
 	}

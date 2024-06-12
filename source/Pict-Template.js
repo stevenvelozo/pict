@@ -22,6 +22,8 @@ class PictTemplateProvider extends libFableServiceBase
 	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
 	 * @param {object} pRecord - The json object to be used as the Record for the template render
 	 * @param {array} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 *
+	 * @return {string} The rendered template
 	 */
 	render(pTemplateHash, pRecord, pContextArray)
 	{
@@ -29,12 +31,14 @@ class PictTemplateProvider extends libFableServiceBase
 	}
 
 	/**
-	 * 
+	 * Render a template expression, deliver a string with the resulting content to a callback function.
+	 *
 	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
 	 * @param {object} pRecord - The json object to be used as the Record for the template render
 	 * @param {array} pContextArray - An array of context objects accessible from the template; safe to leave empty
-	 * @param {*} fCallback 
-	 * @returns 
+	 * @param {(error: Error?, content: String?) => void} fCallback - callback function invoked with the rendered template, or an error
+	 *
+	 * @return {void}
 	 */
 	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)
 	{
@@ -46,6 +50,8 @@ class PictTemplateProvider extends libFableServiceBase
 	 *
 	 * @param {string} pMatchStart - The string pattern to start a match in the template trie
 	 * @param {string} pMatchEnd  - The string pattern to stop a match in the trie acyclic graph
+	 *
+	 * @return {void}
 	 */
 	addPattern(pMatchStart, pMatchEnd)
 	{
@@ -59,7 +65,7 @@ class PictTemplateProvider extends libFableServiceBase
 	 * @param {object} pRecord - The record to resolve
 	 * @param {Array<any>} pContextArray - The context array to resolve (optional)
 	 *
-	 * @returns {any} The value at the given address, or undefined
+	 * @return {any} The value at the given address, or undefined
 	 */
 	resolveStateFromAddress(pAddress, pRecord, pContextArray)
 	{

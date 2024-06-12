@@ -15,16 +15,16 @@ class PictTemplateProviderNotEmpty extends libPictTemplate
 		this.addPattern('{~NE:', '~}');
 	}
 
-	render(pHash, pData, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray)
 	{
-		let tmpHash = pHash.trim();
-		let tmpData = (typeof (pData) === 'object') ? pData : {};
+		let tmpHash = pTemplateHash.trim();
+		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 
-		if (this.LogNoisiness > 4)
+		if (this.pict.LogNoisiness > 4)
 		{
 			this.log.trace(`PICT Template [fNotEmptyRender]::[${tmpHash}] with tmpData:`, tmpData);
 		}
-		else if (this.LogNoisiness > 2)
+		else if (this.pict.LogNoisiness > 2)
 		{
 			this.log.trace(`PICT Template [fNotEmptyRender]::[${tmpHash}]`);
 		}

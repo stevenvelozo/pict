@@ -28,11 +28,11 @@ class PictTemplateProviderEntity extends libPictTemplate
 		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 		let tmpCallback = (typeof (fCallback) === 'function') ? fCallback : () => { return ''; };
 
-		if (this.LogNoisiness > 4)
+		if (this.pict.LogNoisiness > 4)
 		{
 			this.log.trace(`PICT Template [fEntityRender]::[${tmpHash}] with tmpData:`, tmpData);
 		}
-		else if (this.LogNoisiness > 0)
+		else if (this.pict.LogNoisiness > 0)
 		{
 			this.log.trace(`PICT Template [fEntityRender]::[${tmpHash}]`);
 		}
@@ -79,7 +79,7 @@ class PictTemplateProviderEntity extends libPictTemplate
 			return tmpCallback(Error(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]  Entity: ${tmpEntity} ID: ${tmpEntityID}`), '');
 		}
 
-		if (this.LogNoisiness > 3)
+		if (this.pict.LogNoisiness > 3)
 		{
 			this.log.trace(`Pict: Entity Render: Entity [${tmpEntity}] with ID [${tmpEntityID}] as template [${tmpEntityTemplate}] from [${tmpHash}]`);
 		}
