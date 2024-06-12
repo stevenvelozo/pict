@@ -15,10 +15,10 @@ class PictTemplateProviderLogValue extends libPictTemplate
 		this.addPattern('{~LV:', '~}');
 	}
 
-	render(pHash, pData, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray)
 	{
-		let tmpHash = pHash.trim();
-		let tmpData = (typeof (pData) === 'object') ? pData : {};
+		let tmpHash = pTemplateHash.trim();
+		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 
 		let tmpValue = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray);
 		let tmpValueType = typeof (tmpValue);

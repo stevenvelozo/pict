@@ -14,10 +14,10 @@ class PictTemplateProviderDateFormat extends libPictTemplate
 		this.addPattern('{~DateFormat:', '~}');
 	}
 
-	render(pHash, pData, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray)
 	{
-		let tmpHash = pHash.trim();
-		let tmpData = (typeof (pData) === 'object') ? pData : {};
+		let tmpHash = pTemplateHash.trim();
+		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 		let tmpDateValueSet = tmpHash.split('^');
 
 		if (tmpDateValueSet.length < 2)
@@ -28,11 +28,11 @@ class PictTemplateProviderDateFormat extends libPictTemplate
 
 		let tmpDateValue = this.resolveStateFromAddress(tmpDateValueSet[0], tmpData, pContextArray);
 
-		if (this.LogNoisiness > 4)
+		if (this.pict.LogNoisiness > 4)
 		{
 			this.log.trace(`PICT Template [fDateFormat]::[${tmpHash}] with tmpData:`, tmpData);
 		}
-		else if (this.LogNoisiness > 3)
+		else if (this.pict.LogNoisiness > 3)
 		{
 			this.log.trace(`PICT Template [fDateFormat]::[${tmpHash}]`);
 		}

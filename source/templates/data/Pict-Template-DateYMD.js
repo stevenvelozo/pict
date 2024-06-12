@@ -14,10 +14,10 @@ class PictTemplateProviderDateYMD extends libPictTemplate
 		this.addPattern('{~DateYMD:', '~}');
 	}
 
-	render(pHash, pData, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray)
 	{
-		let tmpHash = pHash.trim();
-		let tmpData = (typeof (pData) === 'object') ? pData : {};
+		let tmpHash = pTemplateHash.trim();
+		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 		let tmpDateValue = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray);
 
 

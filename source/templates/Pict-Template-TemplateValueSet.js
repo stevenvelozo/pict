@@ -15,16 +15,16 @@ class PictTemplateProviderTemplateValueSet extends libPictTemplate
 		this.addPattern('{~TVS:', '~}');
 	}
 
-	render(pHash, pData, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray)
 	{
-		let tmpHash = pHash.trim();
-		let tmpData = (typeof (pData) === 'object') ? pData : {};
+		let tmpHash = pTemplateHash.trim();
+		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 
-		if (this.LogNoisiness > 4)
+		if (this.pict.LogNoisiness > 4)
 		{
 			this.log.trace(`PICT Template [fTemplateValueSetRender]::[${tmpHash}] with tmpData:`, tmpData);
 		}
-		else if (this.LogNoisiness > 0)
+		else if (this.pict.LogNoisiness > 0)
 		{
 			this.log.trace(`PICT Template [fTemplateValueSetRender]::[${tmpHash}]`);
 		}
@@ -78,24 +78,24 @@ class PictTemplateProviderTemplateValueSet extends libPictTemplate
 		if (!tmpData)
 		{
 			// No address was provided, just render the template with what this template has.
-			return this.pict.parseTemplateSetByHash(tmpTemplateHash, pData, null, pContextArray);
+			return this.pict.parseTemplateSetByHash(tmpTemplateHash, pRecord, null, pContextArray);
 		}
 		else
 		{
 			return this.pict.parseTemplateSetByHash(tmpTemplateHash, tmpData, null, pContextArray);
 		}
 	}
-	renderAsync(pHash, pData, fCallback, pContextArray)
+	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)
 	{
-		let tmpHash = pHash.trim();
-		let tmpData = (typeof (pData) === 'object') ? pData : {};
+		let tmpHash = pTemplateHash.trim();
+		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 		let tmpCallback = (typeof (fCallback) === 'function') ? fCallback : () => { return ''; };
 
-		if (this.LogNoisiness > 4)
+		if (this.pict.LogNoisiness > 4)
 		{
 			this.log.trace(`PICT Template [fTemplateValueSetRenderAsync]::[${tmpHash}] with tmpData:`, tmpData);
 		}
-		else if (this.LogNoisiness > 0)
+		else if (this.pict.LogNoisiness > 0)
 		{
 			this.log.trace(`PICT Template [fTemplateValueSetRenderAsync]::[${tmpHash}]`);
 		}
@@ -108,7 +108,7 @@ class PictTemplateProviderTemplateValueSet extends libPictTemplate
 
 		if (tmpTemplateHashPart.length < 2)
 		{
-			this.log.trace(`PICT TemplateFromMap [fTemplateRenderAsync]::[${tmpHash}] failed because there were not three stanzas in the expression [${pHash}]`);
+			this.log.trace(`PICT TemplateFromMap [fTemplateRenderAsync]::[${tmpHash}] failed because there were not three stanzas in the expression [${pTemplateHash}]`);
 			return fCallback(null, '');
 		}
 
@@ -151,7 +151,7 @@ class PictTemplateProviderTemplateValueSet extends libPictTemplate
 		{
 			// No address was provided, just render the template with what this template has.
 			// The async portion of this is a mind bender because of how entry can happen dynamically from templates
-			return this.pict.parseTemplateSetByHash(tmpTemplateFromMapHash, pData,
+			return this.pict.parseTemplateSetByHash(tmpTemplateFromMapHash, pRecord,
 				(pError, pValue) =>
 				{
 					if (pError)

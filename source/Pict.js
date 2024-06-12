@@ -2,11 +2,13 @@
 * @author <steven@velozo.com>
 */
 const libFable = require('fable');
+
 const PictTemplateProvider = require('./Pict-Template-Provider.js');
 const PictContentAssignment = require('./Pict-Content-Assignment.js');
 const PictDataProvider = require('./Pict-DataProvider.js');
 const PictCSS = require('./Pict-CSS.js');
 const PictMeadowEntityProvider = require('./Pict-Meadow-EntityProvider.js');
+const PictTemplate = require('./Pict-Template.js');
 
 /**
  * Pict management object.
@@ -14,7 +16,7 @@ const PictMeadowEntityProvider = require('./Pict-Meadow-EntityProvider.js');
 class Pict extends libFable
 {
 	/**
-	 * @param {Object} pSettings - The settings for the Pict instance.
+	 * @param {Object<String, any>} pSettings - The settings for the Pict instance.
 	 */
 	constructor(pSettings)
 	{
@@ -101,14 +103,14 @@ class Pict extends libFable
 	/**
 	 * Load manifests in as Hashed services
 	 *
-	 * @param {Object} pManifestSet - The manifest set to load.
+	 * @param {Object<String, String>} pManifestSet - The manifest set to load.
 	 */
 	loadManifestSet(pManifestSet)
 	{
 		if (typeof(pManifestSet) != 'object')
 		{
 			this.log.warn(`PICT [${this.UUID}] could not load Manifest Set; pManifestSet was not an object.`);
-			return false;
+			return;
 		}
 		let tmpManifestKeys = Object.keys(pManifestSet);
 		if (tmpManifestKeys.length > 0)
@@ -125,14 +127,16 @@ class Pict extends libFable
 	/**
 	 * Add a template expression to the template engine from the PictTemplate service.
 	 *
-	 * @param {Object} pTemplatePrototype - The prototype class for the template expression
+	 * @param {typeof PictTemplate} pTemplatePrototype - The prototype class for the template expression
+	 *
+	 * @return {PictTemplate} the service instance, or null if the prototype was invalid
 	 */
 	addTemplate(pTemplatePrototype)
 	{
 		if (typeof(pTemplatePrototype) != 'function')
 		{
 			this.log.warn(`PICT [${this.UUID}] could not add Template; pTemplatePrototype was not a class it was ${typeof(pTemplatePrototype)}.`);
-			return false;
+			return null;
 		}
 
 		let tmpTemplateHash = pTemplatePrototype.template_hash;
@@ -151,8 +155,12 @@ class Pict extends libFable
 	 * Passing a prototype will use that!
 	 *
 	 * @param {String} pViewHash - The hash of the view.
-	 * @param {Object} pOptions - The options for the view.
-	 * @param {Object} pViewPrototype - The prototype for the view.
+	 * @param {Object<String, any>} [pOptions] - The options for the view.
+	 * @param {any} [pViewPrototype] - The prototype for the view.
+	 *
+	 * FIXME: refer to PictView here once it has a type definition
+	 *
+	 * @return {any} The view instance.
 	 */
 	addView(pViewHash, pOptions, pViewPrototype)
 	{
@@ -186,9 +194,19 @@ class Pict extends libFable
 		}
 	}
 
-	// Just passing an options will construct one for us.
-	// Passing a hash will set the hash.
-	// Passing a prototype will use that!
+	/**
+	 * Just passing an options will construct one for us.
+	 * Passing a hash will set the hash.
+	 * Passing a prototype will use that!
+	 *
+	 * @param {String} pProviderHash - The hash of the provider.
+	 * @param {Object<String, any>} [pOptions] - The options for the provider.
+	 * @param {any} [pProviderPrototype] - The prototype for the provider.
+	 *
+	 * FIXME: refer to PictProvider here once it has a type definition
+	 *
+	 * @return {any} The provider instance.
+	 */
 	addProvider(pProviderHash, pOptions, pProviderPrototype)
 	{
 		let tmpOptions = (typeof(pOptions) == 'object') ? pOptions : {};
@@ -227,8 +245,12 @@ class Pict extends libFable
 	 * Passing a prototype will use that!
 	 *
 	 * @param {String} pApplicationHash - The hash of the application.
-	 * @param {Object} pOptions - The options for the application.
-	 * @param {Object} pApplicationPrototype - The prototype for the application.
+	 * @param {Object} [pOptions] - The options for the application.
+	 * @param {any} [pApplicationPrototype] - The prototype for the application.
+	 *
+	 * FIXME: refer to PictApplication here once it has a type definition
+	 *
+	 * @return {any} The application instance.
 	 */
 	addApplication(pApplicationHash, pOptions, pApplicationPrototype)
 	{
@@ -332,10 +354,10 @@ class Pict extends libFable
 	 * Read a value from a nested object using a dot notation string.
 	 *
 	 * @param {string} pAddress - The address to resolve
-	 * @param {object} pRecord - The record to resolve
-	 * @param {Array<any>} pContextArray - The context array to resolve
+	 * @param {any} pRecord - The record to resolve
+	 * @param {Array<any>} [pContextArray] - The context array to resolve
 	 *
-	 * @returns {any} The value at the given address, or undefined
+	 * @return {any} The value at the given address, or undefined
 	 */
 	resolveStateFromAddress(pAddress, pRecord, pContextArray)
 	{
@@ -349,8 +371,10 @@ class Pict extends libFable
 	 *
 	 * @param {String} pTemplateString - The template string to parse
 	 * @param {Object} pData - The data to use in the template
-	 * @param {Function} fCallback - The callback to call when the template is parsed
-	 * @param {Array<any>} pContextArray - The context array to use in the template
+	 * @param {Function} [fCallback] - The callback to call when the template is parsed
+	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 *
+	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
 	parseTemplate(pTemplateString, pData, fCallback, pContextArray)
 	{
@@ -391,7 +415,7 @@ class Pict extends libFable
 			let tmpResult = this.MetaTemplate.parseString(pTemplateString, tmpData, null, tmpContextArray);
 			if (this.LogControlFlow && this.LogNoisiness > 1)
 			{
-					this.log.info(`PICT-ControlFlow parseTemplate ${tmpParseUUID} Template Return Value:\n${tmpResult}`);
+				this.log.info(`PICT-ControlFlow parseTemplate ${tmpParseUUID} Template Return Value:\n${tmpResult}`);
 			}
 			return tmpResult;
 		}
@@ -402,8 +426,10 @@ class Pict extends libFable
 	 *
 	 * @param {String} pTemplateHash - The hash of the template to parse
 	 * @param {Object} pData - The data to use in the template
-	 * @param {Function} fCallback - The callback to call when the template is parsed
-	 * @param {Array<any>} pContextArray - The context array to use in the template
+	 * @param {Function} [fCallback] - The callback to call when the template is parsed
+	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 *
+	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
 	parseTemplateByHash(pTemplateHash, pData, fCallback, pContextArray)
 	{
@@ -421,9 +447,11 @@ class Pict extends libFable
 	 * Parse a template set.
 	 *
 	 * @param {String} pTemplateString - The template string to parse
-	 * @param {Array|Object} pDataSet - The data set to use in the template
-	 * @param {Function} fCallback - The callback to call when the template is parsed
-	 * @param {Array<any>} pContextArray - The context array to use in the template
+	 * @param {Array<any>|Object} pDataSet - The data set to use in the template
+	 * @param {Function} [fCallback] - The callback to call when the template set is parsed
+	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 *
+	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
 	parseTemplateSet(pTemplateString, pDataSet, fCallback, pContextArray)
 	{
@@ -486,9 +514,11 @@ class Pict extends libFable
 	 * Parse a template set by hash.
 	 *
 	 * @param {String} pTemplateHash - The hash of the template to parse
-	 * @param {Array|Object} pDataSet - The data set to use in the template
-	 * @param {Function} fCallback - The callback to call when the template is parsed
-	 * @param {Array<any>} pContextArray - The context array to use in the template
+	 * @param {Array<any>|Object} pDataSet - The data set to use in the template
+	 * @param {Function} [fCallback] - The callback to call when the template is parsed
+	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 *
+	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
 	parseTemplateSetByHash(pTemplateHash, pDataSet, fCallback, pContextArray)
 	{
@@ -509,6 +539,7 @@ module.exports.PictApplicationClass = require('pict-application');
 
 module.exports.PictViewClass = require('pict-view');
 module.exports.PictProviderClass = require('pict-provider');
+module.exports.PictTemplateClass = PictTemplate;
 
 module.exports.EnvironmentLog = require('./environments/Pict-Environment-Log.js');
 module.exports.EnvironmentObject = require('./environments/Pict-Environment-Object.js');

@@ -15,16 +15,16 @@ class PictTemplateProviderTemplate extends libPictTemplate
 		this.addPattern('{~T:', '~}');
 	}
 
-	render(pHash, pData, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray)
 	{
-		let tmpHash = pHash.trim();
-		let tmpData = (typeof (pData) === 'object') ? pData : {};
+		let tmpHash = pTemplateHash.trim();
+		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 
-		if (this.LogNoisiness > 4)
+		if (this.pict.LogNoisiness > 4)
 		{
 			this.log.trace(`PICT Template [fTemplateRender]::[${tmpHash}] with tmpData:`, tmpData);
 		}
-		else if (this.LogNoisiness > 0)
+		else if (this.pict.LogNoisiness > 0)
 		{
 			this.log.trace(`PICT Template [fTemplateRender]::[${tmpHash}]`);
 		}
@@ -54,7 +54,7 @@ class PictTemplateProviderTemplate extends libPictTemplate
 		if (!tmpAddressOfData)
 		{
 			// No address was provided, just render the template with what this template has.
-			return this.pict.parseTemplateByHash(tmpTemplateHash, pData, null, pContextArray);
+			return this.pict.parseTemplateByHash(tmpTemplateHash, pRecord, null, pContextArray);
 		}
 		else
 		{
@@ -62,17 +62,17 @@ class PictTemplateProviderTemplate extends libPictTemplate
 		}
 	}
 
-	renderAsync(pHash, pData, fCallback, pContextArray)
+	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)
 	{
-		let tmpHash = pHash.trim();
-		let tmpData = (typeof (pData) === 'object') ? pData : {};
+		let tmpHash = pTemplateHash.trim();
+		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 		let tmpCallback = (typeof (fCallback) === 'function') ? fCallback : () => { return ''; };
 
-		if (this.LogNoisiness > 4)
+		if (this.pict.LogNoisiness > 4)
 		{
 			this.log.trace(`PICT Template [fTemplateRenderAsync]::[${tmpHash}] with tmpData:`, tmpData);
 		}
-		else if (this.LogNoisiness > 0)
+		else if (this.pict.LogNoisiness > 0)
 		{
 			this.log.trace(`PICT Template [fTemplateRenderAsync]::[${tmpHash}]`);
 		}
@@ -103,7 +103,7 @@ class PictTemplateProviderTemplate extends libPictTemplate
 		{
 			// No address was provided, just render the template with what this template has.
 			// The async portion of this is a mind bender because of how entry can happen dynamically from templates
-			return this.pict.parseTemplateByHash(tmpTemplateHash, pData,
+			return this.pict.parseTemplateByHash(tmpTemplateHash, pRecord,
 				(pError, pValue) =>
 				{
 					if (pError)

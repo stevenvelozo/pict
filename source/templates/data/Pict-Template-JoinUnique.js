@@ -15,16 +15,16 @@ class PictTemplateProviderJoinUnique extends libPictTemplate
 		this.addPattern('{~JU:', '~}');
 	}
 
-	render(pHash, pData, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray)
 	{
-		let tmpHash = pHash;
-		let tmpData = (typeof (pData) === 'object') ? pData : {};
+		let tmpHash = pTemplateHash;
+		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 
-		if (this.LogNoisiness > 4)
+		if (this.pict.LogNoisiness > 4)
 		{
 			this.log.trace(`PICT Join Unique [fDataRender]::[${tmpHash}] with tmpData:`, tmpData);
 		}
-		else if (this.LogNoisiness > 3)
+		else if (this.pict.LogNoisiness > 3)
 		{
 			this.log.trace(`PICT Join Unique [fDataRender]::[${tmpHash}]`);
 		}

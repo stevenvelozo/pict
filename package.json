@@ -12,10 +12,10 @@
         "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t pict-image:local",
         "docker-dev-run": "docker run -it -d --name pict-dev -p 37447:8080 -p 19506:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-image:local",
         "docker-dev-shell": "docker exec -it pict-dev /bin/bash",
-        "lint": "eslint source/**/*.js",
+        "lint": "eslint source/**",
         "types": "npx -p typescript tsc -p . --declaration --allowJs --emitDeclarationOnly --outDir types"
     },
-    "types": "types/index.d.ts",
+    "types": "types/Pict.d.ts",
     "mocha": {
         "diff": true,
         "extension": [

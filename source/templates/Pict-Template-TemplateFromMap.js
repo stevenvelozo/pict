@@ -15,16 +15,16 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 		this.addPattern('{~TemplateFromMap:', '~}');
 	}
 
-	render(pHash, pData, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray)
 	{
-		let tmpHash = pHash.trim();
-		let tmpData = (typeof (pData) === 'object') ? pData : {};
+		let tmpHash = pTemplateHash.trim();
+		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 
-		if (this.LogNoisiness > 4)
+		if (this.pict.LogNoisiness > 4)
 		{
 			this.log.trace(`PICT TemplateFromMap [fTemplateFromMapRender]::[${tmpHash}] with tmpData:`, tmpData);
 		}
-		else if (this.LogNoisiness > 0)
+		else if (this.pict.LogNoisiness > 0)
 		{
 			this.log.trace(`PICT TemplateFromMap [fTemplateFromMapRender]::[${tmpHash}]`);
 		}
@@ -38,7 +38,7 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 
 		if (tmpTemplateHashPart.length < 3)
 		{
-			this.log.trace(`PICT TemplateFromMap [fTemplateFromMapRenderAsync]::[${tmpHash}] failed because there were not three stanzas in the expression [${pHash}]`);
+			this.log.trace(`PICT TemplateFromMap [fTemplateFromMapRenderAsync]::[${tmpHash}] failed because there were not three stanzas in the expression [${pTemplateHash}]`);
 			return ''
 		}
 
@@ -68,24 +68,24 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 		if (!tmpData)
 		{
 			// No address was provided, just render the TemplateFromMap with what this TemplateFromMap has.
-			return this.pict.parseTemplateByHash(tmpTemplateFromMapHash, pData, null, pContextArray);
+			return this.pict.parseTemplateByHash(tmpTemplateFromMapHash, pRecord, null, pContextArray);
 		}
 		else
 		{
 			return this.pict.parseTemplateByHash(tmpTemplateFromMapHash, tmpData, null, pContextArray);
 		}
 	}
-	renderAsync(pHash, pData, fCallback, pContextArray)
+	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)
 	{
-		let tmpHash = pHash.trim();
-		let tmpData = (typeof (pData) === 'object') ? pData : {};
+		let tmpHash = pTemplateHash.trim();
+		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 		let tmpCallback = (typeof (fCallback) === 'function') ? fCallback : () => { return ''; };
 
-		if (this.LogNoisiness > 4)
+		if (this.pict.LogNoisiness > 4)
 		{
 			this.log.trace(`PICT TemplateFromMap [fTemplateFromMapRenderAsync]::[${tmpHash}] with tmpData:`, tmpData);
 		}
-		else if (this.LogNoisiness > 0)
+		else if (this.pict.LogNoisiness > 0)
 		{
 			this.log.trace(`PICT TemplateFromMap [fTemplateFromMapRenderAsync]::[${tmpHash}]`);
 		}
@@ -99,7 +99,7 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 
 		if (tmpTemplateHashPart.length < 3)
 		{
-			this.log.trace(`PICT TemplateFromMap [fTemplateFromMapRenderAsync]::[${tmpHash}] failed because there were not three stanzas in the expression [${pHash}]`);
+			this.log.trace(`PICT TemplateFromMap [fTemplateFromMapRenderAsync]::[${tmpHash}] failed because there were not three stanzas in the expression [${pTemplateHash}]`);
 			return fCallback(null, '');
 		}
 
@@ -130,7 +130,7 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 		{
 			// No address was provided, just render the TemplateFromMap with what this TemplateFromMap has.
 			// The async portion of this is a mind bender because of how entry can happen dynamically from TemplateFromMaps
-			return this.pict.parseTemplateByHash(tmpTemplateFromMapHash, pData,
+			return this.pict.parseTemplateByHash(tmpTemplateFromMapHash, pRecord,
 				(pError, pValue) =>
 				{
 					if (pError)

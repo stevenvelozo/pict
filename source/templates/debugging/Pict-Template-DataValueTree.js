@@ -15,10 +15,10 @@ class PictTemplateProviderDataValueTree extends libPictTemplate
 		this.addPattern('{~DT:', '~}');
 	}
 
-	render(pHash, pData, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray)
 	{
-		let tmpData = (typeof (pData) === 'object') ? pData : {};
-		tmpData.TemplateHash = pHash.trim();
+		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
+		tmpData.TemplateHash = pTemplateHash.trim();
 
 		tmpData.ValueTreeParameters = tmpData.TemplateHash.split('^');
 		if (tmpData.ValueTreeParameters.length < 1)
