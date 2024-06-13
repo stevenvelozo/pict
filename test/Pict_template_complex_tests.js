@@ -158,10 +158,47 @@ suite
 									Expect(tmpTemplateOutput).to.equal("<div><dog>This was a test... Value? ia600202.us.archive.org 8675309</dog></div>");
 
 									return fDone();
+								}
+							);
+						test
+							(
+								'Template Value Sets with indices',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
 
+									testPict.AppData.ChocoData = _SampleChocoData;
+
+									testPict.TemplateProvider.addTemplate('Container', '{"K":"{~D:Record.Key~}","V":"{~T:ValueTemplate:Record.Value~}"},');
+									testPict.TemplateProvider.addTemplate('ValueTemplate', '{~D:Record.format~}-->{~D:Record.size~}');
+									let tmpTemplateDataWithKeys = testPict.parseTemplate(`{~TemplateValueSet:Container:AppData.ChocoData.files~}`);
+									
+									Expect(tmpTemplateDataWithKeys).to.equal(`{"K":"0","V":"Thumbnail-->838"},{"K":"1","V":"Thumbnail-->6843"},{"K":"2","V":"Thumbnail-->8388"},{"K":"3","V":"Thumbnail-->5993"},{"K":"4","V":"Thumbnail-->4951"},{"K":"5","V":"Thumbnail-->3383"},{"K":"6","V":"Thumbnail-->3503"},{"K":"7","V":"Archive BitTorrent-->4093"},{"K":"8","V":"Metadata-->"},{"K":"9","V":"Metadata-->1371"},{"K":"10","V":"Metadata-->620"},{"K":"11","V":"Item Tile-->7481"},{"K":"12","V":"Animated GIF-->101114"},{"K":"13","V":"MPEG2-->31625216"},{"K":"14","V":"Video Index-->31141"},{"K":"15","V":"Ogg Video-->2248166"},{"K":"16","V":"512Kb MPEG4-->2378677"},`);
+
+									return fDone();
+								}
+							);
+						test
+							(
+								'Template JSON Record',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+
+									testPict.AppData.ChocoData = _SampleChocoData;
+
+									let tmpTemplateDataWithKeys = testPict.parseTemplate(`{~DataJson:AppData.ChocoData.files[1]~}`);
+									let tmpTemplateDataWithKeysShorthand = testPict.parseTemplate(`{~DJ:AppData.ChocoData.files[1]~}`);
+									
+									Expect(tmpTemplateDataWithKeys).to.equal(`{"name":"FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000004.jpg","source":"derivative","format":"Thumbnail","original":"frankerberry_countchockula_1971.0001.mpg","mtime":"1296336957","size":"6843","md5":"c93fa52000ab4665e69b25c403e11aff","crc32":"9444e6f6","sha1":"716b4f9950b8147f51d3265f9c62ff86451308d5"}`);
+									Expect(tmpTemplateDataWithKeys).to.equal(tmpTemplateDataWithKeysShorthand);
+
+									return fDone();
 								}
 							);
 						}
 				);
 		}
 	);
+
+
