@@ -55,7 +55,7 @@
     },
     "dependencies": {
         "cachetrax": "^1.0.4",
-        "fable": "^3.0.133",
+        "fable": "^3.0.134",
         "pict-application": "^1.0.18",
         "pict-provider": "^1.0.2",
         "pict-view": "^1.0.47"
