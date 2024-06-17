@@ -46,11 +46,8 @@
     "homepage": "https://github.com/stevenvelozo/pict#readme",
     "devDependencies": {
         "@eslint/js": "^9.5.0",
-        "chai": "^4.4.1",
         "eslint": "^9.5.0",
         "globals": "^15.4.0",
-        "mocha": "^10.4.0",
-        "nyc": "^17.0.0",
         "quackage": "^1.0.30"
     },
     "dependencies": {
