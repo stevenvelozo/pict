@@ -1,4 +1,4 @@
-const libPictTemplate = require('../../Pict-Template.js');
+const libPictTemplate = require('pict-template');
 
 class PictTemplateProviderLogStatement extends libPictTemplate
 {

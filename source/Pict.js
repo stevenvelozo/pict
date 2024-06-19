@@ -8,7 +8,8 @@ const PictContentAssignment = require('./Pict-Content-Assignment.js');
 const PictDataProvider = require('./Pict-DataProvider.js');
 const PictCSS = require('./Pict-CSS.js');
 const PictMeadowEntityProvider = require('./Pict-Meadow-EntityProvider.js');
-const PictTemplate = require('./Pict-Template.js');
+
+const PictTemplate = require('pict-template');
 
 /**
  * Pict management object.
@@ -61,7 +62,7 @@ class Pict extends libFable
 		this.CSSMap = null;
 		this.addAndInstantiateServiceType('CSSMap', PictCSS);
 
-		this.addServiceType('PictTemplate', require('./Pict-Template.js'));
+		this.addServiceType('PictTemplate', PictTemplate);
 		this.instantiateServiceProvider('MetaTemplate');
 		this.instantiateServiceProvider('DataGeneration');
 
