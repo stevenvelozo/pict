@@ -47,12 +47,12 @@
     "devDependencies": {
         "@eslint/js": "^9.5.0",
         "eslint": "^9.5.0",
-        "globals": "^15.4.0",
+        "globals": "^15.6.0",
         "quackage": "^1.0.30"
     },
     "dependencies": {
         "cachetrax": "^1.0.4",
-        "fable": "^3.0.134",
+        "fable": "^3.0.135",
         "pict-application": "^1.0.18",
         "pict-provider": "^1.0.2",
         "pict-view": "^1.0.47"
