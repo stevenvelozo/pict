@@ -55,7 +55,7 @@
         "fable": "^3.0.136",
         "pict-application": "^1.0.18",
         "pict-provider": "^1.0.2",
-        "pict-template": "^1.0.1",
+        "pict-template": "^1.0.2",
         "pict-view": "^1.0.47"
     }
 }

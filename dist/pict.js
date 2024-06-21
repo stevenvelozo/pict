@@ -2917,9 +2917,10 @@ return fCallback();}}onAfterInitialize(){if(this.pict.LogNoisiness>3){this.log.t
 	 * @param {string} pAddress - The address to resolve
 	 * @param {object} pRecord - The record to resolve
 	 * @param {Array<any>} pContextArray - The context array to resolve (optional)
+	 * @param {object} pRootDataObject - The root data object to resolve (optional)
 	 *
 	 * @return {any} The value at the given address, or undefined
-	 */resolveStateFromAddress(pAddress,pRecord,pContextArray){let tmpContextArray=Array.isArray(pContextArray)?pContextArray:[this.pict];return this.pict.manifest.getValueByHash({Pict:this.pict,AppData:this.pict.AppData,Bundle:this.pict.Bundle,Context:tmpContextArray,Record:pRecord},pAddress);}}module.exports=PictTemplateProvider;module.exports.template_hash='Default';},{"fable-serviceproviderbase":52}],119:[function(require,module,exports){const libFableServiceBase=require('fable-serviceproviderbase');const defaultPictViewSettings={DefaultRenderable:false,DefaultDestinationAddress:false,DefaultTemplateRecordAddress:false,ViewIdentifier:false,// If this is set to true, when the App initializes this will.
+	 */resolveStateFromAddress(pAddress,pRecord,pContextArray,pRootDataObject){let tmpContextArray=Array.isArray(pContextArray)?pContextArray:[this.pict];let tmpRootDataObject=typeof pRootDataObject==='object'?pRootDataObject:{};tmpRootDataObject.Pict=this.pict;tmpRootDataObject.AppData=this.pict.AppData;tmpRootDataObject.Bundle=this.pict.Bundle;tmpRootDataObject.Context=tmpContextArray;tmpRootDataObject.Record=pRecord;return this.pict.manifest.getValueByHash(tmpRootDataObject,pAddress);}}module.exports=PictTemplateProvider;module.exports.template_hash='Default';},{"fable-serviceproviderbase":52}],119:[function(require,module,exports){const libFableServiceBase=require('fable-serviceproviderbase');const defaultPictViewSettings={DefaultRenderable:false,DefaultDestinationAddress:false,DefaultTemplateRecordAddress:false,ViewIdentifier:false,// If this is set to true, when the App initializes this will.
 // After the App initializes, initialize will be called as soon as it's added.
 AutoInitialize:true,AutoInitializeOrdinal:0,// If this is set to true, when the App autorenders (on load) this will.
 // After the App initializes, render will be called as soon as it's added.
