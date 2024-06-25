@@ -152,6 +152,10 @@ class PictContentAssignment extends libFableServiceBase
 				switch (tmpTargetElementSet[i].tagName)
 				{
 					case 'INPUT':
+						if (tmpTargetElementSet[i].type == 'checkbox')
+						{
+							tmpTargetElementSet[i].checked = pContent;
+						}
 					case 'SELECT':
 					case 'TEXTAREA':
 						tmpTargetElementSet[i].value = pContent;
@@ -174,6 +178,10 @@ class PictContentAssignment extends libFableServiceBase
 				switch (tmpTargetElementSet[i].tagName)
 				{
 					case 'INPUT':
+						if (tmpTargetElementSet[i].type == 'checkbox')
+						{
+							tmpTargetElementSet[i].checked = pContent;
+						}
 					case 'SELECT':
 					case 'TEXTAREA':
 						tmpTargetElementSet[i].value = pContent;
@@ -276,6 +284,10 @@ class PictContentAssignment extends libFableServiceBase
 			switch (tmpTargetElement.prop('tagName'))
 				{
 					case 'INPUT':
+						if (tmpTargetElement.attr('type') == 'checkbox')
+						{
+							return tmpTargetElement.prop('checked');
+						}
 					case 'SELECT':
 					case 'TEXTAREA':
 						return tmpTargetElement.val();
@@ -297,6 +309,10 @@ class PictContentAssignment extends libFableServiceBase
 				switch (tmpTargetElementSet[0].tagName)
 				{
 					case 'INPUT':
+						if (tmpTargetElementSet[0].type == 'checkbox')
+						{
+							return tmpTargetElementSet[0].checked;
+						}
 					case 'SELECT':
 					case 'TEXTAREA':
 						return tmpTargetElementSet[0].value;
