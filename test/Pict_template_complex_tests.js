@@ -128,6 +128,11 @@ suite
 												this.testValue = tmpNewTestValue;
 												return tmpNewTestValue;
 											},
+										testErrorFunction:
+											function()
+											{
+												throw new Error('This is a thrown error.');
+											},
 										testDataFunction:
 											function()
 											{
@@ -156,6 +161,15 @@ suite
 									testPict.services.MockService.testValue = 8675309;
 									tmpTemplateOutput = testPict.parseTemplate(`<div>{~Template:MultiFunctionTestTemplate:AppData.ChocoData~}</div>`);
 									Expect(tmpTemplateOutput).to.equal("<div><dog>This was a test... Value? ia600202.us.archive.org 8675309</dog></div>");
+
+									// Errors in functions should be caught and not crash the system
+									testPict.TemplateProvider.addTemplate('MultiFunctionErrorTestTemplate', '<dog>{~D:Pict.services.MockService.testErrorFunction().Message~} {~D:Record.d1~} {~D:Pict.services.MockService.testValue~}</dog>');
+									testPict.TemplateProvider.addTemplate('MultiFunctionMissingTestTemplate', '<dog>{~D:Pict.services.MockService.FunctionDoesntExist().Message~} {~D:Record.d1~} {~D:Pict.services.MockService.testValue~}</dog>');
+									Expect(testPict.parseTemplate(`<div>{~Template:MultiFunctionErrorTestTemplate:AppData.ChocoData~}</div>`))
+										.to.equal("<div><dog>false ia600202.us.archive.org 8675309</dog></div>");
+									Expect(testPict.parseTemplate(`<div>{~Template:MultiFunctionMissingTestTemplate:AppData.ChocoData~}</div>`))
+										.to.equal("<div><dog>false ia600202.us.archive.org 8675309</dog></div>");
+
 
 									return fDone();
 								}
