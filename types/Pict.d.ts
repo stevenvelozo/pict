@@ -173,7 +173,6 @@ import PictMeadowEntityProvider = require("./Pict-Meadow-EntityProvider.js");
 import PictDataProvider = require("./Pict-DataProvider.js");
 import PictContentAssignment = require("./Pict-Content-Assignment.js");
 import PictCSS = require("./Pict-CSS.js");
-import PictTemplate = require("./Pict-Template.js");
 declare const PictApplicationClass: any;
 declare const PictViewClass: any;
 declare const PictProviderClass: any;
