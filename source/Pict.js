@@ -25,6 +25,13 @@ class Pict extends libFable
 
 		this.isBrowser = new Function("try {return (this===window);} catch(pError) {return false;}");
 
+		this.browserAddress = 'window._Pict';
+		if ('BrowserAddress' in this.settings)
+		{
+			this.browserAddress = this.settings.BrowserAddress;
+		}
+		this.children = [];
+
 		/**
 		 * The templateProvider provides a basic key->template mapping with default fallback capabilities
 		 *
@@ -299,6 +306,9 @@ class Pict extends libFable
 			//{~Data:AppData.Some.Value.to.Render~}
 			//{~D:AppData.Some.Value.to.Render~}
 			this.addTemplate(require(`./templates/Pict-Template-Data.js`));
+
+			// Know the in-browser reference for Pict when appropriate
+			this.addTemplate(require(`./templates/Pict-Template-Self.js`));
 
 			// Look up an entity template expression
 			// {~Entity:Book^AppData.Some.Address.IDBook^Render-Book-Template~}

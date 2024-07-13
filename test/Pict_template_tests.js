@@ -92,6 +92,21 @@ suite
 							);
 						test
 							(
+								'Self referentiality is dubious and powerful.',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+									testPict.AppData.ChocoData = _SampleChocoData;
+									let tmpTemplateOutput = testPict.parseTemplate('{~Pict~}');
+									Expect(tmpTemplateOutput.indexOf('_Pict')).to.be.greaterThan(0);
+									Expect(testPict.parseTemplate('{~P~}')).to.equal('window._Pict');
+									testPict.browserAddress = 'window._Pict.children[0]';
+									Expect(testPict.parseTemplate('{~P~}.views["MyFavoriteView"].doSomething()')).to.equal('window._Pict.children[0].views["MyFavoriteView"].doSomething()');
+									fDone();
+								}
+							);
+						test
+							(
 								'Templates can render data trees with arbitrary depth.',
 								function (fDone)
 								{
