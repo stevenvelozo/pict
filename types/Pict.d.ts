@@ -8,6 +8,8 @@ declare class Pict {
      */
     constructor(pSettings: any);
     isBrowser: Function;
+    browserAddress: any;
+    children: any[];
     /**
      * The templateProvider provides a basic key->template mapping with default fallback capabilities
      *
