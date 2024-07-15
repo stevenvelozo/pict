@@ -782,7 +782,7 @@ this.serviceTypes.push(pServiceType);}// Using the static member of the class is
 if(typeof pServiceClass=='function'&&pServiceClass.isFableService){// Add the class to the list of classes
 this.serviceClasses[pServiceType]=pServiceClass;}else{// Add the base class to the list of classes
 this.log.error("Attempted to add service type [".concat(pServiceType,"] with an invalid class.  Using base service class, which will not crash but won't provide meaningful services."));this.serviceClasses[pServiceType]=libFableServiceBase;}return this.serviceClasses[pServiceType];}},{key:"addServiceTypeIfNotExists",value:function addServiceTypeIfNotExists(pServiceType,pServiceClass){if(!(pServiceType in this.servicesMap)){return this.addServiceType(pServiceType,pServiceClass);}else{return this.serviceClasses[pServiceType];}}// This is for the services that are meant to run mostly single-instance so need a default at initialization
-},{key:"addAndInstantiateServiceType",value:function addAndInstantiateServiceType(pServiceType,pServiceClass){this.addServiceType(pServiceType,pServiceClass);return this.instantiateServiceProvider(pServiceType,{},"".concat(pServiceType,"-Default"));}},{key:"addAndInstantiateServiceTypeIfNotExists",value:function addAndInstantiateServiceTypeIfNotExists(pServiceType,pServiceClass){this.addServiceTypeIfNotExists(pServiceType,pServiceClass);if(!(pServiceType in this.servicesMap)){return this.instantiateServiceProvider(pServiceType,{},"".concat(pServiceType,"-Default"));}else{return this.serviceClasses[pServiceType];}}// Some services expect to be overloaded / customized class.
+},{key:"addAndInstantiateServiceType",value:function addAndInstantiateServiceType(pServiceType,pServiceClass){this.addServiceType(pServiceType,pServiceClass);return this.instantiateServiceProvider(pServiceType,{},"".concat(pServiceType,"-Default"));}},{key:"addAndInstantiateServiceTypeIfNotExists",value:function addAndInstantiateServiceTypeIfNotExists(pServiceType,pServiceClass){this.addServiceTypeIfNotExists(pServiceType,pServiceClass);if(!(pServiceType in this.servicesMap)||!(pServiceType in this.fable)){return this.instantiateServiceProvider(pServiceType,{},"".concat(pServiceType,"-Default"));}else{return this[pServiceType];}}},{key:"addAndInstantiateSingletonService",value:function addAndInstantiateSingletonService(pServiceType,pOptions,pServiceClass){this.addServiceTypeIfNotExists(pServiceType,pServiceClass);if(!(pServiceType in this.servicesMap)||!(pServiceType in this.fable)){return this.instantiateServiceProvider(pServiceType,{},"".concat(pServiceType,"-Default"));}else{return this[pServiceType];}}// Some services expect to be overloaded / customized class.
 },{key:"instantiateServiceProviderFromPrototype",value:function instantiateServiceProviderFromPrototype(pServiceType,pOptions,pCustomServiceHash,pServicePrototype){// Instantiate the service
 var tmpService=new pServicePrototype(this,pOptions,pCustomServiceHash);if(this.extraServiceInitialization){tmpService=this.extraServiceInitialization(tmpService);}// Add the service to the service map
 this.servicesMap[pServiceType][tmpService.Hash]=tmpService;// If this is the first service of this type, make it the default
@@ -4522,6 +4522,20 @@ var tmpManifestKey=tmpManifestKeys[i];this.instantiateServiceProvider('Manifest'
 	 * @return {any} The view instance.
 	 */},{key:"addView",value:function addView(pViewHash,pOptions,pViewPrototype){var tmpOptions=_typeof(pOptions)=='object'?pOptions:{};var tmpViewHash=typeof pViewHash=='string'?pViewHash:this.fable.getUUID();if(this.LogControlFlow){if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow addView [".concat(tmpViewHash,"]:"),{Options:tmpOptions});}else{this.log.info("PICT-ControlFlow addView [".concat(tmpViewHash,"]"));}}if(typeof pViewPrototype!='undefined'){// If the prototype has a default_configuration, it will be merged with options.
 if('default_configuration'in pViewPrototype){tmpOptions=this.fable.Utility.extend({},JSON.parse(JSON.stringify(pViewPrototype.default_configuration)),tmpOptions);}return this.instantiateServiceProviderFromPrototype('PictView',tmpOptions,tmpViewHash,pViewPrototype);}else{return this.instantiateServiceProvider('PictView',tmpOptions,tmpViewHash);}}/**
+	 * Add a provider unless one already exists, then return that one.
+	 * 
+	 * Just passing an options will construct one for us.
+	 * Passing a hash will set the hash.
+	 * Passing a prototype will use that!
+	 *
+	 * @param {String} pProviderHash - The hash of the provider.
+	 * @param {Object<String, any>} [pOptions] - The options for the provider.
+	 * @param {any} [pProviderPrototype] - The prototype for the provider.
+	 *
+	 * FIXME: refer to PictProvider here once it has a type definition
+	 *
+	 * @return {any} The provider instance.
+	 */},{key:"addProviderSingleton",value:function addProviderSingleton(pProviderHash,pOptions,pProviderPrototype){if(pProviderHash in this.providers){return this.providers[pProviderHash];}return this.addProvider(pProviderHash,pOptions,pProviderPrototype);}/**
 	 * Just passing an options will construct one for us.
 	 * Passing a hash will set the hash.
 	 * Passing a prototype will use that!

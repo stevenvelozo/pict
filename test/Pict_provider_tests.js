@@ -25,6 +25,22 @@ const _MockSettings = (
 	PictDefaultURLPrefix: `http://localhost:${_RetoldTestPort}/1.0/`
 });
 
+class MockPictProvider extends require('../source/Pict-DataProvider.js')
+{
+	constructor(pFable, pOptions, pServiceHash)
+	{
+		super(pFable, pOptions, pServiceHash);
+
+		this.serviceType = 'MockProvider';
+	}
+
+	doSomething(pData)
+	{
+		this.fable.log.info(`MockProvider did something with ${pData}`);
+		return true;
+	}
+}
+
 suite
 (
 	'Pict Provider Tests',
@@ -52,6 +68,28 @@ suite
 						let tmpEnvironment = new libPict.EnvironmentLog(testPict, {});
 
                         let tmpProvider = testPict.instantiateServiceProvider('PictProvider', _BasicConfigurationProvider, 'ExampleProvider');
+
+						return fDone();
+					}
+				);
+				test
+				(
+					'Singleton providers should only instantiate once..',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+
+						let tmpEnvironment = new libPict.EnvironmentLog(testPict, {});
+
+                        let tmpProvider = testPict.addProviderSingleton('MockPictProvider', {}, MockPictProvider);
+
+						Expect(tmpProvider).to.be.an('object');
+
+                        let tmpProvider2 = testPict.addProviderSingleton('MockPictProvider', {}, MockPictProvider);
+
+						Expect(tmpProvider2.Hash).to.equal(tmpProvider.Hash);
+
+						Expect(Object.keys(testPict.providers).length).to.equal(1);
 
 						return fDone();
 					}

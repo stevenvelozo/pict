@@ -79,6 +79,22 @@ declare class Pict {
      */
     addView(pViewHash: string, pOptions?: any, pViewPrototype?: any): any;
     /**
+     * Add a provider unless one already exists, then return that one.
+     *
+     * Just passing an options will construct one for us.
+     * Passing a hash will set the hash.
+     * Passing a prototype will use that!
+     *
+     * @param {String} pProviderHash - The hash of the provider.
+     * @param {Object<String, any>} [pOptions] - The options for the provider.
+     * @param {any} [pProviderPrototype] - The prototype for the provider.
+     *
+     * FIXME: refer to PictProvider here once it has a type definition
+     *
+     * @return {any} The provider instance.
+     */
+    addProviderSingleton(pProviderHash: string, pOptions?: any, pProviderPrototype?: any): any;
+    /**
      * Just passing an options will construct one for us.
      * Passing a hash will set the hash.
      * Passing a prototype will use that!

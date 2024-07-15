@@ -203,6 +203,30 @@ class Pict extends libFable
 	}
 
 	/**
+	 * Add a provider unless one already exists, then return that one.
+	 * 
+	 * Just passing an options will construct one for us.
+	 * Passing a hash will set the hash.
+	 * Passing a prototype will use that!
+	 *
+	 * @param {String} pProviderHash - The hash of the provider.
+	 * @param {Object<String, any>} [pOptions] - The options for the provider.
+	 * @param {any} [pProviderPrototype] - The prototype for the provider.
+	 *
+	 * FIXME: refer to PictProvider here once it has a type definition
+	 *
+	 * @return {any} The provider instance.
+	 */
+	addProviderSingleton(pProviderHash, pOptions, pProviderPrototype)
+	{
+		if (pProviderHash in this.providers)
+		{
+			return this.providers[pProviderHash];
+		}
+		return this.addProvider(pProviderHash, pOptions, pProviderPrototype);
+	}
+
+	/**
 	 * Just passing an options will construct one for us.
 	 * Passing a hash will set the hash.
 	 * Passing a prototype will use that!
