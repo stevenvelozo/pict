@@ -192,7 +192,7 @@ import PictDataProvider = require("./Pict-DataProvider.js");
 import PictContentAssignment = require("./Pict-Content-Assignment.js");
 import PictCSS = require("./Pict-CSS.js");
 declare const PictApplicationClass: any;
-declare const PictViewClass: any;
+declare const PictViewClass: typeof import("pict-view");
 declare const PictProviderClass: any;
 declare const EnvironmentLog: typeof import("./environments/Pict-Environment-Log.js");
 declare const EnvironmentObject: typeof import("./environments/Pict-Environment-Object.js");
