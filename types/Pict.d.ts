@@ -59,11 +59,11 @@ declare class Pict {
     /**
      * Add a template expression to the template engine from the PictTemplate service.
      *
-     * @param {typeof PictTemplateExpression} pTemplatePrototype - The prototype class for the template expression
+     * @param {typeof any} pTemplatePrototype - The prototype class for the template expression
      *
-     * @return {PictTemplateExpression} the service instance, or null if the prototype was invalid
+     * @return {any} the service instance, or null if the prototype was invalid
      */
-    addTemplate(pTemplatePrototype: typeof PictTemplateExpression): PictTemplateExpression;
+    addTemplate(pTemplatePrototype: typeof any): any;
     /**
      * Just passing an options will construct one for us.
      * Passing a hash will set the hash.
