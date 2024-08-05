@@ -31,7 +31,7 @@ declare class PictEnvironmentObject {
      * @param {Map<String, any>} pContentMap - The content map to use for custom reads.
      */
     constructor(pPict: import("../Pict"), pContentMap: Map<string, any>);
-    contentMap: any;
+    contentMap: {};
     pict: import("../Pict");
     truncateContentLength: number;
     storeEventLog: boolean;

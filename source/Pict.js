@@ -9,8 +9,6 @@ const PictDataProvider = require('./Pict-DataProvider.js');
 const PictCSS = require('./Pict-CSS.js');
 const PictMeadowEntityProvider = require('./Pict-Meadow-EntityProvider.js');
 
-const PictTemplate = require('pict-template');
-
 /**
  * Pict management object.
  */
@@ -69,7 +67,7 @@ class Pict extends libFable
 		this.CSSMap = null;
 		this.addAndInstantiateServiceType('CSSMap', PictCSS);
 
-		this.addServiceType('PictTemplate', PictTemplate);
+		this.addServiceType('PictTemplate', require('pict-template'));
 		this.instantiateServiceProvider('MetaTemplate');
 		this.instantiateServiceProvider('DataGeneration');
 
@@ -135,9 +133,9 @@ class Pict extends libFable
 	/**
 	 * Add a template expression to the template engine from the PictTemplate service.
 	 *
-	 * @param {typeof PictTemplate} pTemplatePrototype - The prototype class for the template expression
+	 * @param {typeof PictTemplateExpression} pTemplatePrototype - The prototype class for the template expression
 	 *
-	 * @return {PictTemplate} the service instance, or null if the prototype was invalid
+	 * @return {PictTemplateExpression} the service instance, or null if the prototype was invalid
 	 */
 	addTemplate(pTemplatePrototype)
 	{
@@ -575,7 +573,7 @@ module.exports.PictApplicationClass = require('pict-application');
 
 module.exports.PictViewClass = require('pict-view');
 module.exports.PictProviderClass = require('pict-provider');
-module.exports.PictTemplateClass = PictTemplate;
+module.exports.PictTemplateClass = require('pict-template');
 
 module.exports.EnvironmentLog = require('./environments/Pict-Environment-Log.js');
 module.exports.EnvironmentObject = require('./environments/Pict-Environment-Object.js');

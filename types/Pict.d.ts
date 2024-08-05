@@ -59,11 +59,11 @@ declare class Pict {
     /**
      * Add a template expression to the template engine from the PictTemplate service.
      *
-     * @param {typeof PictTemplate} pTemplatePrototype - The prototype class for the template expression
+     * @param {typeof PictTemplateExpression} pTemplatePrototype - The prototype class for the template expression
      *
-     * @return {PictTemplate} the service instance, or null if the prototype was invalid
+     * @return {PictTemplateExpression} the service instance, or null if the prototype was invalid
      */
-    addTemplate(pTemplatePrototype: typeof PictTemplate): PictTemplate;
+    addTemplate(pTemplatePrototype: typeof PictTemplateExpression): PictTemplateExpression;
     /**
      * Just passing an options will construct one for us.
      * Passing a hash will set the hash.
@@ -184,7 +184,7 @@ declare class Pict {
     parseTemplateSetByHash(pTemplateHash: string, pDataSet: Array<any> | any, fCallback?: Function, pContextArray?: Array<any>): string | null;
 }
 declare namespace Pict {
-    export { PictApplicationClass, PictViewClass, PictProviderClass, PictTemplate as PictTemplateClass, EnvironmentLog, EnvironmentObject, isBrowser, safeOnDocumentReady, safeLoadPictApplication };
+    export { PictApplicationClass, PictViewClass, PictProviderClass, PictTemplateClass, EnvironmentLog, EnvironmentObject, isBrowser, safeOnDocumentReady, safeLoadPictApplication };
 }
 import PictTemplateProvider = require("./Pict-Template-Provider.js");
 import PictMeadowEntityProvider = require("./Pict-Meadow-EntityProvider.js");
@@ -194,6 +194,7 @@ import PictCSS = require("./Pict-CSS.js");
 declare const PictApplicationClass: any;
 declare const PictViewClass: typeof import("pict-view");
 declare const PictProviderClass: any;
+declare const PictTemplateClass: any;
 declare const EnvironmentLog: typeof import("./environments/Pict-Environment-Log.js");
 declare const EnvironmentObject: typeof import("./environments/Pict-Environment-Object.js");
 declare const isBrowser: Function;
