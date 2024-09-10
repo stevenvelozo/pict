@@ -71,6 +71,17 @@ suite
 									let tmpTemplateOutput5 = testPict.parseTemplate(`<div>{~TemplateIfAbsolute:ChocoTemplate:AppData.ChocoData:AppData.ChocoData.files[0].size^<^839~}</div>`);
 									Expect(tmpTemplateOutput5).to.equal("<div><p>/7/items/FrankenberryCountChoculaTevevisionCommercial1971</p></div>");
 
+									// Construct the bridge list scenario
+									testPict.AppData.currentBridgeList = [];
+									testPict.TemplateProvider.addTemplate('BridgeInspection-Bridge-EmptyMessage', '<p>There are no bridges to inspect.</p>');
+									// This number equality should render
+									let tmpTemplateOutput_No_Bridges = testPict.parseTemplate(`{~TIfAbs:BridgeInspection-Bridge-EmptyMessage:AppData:AppData.currentBridgeList.length^==^0~}`);
+									Expect(tmpTemplateOutput_No_Bridges).to.equal("<p>There are no bridges to inspect.</p>");
+									// Add some bridges to the list
+									testPict.AppData.currentBridgeList = [1, 2, 3];
+									let tmpTemplateOutput_With_Bridges = testPict.parseTemplate(`{~TIfAbs:BridgeInspection-Bridge-EmptyMessage:AppData:AppData.currentBridgeList.length^==^0~}`);
+									Expect(tmpTemplateOutput_With_Bridges).to.equal("");
+
 									// This number equality should render the template (the numeric value is == 838)
 									let tmpTemplateOutput6 = testPict.parseTemplate(`<div>{~TIfAbs:ChocoTemplate:AppData.ChocoData:AppData.ChocoData.files[0].size^<^838~}</div>`, {},
 										(pError, pOutput) =>
