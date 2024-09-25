@@ -47,6 +47,15 @@ suite
 					{
 						var testPict = new libPict(_MockSettings);
 						Expect(testPict).to.be.an('object', 'Pict should initialize as an object directly from the require statement.');
+
+						// Test package anthropology
+						Expect(testPict._PackageFableServiceProvider).to.be.an('object', 'Fable should have a _PackageFableServiceProvider object.');
+						Expect(testPict._PackageFableServiceProvider.name).equal('fable-serviceproviderbase', 'Fable _PackageFableServiceProvider.package.name should be set.');
+						Expect(testPict._PackageFable).to.be.an('object', 'Pict should have a _PackageFable object.');
+						Expect(testPict._PackageFable.name).to.equal('fable', 'Pict _PackageFable.package.name should be set.');
+						Expect(testPict._Package).to.be.an('object', 'Pict should have a _Package object.');
+						Expect(testPict._Package.name).to.equal('pict', 'Pict _Package.package.name should be set.');
+
 						fDone();
 					}
 				);

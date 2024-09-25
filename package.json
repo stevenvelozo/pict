@@ -1,6 +1,6 @@
 {
     "name": "pict",
-    "version": "1.0.215",
+    "version": "1.0.216",
     "description": "Pict browser library.",
     "main": "source/Pict.js",
     "scripts": {
@@ -45,18 +45,18 @@
     },
     "homepage": "https://github.com/stevenvelozo/pict#readme",
     "devDependencies": {
-        "@eslint/js": "^9.9.0",
-        "eslint": "^9.9.0",
+        "@eslint/js": "^9.11.1",
+        "eslint": "^9.11.1",
         "globals": "^15.9.0",
         "quackage": "^1.0.33"
     },
     "dependencies": {
         "cachetrax": "^1.0.4",
-        "fable": "^3.0.143",
-        "pict-application": "^1.0.20",
-        "pict-provider": "^1.0.2",
-        "pict-template": "^1.0.6",
-        "pict-view": "^1.0.53",
-        "typescript": "^5.5.4"
+        "fable": "^3.0.145",
+        "pict-application": "^1.0.22",
+        "pict-provider": "^1.0.3",
+        "pict-template": "^1.0.7",
+        "pict-view": "^1.0.54",
+        "typescript": "^5.6.2"
     }
 }

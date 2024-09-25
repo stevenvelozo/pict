@@ -8,6 +8,9 @@ declare class Pict {
      */
     constructor(pSettings: any);
     isBrowser: Function;
+    /** @type {Object} */
+    _PackageFable: any;
+    _Package: any;
     browserAddress: any;
     children: any[];
     /**

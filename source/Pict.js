@@ -3,6 +3,8 @@
 */
 const libFable = require('fable');
 
+const libPackage = require('../package.json');
+
 const PictTemplateProvider = require('./Pict-Template-Provider.js');
 const PictContentAssignment = require('./Pict-Content-Assignment.js');
 const PictDataProvider = require('./Pict-DataProvider.js');
@@ -22,6 +24,10 @@ class Pict extends libFable
 		super(pSettings);
 
 		this.isBrowser = new Function("try {return (this===window);} catch(pError) {return false;}");
+
+		/** @type {Object} */
+		this._PackageFable = this._Package;
+		this._Package = libPackage;
 
 		this.browserAddress = 'window._Pict';
 		if ('BrowserAddress' in this.settings)
