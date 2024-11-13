@@ -178,6 +178,7 @@ class Pict extends libFable
 	{
 		let tmpOptions = (typeof(pOptions) == 'object') ? pOptions : {};
 		let tmpViewHash = (typeof(pViewHash) == 'string') ? pViewHash : this.fable.getUUID();
+		let tmpViewPrototype = (typeof(pViewPrototype) == 'object') ? pViewPrototype : undefined;
 
 		if (this.LogControlFlow)
 		{
@@ -191,14 +192,14 @@ class Pict extends libFable
 			}
 		}
 
-		if (typeof(pViewPrototype) != 'undefined')
+		if (typeof(tmpViewPrototype) != 'undefined')
 		{
 			// If the prototype has a default_configuration, it will be merged with options.
-			if ('default_configuration' in pViewPrototype)
+			if ('default_configuration' in tmpViewPrototype)
 			{
-				tmpOptions = this.fable.Utility.extend({}, JSON.parse(JSON.stringify(pViewPrototype.default_configuration)), tmpOptions);
+				tmpOptions = this.fable.Utility.extend({}, JSON.parse(JSON.stringify(tmpViewPrototype.default_configuration)), tmpOptions);
 			}
-			return this.instantiateServiceProviderFromPrototype('PictView', tmpOptions, tmpViewHash, pViewPrototype);
+			return this.instantiateServiceProviderFromPrototype('PictView', tmpOptions, tmpViewHash, tmpViewPrototype);
 		}
 		else
 		{
