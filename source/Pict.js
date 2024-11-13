@@ -178,7 +178,7 @@ class Pict extends libFable
 	{
 		let tmpOptions = (typeof(pOptions) == 'object') ? pOptions : {};
 		let tmpViewHash = (typeof(pViewHash) == 'string') ? pViewHash : this.fable.getUUID();
-		let tmpViewPrototype = (typeof(pViewPrototype) == 'object') ? pViewPrototype : undefined;
+		let tmpViewPrototype = (typeof(pViewPrototype) == 'function') ? pViewPrototype : undefined;
 
 		if (this.LogControlFlow)
 		{
