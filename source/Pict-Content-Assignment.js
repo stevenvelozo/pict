@@ -290,7 +290,7 @@ class PictContentAssignment extends libFableServiceBase
 			case 'append_once':
 				// Try to find the content in either the test address or the destination address
 				let tmpTestAddress = (typeof(pTestAddress) == 'string') ? pTestAddress : pDestinationAddress;
-				let tmpExistingContent = this.getElement(`#${tmpTestAddress}`);
+				let tmpExistingContent = this.getElement(tmpTestAddress);
 				if (tmpExistingContent.length < 1)
 				{
 					return this.appendContent(pRenderDestinationAddress, pContent);

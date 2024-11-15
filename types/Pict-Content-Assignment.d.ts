@@ -83,6 +83,20 @@ declare class PictContentAssignment {
      */
     prependContent(pAddress: string, pContent: string): any;
     /**
+     * Project content into a destination address based on a render method -- as the views do.
+     * Valid render methods are:
+     * - append: Append the content to the destination address.
+     * - prepend: Prepend the content to the destination address.
+     * - append_once: Append the content to the destination address only if it doesn't already exist in the test address.
+     * - replace: Replace the content of the destination address with the new content.
+     * @param {string} pRenderMethod
+     * @param {string} pDestinationAddress
+     * @param {string} pContent
+     * @param {string} pTestAddress
+     * @returns Result of the content assignment.
+     */
+    projectContent(pRenderMethod: string, pDestinationAddress: string, pContent: string, pTestAddress: string): any;
+    /**
      * Read content from an element.
      *
      * @param {string} pAddress - The address of the element. (a CSS selector)
