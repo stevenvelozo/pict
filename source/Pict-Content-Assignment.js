@@ -266,6 +266,44 @@ class PictContentAssignment extends libFableServiceBase
 	}
 
 	/**
+	 * Project content into a destination address based on a render method -- as the views do.
+	 * Valid render methods are:
+	 * - append: Append the content to the destination address.
+	 * - prepend: Prepend the content to the destination address.
+	 * - append_once: Append the content to the destination address only if it doesn't already exist in the test address.
+	 * - replace: Replace the content of the destination address with the new content.
+	 * @param {string} pRenderMethod 
+	 * @param {string} pDestinationAddress 
+	 * @param {string} pContent 
+	 * @param {string} pTestAddress 
+	 * @returns Result of the content assignment.
+	 */
+	projectContent(pRenderMethod, pDestinationAddress, pContent, pTestAddress)
+	{
+		// Assign the content to the destination address
+		switch(pRenderMethod)
+		{
+			case 'append':
+				return this.appendContent(pDestinationAddress, pContent);
+			case 'prepend':
+				return this.prependContent(pDestinationAddress, pContent);
+			case 'append_once':
+				// Try to find the content in either the test address or the destination address
+				let tmpTestAddress = (typeof(pTestAddress) == 'string') ? pTestAddress : pDestinationAddress;
+				let tmpExistingContent = this.getElement(`#${tmpTestAddress}`);
+				if (tmpExistingContent.length < 1)
+				{
+					return this.appendContent(pRenderDestinationAddress, pContent);
+				}
+				break;
+			case 'replace':
+				// TODO: Should this be the default?
+			default:
+				return this.assignContent(pDestinationAddress, pContent);
+		}
+	}
+
+	/**
 	 * Read content from an element.
 	 *
 	 * @param {string} pAddress - The address of the element. (a CSS selector)
