@@ -293,7 +293,7 @@ class PictContentAssignment extends libFableServiceBase
 				let tmpExistingContent = this.getElement(tmpTestAddress);
 				if (tmpExistingContent.length < 1)
 				{
-					return this.appendContent(pRenderDestinationAddress, pContent);
+					return this.appendContent(pDestinationAddress, pContent);
 				}
 				break;
 			case 'replace':
