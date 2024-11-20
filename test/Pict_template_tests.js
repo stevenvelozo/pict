@@ -68,6 +68,18 @@ suite
 							);
 						test
 							(
+								'Plucked Template Value Sets work as expected.',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+									testPict.AppData.ChocoData = _SampleChocoData;
+									let tmpTemplateOutput = testPict.parseTemplate('<p>{~PJU:,^source^AppData.ChocoData.files~}</p>');
+									Expect(tmpTemplateOutput).to.equal("<p>derivative,metadata,original</p>");
+									fDone();
+								}
+							);
+						test
+							(
 								'Value trees can log with specified depth.',
 								function (fDone)
 								{

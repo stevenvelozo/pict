@@ -139,7 +139,7 @@ class Pict extends libFable
 	/**
 	 * Add a template expression to the template engine from the PictTemplate service.
 	 *
-	 * @template [T = any]
+	 * @template [T extends PictTemplateProvider]
 	 * @param {InstanceType<T>} pTemplatePrototype - The prototype class for the template expression
 	 *
 	 * @return {any} the service instance, or null if the prototype was invalid
@@ -377,6 +377,7 @@ class Pict extends libFable
 
 			this.addTemplate(require(`./templates/data/Pict-Template-Join.js`));
 			this.addTemplate(require(`./templates/data/Pict-Template-JoinUnique.js`));
+			this.addTemplate(require(`./templates/data/Pict-Template-PluckJoinUnique.js`));
 
 			// Data Generation Templates
 			this.addTemplate(require(`./templates/data-generation/Pict-Template-RandomNumber.js`));
