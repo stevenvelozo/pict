@@ -4,8 +4,8 @@
 /**
  * Simple function to load a pict Application
  *
- * @param {import('pict-application')} pPictApplication - The pict application to load.
- * @param {number} pLogNoisiness - The log noisiness level.
+ * @param {import('pict-application')} [pPictApplication] - The pict application to load.
+ * @param {number} [pLogNoisiness] - The log noisiness level.
  */
 module.exports = function (pPictApplication, pLogNoisiness)
 {

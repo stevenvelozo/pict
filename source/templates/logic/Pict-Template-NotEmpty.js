@@ -11,6 +11,9 @@ class PictTemplateProviderNotEmpty extends libPictTemplate
 	{
 		super(pFable, pOptions, pServiceHash);
 
+		/** @type {any} */
+		this.log;
+
 		this.addPattern('{~NotEmpty:', '~}');
 		this.addPattern('{~NE:', '~}');
 	}

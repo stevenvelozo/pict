@@ -11,6 +11,9 @@ class PictTemplateProviderDataValueTree extends libPictTemplate
 	{
 		super(pFable, pOptions, pServiceHash);
 
+		/** @type {any} */
+		this.log;
+
 		this.addPattern('{~DataTree:', '~}');
 		this.addPattern('{~DT:', '~}');
 	}
@@ -102,8 +105,8 @@ class PictTemplateProviderDataValueTree extends libPictTemplate
 
 			let tmpDataValue =
 			{
-				AppData: this.AppData,
-				Bundle: this.Bundle,
+				AppData: this.pict.AppData,
+				Bundle: this.pict.Bundle,
 
 				RootContainer: pRootObject,
 

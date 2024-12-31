@@ -11,6 +11,13 @@ class PictTemplateProvider extends libFableServiceBase
 	{
 		super(pFable, pOptions, pServiceHash);
 
+		/** @type {any} */
+		this.log;
+		/** @type {string} */
+		this.UUID;
+		/** @type {string} */
+		this.Hash;
+
 		this.serviceType = 'PictTemplateProvider';
 
 		this.templates = {};
@@ -22,9 +29,9 @@ class PictTemplateProvider extends libFableServiceBase
 		this.defaultTemplates = [];
 
 		/**
-		 * @property {Function} loadTemplateFunction - The function to load a template
+		 * @type {(hash?: string) => { template: string, source: string }?} loadTemplateFunction - The function to load a template
 		 */
-		this.loadTemplateFunction = () => { return false; };
+		this.loadTemplateFunction = () => { return null; };
 	}
 
 	/**
@@ -99,7 +106,7 @@ class PictTemplateProvider extends libFableServiceBase
 				return this.templates[pTemplateHash];
 			}
 		}
-		return false;
+		return null;
 	}
 
 	/**
@@ -125,10 +132,7 @@ class PictTemplateProvider extends libFableServiceBase
 		{
 			return this.templates[pTemplateHash];
 		}
-		else
-		{
-			return false;
-		}
+		return null;
 	}
 
 	/**

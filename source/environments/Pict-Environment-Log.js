@@ -28,7 +28,7 @@ class PictEnvironmentLog
 	 */
 	/**
 	 * @param {Pict} pPict - The pict object to attach the custom read/write functions to.
-	 * @param {Map<String, any>} pContentMap - The content map to use for custom reads.
+	 * @param {Object<String, any>} pContentMap - The content map to use for custom reads.
 	 */
 	constructor(pPict, pContentMap)
 	{
@@ -61,7 +61,7 @@ class PictEnvironmentLog
 	 * Create an event log entry.
 	 *
 	 * @param {string} pAddress - The address of the event.
-	 * @param {string} pContent - The content of the event.
+	 * @param {string} [pContent] - The content of the event.
 	 */
 	createEventLogEntry(pAddress, pContent)
 	{

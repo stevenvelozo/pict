@@ -11,6 +11,9 @@ class PictTemplateProviderLogStatement extends libPictTemplate
 	{
 		super(pFable, pOptions, pServiceHash);
 
+		/** @type {any} */
+		this.log;
+
 		this.addPattern('{~LogStatement:', '~}');
 		this.addPattern('{~LS:', '~}');
 	}

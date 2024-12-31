@@ -11,6 +11,11 @@ class PictTemplateProviderJoin extends libPictTemplate
 	{
 		super(pFable, pOptions, pServiceHash);
 
+		/** @type {any} */
+		this.options;
+		/** @type {any} */
+		this.log;
+
 		this.addPattern('{~Join:', '~}');
 		this.addPattern('{~J:', '~}');
 	}

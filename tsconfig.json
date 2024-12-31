@@ -1,12 +1,14 @@
 {
-	"include": ["source/**/*.js"],
+	"include": ["source"],
 	"compilerOptions":
 	{
-		"lib": ["es2015"],
+		"lib": ["es5", "es6", "dom"],
 		"allowJs": true,
+		"checkJs": true,
 		"declaration": true,
 		"emitDeclarationOnly": true,
-		"outDir": "dist",
-		"declarationMap": true
+		"outDir": "types",
+		"declarationMap": true,
+		"resolveJsonModule": true
 	}
 }

@@ -6,6 +6,11 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	{
 		super(pFable, pOptions, pServiceHash);
 
+		/** @type {any} */
+		this.options;
+		/** @type {import('pict') & { settings: any }} */
+		this.fable;
+
 		this.serviceType = 'PictMeadowProvider';
 
 		if (this.fable.settings.PictDefaultURLPrefix)
@@ -26,6 +31,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			this.options.downloadBatchSize = 100;
 		}
 
+		//@ts-ignore - FIXME - remove once we have fable types
 		this.restClient = this.fable.instantiateServiceProviderWithoutRegistration('RestClient');
 
 		this.cache = {};
@@ -38,6 +44,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		// This should not be happening as often as it's happening.
 		if (!(pEntity in this.cache))
 		{
+			//@ts-ignore - FIXME - remove once we have fable types
 			this.cache[pEntity] = this.fable.instantiateServiceProviderWithoutRegistration('ObjectCache');
 			// TODO: Make this a configuration?
 			// For now cache for 30 seconds.

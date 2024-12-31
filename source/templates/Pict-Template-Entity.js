@@ -11,6 +11,9 @@ class PictTemplateProviderEntity extends libPictTemplate
 	{
 		super(pFable, pOptions, pServiceHash);
 
+		/** @type {any} */
+		this.log;
+
 		this.addPattern('{~E:', '~}');
 		this.addPattern('{~Entity:', '~}');
 	}
@@ -38,7 +41,8 @@ class PictTemplateProviderEntity extends libPictTemplate
 		}
 
 		let tmpEntity = false;
-		let tmpEntityID = false;
+		/** @type {string|number} */
+		let tmpEntityID = '';
 		let tmpEntityTemplate = false;
 
 		// This expression requires 2 parts -- a third is optional, and, if present, is the template to render to.
@@ -54,11 +58,11 @@ class PictTemplateProviderEntity extends libPictTemplate
 		tmpEntityID = tmpAddressParts[1].trim();
 		tmpEntityTemplate = tmpAddressParts[2].trim();
 
-		if (!isNaN(tmpEntityID))
+		if (!isNaN(Number(tmpEntityID)))
 		{
 			try
 			{
-				tmpEntityID = parseInt(tmpEntityID);
+				tmpEntityID = parseInt(String(tmpEntityID));
 			}
 			catch
 			{
@@ -69,7 +73,7 @@ class PictTemplateProviderEntity extends libPictTemplate
 		else
 		{
 			// This is an address, so we need to get the value at the address
-			tmpEntityID = this.resolveStateFromAddress(tmpEntityID, tmpData, pContextArray);
+			tmpEntityID = this.resolveStateFromAddress(String(tmpEntityID), tmpData, pContextArray);
 		}
 
 		// No Entity or EntityID

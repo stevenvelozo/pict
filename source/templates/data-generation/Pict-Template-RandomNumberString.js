@@ -11,6 +11,9 @@ class PictTemplateProviderRandomNumberString extends libPictTemplate
 	{
 		super(pFable, pOptions, pServiceHash);
 
+		/** @type {any} */
+		this.log;
+
 		this.addPattern('{~RandomNumberString:', '~}');
 		this.addPattern('{~RNS:', '~}');
 	}

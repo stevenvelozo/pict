@@ -1,3 +1,4 @@
+
 const libFableServiceBase = require('fable').ServiceProviderBase;
 
 const defaultConfiguration = (
@@ -12,6 +13,11 @@ class PictCSS extends libFableServiceBase
 	constructor(pFable, pOptions, pServiceHash)
 	{
 		super(pFable, pOptions, pServiceHash);
+
+		/** @type {any} */
+		this.options;
+		/** @type {{ ContentAssignment: import('./Pict-Content-Assignment') }} */
+		this.services;
 
 		// No merging of options necessary
 		if (typeof(this.options.CSSElementAddress) === 'undefined')

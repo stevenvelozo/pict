@@ -11,6 +11,9 @@ class PictTemplateProviderDollars extends libPictTemplate
 	{
 		super(pFable, pOptions, pServiceHash);
 
+		/** @type {any} */
+		this.log;
+
 		this.addPattern('{~DataJson:', '~}');
 		this.addPattern('{~DJ:', '~}');
 	}

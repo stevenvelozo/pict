@@ -11,6 +11,9 @@ class PictTemplateProviderTemplateValueSet extends libPictTemplate
 	{
 		super(pFable, pOptions, pServiceHash);
 
+		/** @type {any} */
+		this.log;
+
 		this.addPattern('{~TemplateValueSet:', '~}');
 		this.addPattern('{~TVS:', '~}');
 	}
@@ -29,8 +32,8 @@ class PictTemplateProviderTemplateValueSet extends libPictTemplate
 			this.log.trace(`PICT Template [fTemplateValueSetRender]::[${tmpHash}]`);
 		}
 
-		let tmpTemplateHash = false;
-		let tmpAddressOfData = false;
+		let tmpTemplateHash;
+		let tmpAddressOfData;
 
 		// This is just a simple 2 part hash (the entity and the ID)
 		let tmpHashTemplateSeparator = tmpHash.indexOf(':');
@@ -100,8 +103,8 @@ class PictTemplateProviderTemplateValueSet extends libPictTemplate
 			this.log.trace(`PICT Template [fTemplateValueSetRenderAsync]::[${tmpHash}]`);
 		}
 
-		let tmpTemplateFromMapHash = false;
-		let tmpAddressOfData = false;
+		let tmpTemplateFromMapHash;
+		let tmpAddressOfData;
 
 		// This is a 3 part hash with the map address and the key address both
 		let tmpTemplateHashPart = tmpHash.split(':');

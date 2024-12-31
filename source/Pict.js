@@ -1,6 +1,27 @@
 /**
 * @author <steven@velozo.com>
 */
+
+/**
+ * @typedef {{
+ *    UUID: string,
+ *    settings: any,
+ *    fable: Fable,
+ *    servicesMap: any,
+ *    addAndInstantiateServiceType: (hash: string, prototype: any) => any,
+ *    addServiceType: (hash: string, prototype: any) => any,
+ *    instantiateServiceProvider: (hash: string, options?: any, prototype?: any) => any,
+ *    instantiateServiceProviderFromPrototype: (pServiceType: string, pOptions?: any, pCustomServiceHash?: string, pServicePrototype?: any) => any,
+ *    getUUID: () => string,
+ *    Utility:
+ *    {
+ *	      extend: (pObject: any, ...pExtension: any[]) => any,
+ *	      eachLimit: (pArray: any[], pLimit: number, pIterator: (pRecord: any, fRecordCallback: () => void) => void, fCallback: (pError: any) => void) => void,
+ *    },
+ *    MetaTemplate: any,
+ * }} Fable
+ */
+/** @type {{ new(...args: any[]): Fable }} */
 const libFable = require('fable');
 
 const libPackage = require('../package.json');
@@ -23,6 +44,9 @@ class Pict extends libFable
 	{
 		super(pSettings);
 
+		/** @type {any} */
+		this.settings;
+
 		this.isBrowser = new Function("try {return (this===window);} catch(pError) {return false;}");
 
 		/** @type {Object} */
@@ -36,6 +60,11 @@ class Pict extends libFable
 		}
 		this.children = [];
 
+		/** @type {import('pict-application')} */
+		this.PictApplication = null;
+		// shim types from fable until we export types properly
+		/** @type {any} */
+		this.log;
 		/**
 		 * The templateProvider provides a basic key->template mapping with default fallback capabilities
 		 *
@@ -139,10 +168,10 @@ class Pict extends libFable
 	/**
 	 * Add a template expression to the template engine from the PictTemplate service.
 	 *
-	 * @template [T extends PictTemplateProvider]
-	 * @param {InstanceType<T>} pTemplatePrototype - The prototype class for the template expression
+	 * @template {new (...args: any[]) => any} T
+	 * @param {T} pTemplatePrototype - The prototype class for the template expression
 	 *
-	 * @return {any} the service instance, or null if the prototype was invalid
+	 * @return {InstanceType<T>} the service instance, or null if the prototype was invalid
 	 */
 	addTemplate(pTemplatePrototype)
 	{
@@ -152,7 +181,7 @@ class Pict extends libFable
 			return null;
 		}
 
-		let tmpTemplateHash = pTemplatePrototype.template_hash;
+		let tmpTemplateHash = pTemplatePrototype['template_hash'];
 
 		if (this.LogNoisiness > 1)
 		{
@@ -167,13 +196,12 @@ class Pict extends libFable
 	 * Passing a hash will set the hash.
 	 * Passing a prototype will use that!
 	 *
+	 * @template {new (...args: any[]) => any} [T=typeof import('pict-view')]
 	 * @param {String} pViewHash - The hash of the view.
 	 * @param {Object<String, any>} [pOptions] - The options for the view.
-	 * @param {any} [pViewPrototype] - The prototype for the view.
+	 * @param {T} [pViewPrototype] - The prototype for the view.
 	 *
-	 * FIXME: refer to PictView here once it has a type definition
-	 *
-	 * @return {any} The view instance.
+	 * @return {InstanceType<T>} The view instance.
 	 */
 	addView(pViewHash, pOptions, pViewPrototype)
 	{
@@ -194,12 +222,13 @@ class Pict extends libFable
 			}
 		}
 
-		if (typeof(tmpViewPrototype) != 'undefined')
+		if (tmpViewPrototype)
 		{
 			// If the prototype has a default_configuration, it will be merged with options.
-			if ('default_configuration' in tmpViewPrototype)
+			const tmpDefaultViewConfiguration = tmpViewPrototype['default_configuration'];
+			if (tmpDefaultViewConfiguration)
 			{
-				tmpOptions = this.fable.Utility.extend({}, JSON.parse(JSON.stringify(tmpViewPrototype.default_configuration)), tmpOptions);
+				tmpOptions = this.fable.Utility.extend({}, JSON.parse(JSON.stringify(tmpDefaultViewConfiguration)), tmpOptions);
 			}
 			return this.instantiateServiceProviderFromPrototype('PictView', tmpOptions, tmpViewHash, tmpViewPrototype);
 		}
@@ -211,7 +240,7 @@ class Pict extends libFable
 
 	/**
 	 * Add a provider unless one already exists, then return that one.
-	 * 
+	 *
 	 * Just passing an options will construct one for us.
 	 * Passing a hash will set the hash.
 	 * Passing a prototype will use that!

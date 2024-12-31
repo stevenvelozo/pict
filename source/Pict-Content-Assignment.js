@@ -6,13 +6,16 @@ const libFableServiceBase = require('fable').ServiceProviderBase;
 class PictContentAssignment extends libFableServiceBase
 {
 	/**
-	 * @param {object} pFable - The Fable library instance.
-	 * @param {object} pOptions - The options for the service.
-	 * @param {object} pServiceHash - The hash of services.
+	 * @param {import('fable')} pFable - The Fable library instance.
+	 * @param {any} [pOptions] - The options for the service.
+	 * @param {string} [pServiceHash] - The hash of services.
 	 */
 	constructor(pFable, pOptions, pServiceHash)
 	{
 		super(pFable, pOptions, pServiceHash);
+
+		/** @type {any} */
+		this.log;
 
 		this.serviceType = 'PictContentAssignment';
 
@@ -44,7 +47,7 @@ class PictContentAssignment extends libFableServiceBase
 		 * @param {string} pAddress - The address of the element. (a CSS selector)
 		 * @param {string} pContent - The content to set.
 		 */
-		this.customAssignFunction = false;
+		this.customAssignFunction = null;
 		/**
 		 * Set this to override the default mechanism for prepend content to a DOM element.
 		 *
@@ -52,7 +55,7 @@ class PictContentAssignment extends libFableServiceBase
 		 * @param {string} pAddress - The address of the element. (a CSS selector)
 		 * @param {string} pContent - The content to prepend.
 		 */
-		this.customPrependFunction = false;
+		this.customPrependFunction = null;
 		/**
 		 * Set this to override the default mechanism for appending content to a DOM element.
 		 *
@@ -60,7 +63,7 @@ class PictContentAssignment extends libFableServiceBase
 		 * @param {string} pAddress - The address of the element. (a CSS selector)
 		 * @param {string} pContent - The content to append.
 		 */
-		this.customAppendFunction = false;
+		this.customAppendFunction = null;
 
 		/**
 		 * Set this to override the default mechanism for reading content from the DOM.
@@ -69,7 +72,7 @@ class PictContentAssignment extends libFableServiceBase
 		 * @param {string} pAddress - The address of the element. (a CSS selector)
 		 * @return {string} - The content of the element.
 		 */
-		this.customReadFunction = false;
+		this.customReadFunction = null;
 		/**
 		 * Set this to override the default mechanism for getting elements.
 		 *
@@ -77,21 +80,21 @@ class PictContentAssignment extends libFableServiceBase
 		 * @param {string} pAddress - The address of the element.
 		 * @return {Array<any>} - The matched elements.
 		 */
-		this.customGetElementFunction = false;
+		this.customGetElementFunction = null;
 
 		// API Consumers can also craft their own attribute read function
-		this.customReadAttributeFunction = false;
+		this.customReadAttributeFunction = null;
 		// API Consumers can also craft their own attribute set function
-		this.customSetAttributeFunction = false;
+		this.customSetAttributeFunction = null;
 		// API Consumers can also craft their own attribute remove function
-		this.customRemoveAttributeFunction = false;
+		this.customRemoveAttributeFunction = null;
 
 		// API Consumers can also craft their own class read function
-		this.customReadClassFunction = false;
+		this.customReadClassFunction = null;
 		// API Consumers can also craft their own class set function
-		this.customSetClassFunction = false;
+		this.customSetClassFunction = null;
 		// API Consumers can also craft their own class remove function
-		this.customRemoveClassFunction = false;
+		this.customRemoveClassFunction = null;
 	}
 
 	/**
@@ -113,20 +116,24 @@ class PictContentAssignment extends libFableServiceBase
 			{
 				return [];
 			}
-			else
+			// TODO: This isn't the most efficient method, but it is the most compatible.
+			let tmpElementSet = [];
+			for (let i = 0; i < tmpElements.length; i++)
 			{
-				// TODO: This isn't the most efficient method, but it is the most compatible.
-				let tmpElementSet = [];
-				for (let i = 0; i < tmpElements.length; i++)
-				{
-					tmpElementSet.push(tmpElements[i]);
-				}
-				return tmpElementSet;
+				tmpElementSet.push(tmpElements[i]);
 			}
+			return tmpElementSet;
 		}
 		else if (this.inBrowser && this.hasDocument)
 		{
-			return window.document.querySelectorAll(pAddress);
+			// convert from NodeList to Array for consistent return type
+			const tmpElements = window.document.querySelectorAll(pAddress);
+			let tmpElementSet = [];
+			for (let i = 0; i < tmpElements.length; i++)
+			{
+				tmpElementSet.push(tmpElements[i]);
+			}
+			return tmpElementSet;
 		}
 		else
 		{
@@ -136,6 +143,11 @@ class PictContentAssignment extends libFableServiceBase
 		}
 	}
 
+	/**
+	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string|boolean} pContent - The content to assign.
+	 * @return {void}
+	 */
 	assignContent(pAddress, pContent)
 	{
 		if (this.customAssignFunction)
@@ -149,22 +161,30 @@ class PictContentAssignment extends libFableServiceBase
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
-				switch (tmpTargetElementSet[i].tagName)
+				const tmpElement = tmpTargetElementSet[i];
+				switch (tmpElement.tagName)
 				{
 					case 'INPUT':
-						if (tmpTargetElementSet[i].type == 'checkbox')
+						if (tmpElement instanceof HTMLInputElement && tmpElement.type == 'checkbox')
 						{
-							tmpTargetElementSet[i].checked = pContent;
+							tmpElement.checked = Boolean(pContent);
 						}
+						/* falls through */
 					case 'SELECT':
 					case 'TEXTAREA':
-						tmpTargetElementSet[i].value = pContent;
+						if (tmpElement instanceof HTMLInputElement || tmpElement instanceof HTMLSelectElement || tmpElement instanceof HTMLTextAreaElement)
+						{
+							tmpElement.value = String(pContent);
+						}
 						break;
 					case 'SCRIPT':
-						tmpTargetElementSet[i].text = pContent;
+						if (tmpElement instanceof HTMLScriptElement)
+						{
+							tmpElement.text = String(pContent);
+						}
 						break;
 					default:
-						tmpTargetElementSet[i].innerHTML = pContent;
+						tmpElement.innerHTML = String(pContent);
 				}
 			}
 		}
@@ -175,22 +195,30 @@ class PictContentAssignment extends libFableServiceBase
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
+				const tmpElement = tmpTargetElementSet[i];
 				switch (tmpTargetElementSet[i].tagName)
 				{
 					case 'INPUT':
-						if (tmpTargetElementSet[i].type == 'checkbox')
+						if (tmpElement instanceof HTMLInputElement && tmpElement.type == 'checkbox')
 						{
-							tmpTargetElementSet[i].checked = pContent;
+							tmpElement.checked = Boolean(pContent);
 						}
+						/* falls through */
 					case 'SELECT':
 					case 'TEXTAREA':
-						tmpTargetElementSet[i].value = pContent;
+						if (tmpElement instanceof HTMLInputElement || tmpElement instanceof HTMLSelectElement || tmpElement instanceof HTMLTextAreaElement)
+						{
+							tmpElement.value = String(pContent);
+						}
 						break;
 					case 'SCRIPT':
-						tmpTargetElementSet[i].text = pContent;
+						if (tmpElement instanceof HTMLScriptElement)
+						{
+							tmpElement.text = String(pContent);
+						}
 						break;
 					default:
-						tmpTargetElementSet[i].innerHTML = pContent;
+						tmpElement.innerHTML = String(pContent);
 				}
 			}
 		}
@@ -272,10 +300,10 @@ class PictContentAssignment extends libFableServiceBase
 	 * - prepend: Prepend the content to the destination address.
 	 * - append_once: Append the content to the destination address only if it doesn't already exist in the test address.
 	 * - replace: Replace the content of the destination address with the new content.
-	 * @param {string} pRenderMethod 
-	 * @param {string} pDestinationAddress 
-	 * @param {string} pContent 
-	 * @param {string} pTestAddress 
+	 * @param {string} pRenderMethod
+	 * @param {string} pDestinationAddress
+	 * @param {string} pContent
+	 * @param {string} pTestAddress
 	 * @returns Result of the content assignment.
 	 */
 	projectContent(pRenderMethod, pDestinationAddress, pContent, pTestAddress)
@@ -288,6 +316,7 @@ class PictContentAssignment extends libFableServiceBase
 			case 'prepend':
 				return this.prependContent(pDestinationAddress, pContent);
 			case 'append_once':
+			{
 				// Try to find the content in either the test address or the destination address
 				let tmpTestAddress = (typeof(pTestAddress) == 'string') ? pTestAddress : pDestinationAddress;
 				let tmpExistingContent = this.getElement(tmpTestAddress);
@@ -296,8 +325,10 @@ class PictContentAssignment extends libFableServiceBase
 					return this.appendContent(pDestinationAddress, pContent);
 				}
 				break;
+			}
 			case 'replace':
 				// TODO: Should this be the default?
+				/* falls through */
 			default:
 				return this.assignContent(pDestinationAddress, pContent);
 		}
@@ -308,7 +339,7 @@ class PictContentAssignment extends libFableServiceBase
 	 *
 	 * @param {string} pAddress - The address of the element. (a CSS selector)
 	 *
-	 * @return {string} - The content of the element.
+	 * @return {boolean|string|number|string[]} - The content of the element.
 	 */
 	readContent(pAddress)
 	{
@@ -326,6 +357,7 @@ class PictContentAssignment extends libFableServiceBase
 						{
 							return tmpTargetElement.prop('checked');
 						}
+						/* falls through */
 					case 'SELECT':
 					case 'TEXTAREA':
 						return tmpTargetElement.val();
@@ -344,20 +376,30 @@ class PictContentAssignment extends libFableServiceBase
 			}
 			else if (tmpTargetElementSet.length == 1)
 			{
-				switch (tmpTargetElementSet[0].tagName)
+				const tmpElement = tmpTargetElementSet[0];
+				switch (tmpElement.tagName)
 				{
 					case 'INPUT':
-						if (tmpTargetElementSet[0].type == 'checkbox')
+						if (tmpElement instanceof HTMLInputElement && tmpElement.type == 'checkbox')
 						{
-							return tmpTargetElementSet[0].checked;
+							return tmpElement.checked;
 						}
+						/* falls through */
 					case 'SELECT':
 					case 'TEXTAREA':
-						return tmpTargetElementSet[0].value;
+						if (tmpElement instanceof HTMLInputElement || tmpElement instanceof HTMLSelectElement || tmpElement instanceof HTMLTextAreaElement)
+						{
+							return tmpElement.value;
+						}
+						/* falls through */
 					case 'SCRIPT':
-						return tmpTargetElementSet[0].text;
+						if (tmpElement instanceof HTMLScriptElement)
+						{
+							return tmpElement.text;
+						}
+						/* falls through */
 					default:
-						return tmpTargetElementSet[0].innerHTML;
+						return tmpElement.innerHTML;
 				}
 			}
 		}
@@ -373,7 +415,7 @@ class PictContentAssignment extends libFableServiceBase
 	 * Add a class to an element.
 	 *
 	 * @param {string} pAddress - The address of the element. (a CSS selector)
-	 * @param {string} pClass - The class to add.
+	 * @param {string|string[]} pClass - The class to add.
 	 */
 	addClass(pAddress, pClass)
 	{
@@ -393,7 +435,17 @@ class PictContentAssignment extends libFableServiceBase
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
-				tmpTargetElementSet[i].classList.add(pClass);
+				if (Array.isArray(pClass))
+				{
+					for (const tmpClass of pClass)
+					{
+						tmpTargetElementSet[i].classList.add(tmpClass);
+					}
+				}
+				else
+				{
+					tmpTargetElementSet[i].classList.add(pClass);
+				}
 			}
 		}
 		else
@@ -406,7 +458,7 @@ class PictContentAssignment extends libFableServiceBase
 	 * Remove a class from an element.
 	 *
 	 * @param {string} pAddress - The address of the element. (a CSS selector)
-	 * @param {string} pClass - The class to remove.
+	 * @param {string|string[]} pClass - The class to remove.
 	 */
 	removeClass(pAddress, pClass)
 	{
@@ -426,7 +478,17 @@ class PictContentAssignment extends libFableServiceBase
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
-				tmpTargetElementSet[i].classList.remove(pClass);
+				if (Array.isArray(pClass))
+				{
+					for (const tmpClass of pClass)
+					{
+						tmpTargetElementSet[i].classList.remove(tmpClass);
+					}
+				}
+				else
+				{
+					tmpTargetElementSet[i].classList.remove(pClass);
+				}
 			}
 		}
 		else
@@ -568,6 +630,7 @@ class PictContentAssignment extends libFableServiceBase
 		else
 		{
 			this.log.trace(`PICT Content HASCLASS for [${pAddress}] CLASS [${pClass}]:`);
+			return false;
 		}
 	}
 }

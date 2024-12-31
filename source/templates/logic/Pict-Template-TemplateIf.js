@@ -11,6 +11,9 @@ class PictTemplateProviderTemplateIf extends libPictTemplateIf
 	{
 		super(pFable, pOptions, pServiceHash);
 
+		/** @type {any} */
+		this.log;
+
 		this.addPattern('{~TemplateIf:', '~}');
 		this.addPattern('{~TIf:', '~}');
 	}
@@ -29,9 +32,9 @@ class PictTemplateProviderTemplateIf extends libPictTemplateIf
 			this.log.trace(`PICT Template [fTemplateIfAbsoluteValueRender]::[${tmpHash}]`);
 		}
 
-		let tmpTemplateHash = false;
-		let tmpAddressOfData = false;
-		let tmpComparisonOperation = false;
+		let tmpTemplateHash;
+		let tmpAddressOfData;
+		let tmpComparisonOperation;
 
 		let tmpHashParts = tmpHash.split(':');
 
@@ -113,9 +116,9 @@ class PictTemplateProviderTemplateIf extends libPictTemplateIf
 			this.log.trace(`PICT Template [fTemplateIfAbsoluteValueRender]::[${tmpHash}]`);
 		}
 
-		let tmpTemplateHash = false;
-		let tmpAddressOfData = false;
-		let tmpComparisonOperation = false;
+		let tmpTemplateHash;
+		let tmpAddressOfData;
+		let tmpComparisonOperation;
 
 		let tmpHashParts = tmpHash.split(':');
 

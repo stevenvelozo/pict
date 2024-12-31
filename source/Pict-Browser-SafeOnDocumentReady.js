@@ -14,7 +14,7 @@ module.exports = function (fCallback)
 	// In case the document is already rendered
 	if (document.readyState!='loading') fCallback();
 	// Modern browsers have event listener capabilities
-	else if (document.addEventListener) document.addEventListener('DOMContentLoaded', fCallback);
-	// IE <= 8 and ... other abominations
+	else if (document.addEventListener) document.addEventListener('DOMContentLoaded', function() { fCallback(); });
+	//@ts-ignore IE <= 8 and ... other abominations
 	else document.attachEvent('onreadystatechange', function() { if (document.readyState=='complete') fCallback(); });
 }

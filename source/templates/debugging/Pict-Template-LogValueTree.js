@@ -10,6 +10,10 @@ class PictTemplateProviderLogValueTree extends libPictTemplate
 	constructor(pFable, pOptions, pServiceHash)
 	{
 		super(pFable, pOptions, pServiceHash);
+
+		/** @type {any} */
+		this.log;
+
 		this.addPattern('{~LogValueTree:', '~}');
 		this.addPattern('{~LVT:', '~}');
 	}

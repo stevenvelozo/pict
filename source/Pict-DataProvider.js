@@ -6,14 +6,21 @@ class PictDataProvider extends libFableServiceBase
 	{
 		super(pFable, pOptions, pServiceHash);
 
+		/** @type {import('fable') & import('pict')} */
+		this.fable;
+
 		this.serviceType = 'PictDataProvider';
 	}
 
+	/**
+	 * @param {string} pAddress - The address of the data to retrieve
+	 * @param {object} [pData] - (optional) The record to provide to the address resolver
+	 */
 	getDataByAddress(pAddress, pData)
 	{
 		let tmpData = (typeof(pData) === 'undefined') ? {} : pData;
 
-		return this.fable.manifest.getValueByHash({AppData:this.AppData, Bundle:this.Bundle, Record:tmpData}, pAddress);
+		return this.fable.manifest.getValueByHash({AppData:this.fable.AppData, Bundle:this.fable.Bundle, Record:tmpData}, pAddress);
 	}
 }
 

@@ -11,6 +11,9 @@ class PictTemplateProviderLogValue extends libPictTemplate
 	{
 		super(pFable, pOptions, pServiceHash);
 
+		/** @type {any} */
+		this.log;
+
 		this.addPattern('{~LogValue:', '~}');
 		this.addPattern('{~LV:', '~}');
 	}

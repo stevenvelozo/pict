@@ -11,6 +11,9 @@ class PictTemplateProviderTemplateSetFromMap extends libPictTemplate
 	{
 		super(pFable, pOptions, pServiceHash);
 
+		/** @type {any} */
+		this.log;
+
 		this.addPattern('{~TSFM:', '~}');
 		this.addPattern('{~TemplateSetFromMap:', '~}');
 	}
@@ -29,9 +32,9 @@ class PictTemplateProviderTemplateSetFromMap extends libPictTemplate
 			this.log.trace(`PICT TemplateFromMap [fTemplateFromMapSetRender]::[${tmpHash}]`);
 		}
 
-		let tmpTemplateFromMapHash = false;
-		let tmpAddressOfMap = false;
-		let tmpAddressOfKey = false;
+		let tmpTemplateFromMapHash;
+		let tmpAddressOfMap;
+		let tmpAddressOfKey;
 
 		// This is a 3 part hash with the map address and the key address both
 		let tmpTemplateHashPart = tmpHash.split(':');
@@ -91,9 +94,9 @@ class PictTemplateProviderTemplateSetFromMap extends libPictTemplate
 			this.log.trace(`PICT TemplateFromMap [fTemplateFromMapSetRenderAsync]::[${tmpHash}]`);
 		}
 
-		let tmpTemplateFromMapHash = false;
-		let tmpAddressOfMap = false;
-		let tmpAddressOfKey = false;
+		let tmpTemplateFromMapHash;
+		let tmpAddressOfMap;
+		let tmpAddressOfKey;
 
 		// This is a 3 part hash with the map address and the key address both
 		let tmpTemplateHashPart = tmpHash.split(':');
