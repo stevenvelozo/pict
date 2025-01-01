@@ -339,7 +339,8 @@ class PictContentAssignment extends libFableServiceBase
 	 *
 	 * @param {string} pAddress - The address of the element. (a CSS selector)
 	 *
-	 * @return {boolean|string|number|string[]} - The content of the element.
+	 * TODO: return {boolean|string|number|string[]} - The content of the element.
+	 * @return {string|boolean} - The content of the element.
 	 */
 	readContent(pAddress)
 	{
@@ -360,7 +361,12 @@ class PictContentAssignment extends libFableServiceBase
 						/* falls through */
 					case 'SELECT':
 					case 'TEXTAREA':
-						return tmpTargetElement.val();
+					{
+						//FIXME: masking types to simplify the expressed return value, for now
+						/** @type {any} */
+						const value = tmpTargetElement.val();
+						return value;
+					}
 					case 'SCRIPT':
 						return tmpTargetElement.text();
 					default:

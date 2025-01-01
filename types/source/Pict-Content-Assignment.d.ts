@@ -108,9 +108,10 @@ declare class PictContentAssignment {
      *
      * @param {string} pAddress - The address of the element. (a CSS selector)
      *
-     * @return {boolean|string|number|string[]} - The content of the element.
+     * TODO: return {boolean|string|number|string[]} - The content of the element.
+     * @return {string|boolean} - The content of the element.
      */
-    readContent(pAddress: string): boolean | string | number | string[];
+    readContent(pAddress: string): string | boolean;
     /**
      * Add a class to an element.
      *
