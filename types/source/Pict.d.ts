@@ -70,7 +70,7 @@ declare class Pict extends Pict_base {
     browserAddress: any;
     children: any[];
     /** @type {import('pict-application')} */
-    PictApplication: any;
+    PictApplication: import("pict-application");
     /** @type {any} */
     log: any;
     /**
@@ -254,7 +254,7 @@ import PictMeadowEntityProvider = require("./Pict-Meadow-EntityProvider.js");
 import PictDataProvider = require("./Pict-DataProvider.js");
 import PictContentAssignment = require("./Pict-Content-Assignment.js");
 import PictCSS = require("./Pict-CSS.js");
-declare const PictApplicationClass: any;
+declare const PictApplicationClass: typeof import("pict-application");
 declare const PictViewClass: typeof import("pict-view");
 declare const PictProviderClass: any;
 declare const PictTemplateClass: typeof import("pict-template");
@@ -262,7 +262,7 @@ declare const EnvironmentLog: typeof import("./environments/Pict-Environment-Log
 declare const EnvironmentObject: typeof import("./environments/Pict-Environment-Object.js");
 declare const isBrowser: Function;
 declare const safeOnDocumentReady: (fCallback: Function) => void;
-declare const safeLoadPictApplication: (pPictApplication?: any, pLogNoisiness?: number) => void;
+declare const safeLoadPictApplication: (pPictApplication?: import("pict-application"), pLogNoisiness?: number) => void;
 type Fable = {
     UUID: string;
     settings: any;

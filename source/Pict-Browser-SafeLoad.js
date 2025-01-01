@@ -12,9 +12,9 @@ module.exports = function (pPictApplication, pLogNoisiness)
 	let tmpLogNoisiness = (typeof(pLogNoisiness) == 'undefined') ? 0 : pLogNoisiness;
 
 	// Set up a basal pict on the window object
-	if (pPictApplication && ('default_configuration' in pPictApplication) && ('pict_configuration' in pPictApplication.default_configuration))
+	if (pPictApplication && typeof pPictApplication['default_configuration'] === 'object' && ('pict_configuration' in pPictApplication['default_configuration']))
 	{
-		window._Pict = new Pict(pPictApplication.default_configuration.pict_configuration);
+		window._Pict = new Pict(pPictApplication['default_configuration'].pict_configuration);
 	}
 	else
 	{
@@ -30,10 +30,9 @@ module.exports = function (pPictApplication, pLogNoisiness)
 	{
 		tmpDefaultConfiguration = pPictApplication.default_configuration;
 
-		if ('Hash' in pPictApplication.default_configuration)
+		if ('Hash' in tmpDefaultConfiguration && typeof tmpDefaultConfiguration.Hash === 'string')
 		{
-			tmpDefaultConfiguration = pPictApplication.default_configuration;
-			tmpApplicationHash = pPictApplication.default_configuration.Hash;
+			tmpApplicationHash = tmpDefaultConfiguration.Hash;
 		}
 	}
 	_Pict.log.info(`Loading the pict application [${tmpApplicationHash}] and associated views.`);
