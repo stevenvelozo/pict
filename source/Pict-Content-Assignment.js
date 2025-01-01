@@ -44,7 +44,7 @@ class PictContentAssignment extends libFableServiceBase
 		 * Set this to override the default mechanism for setting the content of a DOM element.
 		 *
 		 * @type {Function}
-		 * @param {string} pAddress - The address of the element. (a CSS selector)
+		 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
 		 * @param {string} pContent - The content to set.
 		 */
 		this.customAssignFunction = null;
@@ -52,7 +52,7 @@ class PictContentAssignment extends libFableServiceBase
 		 * Set this to override the default mechanism for prepend content to a DOM element.
 		 *
 		 * @type {Function}
-		 * @param {string} pAddress - The address of the element. (a CSS selector)
+		 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
 		 * @param {string} pContent - The content to prepend.
 		 */
 		this.customPrependFunction = null;
@@ -60,7 +60,7 @@ class PictContentAssignment extends libFableServiceBase
 		 * Set this to override the default mechanism for appending content to a DOM element.
 		 *
 		 * @type {Function}
-		 * @param {string} pAddress - The address of the element. (a CSS selector)
+		 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
 		 * @param {string} pContent - The content to append.
 		 */
 		this.customAppendFunction = null;
@@ -69,7 +69,7 @@ class PictContentAssignment extends libFableServiceBase
 		 * Set this to override the default mechanism for reading content from the DOM.
 		 *
 		 * @type {Function}
-		 * @param {string} pAddress - The address of the element. (a CSS selector)
+		 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
 		 * @return {string} - The content of the element.
 		 */
 		this.customReadFunction = null;
@@ -77,7 +77,7 @@ class PictContentAssignment extends libFableServiceBase
 		 * Set this to override the default mechanism for getting elements.
 		 *
 		 * @type {Function}
-		 * @param {string} pAddress - The address of the element.
+		 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
 		 * @return {Array<any>} - The matched elements.
 		 */
 		this.customGetElementFunction = null;
@@ -144,7 +144,7 @@ class PictContentAssignment extends libFableServiceBase
 	}
 
 	/**
-	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
 	 * @param {string|boolean} pContent - The content to assign.
 	 * @return {void}
 	 */
@@ -157,7 +157,8 @@ class PictContentAssignment extends libFableServiceBase
 		else if (this.hasJquery)
 		{
 			// Get the element(s)
-			let tmpTargetElementSet = window.jQuery(pAddress);
+			//FIXME: this is silly, but it makes the type system happy - it picks a different overload for each case
+			const tmpTargetElementSet = typeof pAddress === 'string' ? window.jQuery(pAddress) : window.jQuery(pAddress);
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
@@ -191,7 +192,7 @@ class PictContentAssignment extends libFableServiceBase
 		else if (this.inBrowser && this.hasDocument)
 		{
 			// Get the element(s)
-			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+			const tmpTargetElementSet = typeof pAddress === 'string' ? window.document.querySelectorAll(pAddress) : [ pAddress ];
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
@@ -232,7 +233,7 @@ class PictContentAssignment extends libFableServiceBase
 	/**
 	 * Append content to an element.
 	 *
-	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
 	 * @param {string} pContent - The content to append.
 	 */
 	appendContent(pAddress, pContent)
@@ -243,12 +244,13 @@ class PictContentAssignment extends libFableServiceBase
 		}
 		else if (this.hasJquery)
 		{
-			let tmpTargetElement = window.jQuery(pAddress);
+			//FIXME: this is silly, but it makes the type system happy - it picks a different overload for each case
+			const tmpTargetElement = typeof pAddress === 'string' ? window.jQuery(pAddress) : window.jQuery(pAddress);
 			tmpTargetElement.append(pContent);
 		}
 		else if (this.inBrowser && this.hasDocument)
 		{
-			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+			const tmpTargetElementSet = typeof pAddress === 'string' ? window.document.querySelectorAll(pAddress) : [ pAddress ];
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
 				tmpTargetElementSet[i].insertAdjacentHTML("beforeend", pContent);
@@ -264,7 +266,7 @@ class PictContentAssignment extends libFableServiceBase
 	/**
 	 * Prepend content to an element.
 	 *
-	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
 	 * @param {string} pContent - The content to prepend.
 	 */
 	prependContent(pAddress, pContent)
@@ -275,12 +277,13 @@ class PictContentAssignment extends libFableServiceBase
 		}
 		else if (this.hasJquery)
 		{
-			let tmpTargetElement = window.jQuery(pAddress);
+			//FIXME: this is silly, but it makes the type system happy - it picks a different overload for each case
+			const tmpTargetElement = typeof pAddress === 'string' ? window.jQuery(pAddress) : window.jQuery(pAddress);
 			tmpTargetElement.prepend(pContent);
 		}
 		else if (this.inBrowser && this.hasDocument)
 		{
-			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+			const tmpTargetElementSet = typeof pAddress === 'string' ? window.document.querySelectorAll(pAddress) : [ pAddress ];
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
 				tmpTargetElementSet[i].insertAdjacentHTML("afterbegin", pContent);
@@ -337,7 +340,7 @@ class PictContentAssignment extends libFableServiceBase
 	/**
 	 * Read content from an element.
 	 *
-	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
 	 *
 	 * TODO: return {boolean|string|number|string[]} - The content of the element.
 	 * @return {string|boolean} - The content of the element.
@@ -350,7 +353,8 @@ class PictContentAssignment extends libFableServiceBase
 		}
 		else if (this.hasJquery)
 		{
-			let tmpTargetElement = window.jQuery(pAddress);
+			//FIXME: this is silly, but it makes the type system happy - it picks a different overload for each case
+			const tmpTargetElement = typeof pAddress === 'string' ? window.jQuery(pAddress) : window.jQuery(pAddress);
 			switch (tmpTargetElement.prop('tagName'))
 				{
 					case 'INPUT':
@@ -375,7 +379,7 @@ class PictContentAssignment extends libFableServiceBase
 		}
 		else if (this.inBrowser && this.hasDocument)
 		{
-			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+			let tmpTargetElementSet = typeof pAddress === 'string' ? window.document.querySelectorAll(pAddress) : [ pAddress ];
 			if (tmpTargetElementSet.length < 1)
 			{
 				return null;
@@ -420,7 +424,7 @@ class PictContentAssignment extends libFableServiceBase
 	/**
 	 * Add a class to an element.
 	 *
-	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
 	 * @param {string|string[]} pClass - The class to add.
 	 */
 	addClass(pAddress, pClass)
@@ -432,12 +436,13 @@ class PictContentAssignment extends libFableServiceBase
 		else if (this.hasJquery)
 		{
 			// Get the element
-			let tmpTargetElement = window.jQuery(pAddress);
+			//FIXME: this is silly, but it makes the type system happy - it picks a different overload for each case
+			const tmpTargetElement = typeof pAddress === 'string' ? window.jQuery(pAddress) : window.jQuery(pAddress);
 			tmpTargetElement.addClass(pClass);
 		}
 		else if (this.inBrowser && this.hasDocument)
 		{
-			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+			const tmpTargetElementSet = typeof pAddress === 'string' ? window.document.querySelectorAll(pAddress) : [ pAddress ];
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
@@ -463,7 +468,7 @@ class PictContentAssignment extends libFableServiceBase
 	/**
 	 * Remove a class from an element.
 	 *
-	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
 	 * @param {string|string[]} pClass - The class to remove.
 	 */
 	removeClass(pAddress, pClass)
@@ -475,12 +480,13 @@ class PictContentAssignment extends libFableServiceBase
 		else if (this.hasJquery)
 		{
 			// Get the element
-			let tmpTargetElement = window.jQuery(pAddress);
+			//FIXME: this is silly, but it makes the type system happy - it picks a different overload for each case
+			const tmpTargetElement = typeof pAddress === 'string' ? window.jQuery(pAddress) : window.jQuery(pAddress);
 			tmpTargetElement.removeClass(pClass);
 		}
 		else if (this.inBrowser && this.hasDocument)
 		{
-			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+			const tmpTargetElementSet = typeof pAddress === 'string' ? window.document.querySelectorAll(pAddress) : [ pAddress ];
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
@@ -506,7 +512,7 @@ class PictContentAssignment extends libFableServiceBase
 	/**
 	 * Read an attribute from an element.
 	 *
-	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
 	 * @param {string} pAttribute - The attribute name to read.
 	 */
 	readAttribute(pAddress, pAttribute)
@@ -517,12 +523,13 @@ class PictContentAssignment extends libFableServiceBase
 		}
 		else if (this.hasJquery)
 		{
-			let tmpTargetElement = window.jQuery(pAddress);
+			//FIXME: this is silly, but it makes the type system happy - it picks a different overload for each case
+			const tmpTargetElement = typeof pAddress === 'string' ? window.jQuery(pAddress) : window.jQuery(pAddress);
 			return tmpTargetElement.attr(pAttribute);
 		}
 		else if (this.inBrowser && this.hasDocument)
 		{
-			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+			const tmpTargetElementSet = typeof pAddress === 'string' ? window.document.querySelectorAll(pAddress) : [ pAddress ];
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
@@ -539,7 +546,7 @@ class PictContentAssignment extends libFableServiceBase
 	/**
 	 * Set an attribute on an element.
 	 *
-	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
 	 * @param {string} pAttribute - The attribute name to set.
 	 * @param {string} pValue - The value to set.
 	 */
@@ -551,12 +558,13 @@ class PictContentAssignment extends libFableServiceBase
 		}
 		else if (this.hasJquery)
 		{
-			let tmpTargetElement = window.jQuery(pAddress);
+			//FIXME: this is silly, but it makes the type system happy - it picks a different overload for each case
+			const tmpTargetElement = typeof pAddress === 'string' ? window.jQuery(pAddress) : window.jQuery(pAddress);
 			tmpTargetElement.attr(pAttribute, pValue);
 		}
 		else if (this.inBrowser && this.hasDocument)
 		{
-			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+			const tmpTargetElementSet = typeof pAddress === 'string' ? window.document.querySelectorAll(pAddress) : [ pAddress ];
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
@@ -572,7 +580,7 @@ class PictContentAssignment extends libFableServiceBase
 	/**
 	 * Remove an attribute from an element.
 	 *
-	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
 	 * @param {string} pAttribute - The attribute name to remove.
 	 */
 	removeAttribute(pAddress, pAttribute)
@@ -583,12 +591,13 @@ class PictContentAssignment extends libFableServiceBase
 		}
 		else if (this.hasJquery)
 		{
-			let tmpTargetElement = window.jQuery(pAddress);
+			//FIXME: this is silly, but it makes the type system happy - it picks a different overload for each case
+			const tmpTargetElement = typeof pAddress === 'string' ? window.jQuery(pAddress) : window.jQuery(pAddress);
 			tmpTargetElement.removeAttr(pAttribute);
 		}
 		else if (this.inBrowser && this.hasDocument)
 		{
-			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+			const tmpTargetElementSet = typeof pAddress === 'string' ? window.document.querySelectorAll(pAddress) : [ pAddress ];
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{
@@ -604,7 +613,7 @@ class PictContentAssignment extends libFableServiceBase
 	/**
 	 * Check if an element has a class.
 	 *
-	 * @param {string} pAddress - The address of the element. (a CSS selector)
+	 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
 	 * @param {string} pClass - The class to check for.
 	 *
 	 * @return {boolean} - Whether the element has the class. If multiple elements are matched, returns true if any have the class.
@@ -617,12 +626,13 @@ class PictContentAssignment extends libFableServiceBase
 		}
 		if (this.hasJquery)
 		{
-			let tmpTargetElement = window.jQuery(pAddress);
+			//FIXME: this is silly, but it makes the type system happy - it picks a different overload for each case
+			const tmpTargetElement = typeof pAddress === 'string' ? window.jQuery(pAddress) : window.jQuery(pAddress);
 			return tmpTargetElement.hasClass(pClass);
 		}
 		else if (this.inBrowser && this.hasDocument)
 		{
-			let tmpTargetElementSet = window.document.querySelectorAll(pAddress);
+			const tmpTargetElementSet = typeof pAddress === 'string' ? window.document.querySelectorAll(pAddress) : [ pAddress ];
 
 			for (let i = 0; i < tmpTargetElementSet.length; i++)
 			{

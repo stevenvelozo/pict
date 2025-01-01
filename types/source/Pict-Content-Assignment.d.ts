@@ -20,7 +20,7 @@ declare class PictContentAssignment {
      * Set this to override the default mechanism for setting the content of a DOM element.
      *
      * @type {Function}
-     * @param {string} pAddress - The address of the element. (a CSS selector)
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
      * @param {string} pContent - The content to set.
      */
     customAssignFunction: Function;
@@ -28,7 +28,7 @@ declare class PictContentAssignment {
      * Set this to override the default mechanism for prepend content to a DOM element.
      *
      * @type {Function}
-     * @param {string} pAddress - The address of the element. (a CSS selector)
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
      * @param {string} pContent - The content to prepend.
      */
     customPrependFunction: Function;
@@ -36,7 +36,7 @@ declare class PictContentAssignment {
      * Set this to override the default mechanism for appending content to a DOM element.
      *
      * @type {Function}
-     * @param {string} pAddress - The address of the element. (a CSS selector)
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
      * @param {string} pContent - The content to append.
      */
     customAppendFunction: Function;
@@ -44,7 +44,7 @@ declare class PictContentAssignment {
      * Set this to override the default mechanism for reading content from the DOM.
      *
      * @type {Function}
-     * @param {string} pAddress - The address of the element. (a CSS selector)
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
      * @return {string} - The content of the element.
      */
     customReadFunction: Function;
@@ -52,7 +52,7 @@ declare class PictContentAssignment {
      * Set this to override the default mechanism for getting elements.
      *
      * @type {Function}
-     * @param {string} pAddress - The address of the element.
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
      * @return {Array<any>} - The matched elements.
      */
     customGetElementFunction: Function;
@@ -70,25 +70,25 @@ declare class PictContentAssignment {
      */
     getElement(pAddress: string): Array<any>;
     /**
-     * @param {string} pAddress - The address of the element. (a CSS selector)
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
      * @param {string|boolean} pContent - The content to assign.
      * @return {void}
      */
-    assignContent(pAddress: string, pContent: string | boolean): void;
+    assignContent(pAddress: string | HTMLElement, pContent: string | boolean): void;
     /**
      * Append content to an element.
      *
-     * @param {string} pAddress - The address of the element. (a CSS selector)
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
      * @param {string} pContent - The content to append.
      */
-    appendContent(pAddress: string, pContent: string): any;
+    appendContent(pAddress: string | HTMLElement, pContent: string): any;
     /**
      * Prepend content to an element.
      *
-     * @param {string} pAddress - The address of the element. (a CSS selector)
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
      * @param {string} pContent - The content to prepend.
      */
-    prependContent(pAddress: string, pContent: string): any;
+    prependContent(pAddress: string | HTMLElement, pContent: string): any;
     /**
      * Project content into a destination address based on a render method -- as the views do.
      * Valid render methods are:
@@ -106,56 +106,56 @@ declare class PictContentAssignment {
     /**
      * Read content from an element.
      *
-     * @param {string} pAddress - The address of the element. (a CSS selector)
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
      *
      * TODO: return {boolean|string|number|string[]} - The content of the element.
      * @return {string|boolean} - The content of the element.
      */
-    readContent(pAddress: string): string | boolean;
+    readContent(pAddress: string | HTMLElement): string | boolean;
     /**
      * Add a class to an element.
      *
-     * @param {string} pAddress - The address of the element. (a CSS selector)
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
      * @param {string|string[]} pClass - The class to add.
      */
-    addClass(pAddress: string, pClass: string | string[]): any;
+    addClass(pAddress: string | HTMLElement, pClass: string | string[]): any;
     /**
      * Remove a class from an element.
      *
-     * @param {string} pAddress - The address of the element. (a CSS selector)
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
      * @param {string|string[]} pClass - The class to remove.
      */
-    removeClass(pAddress: string, pClass: string | string[]): any;
+    removeClass(pAddress: string | HTMLElement, pClass: string | string[]): any;
     /**
      * Read an attribute from an element.
      *
-     * @param {string} pAddress - The address of the element. (a CSS selector)
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
      * @param {string} pAttribute - The attribute name to read.
      */
-    readAttribute(pAddress: string, pAttribute: string): any;
+    readAttribute(pAddress: string | HTMLElement, pAttribute: string): any;
     /**
      * Set an attribute on an element.
      *
-     * @param {string} pAddress - The address of the element. (a CSS selector)
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
      * @param {string} pAttribute - The attribute name to set.
      * @param {string} pValue - The value to set.
      */
-    setAttribute(pAddress: string, pAttribute: string, pValue: string): any;
+    setAttribute(pAddress: string | HTMLElement, pAttribute: string, pValue: string): any;
     /**
      * Remove an attribute from an element.
      *
-     * @param {string} pAddress - The address of the element. (a CSS selector)
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
      * @param {string} pAttribute - The attribute name to remove.
      */
-    removeAttribute(pAddress: string, pAttribute: string): any;
+    removeAttribute(pAddress: string | HTMLElement, pAttribute: string): any;
     /**
      * Check if an element has a class.
      *
-     * @param {string} pAddress - The address of the element. (a CSS selector)
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
      * @param {string} pClass - The class to check for.
      *
      * @return {boolean} - Whether the element has the class. If multiple elements are matched, returns true if any have the class.
      */
-    hasClass(pAddress: string, pClass: string): boolean;
+    hasClass(pAddress: string | HTMLElement, pClass: string): boolean;
 }
 //# sourceMappingURL=Pict-Content-Assignment.d.ts.map
