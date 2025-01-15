@@ -367,6 +367,14 @@ class Pict extends libFable
 			//{~D:AppData.Some.Value.to.Render~}
 			this.addTemplate(require(`./templates/Pict-Template-Data.js`));
 
+			// HTML Comment Start and End based on truthiness ... if the value is false, the comment shows up.
+			// {~HtmlCommentStart:Some.Address~} gives you "<!--"
+			// {~HCS:Some.Address~} gives you "<!--"
+			this.addTemplate(require(`./templates/data/Pict-Template-HtmlCommentStart.js`));
+			// {~HtmlCommentEnd:Some.Address~} gives you "-->"
+			// {~HCE:Some.Address~} gives you "-->"
+			this.addTemplate(require(`./templates/data/Pict-Template-HtmlCommentEnd.js`));
+
 			// Know the in-browser reference for Pict when appropriate
 			this.addTemplate(require(`./templates/Pict-Template-Self.js`));
 

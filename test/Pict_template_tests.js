@@ -255,6 +255,23 @@ suite
 							);
 						test
 							(
+								'Templates should be able to generate HTML Comment start and end based on truthiness',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+									let tmpTemplate = '{~HtmlCommentStart:Record.ShowComment~}<p> SOME COMMENT </p>{~HtmlCommentEnd:Record.ShowComment~}';
+									let tmpTemplateOutput = testPict.parseTemplate(tmpTemplate, { ShowComment: true });
+									Expect(tmpTemplateOutput).to.equal("<p> SOME COMMENT </p>");
+									let tmpTemplateOutput2 = testPict.parseTemplate(tmpTemplate, { ShowComment: false });
+									Expect(tmpTemplateOutput2).to.equal("<!-- <p> SOME COMMENT </p> -->");
+									// If there is no value available default to commenting out the value
+									let tmpTemplateOutput3 = testPict.parseTemplate(tmpTemplate, {  });
+									Expect(tmpTemplateOutput3).to.equal("<!-- <p> SOME COMMENT </p> -->");
+									return fDone();
+								}
+							);
+						test
+							(
 								'Simple templates with generative data.',
 								function (fDone)
 								{

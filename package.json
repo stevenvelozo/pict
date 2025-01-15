@@ -45,19 +45,19 @@
     },
     "homepage": "https://github.com/stevenvelozo/pict#readme",
     "devDependencies": {
-        "@eslint/js": "^9.17.0",
+        "@eslint/js": "^9.18.0",
         "@types/jquery": "^3.5.32",
-        "eslint": "^9.17.0",
+        "eslint": "^9.18.0",
         "globals": "^15.14.0",
         "quackage": "^1.0.36"
     },
     "dependencies": {
         "cachetrax": "^1.0.4",
-        "fable": "^3.0.146",
+        "fable": "^3.0.147",
         "pict-application": "^1.0.24",
         "pict-provider": "^1.0.3",
         "pict-template": "^1.0.10",
         "pict-view": "^1.0.59",
-        "typescript": "^5.7.2"
+        "typescript": "^5.7.3"
     }
 }
