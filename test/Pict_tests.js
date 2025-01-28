@@ -23,25 +23,21 @@ const _MockSettings = (
 	PictDefaultURLPrefix: `http://localhost:${_RetoldTestPort}/1.0/`
 });
 
-suite
-(
+suite(
 	'Pict',
 	function()
 	{
-		setup
-		(
+		setup(
 			function()
 			{
 			}
 		);
 
-		suite
-		(
+		suite(
 			'Object Sanity',
 			function()
 			{
-				test
-				(
+				test(
 					'The class should initialize itself into a happy little object.',
 					function(fDone)
 					{
@@ -59,8 +55,7 @@ suite
 						fDone();
 					}
 				);
-				test
-				(
+				test(
 					'The class should initialize itself into a happy little object with a default AppData.',
 					function(fDone)
 					{
@@ -73,8 +68,7 @@ suite
 						fDone();
 					}
 				);
-				test
-				(
+				test(
 					'How about a little template for the road...',
 					function(fDone)
 					{
@@ -86,8 +80,7 @@ suite
 						fDone();
 					}
 				);
-				test
-				(
+				test(
 					'How about a different template test for the road...',
 					function(fDone)
 					{
@@ -100,8 +93,7 @@ suite
 					}
 				);
 
-				test
-				(
+				test(
 					'Simple Single Record GET REST Request',
 					function(fDone)
 					{
@@ -117,8 +109,7 @@ suite
 					}
 				);
 
-				test
-				(
+				test(
 					'Multi-Record GET REST Request',
 					function(fDone)
 					{
@@ -134,8 +125,7 @@ suite
 					}
 				);
 
-				test
-				(
+				test(
 					'Math test',
 					function(fDone)
 					{
@@ -146,7 +136,7 @@ suite
 						// 3.3333333333333333333333333333333 in the current node.js implementation collapses to 3.3333333333333335
 						Expect(testPict.Math.parsePrecise('4.33333333333333333333333332133333333')).to.equal('4.33333333333333333333333332133333333');
 						Expect(testPict.Math.parsePrecise(undefined)).to.equal('0.0');
-						
+
 						return fDone();
 					}
 				);

@@ -17,20 +17,17 @@ const _MockSettings = (
 	ProductVersion: '1.0.0',
 });
 
-suite
-(
+suite(
 	'Pict CSS',
 	() =>
 	{
 		setup (() => {});
 
-		suite
-		(
+		suite(
 			'Basic CSS merging',
 			() =>
 			{
-				test
-				(
+				test(
 					'Create a bit of CSS.',
 					(fDone) =>
 					{
@@ -42,8 +39,7 @@ suite
 						fDone();
 					}
 				);
-				test
-				(
+				test(
 					'Test priority, and, assignment.',
 					(fDone) =>
 					{

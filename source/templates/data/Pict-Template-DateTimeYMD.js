@@ -1,6 +1,6 @@
 const libPictTemplate = require('pict-template');
 
-class PictTemplateProviderDateFormat extends libPictTemplate
+class PictTemplateProviderDateTimeYMD extends libPictTemplate
 {
 	/**
 	 * @param {Object} pFable - The Fable Framework instance
@@ -16,30 +16,33 @@ class PictTemplateProviderDateFormat extends libPictTemplate
 		/** @type {any} */
 		this.log;
 
-		this.addPattern('{~DateFormat:', '~}');
+		this.addPattern('{~DateTimeYMD:', '~}');
+		this.addPattern('{~DateYMD:', '~}'); // for backwards compatibility
 	}
 
+	/**
+	 * Render a template expression, returning a string with the resulting content.
+	 *
+	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
+	 * @param {any} pRecord - The json object to be used as the Record for the template render
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 *
+	 * @return {string} The rendered template
+	 */
 	render(pTemplateHash, pRecord, pContextArray)
 	{
 		let tmpHash = pTemplateHash.trim();
 		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
-		let tmpDateValueSet = tmpHash.split('^');
+		let tmpDateValue = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray);
 
-		if (tmpDateValueSet.length < 2)
-		{
-			this.log.error(`PICT Template [fDateFormat]::[${tmpHash}] did not have a valid format string and date.`);
-			return '';
-		}
-
-		let tmpDateValue = this.resolveStateFromAddress(tmpDateValueSet[0], tmpData, pContextArray);
 
 		if (this.pict.LogNoisiness > 4)
 		{
-			this.log.trace(`PICT Template [fDateFormat]::[${tmpHash}] with tmpData:`, tmpData);
+			this.log.trace(`PICT Template [fDateTimeYMD]::[${tmpHash}] with data:`, tmpData);
 		}
 		else if (this.pict.LogNoisiness > 3)
 		{
-			this.log.trace(`PICT Template [fDateFormat]::[${tmpHash}]`);
+			this.log.trace(`PICT Template [fDateTimeYMD]::[${tmpHash}]`);
 		}
 
 		// TODO: Modularize this
@@ -65,7 +68,7 @@ class PictTemplateProviderDateFormat extends libPictTemplate
 		}
 		catch
 		{
-			//this.log.error(`Error casting date passed timezone using tz .. casting to the browser guess which is [${this.fable.Dates.dayJS.tz.guess()}].`);
+			//this.log.error(`Error casting timezone using tz .. casting to the browser guess which is [${this.fable.Dates.dayJS.tz.guess()}].`);
 			// Day.js will try to guess the user's timezone for us
 			try
 			{
@@ -77,17 +80,8 @@ class PictTemplateProviderDateFormat extends libPictTemplate
 			}
 		}
 
-		return tmpDayJS.format(tmpDateValueSet[1]);
+		return tmpDayJS.format('YYYY-MM-DD');
 	}
 }
 
-module.exports = PictTemplateProviderDateFormat;
-
-/*
-# DEAR DEAD CODE DIARY:
-
-```javascript
-
-```
-*/
-
+module.exports = PictTemplateProviderDateTimeYMD;

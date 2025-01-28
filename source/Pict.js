@@ -407,8 +407,10 @@ class Pict extends libFable
 			// Data Manipulation Templates
 			this.addTemplate(require(`./templates/data/Pict-Template-DataJson.js`));
 			this.addTemplate(require(`./templates/data/Pict-Template-PascalCaseIdentifier.js`));
-			this.addTemplate(require(`./templates/data/Pict-Template-DateFormat.js`));
-			this.addTemplate(require(`./templates/data/Pict-Template-DateYMD.js`));
+			this.addTemplate(require(`./templates/data/Pict-Template-DateOnlyFormat.js`));
+			this.addTemplate(require(`./templates/data/Pict-Template-DateOnlyYMD.js`));
+			this.addTemplate(require(`./templates/data/Pict-Template-DateTimeFormat.js`));
+			this.addTemplate(require(`./templates/data/Pict-Template-DateTimeYMD.js`));
 			this.addTemplate(require(`./templates/data/Pict-Template-Digits.js`));
 			this.addTemplate(require(`./templates/data/Pict-Template-Dollars.js`));
 

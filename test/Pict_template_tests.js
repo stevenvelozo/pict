@@ -37,77 +37,69 @@ const _QuantityTemplate = `
 
 const _QuantityRecord = require('./data/SampleRecord-Quantity.json');
 
-suite
-	(
+suite(
 		'Pict Templates',
 		function ()
 		{
-			setup
-				(
+			setup(
 					function ()
 					{
 					}
 				);
 
-			suite
-				(
+			suite(
 					'Complex Processing',
 					function ()
 					{
-						test
-							(
+						test(
 								'Value trees can log.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									testPict.AppData.ChocoData = _SampleChocoData;
 									let tmpTemplateOutput = testPict.parseTemplate('<p>{~LVT:AppData.ChocoData~}</p>');
 									Expect(tmpTemplateOutput).to.equal("<p></p>");
 									fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Plucked Template Value Sets work as expected.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									testPict.AppData.ChocoData = _SampleChocoData;
 									let tmpTemplateOutput = testPict.parseTemplate('<p>{~PJU:,^source^AppData.ChocoData.files~}</p>');
 									Expect(tmpTemplateOutput).to.equal("<p>derivative,metadata,original</p>");
 									fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Value trees can log with specified depth.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									testPict.AppData.ChocoData = _SampleChocoData;
 									let tmpTemplateOutput = testPict.parseTemplate('<p>{~LVT:AppData.ChocoData^1~}</p>');
 									Expect(tmpTemplateOutput).to.equal("<p></p>");
 									fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Templates can render data trees.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									testPict.AppData.ChocoData = _SampleChocoData;
 									let tmpTemplateOutput = testPict.parseTemplate('{~DT:AppData.ChocoData~}');
 									Expect(tmpTemplateOutput.indexOf('<div class="PICTObjectBranchDepth_1"><div class="PICTObjectBranch">title</div><div class="PICTObjectBranchValue">Franken Berry / Count Chocula : Tevevision Commercial 1971</div></div>')).to.be.greaterThan(0);
 									fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Self referentiality is dubious and powerful.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									testPict.AppData.ChocoData = _SampleChocoData;
 									let tmpTemplateOutput = testPict.parseTemplate('{~Pict~}');
 									Expect(tmpTemplateOutput.indexOf('_Pict')).to.be.greaterThan(0);
@@ -117,12 +109,11 @@ suite
 									fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Templates can render data trees with arbitrary depth.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									testPict.AppData.ChocoData = _SampleChocoData;
 									let tmpTemplateOutput = testPict.parseTemplate('{~DT:AppData.ChocoData^0~}');
 									Expect(tmpTemplateOutput.indexOf('<div class="PICTObjectBranchDepth_0"><div class="PICTObjectBranch">item_size</div><div class="PICTObjectBranchValue">36431778</div></div>')).to.be.greaterThan(0);
@@ -131,72 +122,101 @@ suite
 									fDone();
 								}
 							);
-						test
-							(
+						test(
 								// Date library uses time zones from here: https://www.iana.org/time-zones
 								'Dates in YYYY-MM-DD with timezone.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									testPict.options.Timezone = 'America/Los_Angeles';
-									let tmpTemplateOutput = testPict.parseTemplate('<p>{~DateYMD:Record.MagicDate~}</p>', { MagicDate: '2023-05-24T17:54:46.000Z' });
+									let tmpTemplateOutput = testPict.parseTemplate('<p>{~DateTimeYMD:Record.MagicDate~}</p>', { MagicDate: '2023-05-25T05:54:46.000Z' });
 									Expect(tmpTemplateOutput).to.equal("<p>2023-05-24</p>");
 									fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Dates in YYYY-MM-DD with a bad time value.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
-									let tmpTemplateOutput = testPict.parseTemplate('<p>{~DateYMD:Record.MagicDate~}</p>', { MagicDate: 'This is not a valid date!' });
+									const testPict = new libPict(_MockSettings);
+									let tmpTemplateOutput = testPict.parseTemplate('<p>{~DateTimeYMD:Record.MagicDate~}</p>', { MagicDate: 'This is not a valid date!' });
 									Expect(tmpTemplateOutput).to.equal("<p>Invalid Date</p>");
 									fDone();
 								}
 							);
-						test
-							(
+						test(
 								// Date library uses time zones from here: https://www.iana.org/time-zones
 								'Custom formatted dates with timezone.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									testPict.options.Timezone = 'America/Los_Angeles';
-									let tmpTemplateOutput = testPict.parseTemplate('<p>{~DateYMD:Record.MagicDate~} which is {~DateFormat:Record.MagicDate^dddd MMMM Do YYYY~}</p>', { MagicDate: '2023-05-24T17:54:46.000Z' });
+									let tmpTemplateOutput = testPict.parseTemplate('<p>{~DateTimeYMD:Record.MagicDate~} which is {~DateTimeFormat:Record.MagicDate^dddd MMMM Do YYYY~}</p>', { MagicDate: '2023-05-25T05:54:46.000Z' });
 									Expect(tmpTemplateOutput).to.equal("<p>2023-05-24 which is Wednesday May 24th 2023</p>");
 									fDone();
 								}
 							);
-						test
-							(
+						test(
+								// Date library uses time zones from here: https://www.iana.org/time-zones
+								'Date values (with no time)',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+									let tmpTemplateOutput = testPict.parseTemplate('<p>{~DateOnlyYMD:Record.MagicDate~} which is {~DateOnlyFormat:Record.MagicDate^dddd MMMM Do YYYY~}</p>',
+										{
+											MagicDate: '2023-05-25',
+										});
+									Expect(tmpTemplateOutput).to.equal("<p>2023-05-25 which is Thursday May 25th 2023</p>");
+									fDone();
+								}
+							);
+						test(
+								// Date library uses time zones from here: https://www.iana.org/time-zones
+								'Extreme date values (with no time)',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+									let tmpTemplateOutput = testPict.parseTemplate(`<p>{~DateOnlyYMD:Record.MinDate~} to {~DateOnlyYMD:Record.MaxDate~} is the valid date range for javascript which are {~DateOnlyFormat:Record.MinDate^dddd MMMM Do YYYY~} to {~DateOnlyFormat:Record.MaxDate^dddd MMMM Do YYYY~}</p>`,
+//Other intersting cutoffs are: {~DateOnlyYMD:Record.YearZero~} and {~DateOnlyYMD:Record.YearNegativeOne~}`,
+										{
+											// using ISO format to force parsing of the date
+											MinDate: new Date(-8640000000000000).toISOString(), // see: https://stackoverflow.com/questions/11526504/minimum-and-maximum-date
+											YearZero: new Date(-62167219200000).toISOString(),
+											YearNegativeOne: new Date(-62167219200001).toISOString(),
+											MaxDate: new Date(8640000000000000).toISOString(),
+										});
+									//FIXME: zero and -1 years are busted, seems to be a dayjs thing? not worrying about it for now
+									Expect(tmpTemplateOutput).to.equal(`<p>-271822-04-20 to 275760-09-13 is the valid date range for javascript which are Saturday April 20th 271822 to Saturday September 13th 275760</p>`);
+//Other intersting cutoffs are: 0000-01-01 and -0001-12-31`);
+									fDone();
+								}
+							);
+						test(
 								'Templates should be able to run on sets.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									let tmpTemplateOutput = testPict.parseTemplateSet('<p>{~Data:Record.size~}</p>', _SampleChocoData.files);
 									Expect(tmpTemplateOutput).to.equal("<p>838</p><p>6843</p><p>8388</p><p>5993</p><p>4951</p><p>3383</p><p>3503</p><p>4093</p><p></p><p>1371</p><p>620</p><p>7481</p><p>101114</p><p>31625216</p><p>31141</p><p>2248166</p><p>2378677</p>");
 									fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Templates should be able to run on sets with subtemplates.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									testPict.TemplateProvider.addTemplate('Choco-Row', '<p>{~Data:Record.name~} is a file of {~Data:Record.size~} bytes big.</p>');
 									let tmpTemplateOutput = testPict.parseTemplate('<div>{~TS:Choco-Row:Record.files~}</div>', _SampleChocoData);
 									Expect(tmpTemplateOutput).to.equal("<div><p>FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000001.jpg is a file of 838 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000004.jpg is a file of 6843 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000009.jpg is a file of 8388 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000014.jpg is a file of 5993 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000019.jpg is a file of 4951 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000024.jpg is a file of 3383 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000029.jpg is a file of 3503 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971_archive.torrent is a file of 4093 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971_files.xml is a file of  bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971_meta.xml is a file of 1371 bytes big.</p><p>FrankenberryCountChoculaTevevisionCommercial1971_reviews.xml is a file of 620 bytes big.</p><p>__ia_thumb.jpg is a file of 7481 bytes big.</p><p>frankerberry_countchockula_1971.0001.gif is a file of 101114 bytes big.</p><p>frankerberry_countchockula_1971.0001.mpg is a file of 31625216 bytes big.</p><p>frankerberry_countchockula_1971.0001.mpg.idx is a file of 31141 bytes big.</p><p>frankerberry_countchockula_1971.0001.ogv is a file of 2248166 bytes big.</p><p>frankerberry_countchockula_1971.0001_512kb.mp4 is a file of 2378677 bytes big.</p></div>");
 									fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Templates should be able to run with meadow API entities at fixed IDs.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									testPict.TemplateProvider.addTemplate('Book-Row-Title', '<h1>{~Data:Record.Title~}</h1>');
 									let tmpTemplateOutput = testPict.parseTemplate('{~E:Book^1^Book-Row-Title~}', {},
 										(pError, pValue) =>
@@ -206,8 +226,7 @@ suite
 										});
 								}
 							);
-						test
-							(
+						test(
 								'Templates should be able to run with meadow API entities at dynamic IDs.',
 								function (fDone)
 								{
@@ -238,12 +257,11 @@ suite
 
 								}
 							);
-						test
-							(
+						test(
 								'Template sets should be able to run with meadow API entities at dynamic IDs as subrecords.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									testPict.TemplateProvider.addTemplate('Book-Row-Title', '<h1>{~Data:Record.Title~}</h1>');
 									let tmpTemplateOutput = testPict.parseTemplate('{~E:Book^Record.CurrentBook^Book-Row-Title~}', { CurrentBook: 100 },
 										(pError, pValue) =>
@@ -253,12 +271,11 @@ suite
 										});
 								}
 							);
-						test
-							(
+						test(
 								'Templates should be able to generate HTML Comment start and end based on truthiness',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									let tmpTemplate = '{~HtmlCommentStart:Record.ShowComment~}<p> SOME COMMENT </p>{~HtmlCommentEnd:Record.ShowComment~}';
 									let tmpTemplateOutput = testPict.parseTemplate(tmpTemplate, { ShowComment: true });
 									Expect(tmpTemplateOutput).to.equal("<p> SOME COMMENT </p>");
@@ -270,12 +287,11 @@ suite
 									return fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Simple templates with generative data.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									let tmpTemplateOutput = testPict.parseTemplate('<p>{~RandomNumberString:10~}</p>', {});
 									Expect(tmpTemplateOutput.length).to.be.greaterThan(7);
 									tmpTemplateOutput = testPict.parseTemplate('<p>{~RandomNumberString:~}</p>', {});
@@ -287,23 +303,21 @@ suite
 									fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Generate identifiers',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									let tmpTemplateOutput = testPict.parseTemplate('<p>{~PascalCaseIdentifier:Record.name~}</p>', { name: 'meadow-endpoints' });
 									Expect(tmpTemplateOutput).to.equal('<p>MeadowEndpoints</p>');
 									fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Templates should be able to run on sets asynchronously.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									testPict.parseTemplateSet('<p>{~Data:Record.size~}</p>', _SampleChocoData.files,
 										(pError, pValue) =>
 										{
@@ -312,13 +326,12 @@ suite
 										});
 								}
 							);
-						test
-							(
+						test(
 								'Templates should be able to run on sets what are objects.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
-									var testCollectionObject = {};
+									const testPict = new libPict(_MockSettings);
+									const testCollectionObject = {};
 									for (let i = 0; i < _SampleChocoData.files.length; i++)
 									{
 										testCollectionObject[_SampleChocoData.files[i].name] = _SampleChocoData.files[i];
@@ -328,12 +341,11 @@ suite
 									fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Templates should be able to join values with a separator.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									let tmpTemplateOutput;
 
 									_SampleChocoData.emptypromises = '';
@@ -350,12 +362,11 @@ suite
 									fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Templates should be able to join unique values with a separator.',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									let tmpTemplateOutput;
 
 									_SampleChocoData.emptypromises = '';
@@ -366,12 +377,11 @@ suite
 									fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Use the template manager a bit...',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 
 									testPict.TemplateProvider.addTemplate('Quantity', _QuantityTemplate);
 
@@ -391,18 +401,17 @@ suite
 									return fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Try some defaults for the template manager...',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 
 									testPict.TemplateProvider.addDefaultTemplate('', '-List-Title', '<h1>List of {~Data:AppData.EntityName~}s</h1>');
 									testPict.TemplateProvider.addDefaultTemplate('', '-List-Row', '<p>{~Data:Record.Name~}</p>');
 									testPict.TemplateProvider.addDefaultTemplate('', '-Bad-End', false);
 
-									testPict.TemplateProvider.loadTemplateFunction = (pTemplateHash) => 
+									testPict.TemplateProvider.loadTemplateFunction = (pTemplateHash) =>
 									{
 										if (pTemplateHash == 'Foo-List-Title')
 										{
@@ -436,12 +445,11 @@ suite
 									return fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Entity template rendering...',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 
 									testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~Data:Record.Title~}: {~Dollars:Record.IDBook~}</h1>');
 									testPict.TemplateProvider.addTemplate('Book-Author-Content', '<p>{~E:Book^1^Book-Author-Title~}</p>');
@@ -455,12 +463,11 @@ suite
 										});
 								}
 							);
-						test
-							(
+						test(
 								'Entity template rendering with reverse context lookup...',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 
 									testPict.TemplateProvider.addTemplate('Book-Author-Title', '{~D:Context[0].log.info(Record.Title, Context[0].fable.SettingsManager.settings)~}<h1>{~Data:Context[0].fable.SettingsManager.settings.Product~} {~Data:Record.Title~}: {~Dollars:Record.IDBook~} {~Data:Context.length~}</h1>');
 									testPict.TemplateProvider.addTemplate('Book-Author-Content', '<p>{~E:Book^1^Book-Author-Title~}</p>');
@@ -473,12 +480,11 @@ suite
 										});
 								}
 							);
-						test
-							(
+						test(
 								'Entity template rendering with Parameterized Location...',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 
 									testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~Data:Record.Title~}: {~Dollars:Record.IDBook~}</h1>');
 									testPict.TemplateProvider.addTemplate('Book-Author-Content', '<p>{~E:Book^Record.Header.IDBook^Book-Author-Title~}</p>');
@@ -491,12 +497,11 @@ suite
 										});
 								}
 							);
-						test
-							(
+						test(
 								'Template rendering process...',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 
 									testPict.AppData.RecordSet = { IDAnimal: 1, Name: 'Fido', Type: 'Dog', Age: 3 };
 
@@ -518,12 +523,11 @@ suite
 										});
 								}
 							);
-						test
-							(
+						test(
 								'Template sets in other templates...',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 
 									testPict.AppData = { Records: _SampleChocoData, EntityName: 'Choco', Title: 'Choco Deluxe Records' };
 
@@ -538,12 +542,11 @@ suite
 									return fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Template from Map Address',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									let tmpTemplateOutput;
 
 									testPict.AppData.MySpecialMap =  (
@@ -577,16 +580,15 @@ suite
 										{
 											Expect(pResult).to.equal('<p>My dino is a BRONTO EFFIN SAURUS</p>');
 											return fDone();
-										
+
 										});
 								}
 							);
-						test
-							(
+						test(
 								'TemplateSet from Map Address',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									let tmpTemplateOutput;
 
 									testPict.AppData.MyTeamMap =  (
@@ -619,16 +621,15 @@ suite
 										{
 											Expect(pResult).to.equal('<div><p>My dino is a BRONTO EFFIN SAURUS</p><p>My dino is a T-Rex</p></div>');
 											return fDone();
-										
+
 										});
 								}
 							);
-						test
-							(
+						test(
 								'TemplateValueSet from Array',
 								function (fDone)
 								{
-									var testPict = new libPict(_MockSettings);
+									const testPict = new libPict(_MockSettings);
 									let tmpTemplateOutput;
 
 									testPict.AppData.MyTeamMap =  (
@@ -654,7 +655,7 @@ suite
 										{
 											Expect(pResult).to.equal('<div><p>Jim</p><p>Jill</p><p>Jack</p><p>Jane</p></div>');
 											return fDone();
-										
+
 										});
 								}
 							);

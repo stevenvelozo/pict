@@ -3,6 +3,7 @@
 	"compilerOptions":
 	{
 		"lib": ["es5", "es6", "dom"],
+		"module": "commonjs",
 		"allowJs": true,
 		"checkJs": true,
 		"declaration": true,

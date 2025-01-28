@@ -41,25 +41,21 @@ class MockPictProvider extends require('../source/Pict-DataProvider.js')
 	}
 }
 
-suite
-(
+suite(
 	'Pict Provider Tests',
 	function()
 	{
-		setup
-		(
+		setup(
 			function()
 			{
 			}
 		);
 
-		suite
-		(
+		suite(
 			'Simple Providers',
 			function()
 			{
-				test
-				(
+				test(
 					'Basic Provider with a list.',
 					function(fDone)
 					{
@@ -72,8 +68,7 @@ suite
 						return fDone();
 					}
 				);
-				test
-				(
+				test(
 					'Singleton providers should only instantiate once..',
 					function(fDone)
 					{

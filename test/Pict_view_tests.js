@@ -25,25 +25,21 @@ const _MockSettings = (
 	PictDefaultURLPrefix: `http://localhost:${_RetoldTestPort}/1.0/`
 });
 
-suite
-(
+suite(
 	'Pict View Tests',
 	function()
 	{
-		setup
-		(
+		setup(
 			function()
 			{
 			}
 		);
 
-		suite
-		(
+		suite(
 			'Simple Views',
 			function()
 			{
-				test
-				(
+				test(
 					'Basic view with a list.',
 					function(fDone)
 					{

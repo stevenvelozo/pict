@@ -1,6 +1,6 @@
 {
     "name": "pict",
-    "version": "1.0.232",
+    "version": "1.0.233",
     "description": "Pict browser library.",
     "main": "source/Pict.js",
     "scripts": {
@@ -12,7 +12,7 @@
         "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t pict-image:local",
         "docker-dev-run": "docker run -it -d --name pict-dev -p 37447:8080 -p 19506:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-image:local",
         "docker-dev-shell": "docker exec -it pict-dev /bin/bash",
-        "lint": "eslint source/**",
+        "lint": "eslint source/**/*.js test/**/*.js",
         "types": "tsc -p ."
     },
     "types": "types/source/Pict.d.ts",
@@ -45,11 +45,11 @@
     },
     "homepage": "https://github.com/stevenvelozo/pict#readme",
     "devDependencies": {
-        "@eslint/js": "^9.18.0",
+        "@eslint/js": "^9.19.0",
         "@types/jquery": "^3.5.32",
-        "eslint": "^9.18.0",
+        "eslint": "^9.19.0",
         "globals": "^15.14.0",
-        "quackage": "^1.0.36"
+        "quackage": "^1.0.37"
     },
     "dependencies": {
         "cachetrax": "^1.0.4",

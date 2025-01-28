@@ -1,5 +1,5 @@
-export = PictTemplateProviderDateYMD;
-declare class PictTemplateProviderDateYMD extends libPictTemplate {
+export = PictTemplateProviderDateTimeFormat;
+declare class PictTemplateProviderDateTimeFormat extends libPictTemplate {
     /**
      * @param {Object} pFable - The Fable Framework instance
      * @param {Object} pOptions - The options for the service
@@ -13,4 +13,4 @@ declare class PictTemplateProviderDateYMD extends libPictTemplate {
     render(pTemplateHash: any, pRecord: any, pContextArray: any): any;
 }
 import libPictTemplate = require("pict-template");
-//# sourceMappingURL=Pict-Template-DateYMD.d.ts.map
+//# sourceMappingURL=Pict-Template-DateTimeFormat.d.ts.map

@@ -24,25 +24,21 @@ const _MockSettings = (
 		PictDefaultURLPrefix: `http://localhost:${_RetoldTestPort}/1.0/`
 	});
 
-suite
-	(
+suite(
 		'Pict Templates: Complex operations',
 		function ()
 		{
-			setup
-				(
+			setup(
 					function ()
 					{
 					}
 				);
 
-			suite
-				(
+			suite(
 					'Conditionals',
 					function ()
 					{
-						test
-							(
+						test(
 								'Templates are only processed based on conditions in data',
 								function (fDone)
 								{
@@ -91,8 +87,7 @@ suite
 										});
 								}
 							);
-						test
-							(
+						test(
 								'Relative Addressing in Conditionals',
 								function (fDone)
 								{
@@ -105,7 +100,7 @@ suite
 									let tmpTemplateOutput = testPict.parseTemplate(`<div>{~TemplateIf:ChocoTemplate:AppData.ChocoData:AppData.ChocoData.d1^==^ia600202.us.archive.org~}</div>`);
 									Expect(tmpTemplateOutput).to.equal("<div></div>");
 
-									// These two addresses 
+									// These two addresses
 									let tmpTemplateOutput2 = testPict.parseTemplate(`<div>{~TemplateIf:ChocoTemplate:AppData.ChocoData:AppData.ChocoData.d1^==^AppData.ChocoData.d0~}</div>`);
 									Expect(tmpTemplateOutput2).to.equal("<div><p>/7/items/FrankenberryCountChoculaTevevisionCommercial1971</p></div>");
 
@@ -118,8 +113,7 @@ suite
 										});
 								}
 							);
-						test
-							(
+						test(
 								'Functions and Services and Conditionals',
 								function (fDone)
 								{
@@ -158,7 +152,7 @@ suite
 
 									testPict.TemplateProvider.addTemplate('FunctionTestTemplate', '<review>{~D:Record.reviews[0].reviewtitle~}</review><rating>{~D:Pict.services.MockService.getTestValue()~}</rating>');
 									let tmpTemplateOutputFunctionsWithConditionals = testPict.parseTemplate(`<div>{~TemplateIfAbsolute:FunctionTestTemplate:AppData.ChocoData:Pict.services.MockService.testFunction()^>=^50~}</div>`);
-									
+
 									// This test exercises a function that isn't deterministic -- it randomly generates a value between 1 and 100 and only shows the review if it's >0 50
 									let tmpTemplateResult = `<div><review>pre booberry</review><rating>${testPict.services.MockService.testValue}</rating></div>`;
 									if (testPict.services.MockService.testValue < 50)
@@ -170,7 +164,7 @@ suite
 									// Pass in the Count Chocula json data as the Record object
 									// Set the value to 8675309
 									testPict.services.MockService.testValue = 8675309;
-									tmpTemplateOutput = testPict.parseTemplate(`<div>{~Template:MultiFunctionTestTemplate:AppData.ChocoData~}</div>`);
+									const tmpTemplateOutput = testPict.parseTemplate(`<div>{~Template:MultiFunctionTestTemplate:AppData.ChocoData~}</div>`);
 									Expect(tmpTemplateOutput).to.equal("<div><dog>This was a test... Value? ia600202.us.archive.org 8675309</dog></div>");
 
 									// Errors in functions should be caught and not crash the system
@@ -185,8 +179,7 @@ suite
 									return fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Template Value Sets with indices',
 								function (fDone)
 								{
@@ -197,14 +190,13 @@ suite
 									testPict.TemplateProvider.addTemplate('Container', '{"K":"{~D:Record.Key~}","V":"{~T:ValueTemplate:Record.Value~}"},');
 									testPict.TemplateProvider.addTemplate('ValueTemplate', '{~D:Record.format~}-->{~D:Record.size~}');
 									let tmpTemplateDataWithKeys = testPict.parseTemplate(`{~TemplateValueSet:Container:AppData.ChocoData.files~}`);
-									
+
 									Expect(tmpTemplateDataWithKeys).to.equal(`{"K":"0","V":"Thumbnail-->838"},{"K":"1","V":"Thumbnail-->6843"},{"K":"2","V":"Thumbnail-->8388"},{"K":"3","V":"Thumbnail-->5993"},{"K":"4","V":"Thumbnail-->4951"},{"K":"5","V":"Thumbnail-->3383"},{"K":"6","V":"Thumbnail-->3503"},{"K":"7","V":"Archive BitTorrent-->4093"},{"K":"8","V":"Metadata-->"},{"K":"9","V":"Metadata-->1371"},{"K":"10","V":"Metadata-->620"},{"K":"11","V":"Item Tile-->7481"},{"K":"12","V":"Animated GIF-->101114"},{"K":"13","V":"MPEG2-->31625216"},{"K":"14","V":"Video Index-->31141"},{"K":"15","V":"Ogg Video-->2248166"},{"K":"16","V":"512Kb MPEG4-->2378677"},`);
 
 									return fDone();
 								}
 							);
-						test
-							(
+						test(
 								'Template JSON Record',
 								function (fDone)
 								{
@@ -214,7 +206,7 @@ suite
 
 									let tmpTemplateDataWithKeys = testPict.parseTemplate(`{~DataJson:AppData.ChocoData.files[1]~}`);
 									let tmpTemplateDataWithKeysShorthand = testPict.parseTemplate(`{~DJ:AppData.ChocoData.files[1]~}`);
-									
+
 									Expect(tmpTemplateDataWithKeys).to.equal(`{"name":"FrankenberryCountChoculaTevevisionCommercial1971.thumbs/frankerberry_countchockula_1971.0001_000004.jpg","source":"derivative","format":"Thumbnail","original":"frankerberry_countchockula_1971.0001.mpg","mtime":"1296336957","size":"6843","md5":"c93fa52000ab4665e69b25c403e11aff","crc32":"9444e6f6","sha1":"716b4f9950b8147f51d3265f9c62ff86451308d5"}`);
 									Expect(tmpTemplateDataWithKeys).to.equal(tmpTemplateDataWithKeysShorthand);
 

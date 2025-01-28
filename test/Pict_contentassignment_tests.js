@@ -17,20 +17,17 @@ const _MockSettings = (
 	ProductVersion: '1.0.0',
 });
 
-suite
-(
+suite(
 	'Pict Content Assignment',
 	() =>
 	{
 		setup (() => {});
 
-		suite
-		(
+		suite(
 			'Basic Content Assignment',
 			() =>
 			{
-				test
-				(
+				test(
 					'Set, read, and replace some content at an address',
 					(fDone) =>
 					{
@@ -46,8 +43,7 @@ suite
 					}
 				);
 
-				test
-				(
+				test(
 					'Set, read, and remove an attribute at an address',
 					(fDone) =>
 					{
@@ -66,8 +62,7 @@ suite
 					}
 				);
 
-				test
-				(
+				test(
 					'Set, read, and remove a class at an address',
 					(fDone) =>
 					{
@@ -94,7 +89,6 @@ suite
 						fDone();
 					}
 				);
-				
 			}
 		);
 	}

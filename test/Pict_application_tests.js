@@ -23,25 +23,21 @@ const _MockSettings = (
 	PictDefaultURLPrefix: `http://localhost:${_RetoldTestPort}/1.0/`
 });
 
-suite
-(
+suite(
 	'Pict Application Tests',
 	function()
 	{
-		setup
-		(
+		setup(
 			function()
 			{
 			}
 		);
 
-		suite
-		(
+		suite(
 			'Simple Application',
 			function()
 			{
-				test
-				(
+				test(
 					'Basic application containing a view with a list.',
 					function(fDone)
 					{
@@ -88,8 +84,7 @@ suite
 						return fDone();
 					}
 				);
-				test
-				(
+				test(
 					'Basic application containing a view with a list, showing control flow.',
 					function(fDone)
 					{
@@ -136,7 +131,7 @@ suite
                                 MainViewportDefaultDataAddress: 'ExampleData',
                                 AutoRenderMainViewportView: true
                             });
-                        
+
                         testPict.PictApplication.initialize();
 
 						return fDone();
