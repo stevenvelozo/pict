@@ -4812,7 +4812,7 @@ try{if(!global.localStorage)return false;}catch(_){return false;}var val=global.
 // presumably different callback function.
 // This makes sure that own properties are retained, so that
 // decorations and such are not lost along the way.
-module.exports=wrappy;function wrappy(fn,cb){if(fn&&cb)return wrappy(fn)(cb);if(typeof fn!=='function')throw new TypeError('need wrapper function');Object.keys(fn).forEach(function(k){wrapper[k]=fn[k];});return wrapper;function wrapper(){var args=new Array(arguments.length);for(var i=0;i<args.length;i++){args[i]=arguments[i];}var ret=fn.apply(this,args);var cb=args[args.length-1];if(typeof ret==='function'&&ret!==cb){Object.keys(cb).forEach(function(k){ret[k]=cb[k];});}return ret;}}},{}],188:[function(require,module,exports){module.exports=extend;var hasOwnProperty=Object.prototype.hasOwnProperty;function extend(){var target={};for(var i=0;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;}},{}],189:[function(require,module,exports){module.exports={"name":"pict","version":"1.0.237","description":"Pict browser library.","main":"source/Pict.js","scripts":{"start":"node source/Pict.js","test":"npx mocha -u tdd -R spec","tests":"npx mocha -u tdd --exit -R spec --grep","coverage":"npx nyc --reporter=lcov --reporter=text-lcov npx mocha -- -u tdd -R spec","build":"npx quack build","docker-dev-build":"docker build ./ -f Dockerfile_LUXURYCode -t pict-image:local","docker-dev-run":"docker run -it -d --name pict-dev -p 37447:8080 -p 19506:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-image:local","docker-dev-shell":"docker exec -it pict-dev /bin/bash","lint":"eslint source/**/*.js test/**/*.js","types":"tsc -p ."},"types":"types/source/Pict.d.ts","mocha":{"diff":true,"extension":["js"],"package":"./package.json","reporter":"spec","slow":"75","timeout":"5000","ui":"tdd","watch-files":["source/**/*.js","test/**/*.js"],"watch-ignore":["lib/vendor"]},"repository":{"type":"git","url":"git+https://stevenvelozo@github.com/stevenvelozo/pict.git"},"author":"steven velozo <steven@velozo.com>","license":"MIT","bugs":{"url":"https://github.com/stevenvelozo/pict/issues"},"homepage":"https://github.com/stevenvelozo/pict#readme","devDependencies":{"@eslint/js":"^9.25.1","@types/jquery":"^3.5.32","eslint":"^9.25.1","globals":"^16.0.0","quackage":"^1.0.38"},"dependencies":{"cachetrax":"^1.0.4","fable":"^3.1.3","pict-application":"^1.0.24","pict-provider":"^1.0.3","pict-template":"^1.0.10","pict-view":"^1.0.59","typescript":"^5.8.3"}};},{}],190:[function(require,module,exports){// This assumes Pict has been required in the browser. Delcare these as globals so linter can do its job.
+module.exports=wrappy;function wrappy(fn,cb){if(fn&&cb)return wrappy(fn)(cb);if(typeof fn!=='function')throw new TypeError('need wrapper function');Object.keys(fn).forEach(function(k){wrapper[k]=fn[k];});return wrapper;function wrapper(){var args=new Array(arguments.length);for(var i=0;i<args.length;i++){args[i]=arguments[i];}var ret=fn.apply(this,args);var cb=args[args.length-1];if(typeof ret==='function'&&ret!==cb){Object.keys(cb).forEach(function(k){ret[k]=cb[k];});}return ret;}}},{}],188:[function(require,module,exports){module.exports=extend;var hasOwnProperty=Object.prototype.hasOwnProperty;function extend(){var target={};for(var i=0;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;}},{}],189:[function(require,module,exports){module.exports={"name":"pict","version":"1.0.237","description":"Pict browser library.","main":"source/Pict.js","scripts":{"start":"node source/Pict.js","test":"npx mocha -u tdd -R spec","tests":"npx mocha -u tdd --exit -R spec --grep","coverage":"npx nyc --reporter=lcov --reporter=text-lcov npx mocha -- -u tdd -R spec","build":"npx quack build","docker-dev-build":"docker build ./ -f Dockerfile_LUXURYCode -t pict-image:local","docker-dev-run":"docker run -it -d --name pict-dev -p 37447:8080 -p 19506:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-image:local","docker-dev-shell":"docker exec -it pict-dev /bin/bash","lint":"eslint source/**/*.js test/**/*.js","types":"tsc -p ."},"types":"types/source/Pict.d.ts","mocha":{"diff":true,"extension":["js"],"package":"./package.json","reporter":"spec","slow":"75","timeout":"5000","ui":"tdd","watch-files":["source/**/*.js","test/**/*.js"],"watch-ignore":["lib/vendor"]},"repository":{"type":"git","url":"git+https://stevenvelozo@github.com/stevenvelozo/pict.git"},"author":"steven velozo <steven@velozo.com>","license":"MIT","bugs":{"url":"https://github.com/stevenvelozo/pict/issues"},"homepage":"https://github.com/stevenvelozo/pict#readme","devDependencies":{"@eslint/js":"^9.25.1","@types/jquery":"^3.5.32","eslint":"^9.25.1","globals":"^16.0.0","quackage":"^1.0.41"},"dependencies":{"cachetrax":"^1.0.4","fable":"^3.1.3","pict-application":"^1.0.24","pict-provider":"^1.0.3","pict-template":"^1.0.10","pict-view":"^1.0.59","typescript":"^5.8.3"}};},{}],190:[function(require,module,exports){// This assumes Pict has been required in the browser. Delcare these as globals so linter can do its job.
 /* global Pict, _Pict: writeable *//**
  * Simple function to load a pict Application
  *
@@ -5038,8 +5038,8 @@ if(!(pTemplateHash in this.templates)){this.checkDefaultTemplateHash(pTemplateHa
 	 *
 	 * @param {String} pTemplateHash - The hash of the template
 	 */loadTemplate(pTemplateHash){let tmpTemplate=this.loadTemplateFunction(pTemplateHash);if(tmpTemplate){this.templates[pTemplateHash]=tmpTemplate.template;this.templateSources[pTemplateHash]="Loaded in loadTemplate('".concat(pTemplateHash,"') function by PictTemplateProvider [").concat(this.UUID,"]::[").concat(this.Hash,"] from [").concat(tmpTemplate.source,"]");}return tmpTemplate;}}module.exports=PictTemplateProvider;},{"fable":68}],197:[function(require,module,exports){/**
-* @author <steven@velozo.com>
-*//**
+ * @author <steven@velozo.com>
+ *//**
  * @typedef {{
  *    UUID: string,
  *    settings: any,
@@ -5057,107 +5057,107 @@ if(!(pTemplateHash in this.templates)){this.checkDefaultTemplateHash(pTemplateHa
  *    },
  *    MetaTemplate: any,
  * }} Fable
- *//** @type {{ new(...args: any[]): Fable }} */const libFable=require('fable');const libPackage=require('../package.json');const PictTemplateProvider=require('./Pict-Template-Provider.js');const PictContentAssignment=require('./Pict-Content-Assignment.js');const PictDataProvider=require('./Pict-DataProvider.js');const PictCSS=require('./Pict-CSS.js');const PictMeadowEntityProvider=require('./Pict-Meadow-EntityProvider.js');/**
+ *//** @type {{ new(...args: any[]): Fable }} */const libFable=require("fable");const libPackage=require("../package.json");const PictTemplateProvider=require("./Pict-Template-Provider.js");const PictContentAssignment=require("./Pict-Content-Assignment.js");const PictDataProvider=require("./Pict-DataProvider.js");const PictCSS=require("./Pict-CSS.js");const PictMeadowEntityProvider=require("./Pict-Meadow-EntityProvider.js");/**
  * Pict management object.
  */class Pict extends libFable{/**
-	 * @param {Object<String, any>} pSettings - The settings for the Pict instance.
-	 */constructor(pSettings){super(pSettings);/** @type {any} */this.settings;this.isBrowser=new Function("try {return (this===window);} catch(pError) {return false;}");/** @type {Object} */this._PackageFable=this._Package;this._Package=libPackage;this.browserAddress='window._Pict';if('BrowserAddress'in this.settings){this.browserAddress=this.settings.BrowserAddress;}this.children=[];/** @type {import('pict-application')} */this.PictApplication=null;// shim types from fable until we export types properly
+   * @param {Object<String, any>} pSettings - The settings for the Pict instance.
+   */constructor(pSettings){super(pSettings);/** @type {any} */this.settings;this.isBrowser=new Function("try {return (this===window);} catch(pError) {return false;}");/** @type {Object} */this._PackageFable=this._Package;this._Package=libPackage;this.browserAddress="window._Pict";if("BrowserAddress"in this.settings){this.browserAddress=this.settings.BrowserAddress;}this.children=[];/** @type {import('pict-application')} */this.PictApplication=null;// shim types from fable until we export types properly
 /** @type {any} */this.log;/**
-		 * The templateProvider provides a basic key->template mapping with default fallback capabilities
-		 *
-		 * @type {PictTemplateProvider}
-		 */this.TemplateProvider=null;this.addAndInstantiateServiceType('TemplateProvider',PictTemplateProvider);/**
-		 * The meadow entity provider.
-		 *
-		 * @type {PictMeadowEntityProvider}
-		 */this.EntityProvider=null;this.addAndInstantiateServiceType('EntityProvider',PictMeadowEntityProvider);/**
-		 * The data provider.
-		 *
-		 * @type {PictDataProvider}
-		 */this.DataProvider=null;this.addAndInstantiateServiceType('DataProvider',PictDataProvider);/**
-		 * The content assignment module.
-		 *
-		 * @type {PictContentAssignment}
-		 */this.ContentAssignment=null;this.addAndInstantiateServiceType('ContentAssignment',PictContentAssignment);/**
-		 * The CSS module.
-		 *
-		 * @type {PictCSS}
-		 * @public
-		 */this.CSSMap=null;this.addAndInstantiateServiceType('CSSMap',PictCSS);this.addServiceType('PictTemplate',require('pict-template'));this.instantiateServiceProvider('MetaTemplate');this.instantiateServiceProvider('DataGeneration');this.manifest=this.instantiateServiceProvider('Manifest');this.AppData={};if('DefaultAppData'in this.fable.settings){this.AppData=this.fable.settings.DefaultAppData;}this.Bundle={};// Log noisness goes from 0 - 5, where 5 is show me everything.
+     * The templateProvider provides a basic key->template mapping with default fallback capabilities
+     *
+     * @type {PictTemplateProvider}
+     */this.TemplateProvider=null;this.addAndInstantiateServiceType("TemplateProvider",PictTemplateProvider);/**
+     * The meadow entity provider.
+     *
+     * @type {PictMeadowEntityProvider}
+     */this.EntityProvider=null;this.addAndInstantiateServiceType("EntityProvider",PictMeadowEntityProvider);/**
+     * The data provider.
+     *
+     * @type {PictDataProvider}
+     */this.DataProvider=null;this.addAndInstantiateServiceType("DataProvider",PictDataProvider);/**
+     * The content assignment module.
+     *
+     * @type {PictContentAssignment}
+     */this.ContentAssignment=null;this.addAndInstantiateServiceType("ContentAssignment",PictContentAssignment);/**
+     * The CSS module.
+     *
+     * @type {PictCSS}
+     * @public
+     */this.CSSMap=null;this.addAndInstantiateServiceType("CSSMap",PictCSS);this.addServiceType("PictTemplate",require("pict-template"));this.instantiateServiceProvider("MetaTemplate");this.instantiateServiceProvider("DataGeneration");this.instantiateServiceProvider("RestClient");this.manifest=this.instantiateServiceProvider("Manifest");this.AppData={};if("DefaultAppData"in this.fable.settings){this.AppData=this.fable.settings.DefaultAppData;}this.Bundle={};// Log noisness goes from 0 - 5, where 5 is show me everything.
 this.LogNoisiness=0;// Although we have log noisiness, sometimes we need control flow without all the other noise for hard to diagnose interpreters.
 this.LogControlFlow=false;// And an easy way to be introspective about data at various locations
 this.LogControlFlowWatchAddressList=[];// Load manifest sets
-if(this.settings.Manifests){this.loadManifestSet(this.settings.Manifests);}this._DefaultPictTemplatesInitialized=false;this.initializePictTemplateEngine();this.addServiceType('PictView',require('pict-view'));this.addServiceType('PictProvider',require('pict-provider'));this.addServiceType('PictApplication',require('pict-application'));// Expose the named views directly, through a convenience accessor
+if(this.settings.Manifests){this.loadManifestSet(this.settings.Manifests);}this._DefaultPictTemplatesInitialized=false;this.initializePictTemplateEngine();this.addServiceType("PictView",require("pict-view"));this.addServiceType("PictProvider",require("pict-provider"));this.addServiceType("PictApplication",require("pict-application"));// Expose the named views directly, through a convenience accessor
 this.providers=this.servicesMap.PictProvider;this.views=this.servicesMap.PictView;}/**
-	 * Load manifests in as Hashed services
-	 *
-	 * @param {Object<String, String>} pManifestSet - The manifest set to load.
-	 */loadManifestSet(pManifestSet){if(typeof pManifestSet!='object'){this.log.warn("PICT [".concat(this.UUID,"] could not load Manifest Set; pManifestSet was not an object."));return;}let tmpManifestKeys=Object.keys(pManifestSet);if(tmpManifestKeys.length>0){for(let i=0;i<tmpManifestKeys.length;i++){// Load each manifest
-let tmpManifestKey=tmpManifestKeys[i];this.instantiateServiceProvider('Manifest',pManifestSet[tmpManifestKey],tmpManifestKey);}}}/**
-	 * Add a template expression to the template engine from the PictTemplate service.
-	 *
-	 * @template {new (...args: any[]) => any} T
-	 * @param {T} pTemplatePrototype - The prototype class for the template expression
-	 *
-	 * @return {InstanceType<T>} the service instance, or null if the prototype was invalid
-	 */addTemplate(pTemplatePrototype){if(typeof pTemplatePrototype!='function'){this.log.warn("PICT [".concat(this.UUID,"] could not add Template; pTemplatePrototype was not a class it was ").concat(typeof pTemplatePrototype,"."));return null;}let tmpTemplateHash=pTemplatePrototype['template_hash'];if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow addTemplate [".concat(tmpTemplateHash,"]"));}return this.instantiateServiceProviderFromPrototype('PictTemplate',{},tmpTemplateHash,pTemplatePrototype);}/**
-	 * Just passing an options will construct one for us.
-	 * Passing a hash will set the hash.
-	 * Passing a prototype will use that!
-	 *
-	 * @template {new (...args: any[]) => any} [T=typeof import('pict-view')]
-	 * @param {String} pViewHash - The hash of the view.
-	 * @param {Object<String, any>} [pOptions] - The options for the view.
-	 * @param {T} [pViewPrototype] - The prototype for the view.
-	 *
-	 * @return {InstanceType<T>} The view instance.
-	 */addView(pViewHash,pOptions,pViewPrototype){let tmpOptions=typeof pOptions=='object'?pOptions:{};let tmpViewHash=typeof pViewHash=='string'?pViewHash:this.fable.getUUID();// This is here to change how the value is managed by webpack
+   * Load manifests in as Hashed services
+   *
+   * @param {Object<String, String>} pManifestSet - The manifest set to load.
+   */loadManifestSet(pManifestSet){if(typeof pManifestSet!="object"){this.log.warn("PICT [".concat(this.UUID,"] could not load Manifest Set; pManifestSet was not an object."));return;}let tmpManifestKeys=Object.keys(pManifestSet);if(tmpManifestKeys.length>0){for(let i=0;i<tmpManifestKeys.length;i++){// Load each manifest
+let tmpManifestKey=tmpManifestKeys[i];this.instantiateServiceProvider("Manifest",pManifestSet[tmpManifestKey],tmpManifestKey);}}}/**
+   * Add a template expression to the template engine from the PictTemplate service.
+   *
+   * @template {new (...args: any[]) => any} T
+   * @param {T} pTemplatePrototype - The prototype class for the template expression
+   *
+   * @return {InstanceType<T>} the service instance, or null if the prototype was invalid
+   */addTemplate(pTemplatePrototype){if(typeof pTemplatePrototype!="function"){this.log.warn("PICT [".concat(this.UUID,"] could not add Template; pTemplatePrototype was not a class it was ").concat(typeof pTemplatePrototype,"."));return null;}let tmpTemplateHash=pTemplatePrototype["template_hash"];if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow addTemplate [".concat(tmpTemplateHash,"]"));}return this.instantiateServiceProviderFromPrototype("PictTemplate",{},tmpTemplateHash,pTemplatePrototype);}/**
+   * Just passing an options will construct one for us.
+   * Passing a hash will set the hash.
+   * Passing a prototype will use that!
+   *
+   * @template {new (...args: any[]) => any} [T=typeof import('pict-view')]
+   * @param {String} pViewHash - The hash of the view.
+   * @param {Object<String, any>} [pOptions] - The options for the view.
+   * @param {T} [pViewPrototype] - The prototype for the view.
+   *
+   * @return {InstanceType<T>} The view instance.
+   */addView(pViewHash,pOptions,pViewPrototype){let tmpOptions=typeof pOptions=="object"?pOptions:{};let tmpViewHash=typeof pViewHash=="string"?pViewHash:this.fable.getUUID();// This is here to change how the value is managed by webpack
 let tmpViewPrototype=pViewPrototype;if(this.LogControlFlow){if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow addView [".concat(tmpViewHash,"]:"),{Options:tmpOptions});}else{this.log.info("PICT-ControlFlow addView [".concat(tmpViewHash,"]"));}}if(tmpViewPrototype){// If the prototype has a default_configuration, it will be merged with options.
-const tmpDefaultViewConfiguration=tmpViewPrototype['default_configuration'];if(tmpDefaultViewConfiguration){tmpOptions=this.fable.Utility.extend({},JSON.parse(JSON.stringify(tmpDefaultViewConfiguration)),tmpOptions);}return this.instantiateServiceProviderFromPrototype('PictView',tmpOptions,tmpViewHash,tmpViewPrototype);}else{return this.instantiateServiceProvider('PictView',tmpOptions,tmpViewHash);}}/**
-	 * Add a provider unless one already exists, then return that one.
-	 *
-	 * Just passing an options will construct one for us.
-	 * Passing a hash will set the hash.
-	 * Passing a prototype will use that!
-	 *
-	 * @param {String} pProviderHash - The hash of the provider.
-	 * @param {Object<String, any>} [pOptions] - The options for the provider.
-	 * @param {any} [pProviderPrototype] - The prototype for the provider.
-	 *
-	 * FIXME: refer to PictProvider here once it has a type definition
-	 *
-	 * @return {any} The provider instance.
-	 */addProviderSingleton(pProviderHash,pOptions,pProviderPrototype){if(pProviderHash in this.providers){return this.providers[pProviderHash];}return this.addProvider(pProviderHash,pOptions,pProviderPrototype);}/**
-	 * Just passing an options will construct one for us.
-	 * Passing a hash will set the hash.
-	 * Passing a prototype will use that!
-	 *
-	 * @param {String} pProviderHash - The hash of the provider.
-	 * @param {Object<String, any>} [pOptions] - The options for the provider.
-	 * @param {any} [pProviderPrototype] - The prototype for the provider.
-	 *
-	 * FIXME: refer to PictProvider here once it has a type definition
-	 *
-	 * @return {any} The provider instance.
-	 */addProvider(pProviderHash,pOptions,pProviderPrototype){let tmpOptions=typeof pOptions=='object'?pOptions:{};let tmpProviderHash=typeof pProviderHash=='string'?pProviderHash:this.fable.getUUID();if(this.LogControlFlow){if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow addProvider [".concat(tmpProviderHash,"]:"),{Options:tmpOptions});}else{this.log.info("PICT-ControlFlow addProvider [".concat(tmpProviderHash,"]"));}}if(typeof pProviderPrototype!='undefined'){// If the prototype has a default_configuration, it will be merged with options.
-if('default_configuration'in pProviderPrototype){tmpOptions=this.fable.Utility.extend({},pProviderPrototype.default_configuration,tmpOptions);}return this.instantiateServiceProviderFromPrototype('PictProvider',tmpOptions,tmpProviderHash,pProviderPrototype);}else{return this.instantiateServiceProvider('PictProvider',tmpOptions,tmpProviderHash);}}/**
-	 * Just passing an options will construct one for us.
-	 * Passing a hash will set the hash.
-	 * Passing a prototype will use that!
-	 *
-	 * @param {String} pApplicationHash - The hash of the application.
-	 * @param {Object} [pOptions] - The options for the application.
-	 * @param {any} [pApplicationPrototype] - The prototype for the application.
-	 *
-	 * FIXME: refer to PictApplication here once it has a type definition
-	 *
-	 * @return {any} The application instance.
-	 */addApplication(pApplicationHash,pOptions,pApplicationPrototype){let tmpOptions=typeof pOptions=='object'?pOptions:{};let tmpApplicationHash=typeof pApplicationHash=='string'?pApplicationHash:this.fable.getUUID();if(this.LogControlFlow){if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow addApplication [".concat(tmpApplicationHash,"]:"),{Options:tmpOptions});}else{this.log.info("PICT-ControlFlow addApplication [".concat(tmpApplicationHash,"]"));}}if(typeof pApplicationPrototype!='undefined'){// If the prototype has a default_configuration, it will be merged with options.
-if('default_configuration'in pApplicationPrototype){tmpOptions=this.fable.Utility.extend({},pApplicationPrototype.default_configuration,tmpOptions);}return this.instantiateServiceProviderFromPrototype('PictApplication',tmpOptions,tmpApplicationHash,pApplicationPrototype);}else{return this.instantiateServiceProvider('PictApplication',tmpOptions,tmpApplicationHash);}}/**
-	 * Attach the default template engine renderers.
-	 *
-	 * @private
-	 */initializePictTemplateEngine(){if(!this._DefaultPictTemplatesInitialized){// Just looking up data in the application state template expression
+const tmpDefaultViewConfiguration=tmpViewPrototype["default_configuration"];if(tmpDefaultViewConfiguration){tmpOptions=this.fable.Utility.extend({},JSON.parse(JSON.stringify(tmpDefaultViewConfiguration)),tmpOptions);}return this.instantiateServiceProviderFromPrototype("PictView",tmpOptions,tmpViewHash,tmpViewPrototype);}else{return this.instantiateServiceProvider("PictView",tmpOptions,tmpViewHash);}}/**
+   * Add a provider unless one already exists, then return that one.
+   *
+   * Just passing an options will construct one for us.
+   * Passing a hash will set the hash.
+   * Passing a prototype will use that!
+   *
+   * @param {String} pProviderHash - The hash of the provider.
+   * @param {Object<String, any>} [pOptions] - The options for the provider.
+   * @param {any} [pProviderPrototype] - The prototype for the provider.
+   *
+   * FIXME: refer to PictProvider here once it has a type definition
+   *
+   * @return {any} The provider instance.
+   */addProviderSingleton(pProviderHash,pOptions,pProviderPrototype){if(pProviderHash in this.providers){return this.providers[pProviderHash];}return this.addProvider(pProviderHash,pOptions,pProviderPrototype);}/**
+   * Just passing an options will construct one for us.
+   * Passing a hash will set the hash.
+   * Passing a prototype will use that!
+   *
+   * @param {String} pProviderHash - The hash of the provider.
+   * @param {Object<String, any>} [pOptions] - The options for the provider.
+   * @param {any} [pProviderPrototype] - The prototype for the provider.
+   *
+   * FIXME: refer to PictProvider here once it has a type definition
+   *
+   * @return {any} The provider instance.
+   */addProvider(pProviderHash,pOptions,pProviderPrototype){let tmpOptions=typeof pOptions=="object"?pOptions:{};let tmpProviderHash=typeof pProviderHash=="string"?pProviderHash:this.fable.getUUID();if(this.LogControlFlow){if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow addProvider [".concat(tmpProviderHash,"]:"),{Options:tmpOptions});}else{this.log.info("PICT-ControlFlow addProvider [".concat(tmpProviderHash,"]"));}}if(typeof pProviderPrototype!="undefined"){// If the prototype has a default_configuration, it will be merged with options.
+if("default_configuration"in pProviderPrototype){tmpOptions=this.fable.Utility.extend({},pProviderPrototype.default_configuration,tmpOptions);}return this.instantiateServiceProviderFromPrototype("PictProvider",tmpOptions,tmpProviderHash,pProviderPrototype);}else{return this.instantiateServiceProvider("PictProvider",tmpOptions,tmpProviderHash);}}/**
+   * Just passing an options will construct one for us.
+   * Passing a hash will set the hash.
+   * Passing a prototype will use that!
+   *
+   * @param {String} pApplicationHash - The hash of the application.
+   * @param {Object} [pOptions] - The options for the application.
+   * @param {any} [pApplicationPrototype] - The prototype for the application.
+   *
+   * FIXME: refer to PictApplication here once it has a type definition
+   *
+   * @return {any} The application instance.
+   */addApplication(pApplicationHash,pOptions,pApplicationPrototype){let tmpOptions=typeof pOptions=="object"?pOptions:{};let tmpApplicationHash=typeof pApplicationHash=="string"?pApplicationHash:this.fable.getUUID();if(this.LogControlFlow){if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow addApplication [".concat(tmpApplicationHash,"]:"),{Options:tmpOptions});}else{this.log.info("PICT-ControlFlow addApplication [".concat(tmpApplicationHash,"]"));}}if(typeof pApplicationPrototype!="undefined"){// If the prototype has a default_configuration, it will be merged with options.
+if("default_configuration"in pApplicationPrototype){tmpOptions=this.fable.Utility.extend({},pApplicationPrototype.default_configuration,tmpOptions);}return this.instantiateServiceProviderFromPrototype("PictApplication",tmpOptions,tmpApplicationHash,pApplicationPrototype);}else{return this.instantiateServiceProvider("PictApplication",tmpOptions,tmpApplicationHash);}}/**
+   * Attach the default template engine renderers.
+   *
+   * @private
+   */initializePictTemplateEngine(){if(!this._DefaultPictTemplatesInitialized){// Just looking up data in the application state template expression
 //{~Data:AppData.Some.Value.to.Render~}
 //{~D:AppData.Some.Value.to.Render~}
 this.addTemplate(require("./templates/Pict-Template-Data.js"));// HTML Comment Start and End based on truthiness ... if the value is false, the comment shows up.
@@ -5184,53 +5184,53 @@ this.addTemplate(require("./templates/logic/Pict-Template-NotEmpty.js"));// Data
 this.addTemplate(require("./templates/data/Pict-Template-DataJson.js"));this.addTemplate(require("./templates/data/Pict-Template-PascalCaseIdentifier.js"));this.addTemplate(require("./templates/data/Pict-Template-DateOnlyFormat.js"));this.addTemplate(require("./templates/data/Pict-Template-DateOnlyYMD.js"));this.addTemplate(require("./templates/data/Pict-Template-DateTimeFormat.js"));this.addTemplate(require("./templates/data/Pict-Template-DateTimeYMD.js"));this.addTemplate(require("./templates/data/Pict-Template-Digits.js"));this.addTemplate(require("./templates/data/Pict-Template-Dollars.js"));this.addTemplate(require("./templates/data/Pict-Template-Join.js"));this.addTemplate(require("./templates/data/Pict-Template-JoinUnique.js"));this.addTemplate(require("./templates/data/Pict-Template-PluckJoinUnique.js"));// Data Generation Templates
 this.addTemplate(require("./templates/data-generation/Pict-Template-RandomNumber.js"));this.addTemplate(require("./templates/data-generation/Pict-Template-RandomNumberString.js"));// Debugging Templates
 this.addTemplate(require("./templates/debugging/Pict-Template-Breakpoint.js"));this.addTemplate(require("./templates/debugging/Pict-Template-LogStatement.js"));this.addTemplate(require("./templates/debugging/Pict-Template-LogValue.js"));this.addTemplate(require("./templates/debugging/Pict-Template-LogValueTree.js"));this.addTemplate(require("./templates/debugging/Pict-Template-DataValueTree.js"));this._DefaultPictTemplatesInitialized=true;}}/**
-	 * Read a value from a nested object using a dot notation string.
-	 *
-	 * @param {string} pAddress - The address to resolve
-	 * @param {any} pRecord - The record to resolve
-	 * @param {Array<any>} [pContextArray] - The context array to resolve
-	 *
-	 * @return {any} The value at the given address, or undefined
-	 */resolveStateFromAddress(pAddress,pRecord,pContextArray){let tmpContextArray=Array.isArray(pContextArray)?pContextArray:[this];return this.manifest.getValueByHash({Pict:this,AppData:this.AppData,Bundle:this.Bundle,Context:tmpContextArray,Record:pRecord},pAddress);}/**
-	 * Parse a template.
-	 *
-	 * @param {String} pTemplateString - The template string to parse
-	 * @param {Object} pData - The data to use in the template
-	 * @param {Function} [fCallback] - The callback to call when the template is parsed
-	 * @param {Array<any>} [pContextArray] - The context array to use in the template
-	 *
-	 * @return {String?} The parsed template string, or undefined if a callback was provided
-	 */parseTemplate(pTemplateString,pData,fCallback,pContextArray){let tmpData=typeof pData==='object'?pData:{};let tmpContextArray=Array.isArray(pContextArray)?pContextArray:[this];let tmpParseUUID;if(this.LogControlFlow){tmpParseUUID=this.fable.getUUID();this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," [").concat(pTemplateString.substring(0,50).replace('\n','\\n'),"...").concat(pTemplateString.length,"] (fCallback: ").concat(typeof fCallback,") with data size [").concat(JSON.stringify(tmpData).length,"]"));if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," template:\n").concat(pTemplateString));}if(this.LogControlFlowWatchAddressList.length>0){for(let i=0;i<this.LogControlFlowWatchAddressList.length;i++){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," Watch Value: [").concat(this.LogControlFlowWatchAddressList[i],"]=>[").concat(this.resolveStateFromAddress(this.LogControlFlowWatchAddressList[i],tmpData),"]"));}}}if(typeof fCallback==='function'){this.MetaTemplate.parseString(pTemplateString,tmpData,(pError,pParsedTemplate)=>{if(this.LogControlFlow&&this.LogNoisiness>1){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," Template Async Return Value:\n").concat(pParsedTemplate));}return fCallback(pError,pParsedTemplate);},tmpContextArray);}else{let tmpResult=this.MetaTemplate.parseString(pTemplateString,tmpData,null,tmpContextArray);if(this.LogControlFlow&&this.LogNoisiness>1){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," Template Return Value:\n").concat(tmpResult));}return tmpResult;}}/**
-	 * Parse a template by hash.
-	 *
-	 * @param {String} pTemplateHash - The hash of the template to parse
-	 * @param {Object} pData - The data to use in the template
-	 * @param {Function} [fCallback] - The callback to call when the template is parsed
-	 * @param {Array<any>} [pContextArray] - The context array to use in the template
-	 *
-	 * @return {String?} The parsed template string, or undefined if a callback was provided
-	 */parseTemplateByHash(pTemplateHash,pData,fCallback,pContextArray){let tmpTemplateString=this.TemplateProvider.getTemplate(pTemplateHash);// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
-if(!tmpTemplateString){tmpTemplateString='';}return this.parseTemplate(tmpTemplateString,pData,fCallback,pContextArray);}/**
-	 * Parse a template set.
-	 *
-	 * @param {String} pTemplateString - The template string to parse
-	 * @param {Array<any>|Object} pDataSet - The data set to use in the template
-	 * @param {Function} [fCallback] - The callback to call when the template set is parsed
-	 * @param {Array<any>} [pContextArray] - The context array to use in the template
-	 *
-	 * @return {String?} The parsed template string, or undefined if a callback was provided
-	 */parseTemplateSet(pTemplateString,pDataSet,fCallback,pContextArray){// TODO: This will need streaming -- for now janky old string append does the trick
-let tmpValue='';if(typeof fCallback=='function'){if(Array.isArray(pDataSet)||typeof pDataSet=='object'){this.Utility.eachLimit(pDataSet,1,(pRecord,fRecordTemplateCallback)=>{return this.parseTemplate(pTemplateString,pRecord,(pError,pTemplateResult)=>{tmpValue+=pTemplateResult;return fRecordTemplateCallback();});},pError=>{return fCallback(pError,tmpValue);});}else{return fCallback(Error('Pict: Template Set: pDataSet is not an array or object.'),'');}}else{if(Array.isArray(pDataSet)||typeof pDataSet=='object'){if(Array.isArray(pDataSet)){for(let i=0;i<pDataSet.length;i++){tmpValue+=this.parseTemplate(pTemplateString,pDataSet[i],null,pContextArray);}}else{let tmpKeys=Object.keys(pDataSet);for(let i=0;i<tmpKeys.length;i++){tmpValue+=this.parseTemplate(pTemplateString,pDataSet[tmpKeys[i]],null,pContextArray);}}return tmpValue;}else{return'';}}}/**
-	 * Parse a template set by hash.
-	 *
-	 * @param {String} pTemplateHash - The hash of the template to parse
-	 * @param {Array<any>|Object} pDataSet - The data set to use in the template
-	 * @param {Function} [fCallback] - The callback to call when the template is parsed
-	 * @param {Array<any>} [pContextArray] - The context array to use in the template
-	 *
-	 * @return {String?} The parsed template string, or undefined if a callback was provided
-	 */parseTemplateSetByHash(pTemplateHash,pDataSet,fCallback,pContextArray){let tmpTemplateString=this.TemplateProvider.getTemplate(pTemplateHash);// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
-if(!tmpTemplateString){tmpTemplateString='';}return this.parseTemplateSet(tmpTemplateString,pDataSet,fCallback,pContextArray);}};module.exports=Pict;module.exports.PictApplicationClass=require('pict-application');module.exports.PictViewClass=require('pict-view');module.exports.PictProviderClass=require('pict-provider');module.exports.PictTemplateClass=require('pict-template');module.exports.EnvironmentLog=require('./environments/Pict-Environment-Log.js');module.exports.EnvironmentObject=require('./environments/Pict-Environment-Object.js');// This is to help understand the type of enivironement we're executing in
+   * Read a value from a nested object using a dot notation string.
+   *
+   * @param {string} pAddress - The address to resolve
+   * @param {any} pRecord - The record to resolve
+   * @param {Array<any>} [pContextArray] - The context array to resolve
+   *
+   * @return {any} The value at the given address, or undefined
+   */resolveStateFromAddress(pAddress,pRecord,pContextArray){let tmpContextArray=Array.isArray(pContextArray)?pContextArray:[this];return this.manifest.getValueByHash({Pict:this,AppData:this.AppData,Bundle:this.Bundle,Context:tmpContextArray,Record:pRecord},pAddress);}/**
+   * Parse a template.
+   *
+   * @param {String} pTemplateString - The template string to parse
+   * @param {Object} pData - The data to use in the template
+   * @param {Function} [fCallback] - The callback to call when the template is parsed
+   * @param {Array<any>} [pContextArray] - The context array to use in the template
+   *
+   * @return {String?} The parsed template string, or undefined if a callback was provided
+   */parseTemplate(pTemplateString,pData,fCallback,pContextArray){let tmpData=typeof pData==="object"?pData:{};let tmpContextArray=Array.isArray(pContextArray)?pContextArray:[this];let tmpParseUUID;if(this.LogControlFlow){tmpParseUUID=this.fable.getUUID();this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," [").concat(pTemplateString.substring(0,50).replace("\n","\\n"),"...").concat(pTemplateString.length,"] (fCallback: ").concat(typeof fCallback,") with data size [").concat(JSON.stringify(tmpData).length,"]"));if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," template:\n").concat(pTemplateString));}if(this.LogControlFlowWatchAddressList.length>0){for(let i=0;i<this.LogControlFlowWatchAddressList.length;i++){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," Watch Value: [").concat(this.LogControlFlowWatchAddressList[i],"]=>[").concat(this.resolveStateFromAddress(this.LogControlFlowWatchAddressList[i],tmpData),"]"));}}}if(typeof fCallback==="function"){this.MetaTemplate.parseString(pTemplateString,tmpData,(pError,pParsedTemplate)=>{if(this.LogControlFlow&&this.LogNoisiness>1){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," Template Async Return Value:\n").concat(pParsedTemplate));}return fCallback(pError,pParsedTemplate);},tmpContextArray);}else{let tmpResult=this.MetaTemplate.parseString(pTemplateString,tmpData,null,tmpContextArray);if(this.LogControlFlow&&this.LogNoisiness>1){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," Template Return Value:\n").concat(tmpResult));}return tmpResult;}}/**
+   * Parse a template by hash.
+   *
+   * @param {String} pTemplateHash - The hash of the template to parse
+   * @param {Object} pData - The data to use in the template
+   * @param {Function} [fCallback] - The callback to call when the template is parsed
+   * @param {Array<any>} [pContextArray] - The context array to use in the template
+   *
+   * @return {String?} The parsed template string, or undefined if a callback was provided
+   */parseTemplateByHash(pTemplateHash,pData,fCallback,pContextArray){let tmpTemplateString=this.TemplateProvider.getTemplate(pTemplateHash);// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
+if(!tmpTemplateString){tmpTemplateString="";}return this.parseTemplate(tmpTemplateString,pData,fCallback,pContextArray);}/**
+   * Parse a template set.
+   *
+   * @param {String} pTemplateString - The template string to parse
+   * @param {Array<any>|Object} pDataSet - The data set to use in the template
+   * @param {Function} [fCallback] - The callback to call when the template set is parsed
+   * @param {Array<any>} [pContextArray] - The context array to use in the template
+   *
+   * @return {String?} The parsed template string, or undefined if a callback was provided
+   */parseTemplateSet(pTemplateString,pDataSet,fCallback,pContextArray){// TODO: This will need streaming -- for now janky old string append does the trick
+let tmpValue="";if(typeof fCallback=="function"){if(Array.isArray(pDataSet)||typeof pDataSet=="object"){this.Utility.eachLimit(pDataSet,1,(pRecord,fRecordTemplateCallback)=>{return this.parseTemplate(pTemplateString,pRecord,(pError,pTemplateResult)=>{tmpValue+=pTemplateResult;return fRecordTemplateCallback();});},pError=>{return fCallback(pError,tmpValue);});}else{return fCallback(Error("Pict: Template Set: pDataSet is not an array or object."),"");}}else{if(Array.isArray(pDataSet)||typeof pDataSet=="object"){if(Array.isArray(pDataSet)){for(let i=0;i<pDataSet.length;i++){tmpValue+=this.parseTemplate(pTemplateString,pDataSet[i],null,pContextArray);}}else{let tmpKeys=Object.keys(pDataSet);for(let i=0;i<tmpKeys.length;i++){tmpValue+=this.parseTemplate(pTemplateString,pDataSet[tmpKeys[i]],null,pContextArray);}}return tmpValue;}else{return"";}}}/**
+   * Parse a template set by hash.
+   *
+   * @param {String} pTemplateHash - The hash of the template to parse
+   * @param {Array<any>|Object} pDataSet - The data set to use in the template
+   * @param {Function} [fCallback] - The callback to call when the template is parsed
+   * @param {Array<any>} [pContextArray] - The context array to use in the template
+   *
+   * @return {String?} The parsed template string, or undefined if a callback was provided
+   */parseTemplateSetByHash(pTemplateHash,pDataSet,fCallback,pContextArray){let tmpTemplateString=this.TemplateProvider.getTemplate(pTemplateHash);// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
+if(!tmpTemplateString){tmpTemplateString="";}return this.parseTemplateSet(tmpTemplateString,pDataSet,fCallback,pContextArray);}}module.exports=Pict;module.exports.PictApplicationClass=require("pict-application");module.exports.PictViewClass=require("pict-view");module.exports.PictProviderClass=require("pict-provider");module.exports.PictTemplateClass=require("pict-template");module.exports.EnvironmentLog=require("./environments/Pict-Environment-Log.js");module.exports.EnvironmentObject=require("./environments/Pict-Environment-Object.js");// This is to help understand the type of enivironement we're executing in
 module.exports.isBrowser=new Function("try {return (this===window);} catch(pError) {return false;}");module.exports.safeOnDocumentReady=require("./Pict-Browser-SafeOnDocumentReady.js");module.exports.safeLoadPictApplication=require("./Pict-Browser-SafeLoad.js");},{"../package.json":189,"./Pict-Browser-SafeLoad.js":190,"./Pict-Browser-SafeOnDocumentReady.js":191,"./Pict-CSS.js":192,"./Pict-Content-Assignment.js":193,"./Pict-DataProvider.js":194,"./Pict-Meadow-EntityProvider.js":195,"./Pict-Template-Provider.js":196,"./environments/Pict-Environment-Log.js":198,"./environments/Pict-Environment-Object.js":199,"./templates/Pict-Template-Data.js":200,"./templates/Pict-Template-Entity.js":201,"./templates/Pict-Template-Self.js":202,"./templates/Pict-Template-Template.js":203,"./templates/Pict-Template-TemplateFromMap.js":204,"./templates/Pict-Template-TemplateSet.js":205,"./templates/Pict-Template-TemplateSetFromMap.js":206,"./templates/Pict-Template-TemplateValueSet.js":207,"./templates/data-generation/Pict-Template-RandomNumber.js":208,"./templates/data-generation/Pict-Template-RandomNumberString.js":209,"./templates/data/Pict-Template-DataJson.js":210,"./templates/data/Pict-Template-DateOnlyFormat.js":211,"./templates/data/Pict-Template-DateOnlyYMD.js":212,"./templates/data/Pict-Template-DateTimeFormat.js":213,"./templates/data/Pict-Template-DateTimeYMD.js":214,"./templates/data/Pict-Template-Digits.js":215,"./templates/data/Pict-Template-Dollars.js":216,"./templates/data/Pict-Template-HtmlCommentEnd.js":217,"./templates/data/Pict-Template-HtmlCommentStart.js":218,"./templates/data/Pict-Template-Join.js":219,"./templates/data/Pict-Template-JoinUnique.js":220,"./templates/data/Pict-Template-PascalCaseIdentifier.js":221,"./templates/data/Pict-Template-PluckJoinUnique.js":222,"./templates/debugging/Pict-Template-Breakpoint.js":223,"./templates/debugging/Pict-Template-DataValueTree.js":224,"./templates/debugging/Pict-Template-LogStatement.js":225,"./templates/debugging/Pict-Template-LogValue.js":226,"./templates/debugging/Pict-Template-LogValueTree.js":227,"./templates/logic/Pict-Template-NotEmpty.js":228,"./templates/logic/Pict-Template-TemplateIf.js":230,"./templates/logic/Pict-Template-TemplateIfAbsolute.js":231,"fable":68,"pict-application":137,"pict-provider":139,"pict-template":141,"pict-view":143}],198:[function(require,module,exports){/**
 * Pict browser shim loader
 * @author <steven@velozo.com>
