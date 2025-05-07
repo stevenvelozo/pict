@@ -11,7 +11,10 @@ declare class PictContentAssignment {
     constructor(pFable: any, pOptions?: any, pServiceHash?: string);
     /** @type {any} */
     log: any;
+    /** @type {any} */
+    fable: any;
     serviceType: string;
+    manifest: any;
     inBrowser: boolean;
     hasDocument: boolean;
     hasJquery: boolean;

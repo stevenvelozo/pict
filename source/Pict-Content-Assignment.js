@@ -16,8 +16,12 @@ class PictContentAssignment extends libFableServiceBase
 
 		/** @type {any} */
 		this.log;
+		/** @type {any} */
+		this.fable;
 
 		this.serviceType = 'PictContentAssignment';
+
+		this.manifest = pFable.newManyfest();
 
 		// Check to see if we are running in a browser
 		this.inBrowser = false;
@@ -314,6 +318,8 @@ class PictContentAssignment extends libFableServiceBase
 		// Assign the content to the destination address
 		switch(pRenderMethod)
 		{
+			case 'virtual-assignment':
+				return this.manifest.setValueByHash(this.fable, pDestinationAddress, pContent);
 			case 'append':
 				return this.appendContent(pDestinationAddress, pContent);
 			case 'prepend':

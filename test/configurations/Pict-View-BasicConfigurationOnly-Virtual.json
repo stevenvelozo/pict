@@ -1,0 +1,23 @@
+{
+	"ViewIdentifier": "ExampleView",
+	"RenderOnLoad": false,
+	"DefaultRenderable": "ExampleView-Print",
+	"DefaultDestinationAddress": "#Example-Print-Container",
+	"Templates": [
+		{
+			"Hash": "ExampleView-Print-Box",
+			"Template": "<div><h1>Example!</h1{~TemplateSet:ExampleView-Print-Row:AppData.ExampleData~}</div>"
+		},
+		{
+			"Hash": "ExampleView-Print-Row",
+			"Template": "<ul>{~Data:Record.Name~}</ul>"
+		}
+	],
+	"Renderables": [
+		{
+			"RenderableHash": "ExampleView-Print",
+			"TemplateHash": "ExampleView-Print-Box",
+			"DestinationAddress": "#ExampleView-Print-Container"
+		}
+	]
+}

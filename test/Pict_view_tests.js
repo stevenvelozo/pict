@@ -56,6 +56,52 @@ suite(
 						return fDone();
 					}
 				);
+				test(
+					'Basic view rendering to a virtual destination.',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+
+						let tmpEnvironment = new libPict.EnvironmentLog(testPict, {});
+
+                        let tmpView = testPict.addView('ExampleView', _BasicConfigurationView);
+
+                        testPict.AppData.ExampleData = [ { Name: 'One' }, { Name: 'Two' }, { Name: 'Three' } ];
+
+						const testOutput = testPict.parseTemplate('{~View:ExampleView~}');
+
+						Expect(testOutput).to.equal("<div><h1>Example!</h1<ul>One</ul><ul>Two</ul><ul>Three</ul></div>");
+
+						return fDone();
+					}
+				);
+				test(
+					'Basic async view rendering to a virtual destination.',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+
+						let tmpEnvironment = new libPict.EnvironmentLog(testPict, {});
+
+                        let tmpView = testPict.addView('ExampleView', _BasicConfigurationView);
+
+                        testPict.AppData.ExampleData = [ { Name: 'One' }, { Name: 'Two' }, { Name: 'Three' } ];
+
+						testPict.parseTemplate('{~View:ExampleView~}', {},
+							(pError, pResult) =>
+							{
+								if (pError)
+								{
+									return fDone(pError);
+								}
+
+								Expect(pResult).to.equal("<div><h1>Example!</h1<ul>One</ul><ul>Two</ul><ul>Three</ul></div>");
+
+								return fDone();
+							}
+						);
+					}
+				);
 			}
 		);
 	}

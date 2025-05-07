@@ -89,6 +89,19 @@ suite(
 						fDone();
 					}
 				);
+
+				test(
+					'Virtual Assignment of Content',
+					(fDone) =>
+					{
+						let testPict = new libPict(_MockSettings);
+						let testEnvironment = new libPict.EnvironmentObject(testPict);
+
+						testPict.ContentAssignment.projectContent('virtual-assignment', '__CachedData', 'SomeValue');
+						Expect(testPict.__CachedData).to.equal('SomeValue');
+						fDone();
+					}
+				);
 			}
 		);
 	}
