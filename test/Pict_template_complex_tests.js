@@ -213,6 +213,31 @@ suite(
 									return fDone();
 								}
 							);
+						test(
+								'Template Set with Payload',
+								function (fDone)
+								{
+									var testPict = new libPict(_MockSettings);
+
+									testPict.AppData.Data = {
+										Keys: [{"Key": "Name" }, { "Key": "Age" }, { "Key": "FavoriteColor" }],
+										Map: {"Name": "Steve", "Homeroom":"Dog", "Age": 50, "FavoriteColor": "Blue" }
+									};
+
+									testPict.TemplateProvider.addTemplate('SetWithPayload', '[aa {~D:Record.Data.Key~}]');
+									testPict.TemplateProvider.addTemplate('SetWithParsedPayload', '[{~D:Record.Data.Key~} :==: {~DVBK:Record.Payload:Record.Data.Key~}]');
+
+									let tmpTemplateDataWithKeys = testPict.parseTemplate(`{~TSWP:SetWithPayload:AppData.Data.Keys:AppData.Data.Map~}`);
+
+									Expect(tmpTemplateDataWithKeys).to.equal('[aa Name][aa Age][aa FavoriteColor]');
+
+									let tmpTemplateData = testPict.parseTemplate(`{~TSWP:SetWithParsedPayload:AppData.Data.Keys:AppData.Data.Map~}`);
+									
+									Expect(tmpTemplateData).to.equal('[Name :==: Steve][Age :==: 50][FavoriteColor :==: Blue]');
+
+									return fDone();
+								}
+							);
 						}
 				);
 		}

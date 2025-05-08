@@ -401,6 +401,8 @@ class Pict extends libFable {
 			//{~D:AppData.Some.Value.to.Render~}
 			this.addTemplate(require(`./templates/Pict-Template-Data.js`));
 
+			this.addTemplate(require(`./templates/Pict-Template-DataValueByKey.js`));
+
 			this.addTemplate(require(`./templates/Pict-Template-View.js`));
 
 			// HTML Comment Start and End based on truthiness ... if the value is false, the comment shows up.
@@ -432,6 +434,9 @@ class Pict extends libFable {
 			// {~TVS:Template:AddressOfDataSet~}
 			this.addTemplate(
 				require(`./templates/Pict-Template-TemplateValueSet.js`),
+			);
+			this.addTemplate(
+				require(`./templates/Pict-Template-TemplateSetWithPayload.js`),
 			);
 			this.addTemplate(require(`./templates/Pict-Template-TemplateFromMap.js`));
 			this.addTemplate(
@@ -711,6 +716,102 @@ class Pict extends libFable {
 			pDataSet,
 			fCallback,
 			pContextArray,
+		);
+	}
+
+
+	/**
+	 * Parse a template set.
+	 *
+	 * @param {String} pTemplateString - The template string to parse
+	 * @param {Array<any>|Object} pDataSet - The data set to use in the template
+	 * @param {Function} [fCallback] - The callback to call when the template set is parsed
+	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 *
+	 * @return {String?} The parsed template string, or undefined if a callback was provided
+	 */
+	parseTemplateSetWithPayload(pTemplateString, pDataSet, pPayload, fCallback, pContextArray) {
+		// TODO: This will need streaming -- for now janky old string append does the trick
+		let tmpValue = "";
+		if (typeof fCallback == "function") {
+			if (Array.isArray(pDataSet) || typeof pDataSet == "object") {
+				this.Utility.eachLimit(
+					pDataSet,
+					1,
+					(pRecord, fRecordTemplateCallback) => {
+						return this.parseTemplate(
+							pTemplateString,
+							{ Data: pRecord, Payload: pPayload },
+							(pError, pTemplateResult) => {
+								tmpValue += pTemplateResult;
+								return fRecordTemplateCallback();
+							},
+						);
+					},
+					(pError) => {
+						return fCallback(pError, tmpValue);
+					},
+				);
+			} else {
+				return fCallback(
+					Error("Pict: Template Set: pDataSet is not an array or object."),
+					"",
+				);
+			}
+		} else {
+			if (Array.isArray(pDataSet) || typeof pDataSet == "object") {
+				if (Array.isArray(pDataSet)) {
+					for (let i = 0; i < pDataSet.length; i++) {
+						tmpValue += this.parseTemplate(
+							pTemplateString,
+							{ Data: pDataSet[i], Payload: pPayload },
+							null,
+							pContextArray,
+						);
+					}
+				} else {
+					let tmpKeys = Object.keys(pDataSet);
+					for (let i = 0; i < tmpKeys.length; i++) {
+						tmpValue += this.parseTemplate(
+							pTemplateString,
+							{ Data: pDataSet[tmpKeys[i]], Payload: pPayload },
+							null,
+							pContextArray,
+						);
+					}
+				}
+
+				return tmpValue;
+			} else {
+				return "";
+			}
+		}
+	}
+
+	/**
+	 * Parse a template set by hash.
+	 *
+	 * @param {String} pTemplateHash - The hash of the template to parse
+	 * @param {Array<any>|Object} pDataSet - The data set to use in the template
+	 * @param {Object} pPayload - The payload to use in the template
+	 * @param {Function} [fCallback] - The callback to call when the template is parsed
+	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 *
+	 * @return {String?} The parsed template string, or undefined if a callback was provided
+	 */
+	parseTemplateSetWithPayloadByHash(pTemplateHash, pDataSet, pPayload, fCallback, pContextArray) {
+		let tmpTemplateString = this.TemplateProvider.getTemplate(pTemplateHash);
+
+		// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
+		if (!tmpTemplateString) {
+			tmpTemplateString = "";
+		}
+		return this.parseTemplateSetWithPayload(
+			tmpTemplateString,
+			pDataSet,
+			pPayload,
+			fCallback,
+			pContextArray
 		);
 	}
 }

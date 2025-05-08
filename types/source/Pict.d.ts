@@ -245,6 +245,29 @@ declare class Pict extends Pict_base {
      * @return {String?} The parsed template string, or undefined if a callback was provided
      */
     parseTemplateSetByHash(pTemplateHash: string, pDataSet: Array<any> | any, fCallback?: Function, pContextArray?: Array<any>): string | null;
+    /**
+     * Parse a template set.
+     *
+     * @param {String} pTemplateString - The template string to parse
+     * @param {Array<any>|Object} pDataSet - The data set to use in the template
+     * @param {Function} [fCallback] - The callback to call when the template set is parsed
+     * @param {Array<any>} [pContextArray] - The context array to use in the template
+     *
+     * @return {String?} The parsed template string, or undefined if a callback was provided
+     */
+    parseTemplateSetWithPayload(pTemplateString: string, pDataSet: Array<any> | any, pPayload: any, fCallback?: Function, pContextArray?: Array<any>): string | null;
+    /**
+     * Parse a template set by hash.
+     *
+     * @param {String} pTemplateHash - The hash of the template to parse
+     * @param {Array<any>|Object} pDataSet - The data set to use in the template
+     * @param {Object} pPayload - The payload to use in the template
+     * @param {Function} [fCallback] - The callback to call when the template is parsed
+     * @param {Array<any>} [pContextArray] - The context array to use in the template
+     *
+     * @return {String?} The parsed template string, or undefined if a callback was provided
+     */
+    parseTemplateSetWithPayloadByHash(pTemplateHash: string, pDataSet: Array<any> | any, pPayload: any, fCallback?: Function, pContextArray?: Array<any>): string | null;
 }
 declare namespace Pict {
     export { PictApplicationClass, PictViewClass, PictProviderClass, PictTemplateClass, EnvironmentLog, EnvironmentObject, isBrowser, safeOnDocumentReady, safeLoadPictApplication, Fable };
