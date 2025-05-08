@@ -8,7 +8,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 		/** @type {any} */
 		this.options;
-		/** @type {import('pict') & { settings: any }} */
+		/** @type {import('pict') & { settings: any } & { newAnticipate: any }} */
 		this.fable;
 		/** @type {any} */
 		this.log;
@@ -57,8 +57,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 	}
 
-
-	gatherEntitySet(fCallback, pEntityInformation)
+	gatherEntitySet(pEntityInformation, fCallback)
 	{
 		// First sanity check the pEntityInformation
 		if (!('Entity' in pEntityInformation) || (typeof(pEntityInformation.Entity) != 'string'))
@@ -144,9 +143,9 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	 * 
 	 * @param {Object} pEntitiesBundleDescription - The entity bundle description object.
 	 *
-	 * @return {Promise<Error?>} - Returns a promise that resolves when the data has been gathered.
+	 * @return {Promise<any>} - Returns a promise that resolves when the data has been gathered.
 	 */
-	async gatherDataFromServer(pEntitiesBundleDescription)
+	gatherDataFromServer(pEntitiesBundleDescription, fCallback)
 	{
 		if (!Array.isArray(pEntitiesBundleDescription))
 		{
@@ -164,7 +163,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 				{
 					try
 					{
-						return this.gatherEntitySet(fNext, tmpEntityBundleEntry);
+						return this.gatherEntitySet(tmpEntityBundleEntry, fNext);
 					}
 					catch (pError)
 					{
@@ -174,19 +173,16 @@ class PictMeadowEntityProvider extends libFableServiceBase
 				});
 		}
 
-		return new Promise((pResolve, pReject) =>
+		tmpAnticipate.wait(
+			(pError) =>
 			{
-				tmpAnticipate.wait(
-					(pError) =>
-					{
-						//FIXME: should we be ignoring this error? rejecting here is unsafe since the result isn't guaranteed to be handled, so will crash stuff currently
-						if (pError)
-						{
-							this.log.error(`EntityBundleRequest error gathering entity set: ${pError}`, pError);
-						}
-						pReject(pError);
-						return true;
-					});
+				//FIXME: should we be ignoring this error? rejecting here is unsafe since the result isn't guaranteed to be handled, so will crash stuff currently
+				if (pError)
+				{
+					this.log.error(`EntityBundleRequest error gathering entity set: ${pError}`, pError);
+					return fCallback(pError);
+				}
+				return fCallback();
 			});
 	}
 
