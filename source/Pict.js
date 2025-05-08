@@ -64,6 +64,8 @@ class Pict extends libFable {
 		// shim types from fable until we export types properly
 		/** @type {any} */
 		this.log;
+		//NOTE: This needs to come before any other providers which may instantiate a rest client so we don't proliferate them
+		this.instantiateServiceProvider("RestClient");
 		/**
 		 * The templateProvider provides a basic key->template mapping with default fallback capabilities
 		 *
@@ -110,7 +112,6 @@ class Pict extends libFable {
 		this.addServiceType("PictTemplate", require("pict-template"));
 		this.instantiateServiceProvider("MetaTemplate");
 		this.instantiateServiceProvider("DataGeneration");
-		this.instantiateServiceProvider("RestClient");
 
 		this.manifest = this.instantiateServiceProvider("Manifest");
 
