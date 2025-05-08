@@ -10,6 +10,8 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		this.options;
 		/** @type {import('pict') & { settings: any }} */
 		this.fable;
+		/** @type {any} */
+		this.log;
 
 		this.serviceType = 'PictMeadowProvider';
 
@@ -53,6 +55,139 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 			this.fable.Bundle[pEntity] = this.cache[pEntity].RecordMap;
 		}
+	}
+
+
+	gatherEntitySet(fCallback, pEntityInformation)
+	{
+		// First sanity check the pEntityInformation
+		if (!('Entity' in pEntityInformation) || (typeof(pEntityInformation.Entity) != 'string'))
+		{
+			this.log.warn(`EntityBundleRequest failed to parse entity request because the entity stanza did not contain an Entity string.`);
+			return fCallback();
+		}
+		if (!('Destination' in pEntityInformation) || (typeof(pEntityInformation.Destination) != 'string'))
+		{
+			this.log.warn(`EntityBundleRequest failed to parse entity request because the entity stanza did not contain a Destination string.`);
+			return fCallback();
+		}
+		if (!('Filter' in pEntityInformation) || (typeof(pEntityInformation.Filter) != 'string'))
+		{
+			pEntityInformation.Filter = '';
+		}
+		if (!('FilterData' in pEntityInformation) || (typeof(pEntityInformation.FilterData) != 'object'))
+		{
+			pEntityInformation.FilterData = {};
+		}
+		if (!('RecordStartCursor' in pEntityInformation) || (typeof(pEntityInformation.RecordStartCursor) != 'number'))
+		{
+			pEntityInformation.RecordStartCursor = 0;
+		}
+		if (!('PageSize' in pEntityInformation) || (typeof(pEntityInformation.PageSize) != 'number'))
+		{
+			pEntityInformation.PageSize = 100;
+		}
+
+		let tmpRecordStartCursor = null;
+		let tmpRecordCount = null;
+		if (pEntityInformation.RecordCount)
+		{
+			tmpRecordStartCursor = pEntityInformation.RecordStartCursor;
+			tmpRecordCount = pEntityInformation.RecordCount;
+		}
+		// Parse the filter template
+		const tmpFilterString = this.fable.parseTemplate(pEntityInformation.Filter, pEntityInformation.FilterData);
+
+		// Create a callback function to handle receiving the record set
+		const fRecordFetchComplete = (pError, pRecordSet) =>
+		{
+			if (pError)
+			{
+				this.log.error(`EntityBundleRequest request Error getting entity set for [${pEntityInformation.Entity}] with filter [${tmpFilterString}]: ${pError}`, pError);
+				return fCallback(pError, '');
+			}
+
+			this.log.trace(`EntityBundleRequest found ${pRecordSet.length} records for ${pEntityInformation.Entity} filtered to [${tmpFilterString}]`);
+
+			// Now assign it back to the destination; because this is not view specific it doesn't use the manifests from them (to deal with scope overlap with subgrids).
+			if (pEntityInformation.SingleRecord)
+			{
+				if (pRecordSet.length > 1)
+				{
+					this.log.warn(`EntityBundleRequest found more than one record for ${pEntityInformation.Entity} filtered to [${tmpFilterString}] but SingleRecord is true; setting the first record.`);
+				}
+				if (pRecordSet.length < 1)
+				{
+					this.fable.manifest.setValueByHash(this.fable, pEntityInformation.Destination, false);
+				}
+				this.fable.manifest.setValueByHash(this.fable, pEntityInformation.Destination, pRecordSet[0]);
+			}
+			else
+			{
+				this.fable.manifest.setValueByHash(this.fable, pEntityInformation.Destination, pRecordSet);
+			}
+
+			return fCallback();
+		};
+		if (tmpRecordCount)
+		{
+			this.getEntitySetPage(pEntityInformation.Entity, tmpFilterString, tmpRecordStartCursor, tmpRecordCount, fRecordFetchComplete);
+		}
+		else
+		{
+			this.getEntitySet(pEntityInformation.Entity, tmpFilterString, fRecordFetchComplete);
+		}
+	}
+
+	/**
+	 * Gather data from the server returning a promise when it is complete.
+	 * 
+	 * @param {Object} pEntitiesBundleDescription - The entity bundle description object.
+	 *
+	 * @return {Promise<Error?>} - Returns a promise that resolves when the data has been gathered.
+	 */
+	async gatherDataFromServer(pEntitiesBundleDescription)
+	{
+		if (!Array.isArray(pEntitiesBundleDescription))
+		{
+			this.log.error(`EntityBundleRequest failed to parse entity bundle request because the input was not an array.`);
+			return Promise.reject(new Error('EntityBundleRequest failed to parse entity bundle request because the input was not an array.'));
+		}
+
+		let tmpAnticipate = this.fable.newAnticipate();
+
+		for (let i = 0; i < pEntitiesBundleDescription.length; i++)
+		{
+			let tmpEntityBundleEntry = pEntitiesBundleDescription[i];
+			tmpAnticipate.anticipate(
+				(fNext) =>
+				{
+					try
+					{
+						return this.gatherEntitySet(fNext, tmpEntityBundleEntry);
+					}
+					catch (pError)
+					{
+						this.log.error(`EntityBundleRequest error gathering entity set: ${pError}`, pError);
+					}
+					return fNext();
+				});
+		}
+
+		return new Promise((pResolve, pReject) =>
+			{
+				tmpAnticipate.wait(
+					(pError) =>
+					{
+						//FIXME: should we be ignoring this error? rejecting here is unsafe since the result isn't guaranteed to be handled, so will crash stuff currently
+						if (pError)
+						{
+							this.log.error(`EntityBundleRequest error gathering entity set: ${pError}`, pError);
+						}
+						pReject(pError);
+						return true;
+					});
+			});
 	}
 
 	getEntity(pEntity, pIDRecord, fCallback)

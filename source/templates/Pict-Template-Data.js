@@ -32,14 +32,21 @@ class PictTemplateProviderData extends libPictTemplate
 			this.log.trace(`PICT Template [fDataRender]::[${tmpHash}]`);
 		}
 
+		let tmpDefaultValue = '';
+		if (tmpHash.indexOf(':') > -1)
+		{
+			tmpDefaultValue = tmpHash.split(':')[1];
+			tmpHash = tmpHash.split(':')[0];
+		}
+
 		let tmpValue = '';
 		if (tmpHash != null)
 		{
 			tmpValue = this.resolveStateFromAddress(tmpHash, tmpRecord, pContextArray);
 		}
-		if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
+		if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined') || (tmpValue === ''))
 		{
-			return '';
+			return tmpDefaultValue;
 		}
 		return tmpValue;
 	}

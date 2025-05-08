@@ -7,11 +7,22 @@ declare class PictMeadowEntityProvider {
     fable: import("pict") & {
         settings: any;
     };
+    /** @type {any} */
+    log: any;
     serviceType: string;
     restClient: any;
     cache: {};
     prepareRequestOptions: (pOptions: any) => any;
     initializeCache(pEntity: any): void;
+    gatherEntitySet(fCallback: any, pEntityInformation: any): any;
+    /**
+     * Gather data from the server returning a promise when it is complete.
+     *
+     * @param {Object} pEntitiesBundleDescription - The entity bundle description object.
+     *
+     * @return {Promise<Error?>} - Returns a promise that resolves when the data has been gathered.
+     */
+    gatherDataFromServer(pEntitiesBundleDescription: any): Promise<Error | null>;
     getEntity(pEntity: any, pIDRecord: any, fCallback: any): void;
     getEntitySetPage(pEntity: any, pMeadowFilterExpression: any, pRecordStartCursor: any, pRecordCount: any, fCallback: any): any;
     getEntitySetRecordCount(pEntity: any, pMeadowFilterExpression: any, fCallback: any): any;
