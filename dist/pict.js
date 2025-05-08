@@ -3786,7 +3786,7 @@ for/* no condition */(q=delta,k=base;;k+=base){t=k<=bias?tMin:k>=bias+tMax?tMax:
 if(typeof define=='function'&&typeof define.amd=='object'&&define.amd){define('punycode',function(){return punycode;});}else if(freeExports&&freeModule){if(module.exports==freeExports){// in Node.js, io.js, or RingoJS v0.8.0+
 freeModule.exports=punycode;}else{// in Narwhal or RingoJS v0.7.0-
 for(key in punycode){punycode.hasOwnProperty(key)&&(freeExports[key]=punycode[key]);}}}else{// in Rhino or a web browser
-root.punycode=punycode;}})(this);}).call(this);}).call(this,typeof global!=="undefined"?global:typeof self!=="undefined"?self:typeof window!=="undefined"?window:{});},{}],149:[function(require,module,exports){'use strict';var replace=String.prototype.replace;var percentTwenties=/%20/g;var Format={RFC1738:'RFC1738',RFC3986:'RFC3986'};module.exports={'default':Format.RFC3986,formatters:{RFC1738:function RFC1738(value){return replace.call(value,percentTwenties,'+');},RFC3986:function RFC3986(value){return String(value);}},RFC1738:Format.RFC1738,RFC3986:Format.RFC3986};},{}],150:[function(require,module,exports){'use strict';var stringify=require('./stringify');var parse=require('./parse');var formats=require('./formats');module.exports={formats:formats,parse:parse,stringify:stringify};},{"./formats":149,"./parse":151,"./stringify":152}],151:[function(require,module,exports){'use strict';var utils=require('./utils');var has=Object.prototype.hasOwnProperty;var isArray=Array.isArray;var defaults={allowDots:false,allowEmptyArrays:false,allowPrototypes:false,allowSparse:false,arrayLimit:20,charset:'utf-8',charsetSentinel:false,comma:false,decodeDotInKeys:false,decoder:utils.decode,delimiter:'&',depth:5,duplicates:'combine',ignoreQueryPrefix:false,interpretNumericEntities:false,parameterLimit:1000,parseArrays:true,plainObjects:false,strictDepth:false,strictNullHandling:false};var interpretNumericEntities=function interpretNumericEntities(str){return str.replace(/&#(\d+);/g,function($0,numberStr){return String.fromCharCode(parseInt(numberStr,10));});};var parseArrayValue=function parseArrayValue(val,options){if(val&&typeof val==='string'&&options.comma&&val.indexOf(',')>-1){return val.split(',');}return val;};// This is what browsers will submit when the ✓ character occurs in an
+root.punycode=punycode;}})(this);}).call(this);}).call(this,typeof global!=="undefined"?global:typeof self!=="undefined"?self:typeof window!=="undefined"?window:{});},{}],149:[function(require,module,exports){'use strict';var replace=String.prototype.replace;var percentTwenties=/%20/g;var Format={RFC1738:'RFC1738',RFC3986:'RFC3986'};module.exports={'default':Format.RFC3986,formatters:{RFC1738:function RFC1738(value){return replace.call(value,percentTwenties,'+');},RFC3986:function RFC3986(value){return String(value);}},RFC1738:Format.RFC1738,RFC3986:Format.RFC3986};},{}],150:[function(require,module,exports){'use strict';var stringify=require('./stringify');var parse=require('./parse');var formats=require('./formats');module.exports={formats:formats,parse:parse,stringify:stringify};},{"./formats":149,"./parse":151,"./stringify":152}],151:[function(require,module,exports){'use strict';var utils=require('./utils');var has=Object.prototype.hasOwnProperty;var isArray=Array.isArray;var defaults={allowDots:false,allowEmptyArrays:false,allowPrototypes:false,allowSparse:false,arrayLimit:20,charset:'utf-8',charsetSentinel:false,comma:false,decodeDotInKeys:false,decoder:utils.decode,delimiter:'&',depth:5,duplicates:'combine',ignoreQueryPrefix:false,interpretNumericEntities:false,parameterLimit:1000,parseArrays:true,plainObjects:false,strictDepth:false,strictNullHandling:false,throwOnLimitExceeded:false};var interpretNumericEntities=function interpretNumericEntities(str){return str.replace(/&#(\d+);/g,function($0,numberStr){return String.fromCharCode(parseInt(numberStr,10));});};var parseArrayValue=function parseArrayValue(val,options,currentArrayLength){if(val&&typeof val==='string'&&options.comma&&val.indexOf(',')>-1){return val.split(',');}if(options.throwOnLimitExceeded&&currentArrayLength>=options.arrayLimit){throw new RangeError('Array limit exceeded. Only '+options.arrayLimit+' element'+(options.arrayLimit===1?'':'s')+' allowed in an array.');}return val;};// This is what browsers will submit when the ✓ character occurs in an
 // application/x-www-form-urlencoded body and the encoding of the page containing
 // the form is iso-8859-1, or when the submitted form has an accept-charset
 // attribute of iso-8859-1. Presumably also with other charsets that do not contain
@@ -3794,17 +3794,17 @@ root.punycode=punycode;}})(this);}).call(this);}).call(this,typeof global!=="und
 var isoSentinel='utf8=%26%2310003%3B';// encodeURIComponent('&#10003;')
 // These are the percent-encoded utf-8 octets representing a checkmark, indicating that the request actually is utf-8 encoded.
 var charsetSentinel='utf8=%E2%9C%93';// encodeURIComponent('✓')
-var parseValues=function parseQueryStringValues(str,options){var obj={__proto__:null};var cleanStr=options.ignoreQueryPrefix?str.replace(/^\?/,''):str;cleanStr=cleanStr.replace(/%5B/gi,'[').replace(/%5D/gi,']');var limit=options.parameterLimit===Infinity?undefined:options.parameterLimit;var parts=cleanStr.split(options.delimiter,limit);var skipIndex=-1;// Keep track of where the utf8 sentinel was found
+var parseValues=function parseQueryStringValues(str,options){var obj={__proto__:null};var cleanStr=options.ignoreQueryPrefix?str.replace(/^\?/,''):str;cleanStr=cleanStr.replace(/%5B/gi,'[').replace(/%5D/gi,']');var limit=options.parameterLimit===Infinity?undefined:options.parameterLimit;var parts=cleanStr.split(options.delimiter,options.throwOnLimitExceeded?limit+1:limit);if(options.throwOnLimitExceeded&&parts.length>limit){throw new RangeError('Parameter limit exceeded. Only '+limit+' parameter'+(limit===1?'':'s')+' allowed.');}var skipIndex=-1;// Keep track of where the utf8 sentinel was found
 var i;var charset=options.charset;if(options.charsetSentinel){for(i=0;i<parts.length;++i){if(parts[i].indexOf('utf8=')===0){if(parts[i]===charsetSentinel){charset='utf-8';}else if(parts[i]===isoSentinel){charset='iso-8859-1';}skipIndex=i;i=parts.length;// The eslint settings do not allow break;
-}}}for(i=0;i<parts.length;++i){if(i===skipIndex){continue;}var part=parts[i];var bracketEqualsPos=part.indexOf(']=');var pos=bracketEqualsPos===-1?part.indexOf('='):bracketEqualsPos+1;var key;var val;if(pos===-1){key=options.decoder(part,defaults.decoder,charset,'key');val=options.strictNullHandling?null:'';}else{key=options.decoder(part.slice(0,pos),defaults.decoder,charset,'key');val=utils.maybeMap(parseArrayValue(part.slice(pos+1),options),function(encodedVal){return options.decoder(encodedVal,defaults.decoder,charset,'value');});}if(val&&options.interpretNumericEntities&&charset==='iso-8859-1'){val=interpretNumericEntities(String(val));}if(part.indexOf('[]=')>-1){val=isArray(val)?[val]:val;}var existing=has.call(obj,key);if(existing&&options.duplicates==='combine'){obj[key]=utils.combine(obj[key],val);}else if(!existing||options.duplicates==='last'){obj[key]=val;}}return obj;};var parseObject=function parseObject(chain,val,options,valuesParsed){var leaf=valuesParsed?val:parseArrayValue(val,options);for(var i=chain.length-1;i>=0;--i){var obj;var root=chain[i];if(root==='[]'&&options.parseArrays){obj=options.allowEmptyArrays&&(leaf===''||options.strictNullHandling&&leaf===null)?[]:[].concat(leaf);}else{obj=options.plainObjects?{__proto__:null}:{};var cleanRoot=root.charAt(0)==='['&&root.charAt(root.length-1)===']'?root.slice(1,-1):root;var decodedRoot=options.decodeDotInKeys?cleanRoot.replace(/%2E/g,'.'):cleanRoot;var index=parseInt(decodedRoot,10);if(!options.parseArrays&&decodedRoot===''){obj={0:leaf};}else if(!isNaN(index)&&root!==decodedRoot&&String(index)===decodedRoot&&index>=0&&options.parseArrays&&index<=options.arrayLimit){obj=[];obj[index]=leaf;}else if(decodedRoot!=='__proto__'){obj[decodedRoot]=leaf;}}leaf=obj;}return leaf;};var parseKeys=function parseQueryStringKeys(givenKey,val,options,valuesParsed){if(!givenKey){return;}// Transform dot notation to bracket notation
+}}}for(i=0;i<parts.length;++i){if(i===skipIndex){continue;}var part=parts[i];var bracketEqualsPos=part.indexOf(']=');var pos=bracketEqualsPos===-1?part.indexOf('='):bracketEqualsPos+1;var key;var val;if(pos===-1){key=options.decoder(part,defaults.decoder,charset,'key');val=options.strictNullHandling?null:'';}else{key=options.decoder(part.slice(0,pos),defaults.decoder,charset,'key');val=utils.maybeMap(parseArrayValue(part.slice(pos+1),options,isArray(obj[key])?obj[key].length:0),function(encodedVal){return options.decoder(encodedVal,defaults.decoder,charset,'value');});}if(val&&options.interpretNumericEntities&&charset==='iso-8859-1'){val=interpretNumericEntities(String(val));}if(part.indexOf('[]=')>-1){val=isArray(val)?[val]:val;}var existing=has.call(obj,key);if(existing&&options.duplicates==='combine'){obj[key]=utils.combine(obj[key],val);}else if(!existing||options.duplicates==='last'){obj[key]=val;}}return obj;};var parseObject=function parseObject(chain,val,options,valuesParsed){var currentArrayLength=0;if(chain.length>0&&chain[chain.length-1]==='[]'){var parentKey=chain.slice(0,-1).join('');currentArrayLength=Array.isArray(val)&&val[parentKey]?val[parentKey].length:0;}var leaf=valuesParsed?val:parseArrayValue(val,options,currentArrayLength);for(var i=chain.length-1;i>=0;--i){var obj;var root=chain[i];if(root==='[]'&&options.parseArrays){obj=options.allowEmptyArrays&&(leaf===''||options.strictNullHandling&&leaf===null)?[]:utils.combine([],leaf);}else{obj=options.plainObjects?{__proto__:null}:{};var cleanRoot=root.charAt(0)==='['&&root.charAt(root.length-1)===']'?root.slice(1,-1):root;var decodedRoot=options.decodeDotInKeys?cleanRoot.replace(/%2E/g,'.'):cleanRoot;var index=parseInt(decodedRoot,10);if(!options.parseArrays&&decodedRoot===''){obj={0:leaf};}else if(!isNaN(index)&&root!==decodedRoot&&String(index)===decodedRoot&&index>=0&&options.parseArrays&&index<=options.arrayLimit){obj=[];obj[index]=leaf;}else if(decodedRoot!=='__proto__'){obj[decodedRoot]=leaf;}}leaf=obj;}return leaf;};var parseKeys=function parseQueryStringKeys(givenKey,val,options,valuesParsed){if(!givenKey){return;}// Transform dot notation to bracket notation
 var key=options.allowDots?givenKey.replace(/\.([^.[]+)/g,'[$1]'):givenKey;// The regex chunks
 var brackets=/(\[[^[\]]*])/;var child=/(\[[^[\]]*])/g;// Get the parent
 var segment=options.depth>0&&brackets.exec(key);var parent=segment?key.slice(0,segment.index):key;// Stash the parent if it exists
 var keys=[];if(parent){// If we aren't using plain objects, optionally prefix keys that would overwrite object prototype properties
 if(!options.plainObjects&&has.call(Object.prototype,parent)){if(!options.allowPrototypes){return;}}keys.push(parent);}// Loop through children appending to the array until we hit depth
 var i=0;while(options.depth>0&&(segment=child.exec(key))!==null&&i<options.depth){i+=1;if(!options.plainObjects&&has.call(Object.prototype,segment[1].slice(1,-1))){if(!options.allowPrototypes){return;}}keys.push(segment[1]);}// If there's a remainder, check strictDepth option for throw, else just add whatever is left
-if(segment){if(options.strictDepth===true){throw new RangeError('Input depth exceeded depth option of '+options.depth+' and strictDepth is true');}keys.push('['+key.slice(segment.index)+']');}return parseObject(keys,val,options,valuesParsed);};var normalizeParseOptions=function normalizeParseOptions(opts){if(!opts){return defaults;}if(typeof opts.allowEmptyArrays!=='undefined'&&typeof opts.allowEmptyArrays!=='boolean'){throw new TypeError('`allowEmptyArrays` option can only be `true` or `false`, when provided');}if(typeof opts.decodeDotInKeys!=='undefined'&&typeof opts.decodeDotInKeys!=='boolean'){throw new TypeError('`decodeDotInKeys` option can only be `true` or `false`, when provided');}if(opts.decoder!==null&&typeof opts.decoder!=='undefined'&&typeof opts.decoder!=='function'){throw new TypeError('Decoder has to be a function.');}if(typeof opts.charset!=='undefined'&&opts.charset!=='utf-8'&&opts.charset!=='iso-8859-1'){throw new TypeError('The charset option must be either utf-8, iso-8859-1, or undefined');}var charset=typeof opts.charset==='undefined'?defaults.charset:opts.charset;var duplicates=typeof opts.duplicates==='undefined'?defaults.duplicates:opts.duplicates;if(duplicates!=='combine'&&duplicates!=='first'&&duplicates!=='last'){throw new TypeError('The duplicates option must be either combine, first, or last');}var allowDots=typeof opts.allowDots==='undefined'?opts.decodeDotInKeys===true?true:defaults.allowDots:!!opts.allowDots;return{allowDots:allowDots,allowEmptyArrays:typeof opts.allowEmptyArrays==='boolean'?!!opts.allowEmptyArrays:defaults.allowEmptyArrays,allowPrototypes:typeof opts.allowPrototypes==='boolean'?opts.allowPrototypes:defaults.allowPrototypes,allowSparse:typeof opts.allowSparse==='boolean'?opts.allowSparse:defaults.allowSparse,arrayLimit:typeof opts.arrayLimit==='number'?opts.arrayLimit:defaults.arrayLimit,charset:charset,charsetSentinel:typeof opts.charsetSentinel==='boolean'?opts.charsetSentinel:defaults.charsetSentinel,comma:typeof opts.comma==='boolean'?opts.comma:defaults.comma,decodeDotInKeys:typeof opts.decodeDotInKeys==='boolean'?opts.decodeDotInKeys:defaults.decodeDotInKeys,decoder:typeof opts.decoder==='function'?opts.decoder:defaults.decoder,delimiter:typeof opts.delimiter==='string'||utils.isRegExp(opts.delimiter)?opts.delimiter:defaults.delimiter,// eslint-disable-next-line no-implicit-coercion, no-extra-parens
-depth:typeof opts.depth==='number'||opts.depth===false?+opts.depth:defaults.depth,duplicates:duplicates,ignoreQueryPrefix:opts.ignoreQueryPrefix===true,interpretNumericEntities:typeof opts.interpretNumericEntities==='boolean'?opts.interpretNumericEntities:defaults.interpretNumericEntities,parameterLimit:typeof opts.parameterLimit==='number'?opts.parameterLimit:defaults.parameterLimit,parseArrays:opts.parseArrays!==false,plainObjects:typeof opts.plainObjects==='boolean'?opts.plainObjects:defaults.plainObjects,strictDepth:typeof opts.strictDepth==='boolean'?!!opts.strictDepth:defaults.strictDepth,strictNullHandling:typeof opts.strictNullHandling==='boolean'?opts.strictNullHandling:defaults.strictNullHandling};};module.exports=function(str,opts){var options=normalizeParseOptions(opts);if(str===''||str===null||typeof str==='undefined'){return options.plainObjects?{__proto__:null}:{};}var tempObj=typeof str==='string'?parseValues(str,options):str;var obj=options.plainObjects?{__proto__:null}:{};// Iterate over the keys and setup the new object
+if(segment){if(options.strictDepth===true){throw new RangeError('Input depth exceeded depth option of '+options.depth+' and strictDepth is true');}keys.push('['+key.slice(segment.index)+']');}return parseObject(keys,val,options,valuesParsed);};var normalizeParseOptions=function normalizeParseOptions(opts){if(!opts){return defaults;}if(typeof opts.allowEmptyArrays!=='undefined'&&typeof opts.allowEmptyArrays!=='boolean'){throw new TypeError('`allowEmptyArrays` option can only be `true` or `false`, when provided');}if(typeof opts.decodeDotInKeys!=='undefined'&&typeof opts.decodeDotInKeys!=='boolean'){throw new TypeError('`decodeDotInKeys` option can only be `true` or `false`, when provided');}if(opts.decoder!==null&&typeof opts.decoder!=='undefined'&&typeof opts.decoder!=='function'){throw new TypeError('Decoder has to be a function.');}if(typeof opts.charset!=='undefined'&&opts.charset!=='utf-8'&&opts.charset!=='iso-8859-1'){throw new TypeError('The charset option must be either utf-8, iso-8859-1, or undefined');}if(typeof opts.throwOnLimitExceeded!=='undefined'&&typeof opts.throwOnLimitExceeded!=='boolean'){throw new TypeError('`throwOnLimitExceeded` option must be a boolean');}var charset=typeof opts.charset==='undefined'?defaults.charset:opts.charset;var duplicates=typeof opts.duplicates==='undefined'?defaults.duplicates:opts.duplicates;if(duplicates!=='combine'&&duplicates!=='first'&&duplicates!=='last'){throw new TypeError('The duplicates option must be either combine, first, or last');}var allowDots=typeof opts.allowDots==='undefined'?opts.decodeDotInKeys===true?true:defaults.allowDots:!!opts.allowDots;return{allowDots:allowDots,allowEmptyArrays:typeof opts.allowEmptyArrays==='boolean'?!!opts.allowEmptyArrays:defaults.allowEmptyArrays,allowPrototypes:typeof opts.allowPrototypes==='boolean'?opts.allowPrototypes:defaults.allowPrototypes,allowSparse:typeof opts.allowSparse==='boolean'?opts.allowSparse:defaults.allowSparse,arrayLimit:typeof opts.arrayLimit==='number'?opts.arrayLimit:defaults.arrayLimit,charset:charset,charsetSentinel:typeof opts.charsetSentinel==='boolean'?opts.charsetSentinel:defaults.charsetSentinel,comma:typeof opts.comma==='boolean'?opts.comma:defaults.comma,decodeDotInKeys:typeof opts.decodeDotInKeys==='boolean'?opts.decodeDotInKeys:defaults.decodeDotInKeys,decoder:typeof opts.decoder==='function'?opts.decoder:defaults.decoder,delimiter:typeof opts.delimiter==='string'||utils.isRegExp(opts.delimiter)?opts.delimiter:defaults.delimiter,// eslint-disable-next-line no-implicit-coercion, no-extra-parens
+depth:typeof opts.depth==='number'||opts.depth===false?+opts.depth:defaults.depth,duplicates:duplicates,ignoreQueryPrefix:opts.ignoreQueryPrefix===true,interpretNumericEntities:typeof opts.interpretNumericEntities==='boolean'?opts.interpretNumericEntities:defaults.interpretNumericEntities,parameterLimit:typeof opts.parameterLimit==='number'?opts.parameterLimit:defaults.parameterLimit,parseArrays:opts.parseArrays!==false,plainObjects:typeof opts.plainObjects==='boolean'?opts.plainObjects:defaults.plainObjects,strictDepth:typeof opts.strictDepth==='boolean'?!!opts.strictDepth:defaults.strictDepth,strictNullHandling:typeof opts.strictNullHandling==='boolean'?opts.strictNullHandling:defaults.strictNullHandling,throwOnLimitExceeded:typeof opts.throwOnLimitExceeded==='boolean'?opts.throwOnLimitExceeded:false};};module.exports=function(str,opts){var options=normalizeParseOptions(opts);if(str===''||str===null||typeof str==='undefined'){return options.plainObjects?{__proto__:null}:{};}var tempObj=typeof str==='string'?parseValues(str,options):str;var obj=options.plainObjects?{__proto__:null}:{};// Iterate over the keys and setup the new object
 var keys=Object.keys(tempObj);for(var i=0;i<keys.length;++i){var key=keys[i];var newObj=parseKeys(key,tempObj[key],options,typeof str==='string');obj=utils.merge(obj,newObj,options);}if(options.allowSparse===true){return obj;}return utils.compact(obj);};},{"./utils":153}],152:[function(require,module,exports){'use strict';var getSideChannel=require('side-channel');var utils=require('./utils');var formats=require('./formats');var has=Object.prototype.hasOwnProperty;var arrayPrefixGenerators={brackets:function brackets(prefix){return prefix+'[]';},comma:'comma',indices:function indices(prefix,key){return prefix+'['+key+']';},repeat:function repeat(prefix){return prefix;}};var isArray=Array.isArray;var push=Array.prototype.push;var pushToArray=function pushToArray(arr,valueOrArray){push.apply(arr,isArray(valueOrArray)?valueOrArray:[valueOrArray]);};var toISO=Date.prototype.toISOString;var defaultFormat=formats['default'];var defaults={addQueryPrefix:false,allowDots:false,allowEmptyArrays:false,arrayFormat:'indices',charset:'utf-8',charsetSentinel:false,commaRoundTrip:false,delimiter:'&',encode:true,encodeDotInKeys:false,encoder:utils.encode,encodeValuesOnly:false,filter:void undefined,format:defaultFormat,formatter:formats.formatters[defaultFormat],// deprecated
 indices:false,serializeDate:function serializeDate(date){return toISO.call(date);},skipNulls:false,strictNullHandling:false};var isNonNullishPrimitive=function isNonNullishPrimitive(v){return typeof v==='string'||typeof v==='number'||typeof v==='boolean'||typeof v==='symbol'||typeof v==='bigint';};var sentinel={};var stringify=function stringify(object,prefix,generateArrayPrefix,commaRoundTrip,allowEmptyArrays,strictNullHandling,skipNulls,encodeDotInKeys,encoder,filter,sort,allowDots,serializeDate,format,formatter,encodeValuesOnly,charset,sideChannel){var obj=object;var tmpSc=sideChannel;var step=0;var findFlag=false;while((tmpSc=tmpSc.get(sentinel))!==void undefined&&!findFlag){// Where object last appeared in the ref tree
 var pos=tmpSc.get(object);step+=1;if(typeof pos!=='undefined'){if(pos===step){throw new RangeError('Cyclic object value');}else{findFlag=true;// Break while
@@ -4812,7 +4812,7 @@ try{if(!global.localStorage)return false;}catch(_){return false;}var val=global.
 // presumably different callback function.
 // This makes sure that own properties are retained, so that
 // decorations and such are not lost along the way.
-module.exports=wrappy;function wrappy(fn,cb){if(fn&&cb)return wrappy(fn)(cb);if(typeof fn!=='function')throw new TypeError('need wrapper function');Object.keys(fn).forEach(function(k){wrapper[k]=fn[k];});return wrapper;function wrapper(){var args=new Array(arguments.length);for(var i=0;i<args.length;i++){args[i]=arguments[i];}var ret=fn.apply(this,args);var cb=args[args.length-1];if(typeof ret==='function'&&ret!==cb){Object.keys(cb).forEach(function(k){ret[k]=cb[k];});}return ret;}}},{}],188:[function(require,module,exports){module.exports=extend;var hasOwnProperty=Object.prototype.hasOwnProperty;function extend(){var target={};for(var i=0;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;}},{}],189:[function(require,module,exports){module.exports={"name":"pict","version":"1.0.239","description":"Pict browser library.","main":"source/Pict.js","scripts":{"start":"node source/Pict.js","test":"npx mocha -u tdd -R spec","tests":"npx mocha -u tdd --exit -R spec --grep","coverage":"npx nyc --reporter=lcov --reporter=text-lcov npx mocha -- -u tdd -R spec","build":"npx quack build","docker-dev-build":"docker build ./ -f Dockerfile_LUXURYCode -t pict-image:local","docker-dev-run":"docker run -it -d --name pict-dev -p 37447:8080 -p 19506:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-image:local","docker-dev-shell":"docker exec -it pict-dev /bin/bash","lint":"eslint source/**/*.js test/**/*.js","types":"tsc -p ."},"types":"types/source/Pict.d.ts","mocha":{"diff":true,"extension":["js"],"package":"./package.json","reporter":"spec","slow":"75","timeout":"5000","ui":"tdd","watch-files":["source/**/*.js","test/**/*.js"],"watch-ignore":["lib/vendor"]},"repository":{"type":"git","url":"git+https://stevenvelozo@github.com/stevenvelozo/pict.git"},"author":"steven velozo <steven@velozo.com>","license":"MIT","bugs":{"url":"https://github.com/stevenvelozo/pict/issues"},"homepage":"https://github.com/stevenvelozo/pict#readme","devDependencies":{"@eslint/js":"^9.25.1","@types/jquery":"^3.5.32","eslint":"^9.25.1","globals":"^16.0.0","quackage":"^1.0.41"},"dependencies":{"cachetrax":"^1.0.4","fable":"^3.1.3","pict-application":"^1.0.25","pict-provider":"^1.0.3","pict-template":"^1.0.10","pict-view":"^1.0.60","typescript":"^5.8.3"}};},{}],190:[function(require,module,exports){// This assumes Pict has been required in the browser. Delcare these as globals so linter can do its job.
+module.exports=wrappy;function wrappy(fn,cb){if(fn&&cb)return wrappy(fn)(cb);if(typeof fn!=='function')throw new TypeError('need wrapper function');Object.keys(fn).forEach(function(k){wrapper[k]=fn[k];});return wrapper;function wrapper(){var args=new Array(arguments.length);for(var i=0;i<args.length;i++){args[i]=arguments[i];}var ret=fn.apply(this,args);var cb=args[args.length-1];if(typeof ret==='function'&&ret!==cb){Object.keys(cb).forEach(function(k){ret[k]=cb[k];});}return ret;}}},{}],188:[function(require,module,exports){module.exports=extend;var hasOwnProperty=Object.prototype.hasOwnProperty;function extend(){var target={};for(var i=0;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;}},{}],189:[function(require,module,exports){module.exports={"name":"pict","version":"1.0.241","description":"Pict browser library.","main":"source/Pict.js","scripts":{"start":"node source/Pict.js","test":"npx mocha -u tdd -R spec","tests":"npx mocha -u tdd --exit -R spec --grep","coverage":"npx nyc --reporter=lcov --reporter=text-lcov npx mocha -- -u tdd -R spec","build":"npx quack build","docker-dev-build":"docker build ./ -f Dockerfile_LUXURYCode -t pict-image:local","docker-dev-run":"docker run -it -d --name pict-dev -p 37447:8080 -p 19506:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-image:local","docker-dev-shell":"docker exec -it pict-dev /bin/bash","lint":"eslint source/**/*.js test/**/*.js","types":"tsc -p ."},"types":"types/source/Pict.d.ts","mocha":{"diff":true,"extension":["js"],"package":"./package.json","reporter":"spec","slow":"75","timeout":"5000","ui":"tdd","watch-files":["source/**/*.js","test/**/*.js"],"watch-ignore":["lib/vendor"]},"repository":{"type":"git","url":"git+https://stevenvelozo@github.com/stevenvelozo/pict.git"},"author":"steven velozo <steven@velozo.com>","license":"MIT","bugs":{"url":"https://github.com/stevenvelozo/pict/issues"},"homepage":"https://github.com/stevenvelozo/pict#readme","devDependencies":{"@eslint/js":"^9.25.1","@types/jquery":"^3.5.32","eslint":"^9.25.1","globals":"^16.0.0","quackage":"^1.0.41"},"dependencies":{"cachetrax":"^1.0.4","fable":"^3.1.3","pict-application":"^1.0.25","pict-provider":"^1.0.3","pict-template":"^1.0.10","pict-view":"^1.0.60","typescript":"^5.8.3"}};},{}],190:[function(require,module,exports){// This assumes Pict has been required in the browser. Delcare these as globals so linter can do its job.
 /* global Pict, _Pict: writeable *//**
  * Simple function to load a pict Application
  *
@@ -4976,8 +4976,8 @@ const tmpTargetElement=typeof pAddress==='string'?window.jQuery(pAddress):window
 const tmpTargetElement=typeof pAddress==='string'?window.jQuery(pAddress):window.jQuery(pAddress);return tmpTargetElement.hasClass(pClass);}else if(this.inBrowser&&this.hasDocument){const tmpTargetElementSet=typeof pAddress==='string'?window.document.querySelectorAll(pAddress):[pAddress];for(let i=0;i<tmpTargetElementSet.length;i++){if(tmpTargetElementSet[i].classList.contains(pClass)){return true;}}return false;}else{this.log.trace("PICT Content HASCLASS for [".concat(pAddress,"] CLASS [").concat(pClass,"]:"));return false;}}}module.exports=PictContentAssignment;},{"fable":68}],194:[function(require,module,exports){const libFableServiceBase=require('fable').ServiceProviderBase;class PictDataProvider extends libFableServiceBase{constructor(pFable,pOptions,pServiceHash){super(pFable,pOptions,pServiceHash);/** @type {import('fable') & import('pict')} */this.fable;this.serviceType='PictDataProvider';}/**
 	 * @param {string} pAddress - The address of the data to retrieve
 	 * @param {object} [pData] - (optional) The record to provide to the address resolver
-	 */getDataByAddress(pAddress,pData){let tmpData=typeof pData==='undefined'?{}:pData;return this.fable.manifest.getValueByHash({AppData:this.fable.AppData,Bundle:this.fable.Bundle,Record:tmpData},pAddress);}}module.exports=PictDataProvider;},{"fable":68}],195:[function(require,module,exports){const libFableServiceBase=require('fable').ServiceProviderBase;class PictMeadowEntityProvider extends libFableServiceBase{constructor(pFable,pOptions,pServiceHash){super(pFable,pOptions,pServiceHash);/** @type {any} */this.options;/** @type {import('pict') & { settings: any }} */this.fable;this.serviceType='PictMeadowProvider';if(this.fable.settings.PictDefaultURLPrefix){this.options.urlPrefix=this.fable.settings.PictDefaultURLPrefix;}else if(!this.options.urlPrefix){this.options.urlPrefix='/1.0/';}if(this.fable.settings.PictDefaultDownloadBatchSize){this.options.downloadBatchSize=this.fable.settings.PictDefaultDownloadBatchSize;}else if(!this.options.downloadBatchSize){this.options.downloadBatchSize=100;}//@ts-ignore - FIXME - remove once we have fable types
-this.restClient=this.fable.instantiateServiceProviderWithoutRegistration('RestClient');this.cache={};this.prepareRequestOptions=pOptions=>{return pOptions;};}initializeCache(pEntity){// This should not be happening as often as it's happening.
+	 */getDataByAddress(pAddress,pData){let tmpData=typeof pData==='undefined'?{}:pData;return this.fable.manifest.getValueByHash({AppData:this.fable.AppData,Bundle:this.fable.Bundle,Record:tmpData},pAddress);}}module.exports=PictDataProvider;},{"fable":68}],195:[function(require,module,exports){const libFableServiceBase=require('fable').ServiceProviderBase;class PictMeadowEntityProvider extends libFableServiceBase{constructor(pFable,pOptions,pServiceHash){var _this$fable$RestClien;super(pFable,pOptions,pServiceHash);/** @type {any} */this.options;/** @type {import('pict') & { settings: any }} */this.fable;this.serviceType='PictMeadowProvider';if(this.fable.settings.PictDefaultURLPrefix){this.options.urlPrefix=this.fable.settings.PictDefaultURLPrefix;}else if(!this.options.urlPrefix){this.options.urlPrefix='/1.0/';}if(this.fable.settings.PictDefaultDownloadBatchSize){this.options.downloadBatchSize=this.fable.settings.PictDefaultDownloadBatchSize;}else if(!this.options.downloadBatchSize){this.options.downloadBatchSize=100;}//@ts-ignore - FIXME - remove once we have fable types
+this.restClient=(_this$fable$RestClien=this.fable.RestClient)!==null&&_this$fable$RestClien!==void 0?_this$fable$RestClien:this.fable.instantiateServiceProviderWithoutRegistration('RestClient');this.cache={};this.prepareRequestOptions=pOptions=>{return pOptions;};}initializeCache(pEntity){// This should not be happening as often as it's happening.
 if(!(pEntity in this.cache)){//@ts-ignore - FIXME - remove once we have fable types
 this.cache[pEntity]=this.fable.instantiateServiceProviderWithoutRegistration('ObjectCache');// TODO: Make this a configuration?
 // For now cache for 30 seconds.
@@ -5052,112 +5052,113 @@ if(!(pTemplateHash in this.templates)){this.checkDefaultTemplateHash(pTemplateHa
  *    getUUID: () => string,
  *    Utility:
  *    {
- *	      extend: (pObject: any, ...pExtension: any[]) => any,
- *	      eachLimit: (pArray: any[], pLimit: number, pIterator: (pRecord: any, fRecordCallback: () => void) => void, fCallback: (pError: any) => void) => void,
+ *				extend: (pObject: any, ...pExtension: any[]) => any,
+ *				eachLimit: (pArray: any[], pLimit: number, pIterator: (pRecord: any, fRecordCallback: () => void) => void, fCallback: (pError: any) => void) => void,
  *    },
  *    MetaTemplate: any,
  * }} Fable
  *//** @type {{ new(...args: any[]): Fable }} */const libFable=require("fable");const libPackage=require("../package.json");const PictTemplateProvider=require("./Pict-Template-Provider.js");const PictContentAssignment=require("./Pict-Content-Assignment.js");const PictDataProvider=require("./Pict-DataProvider.js");const PictCSS=require("./Pict-CSS.js");const PictMeadowEntityProvider=require("./Pict-Meadow-EntityProvider.js");/**
  * Pict management object.
  */class Pict extends libFable{/**
-   * @param {Object<String, any>} pSettings - The settings for the Pict instance.
-   */constructor(pSettings){super(pSettings);/** @type {any} */this.settings;this.isBrowser=new Function("try {return (this===window);} catch(pError) {return false;}");/** @type {Object} */this._PackageFable=this._Package;this._Package=libPackage;this.browserAddress="window._Pict";if("BrowserAddress"in this.settings){this.browserAddress=this.settings.BrowserAddress;}this.children=[];/** @type {import('pict-application')} */this.PictApplication=null;// shim types from fable until we export types properly
-/** @type {any} */this.log;/**
-     * The templateProvider provides a basic key->template mapping with default fallback capabilities
-     *
-     * @type {PictTemplateProvider}
-     */this.TemplateProvider=null;this.addAndInstantiateServiceType("TemplateProvider",PictTemplateProvider);/**
-     * The meadow entity provider.
-     *
-     * @type {PictMeadowEntityProvider}
-     */this.EntityProvider=null;this.addAndInstantiateServiceType("EntityProvider",PictMeadowEntityProvider);/**
-     * The data provider.
-     *
-     * @type {PictDataProvider}
-     */this.DataProvider=null;this.addAndInstantiateServiceType("DataProvider",PictDataProvider);/**
-     * The content assignment module.
-     *
-     * @type {PictContentAssignment}
-     */this.ContentAssignment=null;this.addAndInstantiateServiceType("ContentAssignment",PictContentAssignment);/**
-     * The CSS module.
-     *
-     * @type {PictCSS}
-     * @public
-     */this.CSSMap=null;this.addAndInstantiateServiceType("CSSMap",PictCSS);this.addServiceType("PictTemplate",require("pict-template"));this.instantiateServiceProvider("MetaTemplate");this.instantiateServiceProvider("DataGeneration");this.instantiateServiceProvider("RestClient");this.manifest=this.instantiateServiceProvider("Manifest");this.AppData={};if("DefaultAppData"in this.fable.settings){this.AppData=this.fable.settings.DefaultAppData;}this.Bundle={};// Log noisness goes from 0 - 5, where 5 is show me everything.
+	 * @param {Object<String, any>} pSettings - The settings for the Pict instance.
+	 */constructor(pSettings){super(pSettings);/** @type {any} */this.settings;this.isBrowser=new Function("try {return (this===window);} catch(pError) {return false;}");/** @type {Object} */this._PackageFable=this._Package;this._Package=libPackage;this.browserAddress="window._Pict";if("BrowserAddress"in this.settings){this.browserAddress=this.settings.BrowserAddress;}this.children=[];/** @type {import('pict-application')} */this.PictApplication=null;// shim types from fable until we export types properly
+/** @type {any} */this.log;//NOTE: This needs to come before any other providers which may instantiate a rest client so we don't proliferate them
+this.instantiateServiceProvider("RestClient");/**
+		 * The templateProvider provides a basic key->template mapping with default fallback capabilities
+		 *
+		 * @type {PictTemplateProvider}
+		 */this.TemplateProvider=null;this.addAndInstantiateServiceType("TemplateProvider",PictTemplateProvider);/**
+		 * The meadow entity provider.
+		 *
+		 * @type {PictMeadowEntityProvider}
+		 */this.EntityProvider=null;this.addAndInstantiateServiceType("EntityProvider",PictMeadowEntityProvider);/**
+		 * The data provider.
+		 *
+		 * @type {PictDataProvider}
+		 */this.DataProvider=null;this.addAndInstantiateServiceType("DataProvider",PictDataProvider);/**
+		 * The content assignment module.
+		 *
+		 * @type {PictContentAssignment}
+		 */this.ContentAssignment=null;this.addAndInstantiateServiceType("ContentAssignment",PictContentAssignment);/**
+		 * The CSS module.
+		 *
+		 * @type {PictCSS}
+		 * @public
+		 */this.CSSMap=null;this.addAndInstantiateServiceType("CSSMap",PictCSS);this.addServiceType("PictTemplate",require("pict-template"));this.instantiateServiceProvider("MetaTemplate");this.instantiateServiceProvider("DataGeneration");this.manifest=this.instantiateServiceProvider("Manifest");this.AppData={};if("DefaultAppData"in this.fable.settings){this.AppData=this.fable.settings.DefaultAppData;}this.Bundle={};// Log noisness goes from 0 - 5, where 5 is show me everything.
 this.LogNoisiness=0;// Although we have log noisiness, sometimes we need control flow without all the other noise for hard to diagnose interpreters.
 this.LogControlFlow=false;// And an easy way to be introspective about data at various locations
 this.LogControlFlowWatchAddressList=[];// Load manifest sets
 if(this.settings.Manifests){this.loadManifestSet(this.settings.Manifests);}this._DefaultPictTemplatesInitialized=false;this.initializePictTemplateEngine();this.addServiceType("PictView",require("pict-view"));this.addServiceType("PictProvider",require("pict-provider"));this.addServiceType("PictApplication",require("pict-application"));// Expose the named views directly, through a convenience accessor
 this.providers=this.servicesMap.PictProvider;this.views=this.servicesMap.PictView;}/**
-   * Load manifests in as Hashed services
-   *
-   * @param {Object<String, String>} pManifestSet - The manifest set to load.
-   */loadManifestSet(pManifestSet){if(typeof pManifestSet!="object"){this.log.warn("PICT [".concat(this.UUID,"] could not load Manifest Set; pManifestSet was not an object."));return;}let tmpManifestKeys=Object.keys(pManifestSet);if(tmpManifestKeys.length>0){for(let i=0;i<tmpManifestKeys.length;i++){// Load each manifest
+	 * Load manifests in as Hashed services
+	 *
+	 * @param {Object<String, String>} pManifestSet - The manifest set to load.
+	 */loadManifestSet(pManifestSet){if(typeof pManifestSet!="object"){this.log.warn("PICT [".concat(this.UUID,"] could not load Manifest Set; pManifestSet was not an object."));return;}let tmpManifestKeys=Object.keys(pManifestSet);if(tmpManifestKeys.length>0){for(let i=0;i<tmpManifestKeys.length;i++){// Load each manifest
 let tmpManifestKey=tmpManifestKeys[i];this.instantiateServiceProvider("Manifest",pManifestSet[tmpManifestKey],tmpManifestKey);}}}/**
-   * Add a template expression to the template engine from the PictTemplate service.
-   *
-   * @template {new (...args: any[]) => any} T
-   * @param {T} pTemplatePrototype - The prototype class for the template expression
-   *
-   * @return {InstanceType<T>} the service instance, or null if the prototype was invalid
-   */addTemplate(pTemplatePrototype){if(typeof pTemplatePrototype!="function"){this.log.warn("PICT [".concat(this.UUID,"] could not add Template; pTemplatePrototype was not a class it was ").concat(typeof pTemplatePrototype,"."));return null;}let tmpTemplateHash=pTemplatePrototype["template_hash"];if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow addTemplate [".concat(tmpTemplateHash,"]"));}return this.instantiateServiceProviderFromPrototype("PictTemplate",{},tmpTemplateHash,pTemplatePrototype);}/**
-   * Just passing an options will construct one for us.
-   * Passing a hash will set the hash.
-   * Passing a prototype will use that!
-   *
-   * @template {new (...args: any[]) => any} [T=typeof import('pict-view')]
-   * @param {String} pViewHash - The hash of the view.
-   * @param {Object<String, any>} [pOptions] - The options for the view.
-   * @param {T} [pViewPrototype] - The prototype for the view.
-   *
-   * @return {InstanceType<T>} The view instance.
-   */addView(pViewHash,pOptions,pViewPrototype){let tmpOptions=typeof pOptions=="object"?pOptions:{};let tmpViewHash=typeof pViewHash=="string"?pViewHash:this.fable.getUUID();// This is here to change how the value is managed by webpack
+	 * Add a template expression to the template engine from the PictTemplate service.
+	 *
+	 * @template {new (...args: any[]) => any} T
+	 * @param {T} pTemplatePrototype - The prototype class for the template expression
+	 *
+	 * @return {InstanceType<T>} the service instance, or null if the prototype was invalid
+	 */addTemplate(pTemplatePrototype){if(typeof pTemplatePrototype!="function"){this.log.warn("PICT [".concat(this.UUID,"] could not add Template; pTemplatePrototype was not a class it was ").concat(typeof pTemplatePrototype,"."));return null;}let tmpTemplateHash=pTemplatePrototype["template_hash"];if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow addTemplate [".concat(tmpTemplateHash,"]"));}return this.instantiateServiceProviderFromPrototype("PictTemplate",{},tmpTemplateHash,pTemplatePrototype);}/**
+	 * Just passing an options will construct one for us.
+	 * Passing a hash will set the hash.
+	 * Passing a prototype will use that!
+	 *
+	 * @template {new (...args: any[]) => any} [T=typeof import('pict-view')]
+	 * @param {String} pViewHash - The hash of the view.
+	 * @param {Object<String, any>} [pOptions] - The options for the view.
+	 * @param {T} [pViewPrototype] - The prototype for the view.
+	 *
+	 * @return {InstanceType<T>} The view instance.
+	 */addView(pViewHash,pOptions,pViewPrototype){let tmpOptions=typeof pOptions=="object"?pOptions:{};let tmpViewHash=typeof pViewHash=="string"?pViewHash:this.fable.getUUID();// This is here to change how the value is managed by webpack
 let tmpViewPrototype=pViewPrototype;if(this.LogControlFlow){if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow addView [".concat(tmpViewHash,"]:"),{Options:tmpOptions});}else{this.log.info("PICT-ControlFlow addView [".concat(tmpViewHash,"]"));}}if(tmpViewPrototype){// If the prototype has a default_configuration, it will be merged with options.
 const tmpDefaultViewConfiguration=tmpViewPrototype["default_configuration"];if(tmpDefaultViewConfiguration){tmpOptions=this.fable.Utility.extend({},JSON.parse(JSON.stringify(tmpDefaultViewConfiguration)),tmpOptions);}return this.instantiateServiceProviderFromPrototype("PictView",tmpOptions,tmpViewHash,tmpViewPrototype);}else{return this.instantiateServiceProvider("PictView",tmpOptions,tmpViewHash);}}/**
-   * Add a provider unless one already exists, then return that one.
-   *
-   * Just passing an options will construct one for us.
-   * Passing a hash will set the hash.
-   * Passing a prototype will use that!
-   *
-   * @param {String} pProviderHash - The hash of the provider.
-   * @param {Object<String, any>} [pOptions] - The options for the provider.
-   * @param {any} [pProviderPrototype] - The prototype for the provider.
-   *
-   * FIXME: refer to PictProvider here once it has a type definition
-   *
-   * @return {any} The provider instance.
-   */addProviderSingleton(pProviderHash,pOptions,pProviderPrototype){if(pProviderHash in this.providers){return this.providers[pProviderHash];}return this.addProvider(pProviderHash,pOptions,pProviderPrototype);}/**
-   * Just passing an options will construct one for us.
-   * Passing a hash will set the hash.
-   * Passing a prototype will use that!
-   *
-   * @param {String} pProviderHash - The hash of the provider.
-   * @param {Object<String, any>} [pOptions] - The options for the provider.
-   * @param {any} [pProviderPrototype] - The prototype for the provider.
-   *
-   * FIXME: refer to PictProvider here once it has a type definition
-   *
-   * @return {any} The provider instance.
-   */addProvider(pProviderHash,pOptions,pProviderPrototype){let tmpOptions=typeof pOptions=="object"?pOptions:{};let tmpProviderHash=typeof pProviderHash=="string"?pProviderHash:this.fable.getUUID();if(this.LogControlFlow){if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow addProvider [".concat(tmpProviderHash,"]:"),{Options:tmpOptions});}else{this.log.info("PICT-ControlFlow addProvider [".concat(tmpProviderHash,"]"));}}if(typeof pProviderPrototype!="undefined"){// If the prototype has a default_configuration, it will be merged with options.
+	 * Add a provider unless one already exists, then return that one.
+	 *
+	 * Just passing an options will construct one for us.
+	 * Passing a hash will set the hash.
+	 * Passing a prototype will use that!
+	 *
+	 * @param {String} pProviderHash - The hash of the provider.
+	 * @param {Object<String, any>} [pOptions] - The options for the provider.
+	 * @param {any} [pProviderPrototype] - The prototype for the provider.
+	 *
+	 * FIXME: refer to PictProvider here once it has a type definition
+	 *
+	 * @return {any} The provider instance.
+	 */addProviderSingleton(pProviderHash,pOptions,pProviderPrototype){if(pProviderHash in this.providers){return this.providers[pProviderHash];}return this.addProvider(pProviderHash,pOptions,pProviderPrototype);}/**
+	 * Just passing an options will construct one for us.
+	 * Passing a hash will set the hash.
+	 * Passing a prototype will use that!
+	 *
+	 * @param {String} pProviderHash - The hash of the provider.
+	 * @param {Object<String, any>} [pOptions] - The options for the provider.
+	 * @param {any} [pProviderPrototype] - The prototype for the provider.
+	 *
+	 * FIXME: refer to PictProvider here once it has a type definition
+	 *
+	 * @return {any} The provider instance.
+	 */addProvider(pProviderHash,pOptions,pProviderPrototype){let tmpOptions=typeof pOptions=="object"?pOptions:{};let tmpProviderHash=typeof pProviderHash=="string"?pProviderHash:this.fable.getUUID();if(this.LogControlFlow){if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow addProvider [".concat(tmpProviderHash,"]:"),{Options:tmpOptions});}else{this.log.info("PICT-ControlFlow addProvider [".concat(tmpProviderHash,"]"));}}if(typeof pProviderPrototype!="undefined"){// If the prototype has a default_configuration, it will be merged with options.
 if("default_configuration"in pProviderPrototype){tmpOptions=this.fable.Utility.extend({},pProviderPrototype.default_configuration,tmpOptions);}return this.instantiateServiceProviderFromPrototype("PictProvider",tmpOptions,tmpProviderHash,pProviderPrototype);}else{return this.instantiateServiceProvider("PictProvider",tmpOptions,tmpProviderHash);}}/**
-   * Just passing an options will construct one for us.
-   * Passing a hash will set the hash.
-   * Passing a prototype will use that!
-   *
-   * @param {String} pApplicationHash - The hash of the application.
-   * @param {Object} [pOptions] - The options for the application.
-   * @param {any} [pApplicationPrototype] - The prototype for the application.
-   *
-   * FIXME: refer to PictApplication here once it has a type definition
-   *
-   * @return {any} The application instance.
-   */addApplication(pApplicationHash,pOptions,pApplicationPrototype){let tmpOptions=typeof pOptions=="object"?pOptions:{};let tmpApplicationHash=typeof pApplicationHash=="string"?pApplicationHash:this.fable.getUUID();if(this.LogControlFlow){if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow addApplication [".concat(tmpApplicationHash,"]:"),{Options:tmpOptions});}else{this.log.info("PICT-ControlFlow addApplication [".concat(tmpApplicationHash,"]"));}}if(typeof pApplicationPrototype!="undefined"){// If the prototype has a default_configuration, it will be merged with options.
+	 * Just passing an options will construct one for us.
+	 * Passing a hash will set the hash.
+	 * Passing a prototype will use that!
+	 *
+	 * @param {String} pApplicationHash - The hash of the application.
+	 * @param {Object} [pOptions] - The options for the application.
+	 * @param {any} [pApplicationPrototype] - The prototype for the application.
+	 *
+	 * FIXME: refer to PictApplication here once it has a type definition
+	 *
+	 * @return {any} The application instance.
+	 */addApplication(pApplicationHash,pOptions,pApplicationPrototype){let tmpOptions=typeof pOptions=="object"?pOptions:{};let tmpApplicationHash=typeof pApplicationHash=="string"?pApplicationHash:this.fable.getUUID();if(this.LogControlFlow){if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow addApplication [".concat(tmpApplicationHash,"]:"),{Options:tmpOptions});}else{this.log.info("PICT-ControlFlow addApplication [".concat(tmpApplicationHash,"]"));}}if(typeof pApplicationPrototype!="undefined"){// If the prototype has a default_configuration, it will be merged with options.
 if("default_configuration"in pApplicationPrototype){tmpOptions=this.fable.Utility.extend({},pApplicationPrototype.default_configuration,tmpOptions);}return this.instantiateServiceProviderFromPrototype("PictApplication",tmpOptions,tmpApplicationHash,pApplicationPrototype);}else{return this.instantiateServiceProvider("PictApplication",tmpOptions,tmpApplicationHash);}}/**
-   * Attach the default template engine renderers.
-   *
-   * @private
-   */initializePictTemplateEngine(){if(!this._DefaultPictTemplatesInitialized){// Just looking up data in the application state template expression
+	 * Attach the default template engine renderers.
+	 *
+	 * @private
+	 */initializePictTemplateEngine(){if(!this._DefaultPictTemplatesInitialized){// Just looking up data in the application state template expression
 //{~Data:AppData.Some.Value.to.Render~}
 //{~D:AppData.Some.Value.to.Render~}
 this.addTemplate(require("./templates/Pict-Template-Data.js"));this.addTemplate(require("./templates/Pict-Template-View.js"));// HTML Comment Start and End based on truthiness ... if the value is false, the comment shows up.
@@ -5184,52 +5185,52 @@ this.addTemplate(require("./templates/logic/Pict-Template-NotEmpty.js"));// Data
 this.addTemplate(require("./templates/data/Pict-Template-DataJson.js"));this.addTemplate(require("./templates/data/Pict-Template-PascalCaseIdentifier.js"));this.addTemplate(require("./templates/data/Pict-Template-DateOnlyFormat.js"));this.addTemplate(require("./templates/data/Pict-Template-DateOnlyYMD.js"));this.addTemplate(require("./templates/data/Pict-Template-DateTimeFormat.js"));this.addTemplate(require("./templates/data/Pict-Template-DateTimeYMD.js"));this.addTemplate(require("./templates/data/Pict-Template-Digits.js"));this.addTemplate(require("./templates/data/Pict-Template-Dollars.js"));this.addTemplate(require("./templates/data/Pict-Template-Join.js"));this.addTemplate(require("./templates/data/Pict-Template-JoinUnique.js"));this.addTemplate(require("./templates/data/Pict-Template-PluckJoinUnique.js"));// Data Generation Templates
 this.addTemplate(require("./templates/data-generation/Pict-Template-RandomNumber.js"));this.addTemplate(require("./templates/data-generation/Pict-Template-RandomNumberString.js"));// Debugging Templates
 this.addTemplate(require("./templates/debugging/Pict-Template-Breakpoint.js"));this.addTemplate(require("./templates/debugging/Pict-Template-LogStatement.js"));this.addTemplate(require("./templates/debugging/Pict-Template-LogValue.js"));this.addTemplate(require("./templates/debugging/Pict-Template-LogValueTree.js"));this.addTemplate(require("./templates/debugging/Pict-Template-DataValueTree.js"));this._DefaultPictTemplatesInitialized=true;}}/**
-   * Read a value from a nested object using a dot notation string.
-   *
-   * @param {string} pAddress - The address to resolve
-   * @param {any} pRecord - The record to resolve
-   * @param {Array<any>} [pContextArray] - The context array to resolve
-   *
-   * @return {any} The value at the given address, or undefined
-   */resolveStateFromAddress(pAddress,pRecord,pContextArray){let tmpContextArray=Array.isArray(pContextArray)?pContextArray:[this];return this.manifest.getValueByHash({Pict:this,AppData:this.AppData,Bundle:this.Bundle,Context:tmpContextArray,Record:pRecord},pAddress);}/**
-   * Parse a template.
-   *
-   * @param {String} pTemplateString - The template string to parse
-   * @param {Object} pData - The data to use in the template
-   * @param {Function} [fCallback] - The callback to call when the template is parsed
-   * @param {Array<any>} [pContextArray] - The context array to use in the template
-   *
-   * @return {String?} The parsed template string, or undefined if a callback was provided
-   */parseTemplate(pTemplateString,pData,fCallback,pContextArray){let tmpData=typeof pData==="object"?pData:{};let tmpContextArray=Array.isArray(pContextArray)?pContextArray:[this];let tmpParseUUID;if(this.LogControlFlow){tmpParseUUID=this.fable.getUUID();this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," [").concat(pTemplateString.substring(0,50).replace("\n","\\n"),"...").concat(pTemplateString.length,"] (fCallback: ").concat(typeof fCallback,") with data size [").concat(JSON.stringify(tmpData).length,"]"));if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," template:\n").concat(pTemplateString));}if(this.LogControlFlowWatchAddressList.length>0){for(let i=0;i<this.LogControlFlowWatchAddressList.length;i++){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," Watch Value: [").concat(this.LogControlFlowWatchAddressList[i],"]=>[").concat(this.resolveStateFromAddress(this.LogControlFlowWatchAddressList[i],tmpData),"]"));}}}if(typeof fCallback==="function"){this.MetaTemplate.parseString(pTemplateString,tmpData,(pError,pParsedTemplate)=>{if(this.LogControlFlow&&this.LogNoisiness>1){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," Template Async Return Value:\n").concat(pParsedTemplate));}return fCallback(pError,pParsedTemplate);},tmpContextArray);}else{let tmpResult=this.MetaTemplate.parseString(pTemplateString,tmpData,null,tmpContextArray);if(this.LogControlFlow&&this.LogNoisiness>1){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," Template Return Value:\n").concat(tmpResult));}return tmpResult;}}/**
-   * Parse a template by hash.
-   *
-   * @param {String} pTemplateHash - The hash of the template to parse
-   * @param {Object} pData - The data to use in the template
-   * @param {Function} [fCallback] - The callback to call when the template is parsed
-   * @param {Array<any>} [pContextArray] - The context array to use in the template
-   *
-   * @return {String?} The parsed template string, or undefined if a callback was provided
-   */parseTemplateByHash(pTemplateHash,pData,fCallback,pContextArray){let tmpTemplateString=this.TemplateProvider.getTemplate(pTemplateHash);// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
+	 * Read a value from a nested object using a dot notation string.
+	 *
+	 * @param {string} pAddress - The address to resolve
+	 * @param {any} pRecord - The record to resolve
+	 * @param {Array<any>} [pContextArray] - The context array to resolve
+	 *
+	 * @return {any} The value at the given address, or undefined
+	 */resolveStateFromAddress(pAddress,pRecord,pContextArray){let tmpContextArray=Array.isArray(pContextArray)?pContextArray:[this];return this.manifest.getValueByHash({Pict:this,AppData:this.AppData,Bundle:this.Bundle,Context:tmpContextArray,Record:pRecord},pAddress);}/**
+	 * Parse a template.
+	 *
+	 * @param {String} pTemplateString - The template string to parse
+	 * @param {Object} pData - The data to use in the template
+	 * @param {Function} [fCallback] - The callback to call when the template is parsed
+	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 *
+	 * @return {String?} The parsed template string, or undefined if a callback was provided
+	 */parseTemplate(pTemplateString,pData,fCallback,pContextArray){let tmpData=typeof pData==="object"?pData:{};let tmpContextArray=Array.isArray(pContextArray)?pContextArray:[this];let tmpParseUUID;if(this.LogControlFlow){tmpParseUUID=this.fable.getUUID();this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," [").concat(pTemplateString.substring(0,50).replace("\n","\\n"),"...").concat(pTemplateString.length,"] (fCallback: ").concat(typeof fCallback,") with data size [").concat(JSON.stringify(tmpData).length,"]"));if(this.LogNoisiness>1){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," template:\n").concat(pTemplateString));}if(this.LogControlFlowWatchAddressList.length>0){for(let i=0;i<this.LogControlFlowWatchAddressList.length;i++){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," Watch Value: [").concat(this.LogControlFlowWatchAddressList[i],"]=>[").concat(this.resolveStateFromAddress(this.LogControlFlowWatchAddressList[i],tmpData),"]"));}}}if(typeof fCallback==="function"){this.MetaTemplate.parseString(pTemplateString,tmpData,(pError,pParsedTemplate)=>{if(this.LogControlFlow&&this.LogNoisiness>1){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," Template Async Return Value:\n").concat(pParsedTemplate));}return fCallback(pError,pParsedTemplate);},tmpContextArray);}else{let tmpResult=this.MetaTemplate.parseString(pTemplateString,tmpData,null,tmpContextArray);if(this.LogControlFlow&&this.LogNoisiness>1){this.log.info("PICT-ControlFlow parseTemplate ".concat(tmpParseUUID," Template Return Value:\n").concat(tmpResult));}return tmpResult;}}/**
+	 * Parse a template by hash.
+	 *
+	 * @param {String} pTemplateHash - The hash of the template to parse
+	 * @param {Object} pData - The data to use in the template
+	 * @param {Function} [fCallback] - The callback to call when the template is parsed
+	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 *
+	 * @return {String?} The parsed template string, or undefined if a callback was provided
+	 */parseTemplateByHash(pTemplateHash,pData,fCallback,pContextArray){let tmpTemplateString=this.TemplateProvider.getTemplate(pTemplateHash);// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
 if(!tmpTemplateString){tmpTemplateString="";}return this.parseTemplate(tmpTemplateString,pData,fCallback,pContextArray);}/**
-   * Parse a template set.
-   *
-   * @param {String} pTemplateString - The template string to parse
-   * @param {Array<any>|Object} pDataSet - The data set to use in the template
-   * @param {Function} [fCallback] - The callback to call when the template set is parsed
-   * @param {Array<any>} [pContextArray] - The context array to use in the template
-   *
-   * @return {String?} The parsed template string, or undefined if a callback was provided
-   */parseTemplateSet(pTemplateString,pDataSet,fCallback,pContextArray){// TODO: This will need streaming -- for now janky old string append does the trick
+	 * Parse a template set.
+	 *
+	 * @param {String} pTemplateString - The template string to parse
+	 * @param {Array<any>|Object} pDataSet - The data set to use in the template
+	 * @param {Function} [fCallback] - The callback to call when the template set is parsed
+	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 *
+	 * @return {String?} The parsed template string, or undefined if a callback was provided
+	 */parseTemplateSet(pTemplateString,pDataSet,fCallback,pContextArray){// TODO: This will need streaming -- for now janky old string append does the trick
 let tmpValue="";if(typeof fCallback=="function"){if(Array.isArray(pDataSet)||typeof pDataSet=="object"){this.Utility.eachLimit(pDataSet,1,(pRecord,fRecordTemplateCallback)=>{return this.parseTemplate(pTemplateString,pRecord,(pError,pTemplateResult)=>{tmpValue+=pTemplateResult;return fRecordTemplateCallback();});},pError=>{return fCallback(pError,tmpValue);});}else{return fCallback(Error("Pict: Template Set: pDataSet is not an array or object."),"");}}else{if(Array.isArray(pDataSet)||typeof pDataSet=="object"){if(Array.isArray(pDataSet)){for(let i=0;i<pDataSet.length;i++){tmpValue+=this.parseTemplate(pTemplateString,pDataSet[i],null,pContextArray);}}else{let tmpKeys=Object.keys(pDataSet);for(let i=0;i<tmpKeys.length;i++){tmpValue+=this.parseTemplate(pTemplateString,pDataSet[tmpKeys[i]],null,pContextArray);}}return tmpValue;}else{return"";}}}/**
-   * Parse a template set by hash.
-   *
-   * @param {String} pTemplateHash - The hash of the template to parse
-   * @param {Array<any>|Object} pDataSet - The data set to use in the template
-   * @param {Function} [fCallback] - The callback to call when the template is parsed
-   * @param {Array<any>} [pContextArray] - The context array to use in the template
-   *
-   * @return {String?} The parsed template string, or undefined if a callback was provided
-   */parseTemplateSetByHash(pTemplateHash,pDataSet,fCallback,pContextArray){let tmpTemplateString=this.TemplateProvider.getTemplate(pTemplateHash);// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
+	 * Parse a template set by hash.
+	 *
+	 * @param {String} pTemplateHash - The hash of the template to parse
+	 * @param {Array<any>|Object} pDataSet - The data set to use in the template
+	 * @param {Function} [fCallback] - The callback to call when the template is parsed
+	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 *
+	 * @return {String?} The parsed template string, or undefined if a callback was provided
+	 */parseTemplateSetByHash(pTemplateHash,pDataSet,fCallback,pContextArray){let tmpTemplateString=this.TemplateProvider.getTemplate(pTemplateHash);// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
 if(!tmpTemplateString){tmpTemplateString="";}return this.parseTemplateSet(tmpTemplateString,pDataSet,fCallback,pContextArray);}}module.exports=Pict;module.exports.PictApplicationClass=require("pict-application");module.exports.PictViewClass=require("pict-view");module.exports.PictProviderClass=require("pict-provider");module.exports.PictTemplateClass=require("pict-template");module.exports.EnvironmentLog=require("./environments/Pict-Environment-Log.js");module.exports.EnvironmentObject=require("./environments/Pict-Environment-Object.js");// This is to help understand the type of enivironement we're executing in
 module.exports.isBrowser=new Function("try {return (this===window);} catch(pError) {return false;}");module.exports.safeOnDocumentReady=require("./Pict-Browser-SafeOnDocumentReady.js");module.exports.safeLoadPictApplication=require("./Pict-Browser-SafeLoad.js");},{"../package.json":189,"./Pict-Browser-SafeLoad.js":190,"./Pict-Browser-SafeOnDocumentReady.js":191,"./Pict-CSS.js":192,"./Pict-Content-Assignment.js":193,"./Pict-DataProvider.js":194,"./Pict-Meadow-EntityProvider.js":195,"./Pict-Template-Provider.js":196,"./environments/Pict-Environment-Log.js":198,"./environments/Pict-Environment-Object.js":199,"./templates/Pict-Template-Data.js":200,"./templates/Pict-Template-Entity.js":201,"./templates/Pict-Template-Self.js":202,"./templates/Pict-Template-Template.js":203,"./templates/Pict-Template-TemplateFromMap.js":204,"./templates/Pict-Template-TemplateSet.js":205,"./templates/Pict-Template-TemplateSetFromMap.js":206,"./templates/Pict-Template-TemplateValueSet.js":207,"./templates/Pict-Template-View.js":208,"./templates/data-generation/Pict-Template-RandomNumber.js":209,"./templates/data-generation/Pict-Template-RandomNumberString.js":210,"./templates/data/Pict-Template-DataJson.js":211,"./templates/data/Pict-Template-DateOnlyFormat.js":212,"./templates/data/Pict-Template-DateOnlyYMD.js":213,"./templates/data/Pict-Template-DateTimeFormat.js":214,"./templates/data/Pict-Template-DateTimeYMD.js":215,"./templates/data/Pict-Template-Digits.js":216,"./templates/data/Pict-Template-Dollars.js":217,"./templates/data/Pict-Template-HtmlCommentEnd.js":218,"./templates/data/Pict-Template-HtmlCommentStart.js":219,"./templates/data/Pict-Template-Join.js":220,"./templates/data/Pict-Template-JoinUnique.js":221,"./templates/data/Pict-Template-PascalCaseIdentifier.js":222,"./templates/data/Pict-Template-PluckJoinUnique.js":223,"./templates/debugging/Pict-Template-Breakpoint.js":224,"./templates/debugging/Pict-Template-DataValueTree.js":225,"./templates/debugging/Pict-Template-LogStatement.js":226,"./templates/debugging/Pict-Template-LogValue.js":227,"./templates/debugging/Pict-Template-LogValueTree.js":228,"./templates/logic/Pict-Template-NotEmpty.js":229,"./templates/logic/Pict-Template-TemplateIf.js":231,"./templates/logic/Pict-Template-TemplateIfAbsolute.js":232,"fable":68,"pict-application":137,"pict-provider":139,"pict-template":141,"pict-view":143}],198:[function(require,module,exports){/**
 * Pict browser shim loader
