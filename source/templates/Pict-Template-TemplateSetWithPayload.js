@@ -118,7 +118,7 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 			tmpPayloadData = {};
 		}
 
-		return this.pict.parseTemplateSetWithPayloadByHash(tmpTemplateHash, tmpData, tmpPayloadData, this.resolveStateFromAddress(tmpAddressOfPayload, pRecord, pContextArray),
+		return this.pict.parseTemplateSetWithPayloadByHash(tmpTemplateHash, tmpData, tmpPayloadData,
 			(pError, pValue) =>
 			{
 				if (pError)
