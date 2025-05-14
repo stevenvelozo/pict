@@ -24,7 +24,7 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 
 		if (this.pict.LogNoisiness > 4)
 		{
-			this.log.trace(`PICT Template [fTemplateSetWithPayloadRender]::[${tmpHash}] with tmpData:`, tmpData);
+			this.log.trace(`PICT Template [fTemplateSetWithPayloadRender]::[${tmpHash}] with record:`, pRecord);
 		}
 		else if (this.pict.LogNoisiness > 0)
 		{
