@@ -21,7 +21,6 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 	render(pTemplateHash, pRecord, pContextArray)
 	{
 		let tmpHash = pTemplateHash.trim();
-		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 
 		if (this.pict.LogNoisiness > 4)
 		{
@@ -47,15 +46,27 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 		tmpAddressOfData = tmpTemplateHashes[1];
 		tmpAddressOfPayload = tmpTemplateHashes[2];
 
-		if (!tmpAddressOfData)
+		let tmpData = this.resolveStateFromAddress(tmpAddressOfData, pRecord, pContextArray);
+		if (!tmpData)
 		{
-			// No address was provided, just render the template with what this template has.
-			return this.pict.parseTemplateSetWithPayloadByHash(tmpTemplateHash, pRecord, this.resolveStateFromAddress(tmpAddressOfPayload, tmpData, pContextArray), null, pContextArray);
+			tmpData = pRecord;
 		}
-		else
+		if (!tmpData)
 		{
-			return this.pict.parseTemplateSetWithPayloadByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), this.resolveStateFromAddress(tmpAddressOfPayload, tmpData, pContextArray), null, pContextArray);
+			tmpData = {};
 		}
+
+		let tmpPayloadData = this.resolveStateFromAddress(tmpAddressOfPayload, pRecord, pContextArray);
+		if (!tmpPayloadData)
+		{
+			tmpPayloadData = pRecord;
+		}
+		if (!tmpPayloadData)
+		{
+			tmpPayloadData = {};
+		}
+
+		return this.pict.parseTemplateSetWithPayloadByHash(tmpTemplateHash, tmpData, tmpPayloadData, null, pContextArray);
 	}
 
 	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)
@@ -88,7 +99,6 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 		tmpAddressOfPayload = tmpTemplateHashes[2];
 
 		let tmpData = this.resolveStateFromAddress(tmpAddressOfData, pRecord, pContextArray);
-
 		if (!tmpData)
 		{
 			tmpData = pRecord;
@@ -98,7 +108,17 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 			tmpData = {};
 		}
 
-		return this.pict.parseTemplateSetWithPayloadByHash(tmpTemplateHash, tmpData, this.resolveStateFromAddress(tmpAddressOfPayload, tmpData, pContextArray),
+		let tmpPayloadData = this.resolveStateFromAddress(tmpAddressOfPayload, pRecord, pContextArray);
+		if (!tmpPayloadData)
+		{
+			tmpPayloadData = pRecord;
+		}
+		if (!tmpPayloadData)
+		{
+			tmpPayloadData = {};
+		}
+
+		return this.pict.parseTemplateSetWithPayloadByHash(tmpTemplateHash, tmpData, tmpPayloadData, this.resolveStateFromAddress(tmpAddressOfPayload, pRecord, pContextArray),
 			(pError, pValue) =>
 			{
 				if (pError)
