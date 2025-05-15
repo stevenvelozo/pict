@@ -8,7 +8,7 @@ declare class PictContentAssignment {
      * @param {any} [pOptions] - The options for the service.
      * @param {string} [pServiceHash] - The hash of services.
      */
-    constructor(pFable: any, pOptions?: any, pServiceHash?: string);
+    constructor(pFable: import("fable"), pOptions?: any, pServiceHash?: string);
     /** @type {any} */
     log: any;
     /** @type {any} */

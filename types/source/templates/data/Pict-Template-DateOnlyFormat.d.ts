@@ -5,7 +5,7 @@ declare class PictTemplateProviderDateOnlyFormat extends libPictTemplate {
      * @param {any} pOptions - The options for the service
      * @param {String} pServiceHash - The hash of the service
      */
-    constructor(pFable: any, pOptions: any, pServiceHash: string);
+    constructor(pFable: import("fable"), pOptions: any, pServiceHash: string);
     /** @type {any} */
     options: any;
     /** @type {any} */
