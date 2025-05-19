@@ -511,9 +511,15 @@ suite(
 									testPict.TemplateProvider.addTemplate('Animal-View', '<p>{~Data:Record.Name~} is a {~Data:Record.Type~} that is {~Data:Record.Age~} years old.</p>');
 									testPict.TemplateProvider.addTemplate('Animal-Screen', '<h1>{~D:AppData.RecordSet.Type~}</h1>{~T:Animal-View:AppData.RecordSet~}');
 
+									testPict.TemplateProvider.addTemplate('ReferencedTemplate', '<h1>{~D:Pict.AppData.RecordSet.Type~}</h1>{~T:Animal-View:Pict.AppData.RecordSet~}');
+
 									let tmpTemplateOutput = testPict.parseTemplateByHash('Animal-Screen');
 
 									Expect(tmpTemplateOutput).to.equal('<h1>Dog</h1><p>Fido is a Dog that is 3 years old.</p>', 'The template system should parse a simple template from a hash.');
+
+									let tmpTemplateByReference = testPict.parseTemplate('{~TBR:Record.TemplateReference~}', {TemplateReference:'ReferencedTemplate'})
+
+									Expect(tmpTemplateByReference).to.equal('<h1>Dog</h1><p>Fido is a Dog that is 3 years old.</p>', 'The template system should parse a simple template from a hash.');
 
 									testPict.parseTemplateByHash('Book-Author-Content', { IDBook: 10000, Title: 'I learn things.' },
 										(pError, pValue) =>

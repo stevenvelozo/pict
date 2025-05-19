@@ -401,6 +401,8 @@ class Pict extends libFable {
 			//{~D:AppData.Some.Value.to.Render~}
 			this.addTemplate(require(`./templates/Pict-Template-Data.js`));
 
+			this.addTemplate(require(`./templates/Pict-Template-TemplateByReference.js`));
+
 			this.addTemplate(require(`./templates/Pict-Template-DataValueByKey.js`));
 
 			this.addTemplate(require(`./templates/Pict-Template-View.js`));

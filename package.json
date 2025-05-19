@@ -45,9 +45,9 @@
   },
   "homepage": "https://github.com/stevenvelozo/pict#readme",
   "devDependencies": {
-    "@eslint/js": "^9.26.0",
+    "@eslint/js": "^9.27.0",
     "@types/jquery": "^3.5.32",
-    "eslint": "^9.26.0",
+    "eslint": "^9.27.0",
     "globals": "^16.1.0",
     "quackage": "^1.0.41"
   },
