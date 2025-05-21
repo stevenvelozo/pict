@@ -8,8 +8,8 @@ declare class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
     constructor(pFable: any, pOptions: any, pServiceHash: string);
     /** @type {any} */
     log: any;
-    render(pTemplateHash: any, pRecord: any, pContextArray: any): string;
-    renderAsync(pTemplateHash: any, pRecord: any, fCallback: any, pContextArray: any): string;
+    render(pTemplateHash: any, pRecord: any, pContextArray: any): any;
+    renderAsync(pTemplateHash: any, pRecord: any, fCallback: any, pContextArray: any): any;
 }
 import libPictTemplate = require("pict-template");
 //# sourceMappingURL=Pict-Template-TemplateSetWithPayload.d.ts.map

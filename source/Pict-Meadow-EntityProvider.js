@@ -138,6 +138,75 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 	}
 
+	gatherCustomDataSet(pCustomRequestInformation, fCallback)
+	{
+		// First sanity check the pCustomRequestInformation
+		if (!('URL' in pCustomRequestInformation) || (typeof(pCustomRequestInformation.URL) != 'string'))
+		{
+			this.log.warn(`EntityBundleRequest failed to parse custom data request because the stanza did not contain a URL string.`);
+			return fCallback();
+		}
+		if (!('URLData' in pCustomRequestInformation) || (typeof(pCustomRequestInformation.URLData) != 'object'))
+		{
+			pCustomRequestInformation.URLData = {};
+		}
+
+		// Parse the filter template
+		const tmpURLTemplateString = this.fable.parseTemplate(pCustomRequestInformation.URL, pCustomRequestInformation.URLData);
+		if (tmpURLTemplateString == '')
+		{
+			// We may want to continue, but for now let's say nah and nope out.
+			this.log.warn(`EntityBundleRequest failed to parse custom data request because the entity Filter did not return a string for FilterBy`)
+		}
+
+		let tmpURLPrefix = '';
+		// This will only be true if the "Host" is set.
+		const tmpCustomURIHost = pCustomRequestInformation.Host ? pCustomRequestInformation.Host : false;
+		// If "Host" is set, protocol and port are optional.
+		const tmpCustomURIProtocol = pCustomRequestInformation.Protocol ? pCustomRequestInformation.Protocol : 'https';
+		const tmpCustomURIPort = pCustomRequestInformation.Port ? pCustomRequestInformation.Port : false;
+
+		if (tmpCustomURIHost)
+		{
+			tmpURLPrefix = `${tmpCustomURIProtocol}://${tmpCustomURIHost}`;
+			if (tmpCustomURIPort)
+			{
+				tmpURLPrefix += `:${tmpCustomURIPort}`;
+			}
+		}
+		else
+		{
+			tmpURLPrefix = this.fable.EntityProvider.options.urlPrefix;
+		}
+
+		// Now get the records
+		const callback = (pError, pResponse, pData) =>
+		{
+			if (pError)
+			{
+				this.log.error(`EntityBundleRequest request Error getting data set for [${pCustomRequestInformation.Entity}] with filter [${tmpURLTemplateString}]: ${pError}`, pError);
+				return fCallback(pError, '');
+			}
+
+			this.log.trace(`EntityBundleRequest completed request for ${pCustomRequestInformation.Entity} filtered to [${tmpURLTemplateString}]`);
+
+			// Since this is a templated endpoint it can be used for logging etc.
+			if (pCustomRequestInformation.Destination)
+			{
+				this.fable.manifest.setValueByHash(this.fable, pCustomRequestInformation.Destination, pData);
+			}
+
+			return fCallback();
+		};
+
+		let tmpOptions = (
+			{
+				url: `${tmpURLPrefix}${tmpURLTemplateString}`
+			});
+		tmpOptions = this.fable.EntityProvider.prepareRequestOptions(tmpOptions);
+		return this.fable.EntityProvider.restClient.getJSON(tmpOptions, callback);
+	}
+
 	/**
 	 * Gather data from the server returning a promise when it is complete.
 	 * 
@@ -163,7 +232,15 @@ class PictMeadowEntityProvider extends libFableServiceBase
 				{
 					try
 					{
-						return this.gatherEntitySet(tmpEntityBundleEntry, fNext);
+						switch (tmpEntityBundleEntry.Type)
+						{
+							case 'Custom':
+								return this.gatherCustomDataSet(tmpEntityBundleEntry, fNext);
+							// This is the default case, for a meadow entity set or single entity
+							case 'MeadowEntity':
+							default:
+								return this.gatherEntitySet(tmpEntityBundleEntry, fNext);
+						}
 					}
 					catch (pError)
 					{

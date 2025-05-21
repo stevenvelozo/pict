@@ -57,12 +57,18 @@ suite(
 									"Entity": "Book",
 									"Filter": "FBL~IDBook~INN~{~PJU:,^IDBook^AppData.BookAuthorJoins~}",
 									"Destination": "AppData.Books"
+								},
+								{
+									"Type": "Custom",
+									"URL": "Author/Schema",
+									"Destination": "AppData.AuthorSchema"
 								}
 							],
 							function (pError, pResult)
 							{
 								Expect(testPict.AppData.CurrentAuthor.IDAuthor).to.equal(100);
 								Expect(testPict.AppData.BookAuthorJoins.length).to.be.greaterThan(0);
+								Expect(testPict.AppData.AuthorSchema).to.be.an('object');
 								return fDone();
 							}.bind(this));
 					}
