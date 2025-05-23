@@ -8,6 +8,7 @@
 
 const Chai = require("chai");
 const Expect = Chai.expect;
+const Sinon = require("sinon");
 
 const libPict = require('../source/Pict.js');
 
@@ -84,6 +85,7 @@ suite(
 					function(fDone)
 					{
 						const testPict = new libPict(_MockSettings);
+						const getJSONSpy = Sinon.spy(testPict.EntityProvider.restClient, 'getJSON');
 
 						testPict.EntityProvider.getEntity('Book', 199, (err, rec) =>
 						{
@@ -93,6 +95,7 @@ suite(
 							{
 								Expect(rec2).to.be.an('object');
 								Expect(rec2.IDBook).to.equal(199);
+								Sinon.assert.calledOnce(getJSONSpy);
 								return fDone();
 							});
 						});
@@ -104,6 +107,7 @@ suite(
 					function(fDone)
 					{
 						const testPict = new libPict(_MockSettings);
+						const getJSONSpy = Sinon.spy(testPict.EntityProvider.restClient, 'getJSON');
 
 						testPict.EntityProvider.getEntitySet('Book', `FBV~IDBook~GT~190~FBV~IDBook~LT~200`, (err, recs) =>
 						{
@@ -115,6 +119,9 @@ suite(
 								Expect(recs2).to.be.an('array');
 								Expect(recs2.length).to.equal(9);
 								Expect(recs2[8].IDBook).to.equal(199);
+								Sinon.assert.calledTwice(getJSONSpy); // count + reads
+								Sinon.assert.calledWith(getJSONSpy, 'http://localhost:8086/1.0/Books/Count/FilteredTo/FBV~IDBook~GT~190~FBV~IDBook~LT~200');
+								Sinon.assert.calledWith(getJSONSpy, 'http://localhost:8086/1.0/Books/FilteredTo/FBV~IDBook~GT~190~FBV~IDBook~LT~200/0/100');
 								return fDone();
 							});
 						});
