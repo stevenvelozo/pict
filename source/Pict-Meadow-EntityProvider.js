@@ -348,7 +348,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		this.recordSetCache[pEntity].prune(
 			function ()
 			{
-				let tmpPossibleRecords = this.recordCache[pEntity].read(pMeadowFilterExpression);
+				let tmpPossibleRecords = this.recordSetCache[pEntity].read(pMeadowFilterExpression);
 
 				if (tmpPossibleRecords)
 				{
