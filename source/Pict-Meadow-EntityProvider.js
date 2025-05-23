@@ -36,7 +36,8 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		//@ts-ignore - FIXME - remove once we have fable types
 		this.restClient = this.fable.RestClient ?? this.fable.instantiateServiceProviderWithoutRegistration('RestClient');
 
-		this.cache = {};
+		this.recordCache = {};
+		this.recordSetCache = {};
 
 		this.prepareRequestOptions = (pOptions) => { return pOptions; };
 	}
@@ -44,16 +45,26 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	initializeCache(pEntity)
 	{
 		// This should not be happening as often as it's happening.
-		if (!(pEntity in this.cache))
+		if (!(pEntity in this.recordCache))
 		{
 			//@ts-ignore - FIXME - remove once we have fable types
-			this.cache[pEntity] = this.fable.instantiateServiceProviderWithoutRegistration('ObjectCache');
+			this.recordCache[pEntity] = this.fable.instantiateServiceProviderWithoutRegistration('ObjectCache');
 			// TODO: Make this a configuration?
 			// For now cache for 30 seconds.
-			this.cache[pEntity].maxAge = 30000;
-			this.cache[pEntity].maxLength = 10000;
+			this.recordCache[pEntity].maxAge = 30000;
+			this.recordCache[pEntity].maxLength = 10000;
 
-			this.fable.Bundle[pEntity] = this.cache[pEntity].RecordMap;
+			this.fable.Bundle[pEntity] = this.recordCache[pEntity].RecordMap;
+		}
+		// This should not be happening as often as it's happening.
+		if (!(pEntity in this.recordSetCache))
+		{
+			//@ts-ignore - FIXME - remove once we have fable types
+			this.recordSetCache[pEntity] = this.fable.instantiateServiceProviderWithoutRegistration('ObjectCache');
+			// TODO: Make this a configuration?
+			// For now cache for 10 seconds.
+			this.recordSetCache[pEntity].maxAge = 10000;
+			this.recordSetCache[pEntity].maxLength = 100;
 		}
 	}
 
@@ -267,10 +278,10 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	{
 		this.initializeCache(pEntity);
 		// Discard anything from the cache that has expired or is over size.
-		this.cache[pEntity].prune(
+		this.recordCache[pEntity].prune(
 			function ()
 			{
-				let tmpPossibleRecord = this.cache[pEntity].read(pIDRecord);
+				let tmpPossibleRecord = this.recordCache[pEntity].read(pIDRecord);
 
 				if (tmpPossibleRecord)
 				{
@@ -288,7 +299,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 					{
 						if (pBody)
 						{
-							this.cache[pEntity].put(pBody, pIDRecord);
+							this.recordCache[pEntity].put(pBody, pIDRecord);
 						}
 						return fCallback(pError, pBody);
 					});
@@ -334,7 +345,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		//       If the list is mega-long we can parse it and break it into chunks.
 		this.initializeCache(pEntity);
 		// Discard anything from the cache that has expired or is over size.
-		this.cache[pEntity].prune(
+		this.recordSetCache[pEntity].prune(
 			function ()
 			{
 				return this.getEntitySetRecordCount(pEntity, pMeadowFilterExpression,
@@ -376,6 +387,10 @@ class PictMeadowEntityProvider extends libFableServiceBase
 							},
 							(pFullDownloadError) =>
 							{
+								if (tmpEntitySet)
+								{
+									this.recordSetCache[pEntity].put(tmpEntitySet, pMeadowFilterExpression);
+								}
 								return fCallback(pFullDownloadError, tmpEntitySet);
 							})
 					});

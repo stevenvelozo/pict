@@ -75,5 +75,52 @@ suite(
 				);
 			}
 		);
+		suite(
+			'Entity Providers',
+			function()
+			{
+				test(
+					'Get a book caches',
+					function(fDone)
+					{
+						const testPict = new libPict(_MockSettings);
+
+						testPict.EntityProvider.getEntity('Book', 199, (err, rec) =>
+						{
+							Expect(rec).to.be.an('object');
+							Expect(rec.IDBook).to.equal(199);
+							testPict.EntityProvider.getEntity('Book', 199, (err2, rec2) =>
+							{
+								Expect(rec2).to.be.an('object');
+								Expect(rec2.IDBook).to.equal(199);
+								return fDone();
+							});
+						});
+					}
+				);
+
+				test(
+					'Get a book list caches',
+					function(fDone)
+					{
+						const testPict = new libPict(_MockSettings);
+
+						testPict.EntityProvider.getEntitySet('Book', `FBV~IDBook~GT~190~FBV~IDBook~LT~200`, (err, recs) =>
+						{
+							Expect(recs).to.be.an('array');
+							Expect(recs.length).to.equal(9);
+							Expect(recs[8].IDBook).to.equal(199);
+							testPict.EntityProvider.getEntitySet('Book', `FBV~IDBook~GT~190~FBV~IDBook~LT~200`, (err2, recs2) =>
+							{
+								Expect(recs2).to.be.an('array');
+								Expect(recs2.length).to.equal(9);
+								Expect(recs2[8].IDBook).to.equal(199);
+								return fDone();
+							});
+						});
+					}
+				);
+			}
+		);
 	}
 );
