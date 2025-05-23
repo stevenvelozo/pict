@@ -36,7 +36,9 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		//@ts-ignore - FIXME - remove once we have fable types
 		this.restClient = this.fable.RestClient ?? this.fable.instantiateServiceProviderWithoutRegistration('RestClient');
 
+		/** @type {Record<string, import('cachetrax')>} */
 		this.recordCache = {};
+		/** @type {Record<string, import('cachetrax')>} */
 		this.recordSetCache = {};
 
 		this.prepareRequestOptions = (pOptions) => { return pOptions; };

@@ -13,7 +13,10 @@ declare class PictMeadowEntityProvider {
     log: any;
     serviceType: string;
     restClient: any;
-    cache: {};
+    /** @type {Record<string, import('cachetrax')>} */
+    recordCache: Record<string, any>;
+    /** @type {Record<string, import('cachetrax')>} */
+    recordSetCache: Record<string, any>;
     prepareRequestOptions: (pOptions: any) => any;
     initializeCache(pEntity: any): void;
     gatherEntitySet(pEntityInformation: any, fCallback: any): any;
