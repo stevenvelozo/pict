@@ -96,6 +96,16 @@ suite(
 								}
 							);
 						test(
+								'Data can be formatted into and out of javascript strings, and URL encoding',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+									let tmpTemplateOutput = testPict.parseTemplate('{~DEJS:Record.MagicDate~}', { MagicDate: 'These quotes " should not be unescaped...' });
+									Expect(tmpTemplateOutput).to.equal(`These quotes \" should not be unescaped...`);
+									fDone();
+								}
+							);
+						test(
 								'Self referentiality is dubious and powerful.',
 								function (fDone)
 								{

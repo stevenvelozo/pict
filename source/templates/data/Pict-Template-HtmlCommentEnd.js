@@ -1,6 +1,6 @@
 const libPictTemplate = require('pict-template');
 
-class PictTemplateProviderData extends libPictTemplate
+class PictTemplateProviderHTMLCommandEnd extends libPictTemplate
 {
 	/**
 	 * @param {Object} pFable - The Fable Framework instance
@@ -45,4 +45,4 @@ class PictTemplateProviderData extends libPictTemplate
 	}
 }
 
-module.exports = PictTemplateProviderData;
+module.exports = PictTemplateProviderHTMLCommandEnd;

@@ -1,6 +1,6 @@
 const libPictTemplate = require('pict-template');
 
-class PictTemplateProviderJSONOutput extends libPictTemplate
+class PictTemplateProviderDataEncodeJavascriptString extends libPictTemplate
 {
 	/**
 	 * @param {Object} pFable - The Fable Framework instance
@@ -14,8 +14,8 @@ class PictTemplateProviderJSONOutput extends libPictTemplate
 		/** @type {any} */
 		this.log;
 
-		this.addPattern('{~DataJson:', '~}');
-		this.addPattern('{~DJ:', '~}');
+		this.addPattern('{~DataEncodeJavascriptString:', '~}');
+		this.addPattern('{~DEJS:', '~}');
 	}
 
 	render(pTemplateHash, pRecord, pContextArray)
@@ -32,15 +32,10 @@ class PictTemplateProviderJSONOutput extends libPictTemplate
 			this.log.trace(`PICT Template [fDataJson]::[${tmpHash}]`);
 		}
 
-		let tmpDataToStringify = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray);
+		let tmpDataToEncode = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray);
 
-		if (!tmpDataToStringify)
-		{
-			tmpDataToStringify = pRecord;
-		}
-
-		return JSON.stringify(tmpDataToStringify);
+		return this.pict.DataFormat.stringEncodeForJavascript(tmpDataToEncode);
 	}
 }
 
-module.exports = PictTemplateProviderJSONOutput;
+module.exports = PictTemplateProviderDataEncodeJavascriptString;

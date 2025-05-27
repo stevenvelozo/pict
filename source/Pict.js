@@ -407,6 +407,8 @@ class Pict extends libFable {
 
 			this.addTemplate(require(`./templates/Pict-Template-View.js`));
 
+			this.addTemplate(require(`./templates/data/Pict-Template-DataEncodeJavascriptString.js`));
+
 			// HTML Comment Start and End based on truthiness ... if the value is false, the comment shows up.
 			// {~HtmlCommentStart:Some.Address~} gives you "<!--"
 			// {~HCS:Some.Address~} gives you "<!--"
