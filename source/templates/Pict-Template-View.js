@@ -55,13 +55,20 @@ class PictTemplateProviderView extends libPictTemplate
 		return tmpResult;
 	}
 
+	/**
+	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
+	 * @param {any} pRecord - The json object to be used as the Record for the template
+	 * @param {(pError?: Error, pResult?: string) => void} fCallback - The callback function to call with the result
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @return {void}
+	 */
 	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)
 	{
 		const tmpViewHash = pTemplateHash.trim();
 		if (!(tmpViewHash in this.pict.views))
 		{
 			this.log.warn(`Pict: View Template Render: View not found for [${tmpViewHash}]`);
-			return '';
+			return fCallback(null, '');
 		}
 
 		let tmpRenderGUID = this.pict.getUUID();

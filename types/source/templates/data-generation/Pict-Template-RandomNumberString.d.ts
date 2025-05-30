@@ -8,7 +8,6 @@ declare class PictTemplateProviderRandomNumberString extends libPictTemplate {
     constructor(pFable: any, pOptions: any, pServiceHash: string);
     /** @type {any} */
     log: any;
-    render(pTemplateHash: any, pRecord: any, pContextArray: any): any;
 }
 import libPictTemplate = require("pict-template");
 //# sourceMappingURL=Pict-Template-RandomNumberString.d.ts.map

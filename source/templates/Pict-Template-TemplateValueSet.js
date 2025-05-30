@@ -18,6 +18,15 @@ class PictTemplateProviderTemplateValueSet extends libPictTemplate
 		this.addPattern('{~TVS:', '~}');
 	}
 
+	/**
+	 * Render a template expression, returning a string with the resulting content.
+	 *
+	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
+	 * @param {any} pRecord - The json object to be used as the Record for the template render
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 *
+	 * @return {string} The rendered template
+	 */
 	render(pTemplateHash, pRecord, pContextArray)
 	{
 		let tmpHash = pTemplateHash.trim();
@@ -51,7 +60,7 @@ class PictTemplateProviderTemplateValueSet extends libPictTemplate
 		if (!tmpTemplateHash)
 		{
 			this.log.warn(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`);
-			return `Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`;
+			return '';
 		}
 
 		tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray);
@@ -88,6 +97,16 @@ class PictTemplateProviderTemplateValueSet extends libPictTemplate
 			return this.pict.parseTemplateSetByHash(tmpTemplateHash, tmpData, null, pContextArray);
 		}
 	}
+	/**
+	 * Render a template expression, deliver a string with the resulting content to a callback function.
+	 *
+	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
+	 * @param {any} pRecord - The json object to be used as the Record for the template render
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {(error?: Error, content?: String) => void} fCallback - callback function invoked with the rendered template, or an error
+	 *
+	 * @return {void}
+	 */
 	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)
 	{
 		let tmpHash = pTemplateHash.trim();
@@ -154,7 +173,7 @@ class PictTemplateProviderTemplateValueSet extends libPictTemplate
 		{
 			// No address was provided, just render the template with what this template has.
 			// The async portion of this is a mind bender because of how entry can happen dynamically from templates
-			return this.pict.parseTemplateSetByHash(tmpTemplateFromMapHash, pRecord,
+			this.pict.parseTemplateSetByHash(tmpTemplateFromMapHash, pRecord,
 				(pError, pValue) =>
 				{
 					if (pError)
@@ -166,7 +185,7 @@ class PictTemplateProviderTemplateValueSet extends libPictTemplate
 		}
 		else
 		{
-			return this.pict.parseTemplateSetByHash(tmpTemplateFromMapHash, tmpData,
+			this.pict.parseTemplateSetByHash(tmpTemplateFromMapHash, tmpData,
 				(pError, pValue) =>
 				{
 					if (pError)

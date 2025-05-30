@@ -34,6 +34,16 @@ class PictTemplateProviderEntity extends libPictTemplate
 		return '';
 	}
 
+	/**
+	 * Render a template expression, deliver a string with the resulting content to a callback function.
+	 *
+	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
+	 * @param {any} pRecord - The json object to be used as the Record for the template render
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {(error?: Error, content?: String) => void} fCallback - callback function invoked with the rendered template, or an error
+	 *
+	 * @return {void}
+	 */
 	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)
 	{
 		let tmpHash = pTemplateHash.trim();
@@ -49,10 +59,10 @@ class PictTemplateProviderEntity extends libPictTemplate
 			this.log.trace(`PICT Template [fEntityRender]::[${tmpHash}]`);
 		}
 
-		let tmpEntity = false;
+		let tmpEntity;
 		/** @type {string|number} */
 		let tmpEntityID = '';
-		let tmpEntityTemplate = false;
+		let tmpEntityTemplate;
 
 		// This expression requires 2 parts -- a third is optional, and, if present, is the template to render to.
 		let tmpAddressParts = tmpHash.split('^');
@@ -60,7 +70,7 @@ class PictTemplateProviderEntity extends libPictTemplate
 		if (tmpAddressParts.length < 2)
 		{
 			this.log.warn(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]`);
-			return tmpCallback(Error(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]`), '');
+			return tmpCallback(null, '');
 		}
 
 		tmpEntity = tmpAddressParts[0].trim();
@@ -89,7 +99,7 @@ class PictTemplateProviderEntity extends libPictTemplate
 		if (!tmpEntity || !tmpEntityID)
 		{
 			this.log.warn(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]  Entity: ${tmpEntity} ID: ${tmpEntityID}`);
-			return tmpCallback(Error(`Pict: Entity Render: Entity or entity ID not resolved for [${tmpHash}]  Entity: ${tmpEntity} ID: ${tmpEntityID}`), '');
+			return tmpCallback(null, '');
 		}
 
 		if (this.pict.LogNoisiness > 3)
@@ -110,11 +120,11 @@ class PictTemplateProviderEntity extends libPictTemplate
 				// Now render the template
 				if (tmpEntityTemplate)
 				{
-					return this.pict.parseTemplateByHash(tmpEntityTemplate, pRecord, tmpCallback, pContextArray);
+					this.pict.parseTemplateByHash(tmpEntityTemplate, pRecord, tmpCallback, pContextArray);
 				}
 				else
 				{
-					return tmpCallback(null, '');
+					tmpCallback(null, '');
 				}
 			}.bind(this));
 	}

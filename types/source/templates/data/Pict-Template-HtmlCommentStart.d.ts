@@ -1,5 +1,5 @@
-export = PictTemplateProviderData;
-declare class PictTemplateProviderData extends libPictTemplate {
+export = PictTemplateProviderHTMLCommandStart;
+declare class PictTemplateProviderHTMLCommandStart extends libPictTemplate {
     /**
      * @param {Object} pFable - The Fable Framework instance
      * @param {Object} pOptions - The options for the service
@@ -8,7 +8,6 @@ declare class PictTemplateProviderData extends libPictTemplate {
     constructor(pFable: any, pOptions: any, pServiceHash: string);
     /** @type {any} */
     log: any;
-    render(pTemplateHash: any, pRecord: any, pContextArray: any): "" | "<!-- ";
 }
 import libPictTemplate = require("pict-template");
 //# sourceMappingURL=Pict-Template-HtmlCommentStart.d.ts.map

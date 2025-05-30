@@ -51,6 +51,7 @@ class Pict extends libFable {
 
 		/** @type {Object} */
 		this._PackageFable = this._Package;
+		/** @type {Record<string, any>} */
 		this._Package = libPackage;
 
 		this.browserAddress = "window._Pict";

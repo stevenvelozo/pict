@@ -1,5 +1,5 @@
-export = PictTemplateProviderDollars;
-declare class PictTemplateProviderDollars extends libPictTemplate {
+export = PictTemplateProviderJSONOutput;
+declare class PictTemplateProviderJSONOutput extends libPictTemplate {
     /**
      * @param {Object} pFable - The Fable Framework instance
      * @param {Object} pOptions - The options for the service
@@ -8,7 +8,6 @@ declare class PictTemplateProviderDollars extends libPictTemplate {
     constructor(pFable: any, pOptions: any, pServiceHash: string);
     /** @type {any} */
     log: any;
-    render(pTemplateHash: any, pRecord: any, pContextArray: any): string;
 }
 import libPictTemplate = require("pict-template");
 //# sourceMappingURL=Pict-Template-DataJson.d.ts.map

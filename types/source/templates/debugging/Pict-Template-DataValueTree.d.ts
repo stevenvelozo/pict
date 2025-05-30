@@ -8,7 +8,6 @@ declare class PictTemplateProviderDataValueTree extends libPictTemplate {
     constructor(pFable: any, pOptions: any, pServiceHash: string);
     /** @type {any} */
     log: any;
-    render(pTemplateHash: any, pRecord: any, pContextArray: any): string;
     dataValueTreeObjectSet(pObject: any, pRootObject: any, pCurrentDepth: any, pMaxDepth: any, pContextArray: any): string;
 }
 import libPictTemplate = require("pict-template");

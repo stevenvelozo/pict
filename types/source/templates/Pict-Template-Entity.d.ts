@@ -8,7 +8,6 @@ declare class PictTemplateProviderEntity extends libPictTemplate {
     constructor(pFable: any, pOptions: any, pServiceHash: string);
     /** @type {any} */
     log: any;
-    renderAsync(pTemplateHash: any, pRecord: any, fCallback: any, pContextArray: any): any;
 }
 import libPictTemplate = require("pict-template");
 //# sourceMappingURL=Pict-Template-Entity.d.ts.map

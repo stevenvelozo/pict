@@ -11,62 +11,8 @@ declare class Pict extends Pict_base {
     isBrowser: Function;
     /** @type {Object} */
     _PackageFable: any;
-    _Package: {
-        name: string;
-        version: string;
-        description: string;
-        main: string;
-        scripts: {
-            start: string;
-            test: string;
-            tests: string;
-            coverage: string;
-            build: string;
-            "docker-dev-build": string;
-            "docker-dev-run": string;
-            "docker-dev-shell": string;
-            lint: string;
-            types: string;
-        };
-        types: string;
-        mocha: {
-            diff: boolean;
-            extension: string[];
-            package: string;
-            reporter: string;
-            slow: string;
-            timeout: string;
-            ui: string;
-            "watch-files": string[];
-            "watch-ignore": string[];
-        };
-        repository: {
-            type: string;
-            url: string;
-        };
-        author: string;
-        license: string;
-        bugs: {
-            url: string;
-        };
-        homepage: string;
-        devDependencies: {
-            "@eslint/js": string;
-            "@types/jquery": string;
-            eslint: string;
-            globals: string;
-            quackage: string;
-        };
-        dependencies: {
-            cachetrax: string;
-            fable: string;
-            "pict-application": string;
-            "pict-provider": string;
-            "pict-template": string;
-            "pict-view": string;
-            typescript: string;
-        };
-    };
+    /** @type {Record<string, any>} */
+    _Package: Record<string, any>;
     browserAddress: any;
     children: any[];
     /** @type {import('pict-application')} */

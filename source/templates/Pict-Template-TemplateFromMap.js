@@ -18,6 +18,15 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 		this.addPattern('{~TemplateFromMap:', '~}');
 	}
 
+	/**
+	 * Render a template expression, returning a string with the resulting content.
+	 *
+	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
+	 * @param {any} pRecord - The json object to be used as the Record for the template render
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 *
+	 * @return {string} The rendered template
+	 */
 	render(pTemplateHash, pRecord, pContextArray)
 	{
 		let tmpHash = pTemplateHash.trim();
@@ -78,6 +87,17 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 			return this.pict.parseTemplateByHash(tmpTemplateFromMapHash, tmpData, null, pContextArray);
 		}
 	}
+
+	/**
+	 * Render a template expression, deliver a string with the resulting content to a callback function.
+	 *
+	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
+	 * @param {any} pRecord - The json object to be used as the Record for the template render
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {(error?: Error, content?: String) => void} fCallback - callback function invoked with the rendered template, or an error
+	 *
+	 * @return {void}
+	 */
 	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)
 	{
 		let tmpHash = pTemplateHash.trim();
@@ -133,7 +153,7 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 		{
 			// No address was provided, just render the TemplateFromMap with what this TemplateFromMap has.
 			// The async portion of this is a mind bender because of how entry can happen dynamically from TemplateFromMaps
-			return this.pict.parseTemplateByHash(tmpTemplateFromMapHash, pRecord,
+			this.pict.parseTemplateByHash(tmpTemplateFromMapHash, pRecord,
 				(pError, pValue) =>
 				{
 					if (pError)
@@ -145,7 +165,7 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 		}
 		else
 		{
-			return this.pict.parseTemplateByHash(tmpTemplateFromMapHash, tmpData,
+			this.pict.parseTemplateByHash(tmpTemplateFromMapHash, tmpData,
 				(pError, pValue) =>
 				{
 					if (pError)

@@ -18,6 +18,15 @@ class PictTemplateProviderTemplate extends libPictTemplate
 		this.addPattern('{~TBR:', '~}');
 	}
 
+	/**
+	 * Render a template expression, returning a string with the resulting content.
+	 *
+	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
+	 * @param {any} pRecord - The json object to be used as the Record for the template render
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 *
+	 * @return {string} The rendered template
+	 */
 	render(pTemplateHash, pRecord, pContextArray)
 	{
 		let tmpHash = pTemplateHash.trim();
@@ -51,7 +60,7 @@ class PictTemplateProviderTemplate extends libPictTemplate
 		if (!tmpTemplateHashReferenceLocation)
 		{
 			this.log.warn(`Pict: Template Render: TemplateHashReferenceLocation not resolved for [${tmpHash}]`);
-			return `Pict: Template Render: TemplateHashReferenceLocation not resolved for [${tmpHash}]`;
+			return '';
 		}
 
 		// Now look up the template by the reference
@@ -61,7 +70,7 @@ class PictTemplateProviderTemplate extends libPictTemplate
 		if (!tmpTemplateHash)
 		{
 			this.log.warn(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`);
-			return `Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`;
+			return '';
 		}
 
 		if (!tmpAddressOfData)
@@ -75,6 +84,16 @@ class PictTemplateProviderTemplate extends libPictTemplate
 		}
 	}
 
+	/**
+	 * Render a template expression, deliver a string with the resulting content to a callback function.
+	 *
+	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
+	 * @param {any} pRecord - The json object to be used as the Record for the template render
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {(error?: Error, content?: String) => void} fCallback - callback function invoked with the rendered template, or an error
+	 *
+	 * @return {void}
+	 */
 	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)
 	{
 		let tmpHash = pTemplateHash.trim();
@@ -109,7 +128,7 @@ class PictTemplateProviderTemplate extends libPictTemplate
 		if (!tmpTemplateHashReferenceLocation)
 		{
 			this.log.warn(`Pict: Template Render Async: TemplateHashReferenceLocation not resolved for [${tmpHash}]`);
-			return `Pict: Template Render Async: TemplateHashReferenceLocation not resolved for [${tmpHash}]`;
+			return fCallback(null, '');
 		}
 
 		// Now look up the template by the reference
@@ -119,14 +138,14 @@ class PictTemplateProviderTemplate extends libPictTemplate
 		if (!tmpTemplateHash)
 		{
 			this.log.warn(`Pict: Template Render Async: TemplateHash not resolved for [${tmpHash}]`);
-			return `Pict: Template Render Async: TemplateHash not resolved for [${tmpHash}]`;
+			return fCallback(null, '');
 		}
 
 		if (!tmpAddressOfData)
 		{
 			// No address was provided, just render the template with what this template has.
 			// The async portion of this is a mind bender because of how entry can happen dynamically from templates
-			return this.pict.parseTemplateByHash(tmpTemplateHash, pRecord,
+			this.pict.parseTemplateByHash(tmpTemplateHash, pRecord,
 				(pError, pValue) =>
 				{
 					if (pError)
@@ -138,7 +157,7 @@ class PictTemplateProviderTemplate extends libPictTemplate
 		}
 		else
 		{
-			return this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray),
+			this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray),
 				(pError, pValue) =>
 				{
 					if (pError)

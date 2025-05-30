@@ -18,6 +18,15 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 		this.addPattern('{~TSWP:', '~}');
 	}
 
+	/**
+	 * Render a template expression, returning a string with the resulting content.
+	 *
+	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
+	 * @param {any} pRecord - The json object to be used as the Record for the template render
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 *
+	 * @return {string} The rendered template
+	 */
 	render(pTemplateHash, pRecord, pContextArray)
 	{
 		let tmpHash = pTemplateHash.trim();
@@ -69,6 +78,16 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 		return this.pict.parseTemplateSetWithPayloadByHash(tmpTemplateHash, tmpData, tmpPayloadData, null, pContextArray);
 	}
 
+	/**
+	 * Render a template expression, deliver a string with the resulting content to a callback function.
+	 *
+	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
+	 * @param {any} pRecord - The json object to be used as the Record for the template render
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {(error?: Error, content?: String) => void} fCallback - callback function invoked with the rendered template, or an error
+	 *
+	 * @return {void}
+	 */
 	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)
 	{
 		let tmpHash = pTemplateHash.trim();
@@ -92,7 +111,7 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 		if (tmpTemplateHashes.length < 3)
 		{
 			this.log.trace(`PICT Template [fTemplateSetWithPayloadRender]::[${tmpHash}] failed because there were not three stanzas in the expression [${pTemplateHash}]`);
-			return ``;
+			return fCallback(null, '');
 		}
 		tmpTemplateHash = tmpTemplateHashes[0];
 		tmpAddressOfData = tmpTemplateHashes[1];

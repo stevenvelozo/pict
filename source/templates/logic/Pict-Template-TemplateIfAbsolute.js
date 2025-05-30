@@ -18,6 +18,15 @@ class PictTemplateProviderTemplateIfAbsolute extends libPictTemplateIf
 		this.addPattern('{~TIfAbs:', '~}');
 	}
 
+	/**
+	 * Render a template expression, returning a string with the resulting content.
+	 *
+	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
+	 * @param {any} pRecord - The json object to be used as the Record for the template render
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 *
+	 * @return {string} The rendered template
+	 */
 	render(pTemplateHash, pRecord, pContextArray)
 	{
 		let tmpHash = pTemplateHash.trim();
@@ -41,7 +50,7 @@ class PictTemplateProviderTemplateIfAbsolute extends libPictTemplateIf
 		if (tmpHashParts.length < 3)
 		{
 			this.log.warn(`Pict: Template If Absolute Value Render: TemplateHash not complete for [${tmpHash}]`);
-			return `Pict: Template If Absolute Value Render: TemplateHash not complete for [${tmpHash}]`;
+			return '';
 		}
 
 		tmpTemplateHash = tmpHashParts[0];
@@ -52,13 +61,13 @@ class PictTemplateProviderTemplateIfAbsolute extends libPictTemplateIf
 		if (!tmpTemplateHash)
 		{
 			this.log.warn(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`);
-			return `Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`;
+			return '';
 		}
 		// No comparison operation
 		if (!tmpComparisonOperation)
 		{
 			this.log.warn(`Pict: Template Render: Comparison Operation not resolved for [${tmpHash}]`);
-			return `Pict: Template Render: Comparison Operation not resolved for [${tmpHash}]`;
+			return '';
 		}
 
 		// Now try to break the comparison into three parts...
@@ -66,7 +75,7 @@ class PictTemplateProviderTemplateIfAbsolute extends libPictTemplateIf
 		if (tmpComparisonParts.length < 3)
 		{
 			this.log.warn(`Pict: Template Render: Comparison Operation not complete (three parts expected) for [${tmpHash}]`);
-			return `Pict: Template Render: Comparison Operation not complete (three parts expected) for [${tmpHash}]`;
+			return '';
 		}
 
 		// Now look up the data at the comparison location
@@ -77,26 +86,33 @@ class PictTemplateProviderTemplateIfAbsolute extends libPictTemplateIf
 			{
 				return '';
 			}
+			if (!tmpAddressOfData)
+			{
+				// No address was provided, just render the template with what this template has.
+				return this.pict.parseTemplateByHash(tmpTemplateHash, pRecord, null, pContextArray);
+			}
 			else
 			{
-				if (!tmpAddressOfData)
-				{
-					// No address was provided, just render the template with what this template has.
-					return this.pict.parseTemplateByHash(tmpTemplateHash, pRecord, null, pContextArray);
-				}
-				else
-				{
-					return this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), null, pContextArray);
-				}
+				return this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), null, pContextArray);
 			}
 		}
 		catch (pError)
 		{
 			this.log.error(`Pict: Template Render: Error looking up comparison data for [${tmpHash}]: ${pError}`, pError);
-			return `Pict: Template Render: Error looking up comparison data for [${tmpHash}]: ${pError}`;
+			return '';
 		}
 	}
 
+	/**
+	 * Render a template expression, deliver a string with the resulting content to a callback function.
+	 *
+	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
+	 * @param {any} pRecord - The json object to be used as the Record for the template render
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {(error?: Error, content?: String) => void} fCallback - callback function invoked with the rendered template, or an error
+	 *
+	 * @return {void}
+	 */
 	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)
 	{
 		let tmpHash = pTemplateHash.trim();
@@ -121,7 +137,7 @@ class PictTemplateProviderTemplateIfAbsolute extends libPictTemplateIf
 		if (tmpHashParts.length < 3)
 		{
 			this.log.warn(`Pict: Template If Absolute Value Render: TemplateHash not complete for [${tmpHash}]`);
-			return tmpCallback(new Error(`Pict: Template If Absolute Value Render: TemplateHash not complete for [${tmpHash}]`));
+			return tmpCallback(null, '');
 		}
 
 		tmpTemplateHash = tmpHashParts[0];
@@ -132,13 +148,13 @@ class PictTemplateProviderTemplateIfAbsolute extends libPictTemplateIf
 		if (!tmpTemplateHash)
 		{
 			this.log.warn(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`);
-			return tmpCallback(new Error(`Pict: Template Render: TemplateHash not resolved for [${tmpHash}]`));
+			return tmpCallback(null, '');
 		}
 		// No comparison operation
 		if (!tmpComparisonOperation)
 		{
 			this.log.warn(`Pict: Template Render: Comparison Operation not resolved for [${tmpHash}]`);
-			return tmpCallback(new Error(`Pict: Template Render: Comparison Operation not resolved for [${tmpHash}]`));
+			return tmpCallback(null, '');
 		}
 
 		// Now try to break the comparison into three parts...
@@ -146,7 +162,7 @@ class PictTemplateProviderTemplateIfAbsolute extends libPictTemplateIf
 		if (tmpComparisonParts.length < 3)
 		{
 			this.log.warn(`Pict: Template Render: Comparison Operation not complete (three parts expected) for [${tmpHash}]`);
-			return tmpCallback(new Error(`Pict: Template Render: Comparison Operation not complete (three parts expected) for [${tmpHash}]`));
+			return tmpCallback(null, '');
 		}
 
 		// Now look up the data at the comparison location
@@ -157,32 +173,29 @@ class PictTemplateProviderTemplateIfAbsolute extends libPictTemplateIf
 			{
 				return tmpCallback(null, '');
 			}
+			if (!tmpAddressOfData)
+			{
+				this.pict.parseTemplateByHash(tmpTemplateHash, pRecord,
+					(pError, pValue) =>
+					{
+						if (pError)
+						{
+							return tmpCallback(pError, '');
+						}
+						return tmpCallback(null, pValue);
+					}, pContextArray);
+			}
 			else
 			{
-				if (!tmpAddressOfData)
-				{
-					return this.pict.parseTemplateByHash(tmpTemplateHash, pRecord,
-						(pError, pValue) =>
+				this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray),
+					(pError, pValue) =>
+					{
+						if (pError)
 						{
-							if (pError)
-							{
-								return tmpCallback(pError, '');
-							}
-							return tmpCallback(null, pValue);
-						}, pContextArray);
-				}
-				else
-				{
-					return this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray),
-						(pError, pValue) =>
-						{
-							if (pError)
-							{
-								return tmpCallback(pError, '');
-							}
-							return tmpCallback(null, pValue);
-						}, pContextArray);
-				}
+							return tmpCallback(pError, '');
+						}
+						return tmpCallback(null, pValue);
+					}, pContextArray);
 			}
 		}
 		catch (pError)

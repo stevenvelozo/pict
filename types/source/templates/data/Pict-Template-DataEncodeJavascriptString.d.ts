@@ -1,5 +1,5 @@
-export = PictTemplateProviderRandomNumber;
-declare class PictTemplateProviderRandomNumber extends libPictTemplate {
+export = PictTemplateProviderDataEncodeJavascriptString;
+declare class PictTemplateProviderDataEncodeJavascriptString extends libPictTemplate {
     /**
      * @param {Object} pFable - The Fable Framework instance
      * @param {Object} pOptions - The options for the service
@@ -10,4 +10,4 @@ declare class PictTemplateProviderRandomNumber extends libPictTemplate {
     log: any;
 }
 import libPictTemplate = require("pict-template");
-//# sourceMappingURL=Pict-Template-RandomNumber.d.ts.map
+//# sourceMappingURL=Pict-Template-DataEncodeJavascriptString.d.ts.map
