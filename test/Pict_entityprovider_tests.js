@@ -74,6 +74,88 @@ suite(
 							}.bind(this));
 					}
 				);
+				test(
+					'Decoration Provider with a list.',
+					function(fDone)
+					{
+						const testPict = new libPict(_MockSettings);
+
+						testPict.EntityProvider.gatherDataFromServer(
+							[
+								{
+									"Entity": "Author",
+									"Filter": "FBL~IDAuthor~INN~3,4",
+									"Destination": "AppData.Authors"
+								},
+								{
+									"Entity": "BookAuthorJoin",
+									"Filter": "FBL~IDAuthor~INN~{~PJU:,^IDAuthor^AppData.Authors~}",
+									"Destination": "AppData.BookAuthorJoins"
+								},
+								{
+									"Entity": "Book",
+									"Filter": "FBL~IDBook~INN~{~PJU:,^IDBook^AppData.BookAuthorJoins~}",
+									"Destination": "AppData.Books"
+								},
+								{
+									"Type": "MapJoin",
+									"DestinationRecordSetAddress": "AppData.Authors",
+									"DestinationJoinValue": "IDAuthor",
+									"JoinJoinValueLHS": "IDAuthor",
+									"Joins": "AppData.BookAuthorJoins",
+									"JoinJoinValueRHS": "IDBook",
+									"JoinRecordSetAddress": "AppData.Books",
+									"JoinValue": "IDBook",
+									"RecordDestinationAddress": "Books"
+								},
+								{
+									"Entity": "BookAuthorJoin",
+									"Filter": "FBL~IDBook~INN~{~PJU:,^IDBook^AppData.Books~}",
+									"Destination": "AppData.BookAuthorJoinsRev"
+								},
+								{
+									"Entity": "Author",
+									"Filter": "FBL~IDAuthor~INN~{~PJU:,^IDAuthor^AppData.BookAuthorJoinsRev~}",
+									"Destination": "AppData.AuthorsRev"
+								},
+								{
+									"Type": "MapJoin",
+									"DestinationRecordSetAddress": "AppData.Books",
+									"DestinationJoinValue": "IDBook",
+									"JoinJoinValueLHS": "IDBook",
+									"Joins": "AppData.BookAuthorJoinsRev",
+									"JoinJoinValueRHS": "IDAuthor",
+									"JoinRecordSetAddress": "AppData.AuthorsRev",
+									"JoinValue": "IDAuthor",
+									"RecordDestinationAddress": "Authors"
+								}
+							],
+							function (pError, pResult)
+							{
+								try
+								{
+									Expect(testPict.AppData.Authors.length).to.equal(2);
+									Expect(testPict.AppData.AuthorsRev.length).to.be.greaterThan(1);
+									Expect(testPict.AppData.BookAuthorJoins.length).to.be.greaterThan(0);
+									for (const tmpAuthor of testPict.AppData.Authors)
+									{
+										Expect(tmpAuthor.Books).to.be.an('array');
+										Expect(tmpAuthor.Books.length).to.be.greaterThan(0);
+									}
+									for (const tmpBook of testPict.AppData.Books)
+									{
+										Expect(tmpBook.Authors).to.be.an('array');
+										Expect(tmpBook.Authors.length).to.be.greaterThan(0);
+									}
+								}
+								catch (err)
+								{
+									return fDone(err);
+								}
+								return fDone();
+							}.bind(this));
+					}
+				);
 			}
 		);
 		suite(

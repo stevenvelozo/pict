@@ -20,6 +20,7 @@ declare class PictMeadowEntityProvider {
     prepareRequestOptions: (pOptions: any) => any;
     initializeCache(pEntity: any): void;
     gatherEntitySet(pEntityInformation: any, fCallback: any): any;
+    mapJoin(pCustomRequestInformation: any, fCallback: any): any;
     gatherCustomDataSet(pCustomRequestInformation: any, fCallback: any): any;
     /**
      * Gather data from the server returning a promise when it is complete.

@@ -151,6 +151,85 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 	}
 
+	mapJoin(pCustomRequestInformation, fCallback)
+	{
+		/*
+		{
+			"Type": "MapJoin",
+			"DestinationRecordSetAddress": "Record.CoreEntities",
+			"DestinationJoinValue": "IDBook",
+			"JoinJoinValueLHS": "IDBook",
+			"Joins": "Record.BookAuthorJoins",
+			"JoinJoinValueRHS": "IDAuthor",
+			"JoinRecordSetAddress": "Record.Authors",
+			"JoinValue": "IDAuthor",
+			"RecordDestinationAddress": "Authors"
+		}
+		*/
+		const tmpDestinationEntities = this.fable.manifest.getValueByHash(this.fable, pCustomRequestInformation.DestinationRecordSetAddress);
+		if (!Array.isArray(tmpDestinationEntities))
+		{
+			return fCallback(new Error(`EntityBundleRequest failed to map join because the destination [${pCustomRequestInformation.DestinationRecordSetAddress}] did not return an array.`));
+		}
+		const tmpJoinEntities = this.fable.manifest.getValueByHash(this.fable, pCustomRequestInformation.Joins);
+		if (!Array.isArray(tmpJoinEntities))
+		{
+			return fCallback(new Error(`EntityBundleRequest failed to map join because the join [${pCustomRequestInformation.Joins}] did not return an array.`));
+		}
+		const tmpSourceEntities = this.fable.manifest.getValueByHash(this.fable, pCustomRequestInformation.JoinRecordSetAddress);
+		if (!Array.isArray(tmpSourceEntities))
+		{
+			return fCallback(new Error(`EntityBundleRequest failed to map join because the source [${pCustomRequestInformation.JoinRecordSetAddress}] did not return an array.`));
+		}
+
+		const tmpLHSJoinKey = pCustomRequestInformation.JoinJoinValueLHS || pCustomRequestInformation.DestinationJoinValue;
+		const tmpRHSJoinKey = pCustomRequestInformation.JoinJoinValueRHS || pCustomRequestInformation.JoinValue;
+		const tmpDestinationLookup = {};
+		const tmpSourceLookup = {};
+		const tmpJoinMap = {};
+		for (const tmpDestinationEntity of tmpDestinationEntities)
+		{
+			const tmpDestinationJoinValue = tmpDestinationEntity[pCustomRequestInformation.DestinationJoinValue];
+			tmpDestinationLookup[tmpDestinationJoinValue] = tmpDestinationEntity;
+		}
+		for (const tmpSourceEntity of tmpSourceEntities)
+		{
+			const tmpSourceJoinValue = tmpSourceEntity[pCustomRequestInformation.JoinValue];
+			tmpSourceLookup[tmpSourceJoinValue] = tmpSourceEntity;
+		}
+
+		for (const tmpJoinEntity of tmpJoinEntities)
+		{
+			const tmpLHSJoinValue = tmpJoinEntity[tmpLHSJoinKey];
+			const tmpRHSJoinValue = tmpJoinEntity[tmpRHSJoinKey];
+			tmpJoinMap[tmpLHSJoinValue] = tmpJoinMap[tmpLHSJoinValue] || new Set();
+			tmpJoinMap[tmpLHSJoinValue].add(tmpRHSJoinValue);
+		}
+
+		for (const tmpLHSJoinValue of Object.keys(tmpJoinMap))
+		{
+			const tmpRHSJoinValues = Array.from(tmpJoinMap[tmpLHSJoinValue]);
+			const tmpDestinationEntity = tmpDestinationLookup[tmpLHSJoinValue];
+			if (!tmpDestinationEntity)
+			{
+				this.log.error(`EntityBundleRequest failed to map join because the LHS join value [${tmpLHSJoinValue}] was not found in the destination lookup.`);
+				continue;
+			}
+			for (const tmpRHSJoinValue of tmpRHSJoinValues)
+			{
+				const tmpSourceEntity = tmpSourceLookup[tmpRHSJoinValue];
+				if (!tmpSourceEntity)
+				{
+					this.log.error(`EntityBundleRequest failed to map join because the RHS join value [${tmpRHSJoinValue}] was not found in the source lookup.`);
+					continue;
+				}
+				tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] = tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] || [];
+				tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress].push(tmpSourceEntity);
+			}
+		}
+		fCallback(null, tmpDestinationEntities);
+	}
+
 	gatherCustomDataSet(pCustomRequestInformation, fCallback)
 	{
 		// First sanity check the pCustomRequestInformation
@@ -249,6 +328,8 @@ class PictMeadowEntityProvider extends libFableServiceBase
 						{
 							case 'Custom':
 								return this.gatherCustomDataSet(tmpEntityBundleEntry, fNext);
+							case 'MapJoin':
+								return this.mapJoin(tmpEntityBundleEntry, fNext);
 							// This is the default case, for a meadow entity set or single entity
 							case 'MeadowEntity':
 							default:
@@ -299,6 +380,11 @@ class PictMeadowEntityProvider extends libFableServiceBase
 				return this.restClient.getJSON(tmpOptions,
 					(pError, pResponse, pBody) =>
 					{
+						if (pResponse && pResponse.statusCode && pResponse.statusCode >= 400)
+						{
+							this.log.error(`Error getting entity [${pEntity}] with ID [${pIDRecord}] from url [${tmpOptions.url}]: ${pResponse.statusCode} ${pResponse.statusMessage}`);
+							return fCallback(new Error(`Error getting entity [${pEntity}] with ID [${pIDRecord}] from url [${tmpOptions.url}]: ${pResponse.statusCode} ${JSON.stringify(pBody || {})}`));
+						}
 						if (pBody)
 						{
 							this.recordCache[pEntity].put(pBody, pIDRecord);
@@ -315,6 +401,11 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		return this.restClient.getJSON(tmpURL,
 			function (pDownloadError, pDownloadResponse, pDownloadBody)
 			{
+				if (pDownloadResponse && pDownloadResponse.statusCode && pDownloadResponse.statusCode >= 400)
+				{
+					this.log.error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${tmpURL}]: ${pDownloadResponse.statusCode} ${pDownloadResponse.statusMessage}`);
+					return fCallback(new Error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${tmpURL}]: ${pDownloadResponse.statusCode} ${JSON.stringify(pDownloadBody || {})}`));
+				}
 				return fCallback(pDownloadError, pDownloadBody);
 			}.bind(this));
 	}
@@ -326,6 +417,11 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		return this.restClient.getJSON(tmpURL,
 			function (pError, pResponse, pBody)
 			{
+				if (pResponse && pResponse.statusCode && pResponse.statusCode >= 400)
+				{
+					this.log.error(`Error getting entity count of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${tmpURL}]: ${pResponse.statusCode} ${pResponse.statusMessage}`);
+					return fCallback(new Error(`Error getting entity count of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${tmpURL}]: ${pResponse.statusCode} ${JSON.stringify(pBody || {})}`));
+				}
 				if (pError)
 				{
 					this.log.error(`Error getting entity count of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${tmpURL}]: ${pError}`);
@@ -388,6 +484,11 @@ class PictMeadowEntityProvider extends libFableServiceBase
 								this.restClient.getJSON(pURIFragment,
 									(pDownloadError, pDownloadResponse, pDownloadBody) =>
 									{
+										if (pDownloadResponse && pDownloadResponse.statusCode && pDownloadResponse.statusCode >= 400)
+										{
+											this.log.error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${pURIFragment}]: ${pDownloadResponse.statusCode} ${pDownloadResponse.statusMessage}`);
+											return fDownloadCallback(new Error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${pURIFragment}]: ${pDownloadResponse.statusCode} ${JSON.stringify(pDownloadBody || {})}`));
+										}
 										tmpEntitySet = tmpEntitySet.concat(pDownloadBody);
 										// Should we be caching each record?
 										return fDownloadCallback(pDownloadError);
