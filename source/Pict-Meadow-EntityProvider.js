@@ -380,11 +380,14 @@ class PictMeadowEntityProvider extends libFableServiceBase
 				return this.restClient.getJSON(tmpOptions,
 					(pError, pResponse, pBody) =>
 					{
+						/*
+						 * FIXME: This breaks entity reads for nonexistent records. Putting this back for now until we can audit and fix all the places that may rely on this.
 						if (pResponse && pResponse.statusCode && pResponse.statusCode >= 400)
 						{
 							this.log.error(`Error getting entity [${pEntity}] with ID [${pIDRecord}] from url [${tmpOptions.url}]: ${pResponse.statusCode} ${pResponse.statusMessage}`);
 							return fCallback(new Error(`Error getting entity [${pEntity}] with ID [${pIDRecord}] from url [${tmpOptions.url}]: ${pResponse.statusCode} ${JSON.stringify(pBody || {})}`));
 						}
+						*/
 						if (pBody)
 						{
 							this.recordCache[pEntity].put(pBody, pIDRecord);
