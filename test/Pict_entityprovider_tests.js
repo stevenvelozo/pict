@@ -88,7 +88,7 @@ suite(
 								},
 								{
 									"Entity": "Author",
-									"Filter": "FBL~IDAuthor~INN~3,4",
+									"Filter": "FBL~IDAuthor~LT~10",
 									"Destination": "State.Authors"
 								},
 								{
@@ -138,9 +138,9 @@ suite(
 							{
 								try
 								{
-									Expect(testPict.AppData.TestState.Authors.length).to.equal(2);
-									Expect(testPict.AppData.TestState.AuthorsRev.length).to.be.greaterThan(1);
-									Expect(testPict.AppData.TestState.BookAuthorJoins.length).to.be.greaterThan(0);
+									Expect(testPict.AppData.TestState.Authors.length).to.equal(9);
+									Expect(testPict.AppData.TestState.AuthorsRev.length).to.be.greaterThan(8);
+									Expect(testPict.AppData.TestState.BookAuthorJoins.length).to.be.greaterThan(8);
 									for (const tmpAuthor of testPict.AppData.TestState.Authors)
 									{
 										Expect(tmpAuthor.Books).to.be.an('array');
