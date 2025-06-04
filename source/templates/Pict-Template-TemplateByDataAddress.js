@@ -127,7 +127,7 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 		{
 			// No address was provided, just render the template with what this template has.
 			// The async portion of this is a mind bender because of how entry can happen dynamically from templates
-			this.pict.parseTemplateByHash(tmpTemplateData, pRecord,
+			this.pict.parseTemplate(tmpTemplateData, pRecord,
 				(pError, pValue) =>
 				{
 					if (pError)
@@ -139,7 +139,7 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 		}
 		else
 		{
-			this.pict.parseTemplateByHash(tmpTemplateData, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray),
+			this.pict.parseTemplate(tmpTemplateData, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray),
 				(pError, pValue) =>
 				{
 					if (pError)

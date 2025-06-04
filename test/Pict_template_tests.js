@@ -538,8 +538,28 @@ suite(
 									testPict.parseTemplateByHash('Book-Author-Content', { IDBook: 10000, Title: 'I learn things.' },
 										(pError, pValue) =>
 										{
-											Expect(pValue).to.equal('<h1>I learn things.: $10,000.00</h1><p><h1>Jemima J: $777.00</h1></p>');
-											return fDone();
+											try
+											{
+												Expect(pError).to.not.exist;
+												Expect(pValue).to.equal('<h1>I learn things.: $10,000.00</h1><p><h1>Jemima J: $777.00</h1></p>');
+											}
+											catch (err)
+											{
+												return fDone(err);
+											}
+											testPict.parseTemplate('{~TBDA:Record.Template~}', { Template:'<h1>{~D:Pict.AppData.RecordSet.Type~}</h1>{~T:Animal-View:Pict.AppData.RecordSet~}' }, (pError, pValue) =>
+											{
+												try
+												{
+													Expect(pError).to.not.exist;
+													Expect(pValue).to.equal('<h1>Dog</h1><p>Fido is a Dog that is 3 years old.</p>', 'The template system should parse a simple template from a hash.');
+												}
+												catch (err)
+												{
+													return fDone(err);
+												}
+												return fDone();
+											});
 										});
 								}
 							);
