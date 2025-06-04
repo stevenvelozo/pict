@@ -365,6 +365,13 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			});
 	}
 
+	/**
+	 * Creates a wrapper state object to allow referencing common global state in addition to flow-state.
+	 *
+	 * @param {Record<string, any>} pState - The state object to prepare.
+	 * @param {any} [pStepConfiguration] - (optional) The step configuration object provided in the config, if any.
+	 * @return {Record<string, any>} - The prepared state object.
+	 */
 	prepareState(pState, pStepConfiguration)
 	{
 		return {
@@ -418,7 +425,8 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 	getEntitySetPage(pEntity, pMeadowFilterExpression, pRecordStartCursor, pRecordCount, fCallback)
 	{
-		let tmpURL = `${this.options.urlPrefix}${pEntity}s/FilteredTo/${pMeadowFilterExpression}/${pRecordStartCursor}/${pRecordCount}`;
+		const tmpFilterStanza = pMeadowFilterExpression ? `/FilteredTo/${pMeadowFilterExpression}` : '';
+		const tmpURL = `${this.options.urlPrefix}${pEntity}s${tmpFilterStanza}/${pRecordStartCursor}/${pRecordCount}`;
 
 		return this.restClient.getJSON(tmpURL,
 			function (pDownloadError, pDownloadResponse, pDownloadBody)
@@ -434,7 +442,8 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 	getEntitySetRecordCount(pEntity, pMeadowFilterExpression, fCallback)
 	{
-		let tmpURL = `${this.options.urlPrefix}${pEntity}s/Count/FilteredTo/${pMeadowFilterExpression}`;
+		const tmpFilterStanza = pMeadowFilterExpression ? `/FilteredTo/${pMeadowFilterExpression}` : '';
+		const tmpURL = `${this.options.urlPrefix}${pEntity}s/Count${tmpFilterStanza}`;
 
 		return this.restClient.getJSON(tmpURL,
 			function (pError, pResponse, pBody)
@@ -491,10 +500,11 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 						let tmpDownloadURIFragments = [];
 						let tmpDownloadBatchSize = this.options.downloadBatchSize;
+						const tmpFilterStanza = pMeadowFilterExpression ? `/FilteredTo/${pMeadowFilterExpression}` : '';
 						for (let i = 0; i < (tmpRecordCount / tmpDownloadBatchSize); i++)
 						{
 							// Generate each of the URI fragments to download
-							tmpDownloadURIFragments.push(`${this.options.urlPrefix}${pEntity}s/FilteredTo/${pMeadowFilterExpression}/${i * tmpDownloadBatchSize}/${tmpDownloadBatchSize}`);
+							tmpDownloadURIFragments.push(`${this.options.urlPrefix}${pEntity}s${tmpFilterStanza}/${i * tmpDownloadBatchSize}/${tmpDownloadBatchSize}`);
 						}
 
 						let tmpEntitySet = [];

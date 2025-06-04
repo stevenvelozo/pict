@@ -29,21 +29,14 @@ declare class PictMeadowEntityProvider {
      * @param {(error?: Error) => void} fCallback - The callback function to call when the data gathering is complete.
      */
     gatherDataFromServer(pEntitiesBundleDescription: Array<Record<string, any>>, fCallback: (error?: Error) => void): void;
-    prepareState(pState: any, pStepConfiguration: any): {
-        State: any;
-        AppData: any;
-        Pict: import("pict") & {
-            settings: any;
-        } & {
-            newAnticipate: any;
-        };
-        Fable: import("pict") & {
-            settings: any;
-        } & {
-            newAnticipate: any;
-        };
-        StepConfiguration: any;
-    };
+    /**
+     * Creates a wrapper state object to allow referencing common global state in addition to flow-state.
+     *
+     * @param {Record<string, any>} pState - The state object to prepare.
+     * @param {any} [pStepConfiguration] - (optional) The step configuration object provided in the config, if any.
+     * @return {Record<string, any>} - The prepared state object.
+     */
+    prepareState(pState: Record<string, any>, pStepConfiguration?: any): Record<string, any>;
     getEntity(pEntity: any, pIDRecord: any, fCallback: any): void;
     getEntitySetPage(pEntity: any, pMeadowFilterExpression: any, pRecordStartCursor: any, pRecordCount: any, fCallback: any): any;
     getEntitySetRecordCount(pEntity: any, pMeadowFilterExpression: any, fCallback: any): any;
