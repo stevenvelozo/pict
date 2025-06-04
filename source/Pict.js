@@ -528,7 +528,8 @@ class Pict extends libFable {
 	 *
 	 * @return {any} The value at the given address, or undefined
 	 */
-	resolveStateFromAddress(pAddress, pRecord, pContextArray) {
+	resolveStateFromAddress(pAddress, pRecord, pContextArray)
+	{
 		let tmpContextArray = Array.isArray(pContextArray) ? pContextArray : [this];
 
 		return this.manifest.getValueByHash(
@@ -541,6 +542,23 @@ class Pict extends libFable {
 			},
 			pAddress,
 		);
+	}
+
+	/**
+	 * Read a value from a nested object using a dot notation string.
+	 *
+	 * @param {string} pAddress - The address to resolve
+	 * @param {any} pRecord - The record to resolve
+	 * @param {any} pValue - The value to set at the given address
+	 * @param {Array<any>} [pContextArray] - The context array to resolve
+	 *
+	 * @return {any} The value at the given address, or undefined
+	 */
+	setStateValueAtAddress(pAddress, pRecord, pValue, pContextArray)
+	{
+		let tmpContextArray = (Array.isArray(pContextArray)) ? pContextArray : [this];
+
+		return this.manifest.setValueByHash({Pict:this, AppData:this.AppData, Bundle:this.Bundle, Context:tmpContextArray, Record:pRecord}, pAddress, pValue);
 	}
 
 	/**

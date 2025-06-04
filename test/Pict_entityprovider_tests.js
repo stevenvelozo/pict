@@ -83,49 +83,53 @@ suite(
 						testPict.EntityProvider.gatherDataFromServer(
 							[
 								{
+									"Type": "SetStateAddress",
+									"StateAddress": "AppData.TestState",
+								},
+								{
 									"Entity": "Author",
 									"Filter": "FBL~IDAuthor~INN~3,4",
-									"Destination": "AppData.Authors"
+									"Destination": "State.Authors"
 								},
 								{
 									"Entity": "BookAuthorJoin",
-									"Filter": "FBL~IDAuthor~INN~{~PJU:,^IDAuthor^AppData.Authors~}",
-									"Destination": "AppData.BookAuthorJoins"
+									"Filter": "FBL~IDAuthor~INN~{~PJU:,^IDAuthor^Record.State.Authors~}",
+									"Destination": "State.BookAuthorJoins"
 								},
 								{
 									"Entity": "Book",
-									"Filter": "FBL~IDBook~INN~{~PJU:,^IDBook^AppData.BookAuthorJoins~}",
-									"Destination": "AppData.Books"
+									"Filter": "FBL~IDBook~INN~{~PJU:,^IDBook^Record.State.BookAuthorJoins~}",
+									"Destination": "State.Books"
 								},
 								{
 									"Type": "MapJoin",
-									"DestinationRecordSetAddress": "AppData.Authors",
+									"DestinationRecordSetAddress": "State.Authors",
 									"DestinationJoinValue": "IDAuthor",
 									"JoinJoinValueLHS": "IDAuthor",
-									"Joins": "AppData.BookAuthorJoins",
+									"Joins": "State.BookAuthorJoins",
 									"JoinJoinValueRHS": "IDBook",
-									"JoinRecordSetAddress": "AppData.Books",
+									"JoinRecordSetAddress": "State.Books",
 									"JoinValue": "IDBook",
 									"RecordDestinationAddress": "Books"
 								},
 								{
 									"Entity": "BookAuthorJoin",
-									"Filter": "FBL~IDBook~INN~{~PJU:,^IDBook^AppData.Books~}",
-									"Destination": "AppData.BookAuthorJoinsRev"
+									"Filter": "FBL~IDBook~INN~{~PJU:,^IDBook^Record.State.Books~}",
+									"Destination": "State.BookAuthorJoinsRev"
 								},
 								{
 									"Entity": "Author",
-									"Filter": "FBL~IDAuthor~INN~{~PJU:,^IDAuthor^AppData.BookAuthorJoinsRev~}",
-									"Destination": "AppData.AuthorsRev"
+									"Filter": "FBL~IDAuthor~INN~{~PJU:,^IDAuthor^Record.State.BookAuthorJoinsRev~}",
+									"Destination": "State.AuthorsRev"
 								},
 								{
 									"Type": "MapJoin",
-									"DestinationRecordSetAddress": "AppData.Books",
+									"DestinationRecordSetAddress": "State.Books",
 									"DestinationJoinValue": "IDBook",
 									"JoinJoinValueLHS": "IDBook",
-									"Joins": "AppData.BookAuthorJoinsRev",
+									"Joins": "State.BookAuthorJoinsRev",
 									"JoinJoinValueRHS": "IDAuthor",
-									"JoinRecordSetAddress": "AppData.AuthorsRev",
+									"JoinRecordSetAddress": "State.AuthorsRev",
 									"JoinValue": "IDAuthor",
 									"RecordDestinationAddress": "Authors"
 								}
@@ -134,15 +138,15 @@ suite(
 							{
 								try
 								{
-									Expect(testPict.AppData.Authors.length).to.equal(2);
-									Expect(testPict.AppData.AuthorsRev.length).to.be.greaterThan(1);
-									Expect(testPict.AppData.BookAuthorJoins.length).to.be.greaterThan(0);
-									for (const tmpAuthor of testPict.AppData.Authors)
+									Expect(testPict.AppData.TestState.Authors.length).to.equal(2);
+									Expect(testPict.AppData.TestState.AuthorsRev.length).to.be.greaterThan(1);
+									Expect(testPict.AppData.TestState.BookAuthorJoins.length).to.be.greaterThan(0);
+									for (const tmpAuthor of testPict.AppData.TestState.Authors)
 									{
 										Expect(tmpAuthor.Books).to.be.an('array');
 										Expect(tmpAuthor.Books.length).to.be.greaterThan(0);
 									}
-									for (const tmpBook of testPict.AppData.Books)
+									for (const tmpBook of testPict.AppData.TestState.Books)
 									{
 										Expect(tmpBook.Authors).to.be.an('array');
 										Expect(tmpBook.Authors.length).to.be.greaterThan(0);

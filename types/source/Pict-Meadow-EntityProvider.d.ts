@@ -19,9 +19,9 @@ declare class PictMeadowEntityProvider {
     recordSetCache: Record<string, any>;
     prepareRequestOptions: (pOptions: any) => any;
     initializeCache(pEntity: any): void;
-    gatherEntitySet(pEntityInformation: any, fCallback: any): any;
-    mapJoin(pCustomRequestInformation: any, fCallback: any): any;
-    gatherCustomDataSet(pCustomRequestInformation: any, fCallback: any): any;
+    gatherEntitySet(pEntityInformation: any, pContext: any, fCallback: any): any;
+    mapJoin(pCustomRequestInformation: any, pContext: any, fCallback: any): any;
+    gatherCustomDataSet(pCustomRequestInformation: any, pContext: any, fCallback: any): any;
     /**
      * Gather data from the server returning a promise when it is complete.
      *
@@ -30,6 +30,21 @@ declare class PictMeadowEntityProvider {
      * @return {Promise<any>} - Returns a promise that resolves when the data has been gathered.
      */
     gatherDataFromServer(pEntitiesBundleDescription: any, fCallback: any): Promise<any>;
+    prepareState(pState: any, pStepConfiguration: any): {
+        State: any;
+        AppData: any;
+        Pict: import("pict") & {
+            settings: any;
+        } & {
+            newAnticipate: any;
+        };
+        Fable: import("pict") & {
+            settings: any;
+        } & {
+            newAnticipate: any;
+        };
+        StepConfiguration: any;
+    };
     getEntity(pEntity: any, pIDRecord: any, fCallback: any): void;
     getEntitySetPage(pEntity: any, pMeadowFilterExpression: any, pRecordStartCursor: any, pRecordCount: any, fCallback: any): any;
     getEntitySetRecordCount(pEntity: any, pMeadowFilterExpression: any, fCallback: any): any;

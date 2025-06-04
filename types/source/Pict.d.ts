@@ -148,6 +148,17 @@ declare class Pict extends Pict_base {
      */
     resolveStateFromAddress(pAddress: string, pRecord: any, pContextArray?: Array<any>): any;
     /**
+     * Read a value from a nested object using a dot notation string.
+     *
+     * @param {string} pAddress - The address to resolve
+     * @param {any} pRecord - The record to resolve
+     * @param {any} pValue - The value to set at the given address
+     * @param {Array<any>} [pContextArray] - The context array to resolve
+     *
+     * @return {any} The value at the given address, or undefined
+     */
+    setStateValueAtAddress(pAddress: string, pRecord: any, pValue: any, pContextArray?: Array<any>): any;
+    /**
      * Parse a template.
      *
      * @param {String} pTemplateString - The template string to parse

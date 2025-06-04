@@ -70,7 +70,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 	}
 
-	gatherEntitySet(pEntityInformation, fCallback)
+	gatherEntitySet(pEntityInformation, pContext, fCallback)
 	{
 		// First sanity check the pEntityInformation
 		if (!('Entity' in pEntityInformation) || (typeof(pEntityInformation.Entity) != 'string'))
@@ -91,6 +91,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		{
 			pEntityInformation.FilterData = {};
 		}
+		pContext.StepData = pEntityInformation.FilterData;
 		if (!('RecordStartCursor' in pEntityInformation) || (typeof(pEntityInformation.RecordStartCursor) != 'number'))
 		{
 			pEntityInformation.RecordStartCursor = 0;
@@ -108,7 +109,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			tmpRecordCount = pEntityInformation.RecordCount;
 		}
 		// Parse the filter template
-		const tmpFilterString = this.fable.parseTemplate(pEntityInformation.Filter, pEntityInformation.FilterData);
+		const tmpFilterString = this.fable.parseTemplate(pEntityInformation.Filter, pContext);
 
 		// Create a callback function to handle receiving the record set
 		const fRecordFetchComplete = (pError, pRecordSet) =>
@@ -130,13 +131,13 @@ class PictMeadowEntityProvider extends libFableServiceBase
 				}
 				if (pRecordSet.length < 1)
 				{
-					this.fable.manifest.setValueByHash(this.fable, pEntityInformation.Destination, false);
+					this.fable.manifest.setValueByHash(pContext, pEntityInformation.Destination, false);
 				}
-				this.fable.manifest.setValueByHash(this.fable, pEntityInformation.Destination, pRecordSet[0]);
+				this.fable.manifest.setValueByHash(pContext, pEntityInformation.Destination, pRecordSet[0]);
 			}
 			else
 			{
-				this.fable.manifest.setValueByHash(this.fable, pEntityInformation.Destination, pRecordSet);
+				this.fable.manifest.setValueByHash(pContext, pEntityInformation.Destination, pRecordSet);
 			}
 
 			return fCallback();
@@ -151,32 +152,19 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 	}
 
-	mapJoin(pCustomRequestInformation, fCallback)
+	mapJoin(pCustomRequestInformation, pContext, fCallback)
 	{
-		/*
-		{
-			"Type": "MapJoin",
-			"DestinationRecordSetAddress": "Record.CoreEntities",
-			"DestinationJoinValue": "IDBook",
-			"JoinJoinValueLHS": "IDBook",
-			"Joins": "Record.BookAuthorJoins",
-			"JoinJoinValueRHS": "IDAuthor",
-			"JoinRecordSetAddress": "Record.Authors",
-			"JoinValue": "IDAuthor",
-			"RecordDestinationAddress": "Authors"
-		}
-		*/
-		const tmpDestinationEntities = this.fable.manifest.getValueByHash(this.fable, pCustomRequestInformation.DestinationRecordSetAddress);
+		const tmpDestinationEntities = this.fable.manifest.getValueByHash(pContext, pCustomRequestInformation.DestinationRecordSetAddress);
 		if (!Array.isArray(tmpDestinationEntities))
 		{
 			return fCallback(new Error(`EntityBundleRequest failed to map join because the destination [${pCustomRequestInformation.DestinationRecordSetAddress}] did not return an array.`));
 		}
-		const tmpJoinEntities = this.fable.manifest.getValueByHash(this.fable, pCustomRequestInformation.Joins);
+		const tmpJoinEntities = this.fable.manifest.getValueByHash(pContext, pCustomRequestInformation.Joins);
 		if (!Array.isArray(tmpJoinEntities))
 		{
 			return fCallback(new Error(`EntityBundleRequest failed to map join because the join [${pCustomRequestInformation.Joins}] did not return an array.`));
 		}
-		const tmpSourceEntities = this.fable.manifest.getValueByHash(this.fable, pCustomRequestInformation.JoinRecordSetAddress);
+		const tmpSourceEntities = this.fable.manifest.getValueByHash(pContext, pCustomRequestInformation.JoinRecordSetAddress);
 		if (!Array.isArray(tmpSourceEntities))
 		{
 			return fCallback(new Error(`EntityBundleRequest failed to map join because the source [${pCustomRequestInformation.JoinRecordSetAddress}] did not return an array.`));
@@ -230,7 +218,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		fCallback(null, tmpDestinationEntities);
 	}
 
-	gatherCustomDataSet(pCustomRequestInformation, fCallback)
+	gatherCustomDataSet(pCustomRequestInformation, pContext, fCallback)
 	{
 		// First sanity check the pCustomRequestInformation
 		if (!('URL' in pCustomRequestInformation) || (typeof(pCustomRequestInformation.URL) != 'string'))
@@ -242,9 +230,9 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		{
 			pCustomRequestInformation.URLData = {};
 		}
-
+		pContext.StepData = pCustomRequestInformation.URLData;
 		// Parse the filter template
-		const tmpURLTemplateString = this.fable.parseTemplate(pCustomRequestInformation.URL, pCustomRequestInformation.URLData);
+		const tmpURLTemplateString = this.fable.parseTemplate(pCustomRequestInformation.URL, pContext);
 		if (tmpURLTemplateString == '')
 		{
 			// We may want to continue, but for now let's say nah and nope out.
@@ -285,7 +273,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			// Since this is a templated endpoint it can be used for logging etc.
 			if (pCustomRequestInformation.Destination)
 			{
-				this.fable.manifest.setValueByHash(this.fable, pCustomRequestInformation.Destination, pData);
+				this.fable.manifest.setValueByHash(pContext, pCustomRequestInformation.Destination, pData);
 			}
 
 			return fCallback();
@@ -315,6 +303,8 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 
 		let tmpAnticipate = this.fable.newAnticipate();
+		const tmpStateStack = [];
+		let tmpState = {};
 
 		for (let i = 0; i < pEntitiesBundleDescription.length; i++)
 		{
@@ -326,14 +316,33 @@ class PictMeadowEntityProvider extends libFableServiceBase
 					{
 						switch (tmpEntityBundleEntry.Type)
 						{
+							case 'SetStateAddress':
+								tmpStateStack.push(tmpState);
+								tmpState = this.fable.manifest.getValueByHash(this.fable, tmpEntityBundleEntry.StateAddress);
+								if (typeof tmpState === 'undefined')
+								{
+									tmpState = {};
+									this.fable.manifest.setValueByHash(this.fable, tmpEntityBundleEntry.StateAddress, tmpState);
+								}
+								break;
+							case 'PopState':
+								if (tmpStateStack.length > 0)
+								{
+									tmpState = tmpStateStack.pop();
+								}
+								else
+								{
+									this.log.warn(`EntityBundleRequest encountered a PopState without a matching SetStateAddress.`);
+								}
+								break;
 							case 'Custom':
-								return this.gatherCustomDataSet(tmpEntityBundleEntry, fNext);
+								return this.gatherCustomDataSet(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry), fNext);
 							case 'MapJoin':
-								return this.mapJoin(tmpEntityBundleEntry, fNext);
+								return this.mapJoin(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry), fNext);
 							// This is the default case, for a meadow entity set or single entity
 							case 'MeadowEntity':
 							default:
-								return this.gatherEntitySet(tmpEntityBundleEntry, fNext);
+								return this.gatherEntitySet(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry), fNext);
 						}
 					}
 					catch (pError)
@@ -355,6 +364,17 @@ class PictMeadowEntityProvider extends libFableServiceBase
 				}
 				return fCallback();
 			});
+	}
+
+	prepareState(pState, pStepConfiguration)
+	{
+		return {
+			State: pState,
+			AppData: this.fable.AppData,
+			Pict: this.fable,
+			Fable: this.fable,
+			StepConfiguration: pStepConfiguration,
+		};
 	}
 
 	getEntity(pEntity, pIDRecord, fCallback)
