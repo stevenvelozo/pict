@@ -25,11 +25,10 @@ declare class PictMeadowEntityProvider {
     /**
      * Gather data from the server returning a promise when it is complete.
      *
-     * @param {Object} pEntitiesBundleDescription - The entity bundle description object.
-     *
-     * @return {Promise<any>} - Returns a promise that resolves when the data has been gathered.
+     * @param {Array<Record<string, any>>} pEntitiesBundleDescription - The entity bundle description object.
+     * @param {(error?: Error) => void} fCallback - The callback function to call when the data gathering is complete.
      */
-    gatherDataFromServer(pEntitiesBundleDescription: any, fCallback: any): Promise<any>;
+    gatherDataFromServer(pEntitiesBundleDescription: Array<Record<string, any>>, fCallback: (error?: Error) => void): void;
     prepareState(pState: any, pStepConfiguration: any): {
         State: any;
         AppData: any;

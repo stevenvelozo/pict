@@ -289,17 +289,16 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 	/**
 	 * Gather data from the server returning a promise when it is complete.
-	 * 
-	 * @param {Object} pEntitiesBundleDescription - The entity bundle description object.
 	 *
-	 * @return {Promise<any>} - Returns a promise that resolves when the data has been gathered.
+	 * @param {Array<Record<string, any>>} pEntitiesBundleDescription - The entity bundle description object.
+	 * @param {(error?: Error) => void} fCallback - The callback function to call when the data gathering is complete.
 	 */
 	gatherDataFromServer(pEntitiesBundleDescription, fCallback)
 	{
 		if (!Array.isArray(pEntitiesBundleDescription))
 		{
 			this.log.error(`EntityBundleRequest failed to parse entity bundle request because the input was not an array.`);
-			return Promise.reject(new Error('EntityBundleRequest failed to parse entity bundle request because the input was not an array.'));
+			return fCallback(new Error('EntityBundleRequest failed to parse entity bundle request because the input was not an array.'));
 		}
 
 		let tmpAnticipate = this.fable.newAnticipate();
