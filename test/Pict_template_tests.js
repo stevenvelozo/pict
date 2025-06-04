@@ -527,7 +527,11 @@ suite(
 
 									Expect(tmpTemplateOutput).to.equal('<h1>Dog</h1><p>Fido is a Dog that is 3 years old.</p>', 'The template system should parse a simple template from a hash.');
 
-									let tmpTemplateByReference = testPict.parseTemplate('{~TBR:Record.TemplateReference~}', {TemplateReference:'ReferencedTemplate'})
+									let tmpTemplateByDataAddress = testPict.parseTemplate('{~TBDA:Record.Template~}', { Template:'<h1>{~D:Pict.AppData.RecordSet.Type~}</h1>{~T:Animal-View:Pict.AppData.RecordSet~}' });
+
+									Expect(tmpTemplateByDataAddress).to.equal('<h1>Dog</h1><p>Fido is a Dog that is 3 years old.</p>', 'The template system should parse a simple template from a hash.');
+
+									let tmpTemplateByReference = testPict.parseTemplate('{~TBR:Record.TemplateReference~}', { TemplateReference:'ReferencedTemplate'})
 
 									Expect(tmpTemplateByReference).to.equal('<h1>Dog</h1><p>Fido is a Dog that is 3 years old.</p>', 'The template system should parse a simple template from a hash.');
 
