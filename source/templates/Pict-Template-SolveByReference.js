@@ -52,7 +52,7 @@ class PictTemplateProviderSolveByReference extends libPictTemplate
 			return '';
 		}
 		const tmpRecord = this.pict.resolveStateFromAddress(tmpRecordAddress, tmpContextualRecord, pContextArray) || tmpContextualRecord;
-		const tmpManifest = this.pict.resolveStateFromAddress(tmpManifestAddress, tmpContextualRecord, pContextArray) || this.pict.manifest;
+		const tmpManifest = (tmpManifestAddress && this.pict.resolveStateFromAddress(tmpManifestAddress, tmpContextualRecord, pContextArray)) || this.pict.manifest;
 		const expressionParser = this.fable.instantiateServiceProviderIfNotExists('ExpressionParser');
 		const tmpResultObject = { };
 		return expressionParser.solve(tmpEquation, tmpRecord, tmpResultObject, tmpManifest, tmpRecord);
