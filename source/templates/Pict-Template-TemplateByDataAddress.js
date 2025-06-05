@@ -34,11 +34,11 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 
 		if (this.pict.LogNoisiness > 4)
 		{
-			this.log.trace(`PICT Template [fTemplateRender]::[${tmpDataAddress}] with tmpData:`, tmpData);
+			this.log.trace(`PICT TemplateByDataAddress [fTemplateRender]::[${tmpDataAddress}] with tmpData:`, tmpData);
 		}
 		else if (this.pict.LogNoisiness > 0)
 		{
-			this.log.trace(`PICT Template [fTemplateRender]::[${tmpDataAddress}]`);
+			this.log.trace(`PICT TemplateByDataAddress [fTemplateRender]::[${tmpDataAddress}]`);
 		}
 
 		let tmpTemplateDataAddress;
@@ -63,15 +63,23 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 			return '';
 		}
 
-		const tmpTemplateData = this.pict.resolveStateFromAddress(tmpTemplateDataAddress, pRecord, pContextArray);
+		let tmpTemplate = this.pict.resolveStateFromAddress(tmpTemplateDataAddress, pRecord, pContextArray);
+		if (!tmpTemplate)
+		{
+			if (this.pict.LogNoisiness > 2)
+			{
+				this.log.warn(`Pict: Template Render: Template not found for [${tmpTemplateDataAddress}]`);
+			}
+			tmpTemplate = '';
+		}
 		if (!tmpAddressOfData)
 		{
 			// No address was provided, just render the template with what this template has.
-			return this.pict.parseTemplate(tmpTemplateData, pRecord, null, pContextArray);
+			return this.pict.parseTemplate(tmpTemplate, pRecord, null, pContextArray);
 		}
 		else
 		{
-			return this.pict.parseTemplate(tmpTemplateData, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), null, pContextArray);
+			return this.pict.parseTemplate(tmpTemplate, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), null, pContextArray);
 		}
 	}
 
@@ -93,11 +101,11 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 
 		if (this.pict.LogNoisiness > 4)
 		{
-			this.log.trace(`PICT Template [fTemplateRenderAsync]::[${tmpDataAddress}] with tmpData:`, tmpData);
+			this.log.trace(`PICT TemplateByDataAddress [fTemplateRenderAsync]::[${tmpDataAddress}] with tmpData:`, tmpData);
 		}
 		else if (this.pict.LogNoisiness > 0)
 		{
-			this.log.trace(`PICT Template [fTemplateRenderAsync]::[${tmpDataAddress}]`);
+			this.log.trace(`PICT TemplateByDataAddress [fTemplateRenderAsync]::[${tmpDataAddress}]`);
 		}
 
 		let tmpTemplateDataAddress;
@@ -122,12 +130,20 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 			return tmpCallback(null, '');
 		}
 
-		const tmpTemplateData = this.pict.resolveStateFromAddress(tmpTemplateDataAddress, pRecord, pContextArray);
+		let tmpTemplate = this.pict.resolveStateFromAddress(tmpTemplateDataAddress, pRecord, pContextArray) || '';
+		if (!tmpTemplate)
+		{
+			if (this.pict.LogNoisiness > 2)
+			{
+				this.log.warn(`Pict: Template Render: Template not found for [${tmpTemplateDataAddress}]`);
+			}
+			tmpTemplate = '';
+		}
 		if (!tmpAddressOfData)
 		{
 			// No address was provided, just render the template with what this template has.
 			// The async portion of this is a mind bender because of how entry can happen dynamically from templates
-			this.pict.parseTemplate(tmpTemplateData, pRecord,
+			this.pict.parseTemplate(tmpTemplate, pRecord,
 				(pError, pValue) =>
 				{
 					if (pError)
@@ -139,7 +155,7 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 		}
 		else
 		{
-			this.pict.parseTemplate(tmpTemplateData, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray),
+			this.pict.parseTemplate(tmpTemplate, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray),
 				(pError, pValue) =>
 				{
 					if (pError)

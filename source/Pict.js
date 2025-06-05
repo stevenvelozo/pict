@@ -435,6 +435,8 @@ class Pict extends libFable {
 			// {~T:Template:AddressOfData~}
 			this.addTemplate(require(`./templates/Pict-Template-Template.js`));
 			this.addTemplate(require(`./templates/Pict-Template-TemplateByDataAddress.js`));
+			// {~SBR:AppData.Equation:AppData.HomeworkRectangleSize:AppData.HomeworkManifest~}
+			this.addTemplate(require(`./templates/Pict-Template-SolveByReference.js`));
 			// {~TS:Template:AddressOfDataSet~}
 			this.addTemplate(require(`./templates/Pict-Template-TemplateSet.js`));
 			// {~TVS:Template:AddressOfDataSet~}

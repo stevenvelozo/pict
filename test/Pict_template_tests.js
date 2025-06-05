@@ -666,6 +666,69 @@ suite(
 								}
 							);
 						test(
+								'SolveByReference',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+									let tmpTemplateOutput;
+
+									testPict.AppData =
+									{
+										Equation: 'Area = Width * Height',
+										EquationCircumference: 'Circumference = ROUND(2 * PI() * Radius, 3)',
+										EquationArea: 'Area = ROUND(PI() * Radius * Radius, 3)',
+										HomeworkRectangleData: { Size: { Width: 100, Height: 50, } },
+										HomeworkCircleData: { Size: { Radius: 50, } },
+										HomeworkManifest:
+										{
+											Scope: 'Homework',
+											Descriptors:
+											{
+												'Size.Height':
+												{
+													Hash: 'Height',
+												},
+												'Size.Width':
+												{
+													Hash: 'Width',
+												},
+												'Size.Radius':
+												{
+													Hash: 'Radius',
+												},
+											},
+										},
+									};
+									testPict.AppData.HomeworkManifestInstance = testPict.newManyfest(testPict.AppData.HomeworkManifest);
+									testPict.TemplateProvider.addTemplate('Homework', '{~SBR:AppData.Equation:AppData.HomeworkRectangleData:AppData.HomeworkManifestInstance~}');
+									testPict.TemplateProvider.addTemplate('HomeworkCircleArea', '{~SBR:AppData.EquationArea:AppData.HomeworkCircleData:AppData.HomeworkManifestInstance~}');
+									testPict.TemplateProvider.addTemplate('HomeworkCircleCircumference', '{~SBR:AppData.EquationCircumference:AppData.HomeworkCircleData:AppData.HomeworkManifestInstance~}');
+
+									tmpTemplateOutput = testPict.parseTemplateByHash('Homework');
+									Expect(tmpTemplateOutput).to.equal('5000');
+									tmpTemplateOutput = testPict.parseTemplateByHash('HomeworkCircleArea');
+									Expect(tmpTemplateOutput).to.equal('7853.982');
+									tmpTemplateOutput = testPict.parseTemplateByHash('HomeworkCircleCircumference');
+									Expect(tmpTemplateOutput).to.equal('314.159');
+
+									// Try the same thing async to exercise that function
+									testPict.parseTemplateByHash('Homework', null,
+										(pError, pResult) =>
+										{
+											try
+											{
+												Expect(pResult).to.equal('5000');
+											}
+											catch (err)
+											{
+												return fDone(err);
+											}
+											return fDone();
+
+										});
+								}
+							);
+						test(
 								'TemplateValueSet from Array',
 								function (fDone)
 								{
