@@ -676,6 +676,7 @@ suite(
 									{
 										Equation: 'Area = Width * Height',
 										EquationCircumference: 'Circumference = ROUND(2 * PI() * Radius, 3)',
+										EquationCircumferenceNoParams: 'Size.Circumference = ROUND(2 * PI() * Size.Radius, 3)',
 										EquationArea: 'Area = ROUND(PI() * Radius * Radius, 3)',
 										HomeworkRectangleData: { Size: { Width: 100, Height: 50, } },
 										HomeworkCircleData: { Size: { Radius: 50, } },
@@ -703,12 +704,15 @@ suite(
 									testPict.TemplateProvider.addTemplate('Homework', '{~SBR:AppData.Equation:AppData.HomeworkRectangleData:AppData.HomeworkManifestInstance~}');
 									testPict.TemplateProvider.addTemplate('HomeworkCircleArea', '{~SBR:AppData.EquationArea:AppData.HomeworkCircleData:AppData.HomeworkManifestInstance~}');
 									testPict.TemplateProvider.addTemplate('HomeworkCircleCircumference', '{~SBR:AppData.EquationCircumference:AppData.HomeworkCircleData:AppData.HomeworkManifestInstance~}');
+									testPict.TemplateProvider.addTemplate('HomeworkCircleCircumferenceNoParams', '{~SBR:AppData.EquationCircumferenceNoParams~}');
 
 									tmpTemplateOutput = testPict.parseTemplateByHash('Homework');
 									Expect(tmpTemplateOutput).to.equal('5000');
 									tmpTemplateOutput = testPict.parseTemplateByHash('HomeworkCircleArea');
 									Expect(tmpTemplateOutput).to.equal('7853.982');
 									tmpTemplateOutput = testPict.parseTemplateByHash('HomeworkCircleCircumference');
+									Expect(tmpTemplateOutput).to.equal('314.159');
+									tmpTemplateOutput = testPict.parseTemplateByHash('HomeworkCircleCircumferenceNoParams', testPict.AppData.HomeworkCircleData);
 									Expect(tmpTemplateOutput).to.equal('314.159');
 
 									// Try the same thing async to exercise that function
