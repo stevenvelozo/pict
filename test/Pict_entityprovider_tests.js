@@ -137,8 +137,8 @@ suite(
 									"Type": "MapJoin",
 									"DestinationRecordAddress": "AppData",
 									"JoinRecordSetAddress": "State.Books",
-									"BucketBy": "PublicationYear",
-									"RecordDestinationAddress": "BooksByYear"
+									"BucketBy": [ "PublicationYear", "IDBook" ],
+									"RecordDestinationAddress": "BooksByYearAndID"
 								},
 								{
 									"Type": "MapJoin",
@@ -174,7 +174,8 @@ suite(
 										Expect(tmpBook.Authors).to.be.an('array');
 										Expect(tmpBook.Authors.length).to.be.greaterThan(0);
 									}
-									Expect(Object.keys(testPict.AppData.BooksByYear).length).to.be.greaterThan(0);
+									Expect(Object.keys(testPict.AppData.BooksByYearAndID).length).to.be.greaterThan(0);
+									Expect(Object.keys(testPict.AppData.BooksByYearAndID['2016']).length).to.be.greaterThan(0);
 									Expect(Object.keys(testPict.AppData.BooksByAuthors).length).to.be.greaterThan(0);
 									Expect(Object.keys(testPict.AppData.BooksByID).length).to.equal(testPict.AppData.TestState.Books.length);
 								}

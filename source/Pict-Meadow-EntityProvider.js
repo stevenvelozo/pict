@@ -160,8 +160,6 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			return fCallback(new Error(`EntityBundleRequest failed to map join because the source [${pCustomRequestInformation.JoinRecordSetAddress}] did not return an array.`));
 		}
 
-		const tmpLHSJoinKey = pCustomRequestInformation.JoinJoinValueLHS || pCustomRequestInformation.DestinationJoinValue;
-		const tmpRHSJoinKey = pCustomRequestInformation.JoinJoinValueRHS || pCustomRequestInformation.JoinValue;
 		const tmpSourceLookup = {};
 		for (const tmpSourceEntity of tmpSourceEntities)
 		{
@@ -178,30 +176,27 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			}
 			if (pCustomRequestInformation.BucketBy || pCustomRequestInformation.BucketByTemplate)
 			{
-				const tmpBucketKey = pCustomRequestInformation.BucketBy ? this.fable.manifest.getValueByHash(tmpSourceEntity, pCustomRequestInformation.BucketBy) :
-					this.fable.parseTemplate(pCustomRequestInformation.BucketByTemplate, tmpSourceEntity);
-				if (!tmpBucketKey)
+				const tmpBucketValues = [];
+				if (pCustomRequestInformation.BucketBy)
 				{
-					this.log.warn(`EntityBundleRequest found a source entity with no bucket key for [${pCustomRequestInformation.BucketBy}] in mapJoin.`,
-						{ tmpSourceEntity });
-					continue;
-				}
-				if (!pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress])
-				{
-					pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] = {};
-				}
-				if (pCustomRequestInformation.SingleRecord)
-				{
-					pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey] = tmpSourceEntity;
+					const tmpBucketByKeys = Array.isArray(pCustomRequestInformation.BucketBy) ? pCustomRequestInformation.BucketBy : [pCustomRequestInformation.BucketBy];
+					for (const tmpBucketByKey of tmpBucketByKeys)
+					{
+						const tmpBucketValue = this.fable.manifest.getValueByHash(tmpSourceEntity, tmpBucketByKey);
+						tmpBucketValues.push(tmpBucketValue);
+					}
 				}
 				else
 				{
-					if (!pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey])
+					const tmpBucketByTemplates = Array.isArray(pCustomRequestInformation.BucketByTemplate) ? pCustomRequestInformation.BucketByTemplate : [pCustomRequestInformation.BucketByTemplate];
+					for (const tmpBucketByTemplate of tmpBucketByTemplates)
 					{
-						pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey] = [];
+						const tmpBucketValue = this.fable.parseTemplate(tmpBucketByTemplate, tmpSourceEntity);
+						tmpBucketValues.push(tmpBucketValue);
 					}
-					pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey].push(tmpSourceEntity);
 				}
+				const tmpBucketAddress = `${pCustomRequestInformation.RecordDestinationAddress}.${tmpBucketValues.join('.')}`;
+				this.fable.manifest.setValueByHash(pDestinationEntity, tmpBucketAddress, tmpSourceEntity);
 			}
 			else if (pCustomRequestInformation.SingleRecord)
 			{
@@ -287,30 +282,31 @@ class PictMeadowEntityProvider extends libFableServiceBase
 				}
 				if (pCustomRequestInformation.BucketBy || pCustomRequestInformation.BucketByTemplate)
 				{
-					const tmpBucketKey = pCustomRequestInformation.BucketBy ? this.fable.manifest.getValueByHash(tmpSourceEntity, pCustomRequestInformation.BucketBy) :
-						this.fable.parseTemplate(pCustomRequestInformation.BucketByTemplate, tmpSourceEntity);
-					if (!tmpBucketKey)
+					const tmpBucketValues = [];
+					if (pCustomRequestInformation.BucketBy)
 					{
-						this.log.warn(`EntityBundleRequest found a source entity with no bucket key for [${pCustomRequestInformation.BucketBy} / ${pCustomRequestInformation.BucketByTemplate}] in mapJoin.`,
-							{ tmpSourceEntity });
-						continue;
+						const tmpBucketByKeys = Array.isArray(pCustomRequestInformation.BucketBy) ? pCustomRequestInformation.BucketBy : [pCustomRequestInformation.BucketBy];
+						for (const tmpBucketByKey of tmpBucketByKeys)
+						{
+							const tmpBucketValue = this.fable.manifest.getValueByHash(tmpSourceEntity, tmpBucketByKey);
+							tmpBucketValues.push(tmpBucketValue);
+						}
+					}
+					else
+					{
+						const tmpBucketByTemplates = Array.isArray(pCustomRequestInformation.BucketByTemplate) ? pCustomRequestInformation.BucketByTemplate : [pCustomRequestInformation.BucketByTemplate];
+						for (const tmpBucketByTemplate of tmpBucketByTemplates)
+						{
+							const tmpBucketValue = this.fable.parseTemplate(tmpBucketByTemplate, tmpSourceEntity);
+							tmpBucketValues.push(tmpBucketValue);
+						}
 					}
 					if (!tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress])
 					{
 						tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] = {};
 					}
-					if (pCustomRequestInformation.SingleRecord)
-					{
-						tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey] = tmpSourceEntity;
-					}
-					else
-					{
-						if (!tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey])
-						{
-							tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey] = [];
-						}
-						tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey].push(tmpSourceEntity);
-					}
+					const tmpBucketAddress = `${pCustomRequestInformation.RecordDestinationAddress}.${tmpBucketValues.join('.')}`;
+					this.fable.manifest.setValueByHash(tmpDestinationEntity, tmpBucketAddress, tmpSourceEntity);
 				}
 				else if (pCustomRequestInformation.SingleRecord)
 				{
