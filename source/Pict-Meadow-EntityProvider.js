@@ -152,13 +152,87 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 	}
 
+	mapJoinSingleDestination(pDestinationEntity, pCustomRequestInformation, pContext, fCallback)
+	{
+		const tmpSourceEntities = this.fable.manifest.getValueByHash(pContext, pCustomRequestInformation.JoinRecordSetAddress);
+		if (!Array.isArray(tmpSourceEntities))
+		{
+			return fCallback(new Error(`EntityBundleRequest failed to map join because the source [${pCustomRequestInformation.JoinRecordSetAddress}] did not return an array.`));
+		}
+
+		const tmpLHSJoinKey = pCustomRequestInformation.JoinJoinValueLHS || pCustomRequestInformation.DestinationJoinValue;
+		const tmpRHSJoinKey = pCustomRequestInformation.JoinJoinValueRHS || pCustomRequestInformation.JoinValue;
+		const tmpSourceLookup = {};
+		for (const tmpSourceEntity of tmpSourceEntities)
+		{
+			const tmpSourceJoinValue = tmpSourceEntity[pCustomRequestInformation.JoinValue];
+			tmpSourceLookup[tmpSourceJoinValue] = tmpSourceEntity;
+		}
+
+		for (const tmpSourceEntity of tmpSourceEntities)
+		{
+			if (!tmpSourceEntity)
+			{
+				this.log.error(`EntityBundleRequest failed to map join because the source entity was not found in the source lookup.`);
+				continue;
+			}
+			if (pCustomRequestInformation.BucketBy || pCustomRequestInformation.BucketByTemplate)
+			{
+				const tmpBucketKey = pCustomRequestInformation.BucketBy ? this.fable.manifest.getValueByHash(tmpSourceEntity, pCustomRequestInformation.BucketBy) :
+					this.fable.parseTemplate(pCustomRequestInformation.BucketByTemplate, tmpSourceEntity);
+				if (!tmpBucketKey)
+				{
+					this.log.warn(`EntityBundleRequest found a source entity with no bucket key for [${pCustomRequestInformation.BucketBy}] in mapJoin.`,
+						{ tmpSourceEntity });
+					continue;
+				}
+				if (!pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress])
+				{
+					pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] = {};
+				}
+				if (pCustomRequestInformation.SingleRecord)
+				{
+					pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey] = tmpSourceEntity;
+				}
+				else
+				{
+					if (!pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey])
+					{
+						pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey] = [];
+					}
+					pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey].push(tmpSourceEntity);
+				}
+			}
+			else if (pCustomRequestInformation.SingleRecord)
+			{
+				if (pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] && this.fable.LogNoisiness > 1)
+				{
+					this.fable.log.warn(`EntityBundleRequest found more than one record for [${pCustomRequestInformation.RecordDestinationAddress}] in mapJoin mapped as SingleRecord.`);
+				}
+				pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] = tmpSourceEntity;
+			}
+			else
+			{
+				pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] = pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] || [];
+				pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress].push(tmpSourceEntity);
+			}
+		}
+		fCallback(null, [pDestinationEntity]);
+	}
+
 	mapJoin(pCustomRequestInformation, pContext, fCallback)
 	{
-		const tmpDestinationEntities = this.fable.manifest.getValueByHash(pContext, pCustomRequestInformation.DestinationRecordSetAddress);
-		if (!Array.isArray(tmpDestinationEntities))
+		const tmpSingleDestinationEntity = pCustomRequestInformation.DestinationRecordAddress ? this.fable.manifest.getValueByHash(pContext, pCustomRequestInformation.DestinationRecordAddress) : null;
+		const tmpDestinationEntities = pCustomRequestInformation.DestinationRecordSetAddress ? this.fable.manifest.getValueByHash(pContext, pCustomRequestInformation.DestinationRecordSetAddress) : null;
+		if (!Array.isArray(tmpDestinationEntities) && !tmpSingleDestinationEntity)
 		{
 			return fCallback(new Error(`EntityBundleRequest failed to map join because the destination [${pCustomRequestInformation.DestinationRecordSetAddress}] did not return an array.`));
 		}
+		if (tmpSingleDestinationEntity)
+		{
+			return this.mapJoinSingleDestination(tmpSingleDestinationEntity, pCustomRequestInformation, pContext, fCallback);
+		}
+
 		const tmpJoinEntities = this.fable.manifest.getValueByHash(pContext, pCustomRequestInformation.Joins);
 		if (!Array.isArray(tmpJoinEntities))
 		{
@@ -175,7 +249,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		const tmpDestinationLookup = {};
 		const tmpSourceLookup = {};
 		const tmpJoinMap = {};
-		for (const tmpDestinationEntity of tmpDestinationEntities)
+		for (const tmpDestinationEntity of tmpDestinationEntities || [])
 		{
 			const tmpDestinationJoinValue = tmpDestinationEntity[pCustomRequestInformation.DestinationJoinValue];
 			tmpDestinationLookup[tmpDestinationJoinValue] = tmpDestinationEntity;
@@ -211,8 +285,46 @@ class PictMeadowEntityProvider extends libFableServiceBase
 					this.log.error(`EntityBundleRequest failed to map join because the RHS join value [${tmpRHSJoinValue}] was not found in the source lookup.`);
 					continue;
 				}
-				tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] = tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] || [];
-				tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress].push(tmpSourceEntity);
+				if (pCustomRequestInformation.BucketBy || pCustomRequestInformation.BucketByTemplate)
+				{
+					const tmpBucketKey = pCustomRequestInformation.BucketBy ? this.fable.manifest.getValueByHash(tmpSourceEntity, pCustomRequestInformation.BucketBy) :
+						this.fable.parseTemplate(pCustomRequestInformation.BucketByTemplate, tmpSourceEntity);
+					if (!tmpBucketKey)
+					{
+						this.log.warn(`EntityBundleRequest found a source entity with no bucket key for [${pCustomRequestInformation.BucketBy} / ${pCustomRequestInformation.BucketByTemplate}] in mapJoin.`,
+							{ tmpSourceEntity });
+						continue;
+					}
+					if (!tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress])
+					{
+						tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] = {};
+					}
+					if (pCustomRequestInformation.SingleRecord)
+					{
+						tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey] = tmpSourceEntity;
+					}
+					else
+					{
+						if (!tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey])
+						{
+							tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey] = [];
+						}
+						tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress][tmpBucketKey].push(tmpSourceEntity);
+					}
+				}
+				else if (pCustomRequestInformation.SingleRecord)
+				{
+					if (tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] && this.fable.LogNoisiness > 1)
+					{
+						this.fable.log.warn(`EntityBundleRequest found more than one record for [${pCustomRequestInformation.RecordDestinationAddress}] in mapJoin mapped as SingleRecord.`);
+					}
+					tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] = tmpSourceEntity;
+				}
+				else
+				{
+					tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] = tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] || [];
+					tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress].push(tmpSourceEntity);
+				}
 			}
 		}
 		fCallback(null, tmpDestinationEntities);
@@ -346,7 +458,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 					}
 					catch (pError)
 					{
-						this.log.error(`EntityBundleRequest error gathering entity set: ${pError}`, pError);
+						this.log.error(`EntityBundleRequest error gathering entity set: ${pError}`, { Stack: pError.stack });
 					}
 					return fNext();
 				});
@@ -358,7 +470,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 				//FIXME: should we be ignoring this error? rejecting here is unsafe since the result isn't guaranteed to be handled, so will crash stuff currently
 				if (pError)
 				{
-					this.log.error(`EntityBundleRequest error gathering entity set: ${pError}`, pError);
+					this.log.error(`EntityBundleRequest error gathering entity set: ${pError}`, { Stack: pError.stack });
 					return fCallback(pError);
 				}
 				return fCallback();

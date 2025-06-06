@@ -132,12 +132,35 @@ suite(
 									"JoinRecordSetAddress": "State.AuthorsRev",
 									"JoinValue": "IDAuthor",
 									"RecordDestinationAddress": "Authors"
-								}
+								},
+								{
+									"Type": "MapJoin",
+									"DestinationRecordAddress": "AppData",
+									"JoinRecordSetAddress": "State.Books",
+									"BucketBy": "PublicationYear",
+									"RecordDestinationAddress": "BooksByYear"
+								},
+								{
+									"Type": "MapJoin",
+									"DestinationRecordAddress": "AppData",
+									"JoinRecordSetAddress": "State.Books",
+									"BucketByTemplate": "{~PJU:-^IDAuthor^Record.Authors~}",
+									"RecordDestinationAddress": "BooksByAuthors"
+								},
+								{
+									"Type": "MapJoin",
+									"SingleRecord": true,
+									"DestinationRecordAddress": "AppData",
+									"JoinRecordSetAddress": "State.Books",
+									"BucketBy": "IDBook",
+									"RecordDestinationAddress": "BooksByID"
+								},
 							],
 							function (pError, pResult)
 							{
 								try
 								{
+									Expect(pError).to.not.exist;
 									Expect(testPict.AppData.TestState.Authors.length).to.equal(9);
 									Expect(testPict.AppData.TestState.AuthorsRev.length).to.be.greaterThan(8);
 									Expect(testPict.AppData.TestState.BookAuthorJoins.length).to.be.greaterThan(8);
@@ -151,6 +174,9 @@ suite(
 										Expect(tmpBook.Authors).to.be.an('array');
 										Expect(tmpBook.Authors.length).to.be.greaterThan(0);
 									}
+									Expect(Object.keys(testPict.AppData.BooksByYear).length).to.be.greaterThan(0);
+									Expect(Object.keys(testPict.AppData.BooksByAuthors).length).to.be.greaterThan(0);
+									Expect(Object.keys(testPict.AppData.BooksByID).length).to.equal(testPict.AppData.TestState.Books.length);
 								}
 								catch (err)
 								{
