@@ -196,7 +196,21 @@ class PictMeadowEntityProvider extends libFableServiceBase
 					}
 				}
 				const tmpBucketAddress = `${pCustomRequestInformation.RecordDestinationAddress}.${tmpBucketValues.join('.')}`;
-				this.fable.manifest.setValueByHash(pDestinationEntity, tmpBucketAddress, tmpSourceEntity);
+				if (pCustomRequestInformation.SingleRecord)
+				{
+					//TODO: warn if there is a collision?
+					this.fable.manifest.setValueByHash(pDestinationEntity, tmpBucketAddress, tmpSourceEntity);
+				}
+				else
+				{
+					let tmpBucketArray = this.fable.manifest.getValueByHash(pDestinationEntity, tmpBucketAddress, tmpSourceEntity);
+					if (!tmpBucketArray)
+					{
+						tmpBucketArray = [];
+						this.fable.manifest.setValueByHash(pDestinationEntity, tmpBucketAddress, tmpBucketArray);
+					}
+					tmpBucketArray.push(tmpSourceEntity);
+				}
 			}
 			else if (pCustomRequestInformation.SingleRecord)
 			{
@@ -306,7 +320,21 @@ class PictMeadowEntityProvider extends libFableServiceBase
 						tmpDestinationEntity[pCustomRequestInformation.RecordDestinationAddress] = {};
 					}
 					const tmpBucketAddress = `${pCustomRequestInformation.RecordDestinationAddress}.${tmpBucketValues.join('.')}`;
-					this.fable.manifest.setValueByHash(tmpDestinationEntity, tmpBucketAddress, tmpSourceEntity);
+					if (pCustomRequestInformation.SingleRecord)
+					{
+						//TODO: warn if there is a collision?
+						this.fable.manifest.setValueByHash(tmpDestinationEntity, tmpBucketAddress, tmpSourceEntity);
+					}
+					else
+					{
+						let tmpBucketArray = this.fable.manifest.getValueByHash(tmpDestinationEntity, tmpBucketAddress, tmpSourceEntity);
+						if (!tmpBucketArray)
+						{
+							tmpBucketArray = [];
+							this.fable.manifest.setValueByHash(tmpDestinationEntity, tmpBucketAddress, tmpBucketArray);
+						}
+						tmpBucketArray.push(tmpSourceEntity);
+					}
 				}
 				else if (pCustomRequestInformation.SingleRecord)
 				{

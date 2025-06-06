@@ -135,10 +135,30 @@ suite(
 								},
 								{
 									"Type": "MapJoin",
+									"DestinationRecordSetAddress": "State.Books",
+									"DestinationJoinValue": "IDBook",
+									"JoinJoinValueLHS": "IDBook",
+									"Joins": "State.BookAuthorJoinsRev",
+									"JoinJoinValueRHS": "IDAuthor",
+									"JoinRecordSetAddress": "State.AuthorsRev",
+									"JoinValue": "IDAuthor",
+									"BucketBy": 'IDAuthor',
+									"RecordDestinationAddress": "AuthorMap"
+								},
+								{
+									"Type": "MapJoin",
 									"DestinationRecordAddress": "AppData",
 									"JoinRecordSetAddress": "State.Books",
 									"BucketBy": [ "PublicationYear", "IDBook" ],
 									"RecordDestinationAddress": "BooksByYearAndID"
+								},
+								{
+									"Type": "MapJoin",
+									"SingleRecord": true,
+									"DestinationRecordAddress": "AppData",
+									"JoinRecordSetAddress": "State.Books",
+									"BucketBy": [ "PublicationYear", "IDBook" ],
+									"RecordDestinationAddress": "BooksByYearAndIDSingle"
 								},
 								{
 									"Type": "MapJoin",
@@ -173,9 +193,15 @@ suite(
 									{
 										Expect(tmpBook.Authors).to.be.an('array');
 										Expect(tmpBook.Authors.length).to.be.greaterThan(0);
+										Expect(tmpBook.AuthorMap).to.be.an('object');
+										Expect(tmpBook.Authors.length).to.equal(Object.keys(tmpBook.AuthorMap).length);
 									}
 									Expect(Object.keys(testPict.AppData.BooksByYearAndID).length).to.be.greaterThan(0);
 									Expect(Object.keys(testPict.AppData.BooksByYearAndID['2016']).length).to.be.greaterThan(0);
+									Expect(testPict.AppData.BooksByYearAndID['2016']['4641']).to.be.an('array');
+									Expect(testPict.AppData.BooksByYearAndID['2016']['4641'].length).to.equal(1);
+									Expect(testPict.AppData.BooksByYearAndIDSingle['2016']['4641']).to.be.an('object');
+									Expect(testPict.AppData.BooksByYearAndIDSingle['2016']['4641'].IDBook).to.equal(4641);
 									Expect(Object.keys(testPict.AppData.BooksByAuthors).length).to.be.greaterThan(0);
 									Expect(Object.keys(testPict.AppData.BooksByID).length).to.equal(testPict.AppData.TestState.Books.length);
 								}
