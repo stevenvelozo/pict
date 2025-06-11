@@ -489,6 +489,25 @@ suite(
 								}
 							);
 						test(
+								'Data template rendering with missing data and a template fallback that has async entity data...',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+
+									testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~DWTF:Record.Banana:MissingBanana~}: {~Dollars:Record.IDBook~}</h1>');
+									testPict.TemplateProvider.addTemplate('Book-Author-Content', '<p>{~E:Book^1^Book-Author-Title~}</p>');
+									testPict.TemplateProvider.addTemplate('Book-Author-Load', '<p>{~E:Book^100^Book-Author-Title~} {~D:Record.itemnumber~}</p>');
+									testPict.TemplateProvider.addTemplate('MissingBanana', '<span class="empty-message">Oh no! No banana!</span>');
+
+									testPict.parseTemplateByHash('Book-Author-Content', { IDBook: 100 },
+										(pError, pValue) =>
+										{
+											Expect(pValue).to.equal('<p><h1><span class="empty-message">Oh no! No banana!</span>: $1.00</h1></p>');
+											return fDone();
+										});
+								}
+							);
+						test(
 								'Entity template rendering...',
 								function (fDone)
 								{
