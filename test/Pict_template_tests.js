@@ -101,6 +101,7 @@ suite(
 								{
 									const testPict = new libPict(_MockSettings);
 									let tmpTemplateOutput = testPict.parseTemplate('{~DEJS:Record.MagicDate~}', { MagicDate: 'These quotes " should not be unescaped...' });
+									// eslint-disable-next-line no-useless-escape
 									Expect(tmpTemplateOutput).to.equal(`These quotes \" should not be unescaped...`);
 									fDone();
 								}
