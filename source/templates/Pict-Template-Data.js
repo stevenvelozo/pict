@@ -19,7 +19,7 @@ class PictTemplateProviderData extends libPictTemplate
 	}
 
 	/**
-	 * Render a template expression, returning a string with the resulting content.
+	 * Render a template expression, returning a string with the resulting content or an optional default value.
 	 *
 	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
 	 * @param {any} pRecord - The json object to be used as the Record for the template render

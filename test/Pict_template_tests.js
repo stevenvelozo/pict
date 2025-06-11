@@ -101,6 +101,7 @@ suite(
 								{
 									const testPict = new libPict(_MockSettings);
 									let tmpTemplateOutput = testPict.parseTemplate('{~DEJS:Record.MagicDate~}', { MagicDate: 'These quotes " should not be unescaped...' });
+									// eslint-disable-next-line no-useless-escape
 									Expect(tmpTemplateOutput).to.equal(`These quotes \" should not be unescaped...`);
 									fDone();
 								}
@@ -453,6 +454,58 @@ suite(
 									Expect(testPict.parseTemplateByHash('Quantity-List-Title', _QuantityRecord)).to.equal('<h1>List of Bands</h1>', 'The template system should parse a simple default template from a hash.');
 
 									return fDone();
+								}
+							);
+						test(
+								'Data template rendering with missing data and a template fallback...',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+
+									testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~DWTF:Record.Title:MissingTitle~}</h1>');
+									testPict.TemplateProvider.addTemplate('MissingTitle', '<span class="empty-message">Oh no! No title!</span>');
+
+									testPict.parseTemplateByHash('Book-Author-Title', { Title: undefined },
+										(pError, pValue) =>
+										{
+											Expect(pValue).to.equal('<h1><span class="empty-message">Oh no! No title!</span></h1>');
+											return fDone();
+										});
+								}
+							);
+						test(
+								'Data template rendering with missing data and a template fallback, but the fallback address is not found...',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+
+									testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~DWTF:Record.Title:IntentionallyMissingFallbackTemplate~}</h1>');
+
+									testPict.parseTemplateByHash('Book-Author-Title', { Title: undefined },
+										(pError, pValue) =>
+										{
+											Expect(pValue).to.equal('<h1></h1>');
+											return fDone();
+										});
+								}
+							);
+						test(
+								'Data template rendering with missing data and a template fallback that has async entity data...',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+
+									testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~DWTF:Record.Banana:MissingBanana~}: {~Dollars:Record.IDBook~}</h1>');
+									testPict.TemplateProvider.addTemplate('Book-Author-Content', '<p>{~E:Book^1^Book-Author-Title~}</p>');
+									testPict.TemplateProvider.addTemplate('Book-Author-Load', '<p>{~E:Book^100^Book-Author-Title~} {~D:Record.itemnumber~}</p>');
+									testPict.TemplateProvider.addTemplate('MissingBanana', '<span class="empty-message">Oh no! No banana!</span>');
+
+									testPict.parseTemplateByHash('Book-Author-Content', { IDBook: 100 },
+										(pError, pValue) =>
+										{
+											Expect(pValue).to.equal('<p><h1><span class="empty-message">Oh no! No banana!</span>: $1.00</h1></p>');
+											return fDone();
+										});
 								}
 							);
 						test(
