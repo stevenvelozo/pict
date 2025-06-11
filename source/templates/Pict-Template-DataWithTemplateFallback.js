@@ -14,12 +14,12 @@ class PictTemplateProviderData extends libPictTemplate
 		/** @type {any} */
 		this.log;
 
-		this.addPattern('{~Data:', '~}');
-		this.addPattern('{~D:', '~}');
+		this.addPattern('{~DataWithTemplateFallback:', '~}');
+		this.addPattern('{~DWTF:', '~}');
 	}
 
 	/**
-	 * Render a template expression, returning a string with the resulting content or an optional default value.
+	 * Render a template expression, returning a string with the resulting content or an optional default template string from an address.
 	 *
 	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
@@ -41,10 +41,10 @@ class PictTemplateProviderData extends libPictTemplate
 			this.log.trace(`PICT Template [fDataRender]::[${tmpHash}]`);
 		}
 
-		let tmpDefaultValue = '';
+		let tmpTemplateFallbackAddress = '';
 		if (tmpHash.indexOf(':') > -1)
 		{
-			tmpDefaultValue = tmpHash.split(':')[1];
+			tmpTemplateFallbackAddress = tmpHash.split(':')[1];
 			tmpHash = tmpHash.split(':')[0];
 		}
 
@@ -55,7 +55,18 @@ class PictTemplateProviderData extends libPictTemplate
 		}
 		if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined') || (tmpValue === ''))
 		{
-			return tmpDefaultValue;
+			const tmpDefaultTemplate = this.pict.parseTemplateByHash(tmpTemplateFallbackAddress, tmpRecord, null, pContextArray);
+			if (tmpDefaultTemplate == null || tmpDefaultTemplate === '')
+			{
+				this.log.warn(`PICT Template [fDataRender]::[${tmpHash}] - No default template found at address: ${tmpTemplateFallbackAddress}`);
+				// If no default template is found, return an empty string
+				return '';
+			}
+			if (this.pict.LogNoisiness > 3)
+			{
+				this.log.trace(`PICT Template [fDataRender]::[${tmpHash}] - Using default template from address: ${tmpTemplateFallbackAddress}`);
+			}
+			return tmpDefaultTemplate;
 		}
 		return tmpValue;
 	}

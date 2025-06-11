@@ -456,6 +456,39 @@ suite(
 								}
 							);
 						test(
+								'Data template rendering with missing data and a template fallback...',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+
+									testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~DWTF:Record.Title:MissingTitle~}</h1>');
+									testPict.TemplateProvider.addTemplate('MissingTitle', '<span class="empty-message">Oh no! No title!</span>');
+
+									testPict.parseTemplateByHash('Book-Author-Title', { Title: undefined },
+										(pError, pValue) =>
+										{
+											Expect(pValue).to.equal('<h1><span class="empty-message">Oh no! No title!</span></h1>');
+											return fDone();
+										});
+								}
+							);
+						test(
+								'Data template rendering with missing data and a template fallback, but the fallback address is not found...',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+
+									testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~DWTF:Record.Title:IntentionallyMissingFallbackTemplate~}</h1>');
+
+									testPict.parseTemplateByHash('Book-Author-Title', { Title: undefined },
+										(pError, pValue) =>
+										{
+											Expect(pValue).to.equal('<h1></h1>');
+											return fDone();
+										});
+								}
+							);
+						test(
 								'Entity template rendering...',
 								function (fDone)
 								{
