@@ -513,6 +513,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		return {
 			State: pState,
 			AppData: this.fable.AppData,
+			Bundle: this.fable.Bundle,
 			Pict: this.fable,
 			Fable: this.fable,
 			StepConfiguration: pStepConfiguration,

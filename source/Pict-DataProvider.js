@@ -20,7 +20,15 @@ class PictDataProvider extends libFableServiceBase
 	{
 		let tmpData = (typeof(pData) === 'undefined') ? {} : pData;
 
-		return this.fable.manifest.getValueByHash({AppData:this.fable.AppData, Bundle:this.fable.Bundle, Record:tmpData}, pAddress);
+		const tmpAddressSpace =
+		{
+			Fable: this.fable,
+			Pict: this.fable,
+			AppData: this.fable.AppData,
+			Bundle: this.fable.Bundle,
+			Record: tmpData,
+		};
+		return this.fable.manifest.getValueByHash(tmpAddressSpace, pAddress);
 	}
 }
 

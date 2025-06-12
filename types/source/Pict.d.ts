@@ -51,8 +51,10 @@ declare class Pict extends Pict_base {
      */
     public CSSMap: PictCSS;
     manifest: any;
-    AppData: any;
-    Bundle: {};
+    /** @type {Record<string, any>} */
+    AppData: Record<string, any>;
+    /** @type {Record<string, any>} */
+    Bundle: Record<string, any>;
     LogNoisiness: number;
     LogControlFlow: boolean;
     LogControlFlowWatchAddressList: any[];
@@ -236,7 +238,7 @@ import PictContentAssignment = require("./Pict-Content-Assignment.js");
 import PictCSS = require("./Pict-CSS.js");
 declare const PictApplicationClass: typeof import("pict-application");
 declare const PictViewClass: typeof import("pict-view");
-declare const PictProviderClass: any;
+declare const PictProviderClass: typeof import("pict-provider");
 declare const PictTemplateClass: typeof import("pict-template");
 declare const EnvironmentLog: typeof import("./environments/Pict-Environment-Log.js");
 declare const EnvironmentObject: typeof import("./environments/Pict-Environment-Object.js");

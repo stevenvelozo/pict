@@ -116,12 +116,19 @@ class Pict extends libFable {
 
 		this.manifest = this.instantiateServiceProvider("Manifest");
 
+		/** @type {Record<string, any>} */
 		this.AppData = {};
-		if ("DefaultAppData" in this.fable.settings) {
+		if ("DefaultAppData" in this.fable.settings)
+		{
 			this.AppData = this.fable.settings.DefaultAppData;
 		}
 
+		/** @type {Record<string, any>} */
 		this.Bundle = {};
+		if ("DefaultBundle" in this.fable.settings)
+		{
+			this.Bundle = this.fable.settings.DefaultBundle;
+		}
 
 		// Log noisness goes from 0 - 5, where 5 is show me everything.
 		this.LogNoisiness = 0;
@@ -535,7 +542,7 @@ class Pict extends libFable {
 	 */
 	resolveStateFromAddress(pAddress, pRecord, pContextArray)
 	{
-		let tmpContextArray = Array.isArray(pContextArray) ? pContextArray : [this];
+		let tmpContextArray = Array.isArray(pContextArray) ? pContextArray : [ this ];
 
 		return this.manifest.getValueByHash(
 			{
@@ -561,9 +568,17 @@ class Pict extends libFable {
 	 */
 	setStateValueAtAddress(pAddress, pRecord, pValue, pContextArray)
 	{
-		let tmpContextArray = (Array.isArray(pContextArray)) ? pContextArray : [this];
-
-		return this.manifest.setValueByHash({Pict:this, AppData:this.AppData, Bundle:this.Bundle, Context:tmpContextArray, Record:pRecord}, pAddress, pValue);
+		let tmpContextArray = (Array.isArray(pContextArray)) ? pContextArray : [ this ];
+		const tmpAddressSpace =
+		{
+			Fable: this.fable,
+			Pict: this,
+			AppData: this.AppData,
+			Bundle: this.Bundle,
+			Context: tmpContextArray,
+			Record: pRecord,
+		};
+		return this.manifest.setValueByHash(tmpAddressSpace, pAddress, pValue);
 	}
 
 	/**
@@ -578,7 +593,7 @@ class Pict extends libFable {
 	 */
 	parseTemplate(pTemplateString, pData, fCallback, pContextArray) {
 		let tmpData = typeof pData === "object" ? pData : {};
-		let tmpContextArray = Array.isArray(pContextArray) ? pContextArray : [this];
+		let tmpContextArray = Array.isArray(pContextArray) ? pContextArray : [ this ];
 		let tmpParseUUID;
 		if (this.LogControlFlow) {
 			tmpParseUUID = this.fable.getUUID();
