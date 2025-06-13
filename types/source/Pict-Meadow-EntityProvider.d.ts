@@ -20,9 +20,62 @@ declare class PictMeadowEntityProvider {
     prepareRequestOptions: (pOptions: any) => any;
     initializeCache(pEntity: any): void;
     gatherEntitySet(pEntityInformation: any, pContext: any, fCallback: any): any;
-    mapJoinSingleDestination(pDestinationEntity: any, pCustomRequestInformation: any, pContext: any, fCallback: any): any;
-    mapJoin(pCustomRequestInformation: any, pContext: any, fCallback: any): any;
+    mapJoinSingleDestination(pDestinationEntity: any, pCustomRequestInformation: any, pContext: any): any[];
+    mapJoin(pCustomRequestInformation: any, pContext: any): any;
+    /**
+     * ExampleConfig:
+     * {
+     *      "InputRecordsetAddress": "AppData.DocumentData.ReportData.Observations[]<<~?ObservationType,==,WalbecNDTRollerTests?~>>",
+     *      "OutputRecordsetAddress": "AppData.DocumentData.ReportData.FormData.ADDTests",
+     * 		"OutputRecordsetAddressMapping":
+     *      {
+     * 			"InputRecord.Tags[],AnyContains,HR": "AppData.DocumentData.ReportData.FormData.HRTests",
+     * 			"InputRecord.Tags[],AnyContains,CR": "AppData.DocumentData.ReportData.FormData.CRTests",
+     * 			"InputRecord.Tags[],AnyContains,IR": "AppData.DocumentData.ReportData.FormData.IRTests"
+     *      },
+     * 		"RecordPrototypeAddress": "OutputRecordSet[]<<~?IDObservation,==,{~D:InputRecord.IDObservation~}?~>>",
+     * 		"RecordFieldMapping":
+     *      {
+     * 			"AppData.DocumentData.ReportData.FormData.HRTests":
+     *          {
+     *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.MaterialTemperature": "OutputRecord.Temp",
+     *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.PercentDensity": "OutputRecord.Density",
+     *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.Offset": "OutputRecord.Offset",
+     *               "InputRecord.IDObservation": "OutputRecord.IDObservation"
+     *          },
+     * 			"AppData.DocumentData.ReportData.FormData.CRTests":
+     *          {
+     *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.MaterialTemperature": "OutputRecord.CRTemp",
+     *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.PercentDensity": "OutputRecord.CRDensity",
+     *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.Offset": "OutputRecord.CROffset",
+     *               "InputRecord.IDObservation": "OutputRecord.IDObservation"
+     *          },
+     * 			"AppData.DocumentData.ReportData.FormData.IRTests":
+     *          {
+     *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.MaterialTemperature": "OutputRecord.IRTemp",
+     *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.PercentDensity": "OutputRecord.IRDensity",
+     *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.Offset": "OutputRecord.IROffset",
+     *               "InputRecord.IDObservation": "OutputRecord.IDObservation"
+     *          },
+     *          "Default":
+     *          {
+     *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.MaterialTemperature": "OutputRecord.ADDTemp",
+     *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.PercentDensity": "OutputRecord.ADDDensity",
+     *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.Offset": "OutputRecord.ADDOffset",
+     *               "InputRecord.IDObservation": "OutputRecord.IDObservation"
+     *          }
+     *      }
+     * }
+     */
+    projectDataset(pConfiguration: any, pContext: any): void;
+    _resolveOutputRecordsetAddressMapping(pConfiguration: any, pContext: any, pInputRecord: any): any;
     gatherCustomDataSet(pCustomRequestInformation: any, pContext: any, fCallback: any): any;
+    /**
+     * Local version of gatherDataFromServer that only support synchronous operations.
+     *
+     * @param {Array<Record<string, any>>} pEntitiesBundleDescription - The entity bundle description object.
+     */
+    processBundle(pEntitiesBundleDescription: Array<Record<string, any>>): void;
     /**
      * Gather data from the server returning a promise when it is complete.
      *

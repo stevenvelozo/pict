@@ -78,6 +78,7 @@ suite(
 					'Decoration Provider with a list.',
 					function(fDone)
 					{
+						this.timeout(10000); // Allow for the server to respond
 						const testPict = new libPict(_MockSettings);
 
 						testPict.EntityProvider.gatherDataFromServer(
@@ -211,6 +212,56 @@ suite(
 								}
 								return fDone();
 							}.bind(this));
+					}
+				);
+				test(
+					'Sync bundle test.',
+					function()
+					{
+						const testPict = new libPict(_MockSettings);
+						testPict.AppData.Comics =
+						[
+							{ IDComic: 1, Name: 'Batman', InStock: true, Genres: [ 'Action', 'Sci-Fi' ] },
+							{ IDComic: 2, Name: 'Superman', InStock: true, Genres: [ 'Action', 'Sci-Fi' ] },
+							{ IDComic: 3, Name: 'Non Action Comic Book', InStock: true, Genres: [ 'Slice of Life', 'Sci-Fi' ] },
+							{ IDComic: 4, Name: 'Other Non Action Comic Book', InStock: false, Genres: [ 'Slice of Life', 'Sci-Fi' ] },
+						];
+						testPict.AppData.ActionBooks = [{ IDComic: 1, ExtraColumn: 'ExtraValue' }];
+						const tmpBundle = [{
+							"Type": "ProjectDataset",
+							//"InputRecordsetAddress": "AppData.Comics[]<<~?Genre,==,Sci-Fi?~>>",
+							"InputRecordsetAddress": "AppData.Comics[]<<~?InStock,TRUE,?~>>",
+							"OutputRecordsetAddress": "AppData.SciFiBooks",
+							"OutputRecordsetAddressMapping":
+							{
+								"InputRecord.Genres[],AnyContains,Action": "AppData.ActionBooks"
+							},
+							"RecordPrototypeAddress": "OutputRecordset[]<<~?IDComic,==,{~D:Record.InputRecord.IDComic~}?~>>",
+							"RecordFieldMapping":
+							{
+								"AppData.ActionBooks":
+								{
+									"InputRecord.Name": "OutputRecord.Title",
+									"InputRecord.IDComic": "OutputRecord.IDComic"
+								},
+								"Default":
+								{
+									"InputRecord.Name": "OutputRecord.Title",
+									"InputRecord.IDComic": "OutputRecord.IDComic"
+								}
+							}
+						}];
+
+						testPict.EntityProvider.processBundle(tmpBundle);
+						Expect(testPict.AppData.ActionBooks.length).to.equal(2);
+						Expect(testPict.AppData.ActionBooks[0].ExtraColumn).to.equal('ExtraValue');
+						Expect(testPict.AppData.ActionBooks[0].Title).to.equal('Batman');
+						Expect(testPict.AppData.ActionBooks[0].IDComic).to.equal(1);
+						Expect(testPict.AppData.ActionBooks[1].Title).to.equal('Superman');
+						Expect(testPict.AppData.ActionBooks[1].IDComic).to.equal(2);
+						Expect(testPict.AppData.SciFiBooks.length).to.equal(1);
+						Expect(testPict.AppData.SciFiBooks[0].Title).to.equal('Non Action Comic Book');
+						Expect(testPict.AppData.SciFiBooks[0].IDComic).to.equal(3);
 					}
 				);
 			}

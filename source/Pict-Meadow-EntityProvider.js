@@ -152,12 +152,12 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 	}
 
-	mapJoinSingleDestination(pDestinationEntity, pCustomRequestInformation, pContext, fCallback)
+	mapJoinSingleDestination(pDestinationEntity, pCustomRequestInformation, pContext)
 	{
 		const tmpSourceEntities = this.fable.manifest.getValueByHash(pContext, pCustomRequestInformation.JoinRecordSetAddress);
 		if (!Array.isArray(tmpSourceEntities))
 		{
-			return fCallback(new Error(`EntityBundleRequest failed to map join because the source [${pCustomRequestInformation.JoinRecordSetAddress}] did not return an array.`));
+			throw new Error(`EntityBundleRequest failed to map join because the source [${pCustomRequestInformation.JoinRecordSetAddress}] did not return an array.`);
 		}
 
 		const tmpSourceLookup = {};
@@ -226,31 +226,31 @@ class PictMeadowEntityProvider extends libFableServiceBase
 				pDestinationEntity[pCustomRequestInformation.RecordDestinationAddress].push(tmpSourceEntity);
 			}
 		}
-		fCallback(null, [pDestinationEntity]);
+		return [pDestinationEntity];
 	}
 
-	mapJoin(pCustomRequestInformation, pContext, fCallback)
+	mapJoin(pCustomRequestInformation, pContext)
 	{
 		const tmpSingleDestinationEntity = pCustomRequestInformation.DestinationRecordAddress ? this.fable.manifest.getValueByHash(pContext, pCustomRequestInformation.DestinationRecordAddress) : null;
 		const tmpDestinationEntities = pCustomRequestInformation.DestinationRecordSetAddress ? this.fable.manifest.getValueByHash(pContext, pCustomRequestInformation.DestinationRecordSetAddress) : null;
 		if (!Array.isArray(tmpDestinationEntities) && !tmpSingleDestinationEntity)
 		{
-			return fCallback(new Error(`EntityBundleRequest failed to map join because the destination [${pCustomRequestInformation.DestinationRecordSetAddress}] did not return an array.`));
+			throw new Error(`EntityBundleRequest failed to map join because the destination [${pCustomRequestInformation.DestinationRecordSetAddress}] did not return an array.`);
 		}
 		if (tmpSingleDestinationEntity)
 		{
-			return this.mapJoinSingleDestination(tmpSingleDestinationEntity, pCustomRequestInformation, pContext, fCallback);
+			return this.mapJoinSingleDestination(tmpSingleDestinationEntity, pCustomRequestInformation, pContext);
 		}
 
 		const tmpJoinEntities = this.fable.manifest.getValueByHash(pContext, pCustomRequestInformation.Joins);
 		if (!Array.isArray(tmpJoinEntities))
 		{
-			return fCallback(new Error(`EntityBundleRequest failed to map join because the join [${pCustomRequestInformation.Joins}] did not return an array.`));
+			throw new Error(`EntityBundleRequest failed to map join because the join [${pCustomRequestInformation.Joins}] did not return an array.`);
 		}
 		const tmpSourceEntities = this.fable.manifest.getValueByHash(pContext, pCustomRequestInformation.JoinRecordSetAddress);
 		if (!Array.isArray(tmpSourceEntities))
 		{
-			return fCallback(new Error(`EntityBundleRequest failed to map join because the source [${pCustomRequestInformation.JoinRecordSetAddress}] did not return an array.`));
+			throw new Error(`EntityBundleRequest failed to map join because the source [${pCustomRequestInformation.JoinRecordSetAddress}] did not return an array.`);
 		}
 
 		const tmpLHSJoinKey = pCustomRequestInformation.JoinJoinValueLHS || pCustomRequestInformation.DestinationJoinValue;
@@ -351,7 +351,151 @@ class PictMeadowEntityProvider extends libFableServiceBase
 				}
 			}
 		}
-		fCallback(null, tmpDestinationEntities);
+		return tmpDestinationEntities;
+	}
+
+	/**
+	 * ExampleConfig:
+	 * {
+	 *      "InputRecordsetAddress": "AppData.DocumentData.ReportData.Observations[]<<~?ObservationType,==,WalbecNDTRollerTests?~>>",
+	 *      "OutputRecordsetAddress": "AppData.DocumentData.ReportData.FormData.ADDTests",
+	 * 		"OutputRecordsetAddressMapping":
+	 *      {
+	 * 			"InputRecord.Tags[],AnyContains,HR": "AppData.DocumentData.ReportData.FormData.HRTests",
+	 * 			"InputRecord.Tags[],AnyContains,CR": "AppData.DocumentData.ReportData.FormData.CRTests",
+	 * 			"InputRecord.Tags[],AnyContains,IR": "AppData.DocumentData.ReportData.FormData.IRTests"
+	 *      },
+	 * 		"RecordPrototypeAddress": "OutputRecordSet[]<<~?IDObservation,==,{~D:InputRecord.IDObservation~}?~>>",
+	 * 		"RecordFieldMapping":
+	 *      {
+	 * 			"AppData.DocumentData.ReportData.FormData.HRTests":
+	 *          {
+	 *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.MaterialTemperature": "OutputRecord.Temp",
+	 *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.PercentDensity": "OutputRecord.Density",
+	 *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.Offset": "OutputRecord.Offset",
+	 *               "InputRecord.IDObservation": "OutputRecord.IDObservation"
+	 *          },
+	 * 			"AppData.DocumentData.ReportData.FormData.CRTests":
+	 *          {
+	 *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.MaterialTemperature": "OutputRecord.CRTemp",
+	 *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.PercentDensity": "OutputRecord.CRDensity",
+	 *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.Offset": "OutputRecord.CROffset",
+	 *               "InputRecord.IDObservation": "OutputRecord.IDObservation"
+	 *          },
+	 * 			"AppData.DocumentData.ReportData.FormData.IRTests":
+	 *          {
+	 *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.MaterialTemperature": "OutputRecord.IRTemp",
+	 *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.PercentDensity": "OutputRecord.IRDensity",
+	 *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.Offset": "OutputRecord.IROffset",
+	 *               "InputRecord.IDObservation": "OutputRecord.IDObservation"
+	 *          },
+	 *          "Default":
+	 *          {
+	 *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.MaterialTemperature": "OutputRecord.ADDTemp",
+	 *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.PercentDensity": "OutputRecord.ADDDensity",
+	 *               "InputRecord.Details.WalbecNDTRollerTests[0].Datum.Offset": "OutputRecord.ADDOffset",
+	 *               "InputRecord.IDObservation": "OutputRecord.IDObservation"
+	 *          }
+	 *      }
+	 * }
+	 */
+	projectDataset(pConfiguration, pContext)
+	{
+		const tmpInputRecordset = this.fable.manifest.getValueByHash(pContext, pConfiguration.InputRecordsetAddress);
+		if (!Array.isArray(tmpInputRecordset))
+		{
+			throw new Error(`EntityBundleRequest failed to project dataset because the input recordset [${pConfiguration.InputRecordsetAddress}] did not return an array.`);
+		}
+		let tmpDefaultOutputRecordset = this.fable.manifest.getValueByHash(pContext, pConfiguration.OutputRecordsetAddress);
+		if (!tmpDefaultOutputRecordset)
+		{
+			tmpDefaultOutputRecordset = [];
+			this.fable.manifest.setValueByHash(pContext, pConfiguration.OutputRecordsetAddress, tmpDefaultOutputRecordset);
+		}
+		for (const tmpInputRecord of tmpInputRecordset)
+		{
+			let tmpOutputRecordset = tmpDefaultOutputRecordset;
+			let tmpOutputRecordsetAddressOverride;
+			if (typeof pConfiguration.OutputRecordsetAddressMapping === 'object')
+			{
+				tmpOutputRecordsetAddressOverride = this._resolveOutputRecordsetAddressMapping(pConfiguration, pContext, tmpInputRecord);
+				if (tmpOutputRecordsetAddressOverride)
+				{
+					tmpOutputRecordset = this.fable.manifest.getValueByHash(pContext, tmpOutputRecordsetAddressOverride);
+					if (!tmpOutputRecordset)
+					{
+						tmpOutputRecordset = [];
+						this.fable.manifest.setValueByHash(pContext, tmpOutputRecordsetAddressOverride, tmpOutputRecordset);
+					}
+				}
+				if (!tmpOutputRecordset || !Array.isArray(tmpOutputRecordset))
+				{
+					tmpOutputRecordset = tmpDefaultOutputRecordset;
+				}
+			}
+			const tmpPrototypeAddress = this.fable.parseTemplate(pConfiguration.RecordPrototypeAddress, Object.assign({ InputRecord: tmpInputRecord }, pContext));
+			const tmpRecordPrototype = this.fable.manifest.getValueByHash(Object.assign({ InputRecord: tmpInputRecord, OutputRecordset: tmpOutputRecordset }, pContext), tmpPrototypeAddress);
+			let tmpOutputRecord = { };
+			if (Array.isArray(tmpRecordPrototype) && tmpRecordPrototype.length > 0)
+			{
+				tmpOutputRecord = tmpRecordPrototype[0];
+			}
+			else
+			{
+				tmpOutputRecordset.push(tmpOutputRecord);
+			}
+			let tmpRecordFieldMapping = pConfiguration.RecordFieldMapping[tmpOutputRecordsetAddressOverride] || pConfiguration.RecordFieldMapping.Default;
+			if (!tmpRecordFieldMapping)
+			{
+				tmpRecordFieldMapping = pConfiguration.RecordFieldMapping[Object.keys(pConfiguration.RecordFieldMapping)[0]];
+			}
+			if (!tmpRecordFieldMapping)
+			{
+				throw new Error(`EntityBundleRequest failed to project dataset because the record field mapping for [${tmpOutputRecordsetAddressOverride}] did not return a mapping.`);
+			}
+			for (const tmpInputFieldAddress of Object.keys(tmpRecordFieldMapping))
+			{
+				const tmpOutputFieldAddress = tmpRecordFieldMapping[tmpInputFieldAddress];
+				const tmpInputFieldValue = this.fable.manifest.getValueByHash(Object.assign({ InputRecord: tmpInputRecord }, pContext), tmpInputFieldAddress);
+				this.fable.manifest.setValueByHash(Object.assign({ OutputRecord: tmpOutputRecord }, pContext), tmpOutputFieldAddress, tmpInputFieldValue);
+			}
+		}
+	}
+
+	_resolveOutputRecordsetAddressMapping(pConfiguration, pContext, pInputRecord)
+	{
+		const tmpAddressSpace = Object.assign({ InputRecord: pInputRecord }, pContext);
+		for (const tmpRule of Object.keys(pConfiguration.OutputRecordsetAddressMapping))
+		{
+			const [ tmpLHSAddress, tmpOperator, tmpMatchValue ] = tmpRule.split(',');
+			const tmpLHS = this.fable.manifest.getValueByHash(tmpAddressSpace, tmpLHSAddress);
+			if (!tmpLHS)
+			{
+				if (this.fable.LogNoisiness > 0)
+				{
+					this.log.warn(`EntityBundleRequest failed to project dataset because the LHS address [${tmpLHSAddress}] did not return a value.`);
+				}
+				continue;
+			}
+			switch (tmpOperator)
+			{
+				case 'AnyContains':
+					if (!Array.isArray(tmpLHS))
+					{
+						//TODO: consider making this use objects as well?
+						this.log.error(`EntityBundleRequest failed to project dataset because the LHS address [${tmpLHSAddress}] did not return an array.`);
+						continue;
+					}
+					for (const tmpLHSValue of tmpLHS)
+					{
+						if (String(tmpLHSValue).includes(tmpMatchValue))
+						{
+							return pConfiguration.OutputRecordsetAddressMapping[tmpRule];
+						}
+					}
+					return null;
+			}
+		}
 	}
 
 	gatherCustomDataSet(pCustomRequestInformation, pContext, fCallback)
@@ -424,6 +568,64 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	}
 
 	/**
+	 * Local version of gatherDataFromServer that only support synchronous operations.
+	 *
+	 * @param {Array<Record<string, any>>} pEntitiesBundleDescription - The entity bundle description object.
+	 */
+	processBundle(pEntitiesBundleDescription)
+	{
+		if (!Array.isArray(pEntitiesBundleDescription))
+		{
+			this.log.error(`EntityBundleRequest failed to parse entity bundle request because the input was not an array.`);
+			throw new Error('EntityBundleRequest failed to parse entity bundle request because the input was not an array.');
+		}
+
+		const tmpStateStack = [];
+		let tmpState = {};
+
+		for (const tmpEntityBundleEntry of pEntitiesBundleDescription)
+		{
+			try
+			{
+				switch (tmpEntityBundleEntry.Type)
+				{
+					case 'SetStateAddress':
+						tmpStateStack.push(tmpState);
+						tmpState = this.fable.manifest.getValueByHash(this.fable, tmpEntityBundleEntry.StateAddress);
+						if (typeof tmpState === 'undefined')
+						{
+							tmpState = {};
+							this.fable.manifest.setValueByHash(this.fable, tmpEntityBundleEntry.StateAddress, tmpState);
+						}
+						break;
+					case 'PopState':
+						if (tmpStateStack.length > 0)
+						{
+							tmpState = tmpStateStack.pop();
+						}
+						else
+						{
+							this.log.warn(`EntityBundleRequest encountered a PopState without a matching SetStateAddress.`);
+						}
+						break;
+					case 'MapJoin':
+						this.mapJoin(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry));
+						break;
+					case 'ProjectDataset':
+						this.projectDataset(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry));
+						break;
+					default:
+						this.log.error(`EntityBundleRequest encountered an unsupported type [${tmpEntityBundleEntry.Type}] in the entity bundle description.`);
+				}
+			}
+			catch (pError)
+			{
+				this.log.error(`EntityBundleRequest error gathering entity set: ${pError}`, { Stack: pError.stack });
+			}
+		}
+	}
+
+	/**
 	 * Gather data from the server returning a promise when it is complete.
 	 *
 	 * @param {Array<Record<string, any>>} pEntitiesBundleDescription - The entity bundle description object.
@@ -459,7 +661,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 									tmpState = {};
 									this.fable.manifest.setValueByHash(this.fable, tmpEntityBundleEntry.StateAddress, tmpState);
 								}
-								break;
+								return fNext();
 							case 'PopState':
 								if (tmpStateStack.length > 0)
 								{
@@ -469,11 +671,15 @@ class PictMeadowEntityProvider extends libFableServiceBase
 								{
 									this.log.warn(`EntityBundleRequest encountered a PopState without a matching SetStateAddress.`);
 								}
-								break;
+								return fNext();
 							case 'Custom':
 								return this.gatherCustomDataSet(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry), fNext);
 							case 'MapJoin':
-								return this.mapJoin(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry), fNext);
+								this.mapJoin(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry));
+								return fNext();
+							case 'ProjectDataset':
+								this.projectDataset(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry));
+								return fNext();
 							// This is the default case, for a meadow entity set or single entity
 							case 'MeadowEntity':
 							default:
@@ -483,8 +689,8 @@ class PictMeadowEntityProvider extends libFableServiceBase
 					catch (pError)
 					{
 						this.log.error(`EntityBundleRequest error gathering entity set: ${pError}`, { Stack: pError.stack });
+						return fNext();
 					}
-					return fNext();
 				});
 		}
 

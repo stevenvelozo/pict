@@ -512,6 +512,7 @@ suite(
 								'Entity template rendering...',
 								function (fDone)
 								{
+									this.timeout(10000);
 									const testPict = new libPict(_MockSettings);
 
 									testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~Data:Record.Title~}: {~Dollars:Record.IDBook~}</h1>');
