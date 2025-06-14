@@ -493,9 +493,9 @@ class PictMeadowEntityProvider extends libFableServiceBase
 							return pConfiguration.OutputRecordsetAddressMapping[tmpRule];
 						}
 					}
-					return null;
 			}
 		}
+		return null;
 	}
 
 	gatherCustomDataSet(pCustomRequestInformation, pContext, fCallback)
