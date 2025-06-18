@@ -59,7 +59,11 @@ declare class Pict extends Pict_base {
     LogControlFlow: boolean;
     LogControlFlowWatchAddressList: any[];
     _DefaultPictTemplatesInitialized: boolean;
-    providers: any;
+    /** @type {{ FilterManager: libProviderFilterManager, [key: string]: import('pict-provider') }} */
+    providers: {
+        FilterManager: libProviderFilterManager;
+        [key: string]: import("pict-provider");
+    };
     views: any;
     /**
      * Load manifests in as Hashed services
@@ -236,6 +240,7 @@ import PictMeadowEntityProvider = require("./Pict-Meadow-EntityProvider.js");
 import PictDataProvider = require("./Pict-DataProvider.js");
 import PictContentAssignment = require("./Pict-Content-Assignment.js");
 import PictCSS = require("./Pict-CSS.js");
+import libProviderFilterManager = require("./providers/Provider-Filter-Manager.js");
 declare const PictApplicationClass: typeof import("pict-application");
 declare const PictViewClass: typeof import("pict-view");
 declare const PictProviderClass: typeof import("pict-provider");

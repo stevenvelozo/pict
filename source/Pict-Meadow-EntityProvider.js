@@ -24,13 +24,16 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			this.options.urlPrefix = '/1.0/';
 		}
 
-		if (this.fable.settings.PictDefaultDownloadBatchSize)
+		if (!this.options.downloadBatchSize)
 		{
-			this.options.downloadBatchSize = this.fable.settings.PictDefaultDownloadBatchSize;
-		}
-		else if (!this.options.downloadBatchSize)
-		{
-			this.options.downloadBatchSize = 100;
+			if (typeof this.fable.settings.PictDefaultDownloadBatchSize === 'number')
+			{
+				this.options.downloadBatchSize = this.fable.settings.PictDefaultDownloadBatchSize;
+			}
+			else
+			{
+				this.options.downloadBatchSize = 100;
+			}
 		}
 
 		//@ts-ignore - FIXME - remove once we have fable types
@@ -70,6 +73,12 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 	}
 
+	gatherEntitySetCount(pEntityInformation, pContext, fCallback)
+	{
+		pEntityInformation.CountOnly = true;
+		return this.gatherEntitySet(pEntityInformation, pContext, fCallback);
+	}
+
 	gatherEntitySet(pEntityInformation, pContext, fCallback)
 	{
 		// First sanity check the pEntityInformation
@@ -96,17 +105,22 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		{
 			pEntityInformation.RecordStartCursor = 0;
 		}
+		//TODO: consider ChunkSize for cases when AllRecords is set and we want to control the to-server page size
 		if (!('PageSize' in pEntityInformation) || (typeof(pEntityInformation.PageSize) != 'number'))
 		{
 			pEntityInformation.PageSize = 100;
 		}
+		if (!('AllRecords' in pEntityInformation) || (typeof(pEntityInformation.AllRecords) != 'boolean'))
+		{
+			pEntityInformation.AllRecords = false;
+		}
 
 		let tmpRecordStartCursor = null;
-		let tmpRecordCount = null;
-		if (pEntityInformation.RecordCount)
+		let tmpPageSize = null;
+		if (pEntityInformation.PageSize)
 		{
 			tmpRecordStartCursor = pEntityInformation.RecordStartCursor;
-			tmpRecordCount = pEntityInformation.RecordCount;
+			tmpPageSize = pEntityInformation.PageSize;
 		}
 		// Parse the filter template
 		const tmpFilterString = this.fable.parseTemplate(pEntityInformation.Filter, pContext);
@@ -120,10 +134,14 @@ class PictMeadowEntityProvider extends libFableServiceBase
 				return fCallback(pError, '');
 			}
 
-			this.log.trace(`EntityBundleRequest found ${pRecordSet.length} records for ${pEntityInformation.Entity} filtered to [${tmpFilterString}]`);
+			this.log.trace(`EntityBundleRequest found ${pRecordSet.length} records for ${pEntityInformation.Entity} filtered to [${tmpFilterString}]${!pEntityInformation.CountOnly && !pEntityInformation.AllRecords ? ` [${tmpRecordStartCursor}/${tmpPageSize}]` : ''}`);
 
+			if (pEntityInformation.CountOnly)
+			{
+				this.fable.manifest.setValueByHash(pContext, pEntityInformation.Destination, pRecordSet);
+			}
 			// Now assign it back to the destination; because this is not view specific it doesn't use the manifests from them (to deal with scope overlap with subgrids).
-			if (pEntityInformation.SingleRecord)
+			else if (pEntityInformation.SingleRecord)
 			{
 				if (pRecordSet.length > 1)
 				{
@@ -142,9 +160,13 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 			return fCallback();
 		};
-		if (tmpRecordCount)
+		if (pEntityInformation.CountOnly)
 		{
-			this.getEntitySetPage(pEntityInformation.Entity, tmpFilterString, tmpRecordStartCursor, tmpRecordCount, fRecordFetchComplete);
+			this.getEntitySetRecordCount(pEntityInformation.Entity, tmpFilterString, fRecordFetchComplete);
+		}
+		else if (tmpPageSize && !pEntityInformation.AllRecords)
+		{
+			this.getEntitySetPage(pEntityInformation.Entity, tmpFilterString, tmpRecordStartCursor, tmpPageSize, fRecordFetchComplete);
 		}
 		else
 		{
@@ -192,24 +214,37 @@ class PictMeadowEntityProvider extends libFableServiceBase
 					for (const tmpBucketByTemplate of tmpBucketByTemplates)
 					{
 						const tmpBucketValue = this.fable.parseTemplate(tmpBucketByTemplate, tmpSourceEntity);
-						tmpBucketValues.push(tmpBucketValue);
+						if (tmpBucketValue)
+						{
+							tmpBucketValues.push(tmpBucketValue);
+						}
 					}
 				}
-				const tmpBucketAddress = `${pCustomRequestInformation.RecordDestinationAddress}.${tmpBucketValues.join('.')}`;
-				if (pCustomRequestInformation.SingleRecord)
+				if (tmpBucketValues.length < 1)
 				{
-					//TODO: warn if there is a collision?
-					this.fable.manifest.setValueByHash(pDestinationEntity, tmpBucketAddress, tmpSourceEntity);
+					if (this.fable.LogNoisiness > 0)
+					{
+						this.log.warn(`EntityBundleRequest failed to map join because no bucket values were found.`, { pCustomRequestInformation, tmpSourceEntity });
+					}
 				}
 				else
 				{
-					let tmpBucketArray = this.fable.manifest.getValueByHash(pDestinationEntity, tmpBucketAddress, tmpSourceEntity);
-					if (!tmpBucketArray)
+					const tmpBucketAddress = `${pCustomRequestInformation.RecordDestinationAddress}.${tmpBucketValues.join('.')}`;
+					if (pCustomRequestInformation.SingleRecord)
 					{
-						tmpBucketArray = [];
-						this.fable.manifest.setValueByHash(pDestinationEntity, tmpBucketAddress, tmpBucketArray);
+						//TODO: warn if there is a collision?
+						this.fable.manifest.setValueByHash(pDestinationEntity, tmpBucketAddress, tmpSourceEntity);
 					}
-					tmpBucketArray.push(tmpSourceEntity);
+					else
+					{
+						let tmpBucketArray = this.fable.manifest.getValueByHash(pDestinationEntity, tmpBucketAddress, tmpSourceEntity);
+						if (!tmpBucketArray)
+						{
+							tmpBucketArray = [];
+							this.fable.manifest.setValueByHash(pDestinationEntity, tmpBucketAddress, tmpBucketArray);
+						}
+						tmpBucketArray.push(tmpSourceEntity);
+					}
 				}
 			}
 			else if (pCustomRequestInformation.SingleRecord)
@@ -681,6 +716,8 @@ class PictMeadowEntityProvider extends libFableServiceBase
 								this.projectDataset(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry));
 								return fNext();
 							// This is the default case, for a meadow entity set or single entity
+							case 'MeadowEntityCount':
+								return this.gatherEntitySetCount(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry), fNext);
 							case 'MeadowEntity':
 							default:
 								return this.gatherEntitySet(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry), fNext);
@@ -776,8 +813,8 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			{
 				if (pDownloadResponse && pDownloadResponse.statusCode && pDownloadResponse.statusCode >= 400)
 				{
-					this.log.error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${tmpURL}]: ${pDownloadResponse.statusCode} ${pDownloadResponse.statusMessage}`);
-					return fCallback(new Error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${tmpURL}]: ${pDownloadResponse.statusCode} ${JSON.stringify(pDownloadBody || {})}`));
+					this.log.error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] [${pRecordStartCursor}/${pRecordCount}] from url [${tmpURL}]: ${pDownloadResponse.statusCode} ${pDownloadResponse.statusMessage}`);
+					return fCallback(new Error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] [${pRecordStartCursor}/${pRecordCount}] from url [${tmpURL}]: ${pDownloadResponse.statusCode} ${JSON.stringify(pDownloadBody || {})}`));
 				}
 				return fCallback(pDownloadError, pDownloadBody);
 			}.bind(this));

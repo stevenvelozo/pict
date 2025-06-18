@@ -22,15 +22,16 @@
  * }} Fable
  */
 /** @type {{ new(...args: any[]): Fable }} */
-const libFable = require("fable");
+const libFable = require('fable');
 
-const libPackage = require("../package.json");
+const libPackage = require('../package.json');
+const libProviderFilterManager = require('./providers/Provider-Filter-Manager.js');
 
-const PictTemplateProvider = require("./Pict-Template-Provider.js");
-const PictContentAssignment = require("./Pict-Content-Assignment.js");
-const PictDataProvider = require("./Pict-DataProvider.js");
-const PictCSS = require("./Pict-CSS.js");
-const PictMeadowEntityProvider = require("./Pict-Meadow-EntityProvider.js");
+const PictTemplateProvider = require('./Pict-Template-Provider.js');
+const PictContentAssignment = require('./Pict-Content-Assignment.js');
+const PictDataProvider = require('./Pict-DataProvider.js');
+const PictCSS = require('./Pict-CSS.js');
+const PictMeadowEntityProvider = require('./Pict-Meadow-EntityProvider.js');
 
 /**
  * Pict management object.
@@ -150,8 +151,11 @@ class Pict extends libFable {
 		this.addServiceType("PictApplication", require("pict-application"));
 
 		// Expose the named views directly, through a convenience accessor
+		/** @type {{ FilterManager: libProviderFilterManager, [key: string]: import('pict-provider') }} */
 		this.providers = this.servicesMap.PictProvider;
 		this.views = this.servicesMap.PictView;
+
+		this.addProvider('FilterManager', {}, libProviderFilterManager);
 	}
 
 	/**

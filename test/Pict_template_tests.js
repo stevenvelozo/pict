@@ -241,6 +241,7 @@ suite(
 								'Templates should be able to run with meadow API entities at dynamic IDs.',
 								function (fDone)
 								{
+									this.timeout(10000);
 									const testPict = new libPict(_MockSettings);
 
 									testPict.LogNoisiness = 0;

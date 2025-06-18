@@ -1,0 +1,447 @@
+
+/**
+ * @typedef {{
+ *   ValueTemplate?: string,
+ *   Value?: string,
+ *   CoreEntity: string,
+ *   Instruction: string,
+ *   Operator: string,
+ *   Fields: string[],
+ * }} FilterConnection
+ *
+ * @typedef {{
+ *   GUID: string,
+ *   Filters: Array<Record<string, any>>,
+ *   JoinConfig?: FilterConnection,
+ * }} PreparedFilter
+ *
+ * @typedef {{
+ *   Entity: string,
+ *   Filter: string,
+ *   ResultDestinationAddress: string,
+ *   Mode?: 'Count' | 'Records',
+ *   RecordOffset?: number,
+ *   PageSize?: number,
+ *   FilterConfiguration: Array<Record<string, any>>,
+ *   PreparedFilters: Array<PreparedFilter>,
+ *   BundleConfig?: Array<Record<string, any>>,
+ * }} FilterState
+ */
+
+class FilterMeadowStanzaTokenGenerator
+{
+	/**
+	 * @param {import('../Pict.js')} pFable
+	 */
+	constructor(pFable)
+	{
+		this.fable = pFable;
+		this.pict = pFable;
+		this.log = pFable.log;
+	}
+
+	/**
+	 * @param {FilterState} pFilterState
+	 */
+	generateMeadowFilterStanzas(pFilterState)
+	{
+		const tmpResult = [];
+		for (const tmpFilterConfig of pFilterState.FilterConfiguration || [])
+		{
+			/** @type {PreparedFilter} */
+			const tmpFilterResult = { GUID: this.pict.getUUID(), Filters: [] };
+			switch (tmpFilterConfig.Type)
+			{
+				case 'ExternalJoinStringSet':
+					/*
+					  "Values": [ "John", "Jane" ],
+					  "ExternalFilterByColumns": [ "Name" ],
+					  "ExactMatch": false,
+
+					  "CoreConnectionColumn": "IDBook",
+
+					  "JoinTable": "BookAuthorJoin",
+					  "JoinTableExternalConnectionColumn": "IDAuthor",
+					  "JoinTableCoreConnectionColumn": "IDBook",
+
+					  "ExternalFilterByTable": "Author",
+					  "ExternalFilterByTableConnectionColumn": "IDAuthor",
+					 */
+					for (const tmpField of tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]))
+					{
+						for (const tmpValue of tmpFilterConfig.Values || [])
+						{
+							const tmpFilter =
+							{
+								Index: -1,
+								Entity: tmpFilterConfig.ExternalFilterByTable,
+								Instruction: 'FBVOR',
+								Field: tmpField,
+							};
+							if (tmpFilterConfig.ExactMatch)
+							{
+								tmpFilter.Operator = 'EQ';
+								tmpFilter.Value = tmpValue;
+							}
+							else
+							{
+								tmpFilter.Operator = 'LK';
+								tmpFilter.Value = `%25${tmpValue}%25`;
+							}
+							tmpFilterResult.Filters.push(tmpFilter);
+						}
+					}
+					tmpFilterResult.Filters.push(
+					{
+						Index: 0,
+						Fulcrum: true,
+						Entity: tmpFilterConfig.JoinTable,
+						Instruction: 'FBL',
+						Field: tmpFilterConfig.JoinTableExternalConnectionColumn,
+						Operator: 'INN',
+						ValueTemplate: `{~PJU:,^${tmpFilterConfig.JoinTableExternalConnectionColumn}^Record.State[Step-1]~}`,
+					});
+					if (tmpFilterResult.Filters.length > 0)
+					{
+						tmpFilterResult.JoinConfig =
+						{
+							CoreEntity: pFilterState.Entity,
+							Instruction: 'FBLOR',
+							Fields: [ tmpFilterConfig.CoreConnectionColumn ],
+							Operator: 'INN',
+							ValueTemplate: `{~PJU:,^${tmpFilterConfig.JoinTableCoreConnectionColumn}^Record.State[Step0]~}`,
+						};
+					}
+					break;
+				case 'DateRange':
+				case 'ValueRange':
+				case 'Range':
+					/*
+					  "Values":
+					  {
+						  "Start": "2023-01-01T00:00:00Z",
+						  "End": "2024-01-01T00:00:00Z"
+					  },
+					  "FilterByColumn": "CreateDate",
+					 */
+					if (tmpFilterConfig.Values && tmpFilterConfig.Values.Start)
+					{
+						tmpFilterResult.Filters.push(
+						{
+							Index: 0,
+							CoreEntity: true,
+							Entity: pFilterState.Entity,
+							Instruction: 'FBVOR',
+							Field: tmpFilterConfig.FilterByColumn,
+							Operator: 'GT',
+							Value: tmpFilterConfig.Values.Start,
+						});
+					}
+					if (tmpFilterConfig.Values && tmpFilterConfig.Values.End)
+					{
+						tmpFilterResult.Filters.push(
+						{
+							Index: 0,
+							CoreEntity: true,
+							Entity: pFilterState.Entity,
+							Instruction: 'FBVOR',
+							Field: tmpFilterConfig.FilterByColumn,
+							Operator: 'LT',
+							Value: tmpFilterConfig.Values.End,
+						});
+					}
+					break;
+				case 'StringMatch':
+				case 'NumericMatch':
+				case 'Match':
+					/*
+					  "Values": [ "John", "Jane" ],
+					  "FilterByColumn": "Name",
+					  "ExactMatch": false,
+					 */
+					for (const tmpField of tmpFilterConfig.FilterByColumns || (tmpFilterConfig.FilterByColumn ? [ tmpFilterConfig.FilterByColumn ] : [ 'Name' ]))
+					{
+						for (const tmpValue of tmpFilterConfig.Values || [])
+						{
+							const tmpFilter =
+							{
+								Index: 0,
+								CoreEntity: true,
+								Entity: pFilterState.Entity,
+								Instruction: 'FBVOR',
+								Field: tmpField,
+							};
+							// don't use like for numbers
+							if (tmpFilterConfig.ExactMatch || (typeof tmpFilterConfig.ExactMatch === 'undefined' && tmpFilterConfig.Type == 'NumericMatch'))
+							{
+								tmpFilter.Operator = 'EQ';
+								tmpFilter.Value = tmpValue;
+							}
+							else
+							{
+								tmpFilter.Operator = 'LK';
+								tmpFilter.Value = `%25${tmpValue}%25`; //FIXME: figure out a cleaner way to do URL encoding for these - probably, should be downstream, but isn't currently
+							}
+							tmpFilterResult.Filters.push(tmpFilter);
+						}
+					}
+					break;
+				case 'InternalJoinRecord':
+					/*
+					  "Values": [ "Bob" ],
+                      "RemoteTable": "User",
+                      "RecordSet": "Book",
+                      "ExternalFilterByColumns": [ "NameFirst", "NameLast" ],
+                      "JoinExternalConnectionColumn": "IDUser",
+                      "JoinInternalConnectionColumn": "CreatingIDUser",
+					 */
+					for (const tmpField of tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]))
+					{
+						for (const tmpValue of tmpFilterConfig.Values || [])
+						{
+							const tmpFilter =
+							{
+								Index: 0,
+								Entity: tmpFilterConfig.RemoteTable,
+								Instruction: 'FBV',
+								Field: tmpField,
+							};
+							if (tmpFilterConfig.ExactMatch)
+							{
+								tmpFilter.Operator = 'EQ';
+								tmpFilter.Value = tmpValue;
+							}
+							else
+							{
+								tmpFilter.Operator = 'LK';
+								tmpFilter.Value = `%25${tmpValue}%25`;
+							}
+							tmpFilterResult.Filters.push(tmpFilter);
+						}
+					}
+					if (tmpFilterResult.Filters.length > 0)
+					{
+						tmpFilterResult.JoinConfig =
+						{
+							Instruction: 'FBLOR',
+							CoreEntity: pFilterState.Entity,
+							Fields: [ tmpFilterConfig.JoinInternalConnectionColumn ],
+							Operator: 'INN',
+							ValueTemplate: `{~PJU:,^${tmpFilterConfig.JoinExternalConnectionColumn}^Record.State[Step0]~}`,
+						};
+					}
+					break;
+			}
+			if (tmpFilterResult.Filters.length > 0)
+			{
+				tmpResult.push(tmpFilterResult);
+			}
+		}
+		pFilterState.PreparedFilters = tmpResult;
+	}
+
+	/**
+	 * @param {FilterState} pFilterState
+	 */
+	linkPreparedFilters(pFilterState)
+	{
+		const tmpGroupedStanzas = [];
+		for (const tmpPreparedFilter of pFilterState.PreparedFilters || [])
+		{
+			if (tmpPreparedFilter.JoinConfig)
+			{
+				const tmpSubGroup = tmpPreparedFilter.Filters;
+				const tmpJoinConfig = tmpPreparedFilter.JoinConfig;
+				for (const tmpField of tmpJoinConfig.Fields || [])
+				{
+					const tmpStanza =
+					{
+						Index: 1,
+						CoreEntity: true,
+						Entity: tmpPreparedFilter.JoinConfig.CoreEntity,
+						Instruction: tmpPreparedFilter.JoinConfig.Instruction || 'FBVOR',
+						Field: tmpField,
+						Operator: tmpJoinConfig.Operator,
+						Value: tmpJoinConfig.Value,
+						ValueTemplate: tmpJoinConfig.ValueTemplate,
+					};
+					tmpSubGroup.push(tmpStanza);
+				}
+				tmpGroupedStanzas.push(tmpSubGroup);
+			}
+			else
+			{
+				tmpGroupedStanzas.push(tmpPreparedFilter.Filters);
+			}
+		}
+		return tmpGroupedStanzas;
+	}
+
+	/**
+	 * Generate a computed index for each filter in the meadow filter stanzas such that the overall address space is non-overlapping and stable.
+	 *
+	 * @param {FilterState} pFilterState
+	 */
+	normalizeMeadowFilterStanzas(pFilterState)
+	{
+		let tmpTotalIndexCount = 0;
+		for (const tmpFilterGroup of pFilterState.PreparedFilters)
+		{
+			const tmpLocalIndices = new Set();
+			tmpFilterGroup.Filters.sort((a, b) => a.Index - b.Index);
+			for (const tmpFilter of tmpFilterGroup.Filters)
+			{
+				if (!tmpFilter.CoreEntity)
+				{
+					tmpLocalIndices.add(tmpFilter.Index);
+				}
+			}
+			tmpTotalIndexCount += tmpLocalIndices.size;
+		}
+
+		let tmpComputedIndex = -tmpTotalIndexCount - 1;
+
+		for (const tmpFilterGroup of pFilterState.PreparedFilters)
+		{
+			let tmpCurrentIndex = null;
+			for (const tmpFilter of tmpFilterGroup.Filters)
+			{
+				if (tmpFilter.Index !== tmpCurrentIndex)
+				{
+					++tmpComputedIndex;
+					tmpCurrentIndex = tmpFilter.Index;
+				}
+				tmpFilter.ComputedIndex = tmpComputedIndex;
+			}
+			for (const tmpFilter of tmpFilterGroup.Filters)
+			{
+				if (tmpFilter.ValueTemplate)
+				{
+					tmpFilter.ValueTemplate = tmpFilter.ValueTemplate.replace(/\[([^\]]+)\]/g, (match) =>
+					{
+						const tmpLocalIndex = match.substring(5, match.length - 1);
+						const tmpGlobalIndex = tmpFilterGroup.Filters.find((f) => f.Index == tmpLocalIndex)?.ComputedIndex;
+						if (!tmpGlobalIndex)
+						{
+							throw new Error(`Filter index ${tmpLocalIndex} not found in group filters.`);
+						}
+						return match.replace(tmpLocalIndex, tmpGlobalIndex);
+					});
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param {FilterState} pFilterState
+	 */
+	compileMeadowFilterStanzas(pFilterState)
+	{
+		const tmpBundleConfig = [];
+		//TODO: mathematically solve the number line
+		// planned synthesized syntax for running on the server
+		// FBV-3_Author~Name~LK~%25Ann%25~FBL-2_BookAuthorJoin~IDAuthor~INN~{~PJU:,^State[Step-3]^IDAuthor~}~FBV-1~User~NameFirst~LK~%25Bob%25~FBVOR-1~User~NameLast~LK~%25Bob%25~FBV~CreateDate~GT~2023-01-01T00:00:00Z~FBV~CreateDate~LT~2024-01-01T00:00:00Z~FBL~IDBook~INN~{~PJU:,^State[Step-2]^IDBook~}
+		tmpBundleConfig.push(
+		{
+			Type: 'SetStateAddress',
+			StateAddress: `Bundle[${pFilterState.Filter}]`,
+		});
+		const tmpGroupedFilters = {};
+		const tmpGroupedFilterKeys = [];
+		const tmpGroupedCoreFilters = [];
+		const tmpGroupedCoreFilterKeys = [];
+		let tmpCoreEntity;
+		const tmpCoreFilterStrings = [];
+		for (const tmpFilterGroup of pFilterState.PreparedFilters)
+		{
+			for (const tmpFilter of tmpFilterGroup.Filters)
+			{
+				if (tmpFilter.CoreEntity)
+				{
+					tmpCoreEntity = tmpFilter.Entity;
+					const tmpFilterGUID = `${tmpFilterGroup.GUID}-${tmpFilter.ComputedIndex}`;
+					if (!tmpGroupedCoreFilterKeys.find((v) => v == tmpFilterGUID))
+					{
+						tmpGroupedCoreFilterKeys.push(tmpFilterGUID);
+					}
+					if (!tmpGroupedCoreFilters[tmpFilterGUID])
+					{
+						tmpGroupedCoreFilters[tmpFilterGUID] = { Stanzas: [], ComputedIndex: tmpFilter.ComputedIndex, Entity: tmpFilter.Entity };
+					}
+					tmpGroupedCoreFilters[tmpFilterGUID].Stanzas.push(this._compileSimpleFilterToString(tmpFilter));
+				}
+				else
+				{
+					const tmpFilterGroupGUID = `${tmpFilterGroup.GUID}-${tmpFilter.ComputedIndex}`;
+					if (!tmpGroupedFilterKeys.find((v) => v == tmpFilterGroupGUID))
+					{
+						tmpGroupedFilterKeys.push(tmpFilterGroupGUID);
+					}
+					if (!tmpGroupedFilters[tmpFilterGroupGUID])
+					{
+						tmpGroupedFilters[tmpFilterGroupGUID] = { Stanzas: [], ComputedIndex: tmpFilter.ComputedIndex, Entity: tmpFilter.Entity };
+					}
+					tmpGroupedFilters[tmpFilterGroupGUID].Stanzas.push(this._compileSimpleFilterToString(tmpFilter));
+				}
+			}
+			for (const tmpFilterGroupKey of tmpGroupedFilterKeys)
+			{
+				tmpGroupedFilters[tmpFilterGroupKey].Stanzas = tmpGroupedFilters[tmpFilterGroupKey].Stanzas.filter((f) => f.length > 0);
+				if (tmpGroupedFilters[tmpFilterGroupKey].Stanzas.length > 0)
+				{
+					tmpBundleConfig.push(
+						{
+							Type: 'MeadowEntity',
+							AllRecords: true,
+							Entity: tmpGroupedFilters[tmpFilterGroupKey].Entity,
+							Filter: tmpGroupedFilters[tmpFilterGroupKey].Stanzas.join('~'),
+							Destination: `State[Step${tmpGroupedFilters[tmpFilterGroupKey].ComputedIndex}]`,
+						});
+				}
+			}
+		}
+		for (const tmpCoreFilterKey of tmpGroupedCoreFilterKeys)
+		{
+			tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas = tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas.filter((f) => f.length > 0);
+			if (tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas.length > 0)
+			{
+				tmpCoreFilterStrings.push([ 'FOP~0~(~0', ...tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas, 'FCP~0~)~0'].join('~'));
+			}
+		}
+		tmpBundleConfig.push(
+		{
+			Type: pFilterState.Mode === 'Count' ? 'MeadowEntityCount' : 'MeadowEntity',
+			Entity: tmpCoreEntity,
+			Filter: tmpCoreFilterStrings.join('~'),
+			AllRecords: typeof pFilterState.PageSize === 'undefined',
+			RecordStartCursor: pFilterState.RecordOffset,
+			PageSize: pFilterState.PageSize,
+			Destination: pFilterState.ResultDestinationAddress,
+		});
+		pFilterState.BundleConfig = tmpBundleConfig;
+	}
+
+	_compileSimpleFilterToString(pFilter)
+	{
+		let tmpFilterString = `${pFilter.Instruction}`;
+		if (pFilter.Field)
+		{
+			tmpFilterString += `~${pFilter.Field}`;
+		}
+		if (pFilter.Operator)
+		{
+			tmpFilterString += `~${pFilter.Operator}`;
+		}
+		if (pFilter.ValueTemplate)
+		{
+			tmpFilterString += `~${pFilter.ValueTemplate}`;
+		}
+		else
+		{
+			tmpFilterString += `~${pFilter.Value || ''}`;
+		}
+		return tmpFilterString;
+	}
+}
+
+module.exports = FilterMeadowStanzaTokenGenerator;

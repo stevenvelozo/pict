@@ -90,16 +90,19 @@ suite(
 								{
 									"Entity": "Author",
 									"Filter": "FBL~IDAuthor~LT~10",
+									"AllRecords": true,
 									"Destination": "State.Authors"
 								},
 								{
 									"Entity": "BookAuthorJoin",
 									"Filter": "FBL~IDAuthor~INN~{~PJU:,^IDAuthor^Record.State.Authors~}",
+									"AllRecords": true,
 									"Destination": "State.BookAuthorJoins"
 								},
 								{
 									"Entity": "Book",
 									"Filter": "FBL~IDBook~INN~{~PJU:,^IDBook^Record.State.BookAuthorJoins~}",
+									"AllRecords": true,
 									"Destination": "State.Books"
 								},
 								{
@@ -116,11 +119,13 @@ suite(
 								{
 									"Entity": "BookAuthorJoin",
 									"Filter": "FBL~IDBook~INN~{~PJU:,^IDBook^Record.State.Books~}",
+									"AllRecords": true,
 									"Destination": "State.BookAuthorJoinsRev"
 								},
 								{
 									"Entity": "Author",
 									"Filter": "FBL~IDAuthor~INN~{~PJU:,^IDAuthor^Record.State.BookAuthorJoinsRev~}",
+									"AllRecords": true,
 									"Destination": "State.AuthorsRev"
 								},
 								{
@@ -232,6 +237,7 @@ suite(
 							//"InputRecordsetAddress": "AppData.Comics[]<<~?Genre,==,Sci-Fi?~>>",
 							"InputRecordsetAddress": "AppData.Comics[]<<~?InStock,TRUE,?~>>",
 							"OutputRecordsetAddress": "AppData.SciFiBooks",
+							"AllRecords": true,
 							"OutputRecordsetAddressMapping":
 							{
 								"InputRecord.Genres[],AnyContains,Action": "AppData.ActionBooks"

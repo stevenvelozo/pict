@@ -76,7 +76,9 @@ suite(
 
 						let tmpEnvironment = new libPict.EnvironmentLog(testPict, {});
 
-                        let tmpProvider = testPict.addProviderSingleton('MockPictProvider', {}, MockPictProvider);
+						Expect(Object.keys(testPict.providers).length).to.equal(1); // default provider
+
+						let tmpProvider = testPict.addProviderSingleton('MockPictProvider', {}, MockPictProvider);
 
 						Expect(tmpProvider).to.be.an('object');
 
@@ -84,7 +86,7 @@ suite(
 
 						Expect(tmpProvider2.Hash).to.equal(tmpProvider.Hash);
 
-						Expect(Object.keys(testPict.providers).length).to.equal(1);
+						Expect(Object.keys(testPict.providers).length).to.equal(2);
 
 						return fDone();
 					}
