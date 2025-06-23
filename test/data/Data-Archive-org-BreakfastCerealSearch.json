@@ -1,0 +1,5079 @@
+[
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "Breakfas1939",
+			"title": "Breakfast Pals",
+			"description": "Snap, Crackle and Pop take on Soggy, Mushy and Toughy.",
+			"subject": [
+				"Advertising: Screen ads",
+				"Animation: Advertising",
+				"Agriculture: Food industry: Cereals"
+			],
+			"creator": [
+				"Cartoon Films, Limited"
+			],
+			"collection": [
+				"prelinger"
+			],
+			"date": "1939-01-01T00:00:00Z",
+			"year": 1939,
+			"type": "MovingImage",
+			"mediatype": "movies",
+			"licenseurl": "http://creativecommons.org/licenses/publicdomain/",
+			"num_favorites": 189,
+			"num_reviews": 12,
+			"item_size": 110160718,
+			"files_count": 38,
+			"downloads": 196133,
+			"week": 89,
+			"month": 455,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 4,
+			"addeddate": "2002-07-16T00:00:00Z",
+			"reviewdate": "2024-10-05T12:35:48Z",
+			"publicdate": "2002-07-16T00:00:00Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "vts-02-1_202210",
+			"title": "CBS Saturday Morning Cartoons (April 14, 1984)",
+			"description": "As promised last Sunday when I just dropped the ball on my newest stuff!! What's in this package? Make a wish, blow out your candles download and get ready for a Saturday morning party of surprises! Instead of blowing ALL of your money on bets/fantasy, how about helping our fellow human and furry friends down in Florida or anywhere Ian destroyed (yea, I know they are crazy down there but at least help the innocent furry friends bot get eaten by alligators which you just know has already happened. It will come back to you at least double! You can't expect it, it will just happen! https://www.humanesociety.org/ THANK YOU AND ENJOY THESE MANY HOURS OF SATURDAY MORNING MEMORIES! SO GO GRAB THAT BOWL OF YOUR KIDS CEREAL (or at least that toast and WAY too much jelly! Enjoy! ~CW~",
+			"subject": [
+				"70s",
+				"80s",
+				"90s",
+				"saturday morning",
+				"woc"
+			],
+			"collection": [
+				"vhskids",
+				"vhsvault"
+			],
+			"date": "1984-04-14T00:00:00Z",
+			"year": 1984,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 70,
+			"num_reviews": 5,
+			"item_size": 5010572778,
+			"files_count": 151,
+			"downloads": 3477,
+			"week": 36,
+			"month": 116,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 5,
+			"addeddate": "2022-10-01T15:43:07Z",
+			"reviewdate": "2025-02-25T19:26:40Z",
+			"publicdate": "2022-10-01T15:43:07Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "Cheerios1960",
+			"title": "Cheerios/V-8",
+			"description": "Cereal commercial targeted at children of the space age.",
+			"subject": [
+				"Space: Culture",
+				"Advertising: Television commercials",
+				"Agriculture: Food industry: Cereals"
+			],
+			"creator": [
+				"Filmways (?)"
+			],
+			"collection": [
+				"prelinger"
+			],
+			"date": "1960-01-01T00:00:00Z",
+			"year": 1960,
+			"type": "MovingImage",
+			"mediatype": "movies",
+			"licenseurl": "http://creativecommons.org/licenses/publicdomain/",
+			"num_favorites": 93,
+			"num_reviews": 18,
+			"item_size": 76978252,
+			"files_count": 34,
+			"downloads": 116715,
+			"week": 35,
+			"month": 119,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 3,
+			"addeddate": "2002-07-16T00:00:00Z",
+			"reviewdate": "2011-12-25T07:32:50Z",
+			"publicdate": "2002-07-16T00:00:00Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "kvwb-ch-21-kids-wb-commercials-2001",
+			"title": "KVWB Channel 21 - Kids' WB! Commercials from Early 2001",
+			"description": "A treat for you all! Commercials from February 2001 from Kids' WB! Enjoy. The original VHS tape died. It flaked away after I did the transfer, hence the low-res. Please consider joining the Patreon so I can preserved the thousands of VHS and Betamax tapes I have of off-air recordings, to save history. Thanks. It's true that these commercials have been stolen by idiots on YouTurd. This is the original file made from the original tape years ago.\u00a0",
+			"subject": [
+				"Kids' WB!",
+				"Kids WB!",
+				"KidsWB",
+				"Cartoon Network",
+				"The WB",
+				"The CW",
+				"TheCW4Kids",
+				"Commercial Bumpers",
+				"Weekday Morning Cartoons",
+				"Weekday Afternoon Cartoons",
+				"Valentine's Day",
+				"Lucky Charms",
+				"Crystal Ball",
+				"Me Lucky Charms",
+				"Statue of Liberty",
+				"Old West",
+				"Saloon",
+				"Pikachu",
+				"Misty",
+				"Ash Ketchum",
+				"Saturday Morning Cartoons",
+				"Pokemon",
+				"Pokemon Indigo League",
+				"Mouth",
+				"Sabrina the Teenage Witch",
+				"Melissa Joan Hart",
+				"Salem the Cat",
+				"Talking Cat",
+				"Syndicated Programming",
+				"Harlem Globetrotters",
+				"Info Zone",
+				"Sunday Morning Cartoons",
+				"Sweet Brown Sugar",
+				"Thomas & Mack Center",
+				"Pokemon Stadium",
+				"Pop Tarts",
+				"Boy Band",
+				"Skateboarding",
+				"Human Bowling",
+				"Go Kart Racing",
+				"Broadcast Translators",
+				"Pahrumper",
+				"Millennial Children Cartoons",
+				"Overton",
+				"Tecopa",
+				"Shoshone",
+				"St. George",
+				"End Credits",
+				"Cardcaptors Sakura",
+				"Fraturday",
+				"Detention!",
+				"Warner Bros. Animation",
+				"Anvil",
+				"Cartoons",
+				"Helicopter",
+				"Warner Bros. Watertower",
+				"Warner Bros. Studio",
+				"Soccer Ball",
+				"Graffiti",
+				"Green Ketchup",
+				"Paper Mario",
+				"Princess Peach",
+				"Super Mario",
+				"Nintendo 64",
+				"Histeria!",
+				"Nintendo",
+				"N64",
+				"Bowser Koopa",
+				"Lady and the Tramp II",
+				"Scamp",
+				"Walt Disney Animation",
+				"Disney",
+				"Cheapquel",
+				"DVD",
+				"V5 Rocket",
+				"Tyrone L. Warbasse",
+				"Apollo Rocket",
+				"Mountain Bike",
+				"Teen Girls",
+				"Teen Boys",
+				"Dancing Mailman",
+				"Willy Wonka",
+				"Wonka Candy",
+				"Laffy Taffy",
+				"Oompa Loompa",
+				"wonka.com",
+				"coffee4binky",
+				"Wonka's Factory",
+				"Bad Joke",
+				"Bad Pun",
+				"2001",
+				"Goat",
+				"Agent J",
+				"Agent K",
+				"Terry McGuinness",
+				"Will Friedle",
+				"School Hallway",
+				"Grumpy Bear Plays",
+				"Gum on Floor",
+				"Village Roadshow Pictures",
+				"Silly Mailman",
+				"USPS",
+				"Postal Service",
+				"Children Movie",
+				"Kids Movie",
+				"Family Movie",
+				"Honey Comb",
+				"Honey Comb Monster",
+				"Annoyed Comic Book Grumpy",
+				"Crime Prevention",
+				"Golden Crisp",
+				"Sugar Bear",
+				"Toddler Video Games",
+				"Computer Games",
+				"Learning Software",
+				"Early Childhood",
+				"Adiboo",
+				"Bus",
+				"Static Shock",
+				"Lazerverse",
+				"Chips Ahoy!",
+				"Cookies",
+				"Ritz Crackers",
+				"Super Stuffed Saturday",
+				"Moesha",
+				"Brandy",
+				"African-American TV Show",
+				"Teen Sitcom",
+				"UNLV",
+				"Iguana",
+				"Phillip I. Barnes",
+				"Fruit Gushers",
+				"Jelly Beans",
+				"Movie Studio",
+				"Professor Oak",
+				"Ash's Mom",
+				"Team Rocket",
+				"Tight Clothing",
+				"Secret Agent",
+				"Peter Piper's Pizza",
+				"Pizza",
+				"Christina A. Murphy",
+				"Arcade",
+				"Ticket Arcade",
+				"Pistol Pete's Pizza",
+				"Report Card",
+				"Tokens",
+				"ShowBiz Pizza",
+				"Air Hockey",
+				"Las Vegas",
+				"Nevada",
+				"Lifeguard",
+				"Shelley Wistrom",
+				"The Beach",
+				"Shark",
+				"Cinnamon Toast Crunch",
+				"Dudebro",
+				"Douchebag",
+				"Pool",
+				"Motel",
+				"Hard Rock Hotel",
+				"Las Vegas Strip",
+				"Zeta Project",
+				"Ashley Wistrom",
+				"Paradise Road",
+				"Superheroes",
+				"Sylvester and Tweety",
+				"Looney Tunes",
+				"Beach Ball",
+				"Hysterical Woman",
+				"Airline",
+				"Airplane",
+				"Kids Meals",
+				"Stewardess",
+				"Kitty Chaos",
+				"Wendy's",
+				"Sports Illustrated for Kids",
+				"Sports Illustrated",
+				"Extreme",
+				"Treating Kids Like Imbeciles",
+				"Hamburger",
+				"French Fries",
+				"Virtual World",
+				"Windows 95",
+				"Onion Rings",
+				"Prime Cable",
+				"Rated EC",
+				"Grocery Shopping",
+				"Hanna-Barbara",
+				"Spy",
+				"Dinosaurs",
+				"Hot Moms",
+				"Jade",
+				"Jackie Chan's Niece",
+				"Sweepstakes",
+				"Loud Kiddington",
+				"Cox Cable",
+				"Speakers",
+				"Concert",
+				"Chuck E. Cheese",
+				"L'oreal Kids",
+				"Shampoo",
+				"Froot Loops",
+				"Moon",
+				"Toucan Sam",
+				"Follow Your Nose It Always Knows",
+				"British Bird",
+				"KLRL Channel 21",
+				"Anime",
+				"Japanimation",
+				"4 Kids Entertainment",
+				"Mortal Kombat",
+				"Jeri Ryan",
+				"7 of 9",
+				"Star Trek Voyager",
+				"Star Trek",
+				"Paramount Pictures",
+				"Circus Circus",
+				"KUPN Channel 21",
+				"The Adventuredome",
+				"Bored Kids",
+				"Gogurt",
+				"Yogurt",
+				"Sphinx",
+				"Pyramids of Giza",
+				"Raspberry",
+				"Bronx Cheer",
+				"Swinging on Vines",
+				"Jungle",
+				"KVWB Channel 21",
+				"Dawson's Creek",
+				"Katie Holmes",
+				"Jack & Jill",
+				"Fruit Roll-Ups",
+				"Corporation",
+				"Lab",
+				"Tattoos",
+				"Globe",
+				"Easter Island",
+				"Tony Hawk",
+				"KVMY Channel 21",
+				"Max Steel",
+				"The Johto Journeys",
+				"Historical Landmarks",
+				"X Team",
+				"Kids Meal Toys",
+				"Happy Meal",
+				"Burger Kids Club",
+				"Big Huge Dog",
+				"Pet Store",
+				"Trashing a Store",
+				"KHSV Channel 21",
+				"Jenny McCarthy",
+				"Lawn Jockey",
+				"Garage Door",
+				"Muscle Car",
+				"Painted Flames on Cars",
+				"Robo-Chi Pets",
+				"Kit Kat",
+				"Gimme a Break",
+				"Americana",
+				"Americans",
+				"Sinclair Broadcasting Group",
+				"Montage",
+				"Burger King",
+				"Uncle",
+				"Chow Down with Chan",
+				"Shower",
+				"Dannon",
+				"Talking Animals",
+				"Danimals",
+				"Dumb Dad",
+				"Pre-History",
+				"Retro Commercials",
+				"Prehistoric",
+				"VHS Tape Glitch",
+				"Tokyo Tower",
+				"Tokyo",
+				"Japan",
+				"Promo",
+				"My Sharona",
+				"Excalibur",
+				"Hotel Casino",
+				"Resort",
+				"Old Commercials",
+				"Gaming",
+				"Gambling",
+				"Arab Man",
+				"Yoplait",
+				"Sheriff",
+				"Shapeshifting",
+				"Morph",
+				"Cyborg",
+				"Robot",
+				"Sci-Fi",
+				"Vintage Commercials",
+				"Science Fiction",
+				"3rd Rock from the Sun",
+				"French Steward",
+				"Joseph Gordon-Leavitt",
+				"John Lithgow",
+				"Jane Curtain",
+				"The Mirage",
+				"MGM Mirage",
+				"Sports Mascot",
+				"Denny's",
+				"Pre-Trump America",
+				"Reebok",
+				"Inventors",
+				"Computer Animation",
+				"CGI",
+				"Jessie & James",
+				"Pit Stop",
+				"Pit Crew",
+				"McDonald's",
+				"Ronald McDonald",
+				"Clown",
+				"Nostalgia",
+				"Scary Clown",
+				"Goofy",
+				"Donald",
+				"Mickey Mouse",
+				"House of Mouse",
+				"Pluto",
+				"Daisy Duck",
+				"Minnie Mouse",
+				"Nephews",
+				"Space Rocket",
+				"Pre-9/11 America",
+				"Space",
+				"Outer Space",
+				"Heinz EZ Squirt",
+				"Dot Com Era",
+				"Dot Com Bubble",
+				"First World Problems",
+				"Desert Island",
+				"Raft",
+				"Surfing",
+				"Sand Castle",
+				"Razor Scooter",
+				"Aliens",
+				"UFOs",
+				"Manhattan",
+				"Extra-Terrestrials",
+				"The Future",
+				"Mt. Rushmore",
+				"Crashing",
+				"Jack Russell Terrier",
+				"Annoying Kid",
+				"Shock Collar",
+				"Children Toys",
+				"Good Grades Rewarded",
+				"Wind Surfing",
+				"Waterspout",
+				"Capri Sun",
+				"Fruit Punch",
+				"Digimon",
+				"Digimon Toys",
+				"Digital Monsters",
+				"Bandai",
+				"Digivolving",
+				"Children Cereal",
+				"Flying Pokemon",
+				"Part of a Complete Breakfast",
+				"Station ID",
+				"Juicy Fruit",
+				"Wringly's Gum",
+				"Michael Clarke Duncan",
+				"Paul Sorvino",
+				"David Arquette",
+				"See Spot Run",
+				"Hooch from Turner & Hooch",
+				"Lawnmower",
+				"Suburban Dad",
+				"Heinz Easy Squirt Ketchup",
+				"Catsup",
+				"AOL",
+				"AOL 6.0",
+				"You've Got Mail",
+				"VHS Transfer",
+				"Chat Room",
+				"AIM",
+				"AOL Instant Messenger",
+				"Fruity Pebbles",
+				"James Bond 007",
+				"Flintstones",
+				"Wilma Flintstone",
+				"Pebbles Flintstone",
+				"Fred Flintstone",
+				"Barney Rubble",
+				"Jackie Chan",
+				"Men in Black Worms",
+				"Men in Black",
+				"Jackie Chan Adventures",
+				"Big Fat Baby",
+				"Father Time",
+				"Popcorn Machine",
+				"Barbie",
+				"Mattel",
+				"Post Cereal",
+				"Bed Time Baby Rocks Chrissy",
+				"Edward G. Robinson",
+				"1930s Mobsters",
+				"Apple Jacks",
+				"Kellogg's",
+				"Suburban Kids",
+				"Suburban Mom",
+				"Karen",
+				"Bulldog",
+				"Hi-C",
+				"Extreme Kids",
+				"Junior High School Kids",
+				"Middle School Kids",
+				"High School Kids",
+				"Batman Beyond",
+				"DC Comics",
+				"Michigan J. Frog",
+				"The WB Prime Time",
+				"7th Heaven",
+				"Kiss the Bride"
+			],
+			"creator": [
+				"KVWB Channel 21 - Las Vegas"
+			],
+			"collection": [
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "2001-01-01T00:00:00Z",
+			"year": 2001,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"licenseurl": "http://creativecommons.org/publicdomain/mark/1.0/",
+			"num_favorites": 11,
+			"item_size": 2463123929,
+			"files_count": 46,
+			"downloads": 4190,
+			"week": 11,
+			"month": 60,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2020-10-17T17:21:33Z",
+			"publicdate": "2020-10-17T17:21:33Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "0711_General_Screen_Advertising_Shorts_08_48_50_00",
+			"title": "General Screen Advertising Shorts",
+			"description": "SINGING ESSO MEN. SINGER SEWING CENTER MOVIES. CHEVROLET: \"THE TRIP\" (1940). EVEREADY SPOT. BEICH CANDY (WHIZ BARS). STARCH AD. KELLOGG'S RICE KRISPIE KIDS (SNAP, CRACKLE & POP). COFFEE AD. PA-1090 \u00ecGSA Shorts\u00ee 00:00:13:20 - 00:12:11:29 B/W Sound ca. 1936 - 1940 GSA short commercial films. Singing Esso gas station attendants, dish soap, coffee, candy bars, early Kellogg's Rice Crispies animated Snap, Crackle, Pop cereal cartoon commercial. Chevrolet promo, instant starch. Eveready batteries, Singer sewing machines instructional shops. 00:00:13:20 - 00:01:13:02 B/W Sound ca. 1936 - 1940 Esso co. commercial short- \"Extra.\" Customers get extra product for their money from florist (bouquet of posies + carnation), baker (baker's dozen-bonus roll), butcher (bone for dog). VO Male host: \"Everybody likes that little something extra.\" Regional phrases for \"extra\" treatment. New England- \"something to boot.\" Grocer gives lollipop to young Black boy. Attendant in uniform pumps Esso Extra gas at...",
+			"creator": [
+				"Various producers"
+			],
+			"collection": [
+				"prelinger"
+			],
+			"date": "1936-01-01T00:00:00Z",
+			"year": 1936,
+			"mediatype": "movies",
+			"num_favorites": 52,
+			"num_reviews": 2,
+			"item_size": 397052307,
+			"files_count": 43,
+			"downloads": 10190,
+			"week": 10,
+			"month": 63,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 4,
+			"addeddate": "2012-06-19T04:12:48Z",
+			"reviewdate": "2018-12-07T11:08:53Z",
+			"publicdate": "2012-06-19T04:33:05Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1960KelloggsOKsCerealWithYogiBear",
+			"title": "Kellogg's OK's Cereal with Yogi Bear",
+			"description": "Yogi Bear endorses a defunct cereal in this black-and-white 1960 commercial.",
+			"subject": [
+				"classic tv commercial",
+				"cereal",
+				"Yogi Bear",
+				"cartoons",
+				"animated mascot",
+				"animation",
+				"Kellogg's Cereal",
+				"celebrities",
+				"1960",
+				"1960s"
+			],
+			"creator": [
+				"Kellogg's"
+			],
+			"collection": [
+				"vinnierattolle",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1960-01-01T00:00:00Z",
+			"year": 1960,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"licenseurl": "http://creativecommons.org/publicdomain/mark/1.0/",
+			"num_favorites": 23,
+			"num_reviews": 1,
+			"item_size": 21045807,
+			"files_count": 20,
+			"downloads": 3306,
+			"week": 9,
+			"month": 38,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 4,
+			"addeddate": "2014-06-16T05:56:20Z",
+			"reviewdate": "2014-06-16T20:15:27Z",
+			"publicdate": "2014-06-16T05:56:20Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "QuispCerealTelevisionCommercial1966",
+			"title": "Quisp Cereal : Television Commercial : 1966",
+			"description": "Quisp is a sugar-sweetened breakfast cereal from the Quaker Oats Company. It was introduced in 1965 and continued as a mass-market grocery item until the late 1970s. Sometime afterward, the company sold the item sporadcially, and upon the rise of the Internet began selling it primarily online. Quisp was initially marketed with a sister brand, Quake. Its joint-product television commercials were produced by Jay Ward, a major producer of animated television series.",
+			"subject": [
+				"Third Eye Cinema",
+				"classic television commercials",
+				"1960's pop culture",
+				"saturday morning cartoons",
+				"cartoon",
+				"animated",
+				"Jay Ward"
+			],
+			"creator": [
+				"Jay Ward"
+			],
+			"collection": [
+				"classic_tv_commercials",
+				"television"
+			],
+			"mediatype": "movies",
+			"licenseurl": "http://creativecommons.org/publicdomain/mark/1.0/",
+			"num_favorites": 22,
+			"num_reviews": 2,
+			"item_size": 42233515,
+			"files_count": 23,
+			"downloads": 9053,
+			"week": 8,
+			"month": 20,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 4,
+			"addeddate": "2011-01-29T17:54:19Z",
+			"reviewdate": "2012-06-21T00:21:41Z",
+			"publicdate": "2011-01-29T17:56:36Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "youtube-FGdWZpC5byY",
+			"title": "ABC Afterschool Special - \"My Mom's Having a Baby\" (Complete Broadcast, 2/16/1977) \ud83d\udc76 \ud83d\udcfa",
+			"description": "Here's yet another awesome original airing (and one of the most famous of all) of the ABC Afterschool Specials - \"My Mom's Having a Baby\" as aired on KTXS Channel 12, the ABC affiliate out of Sweetwater-Abilene, Texas. In this story - produced by DePatie-Freleng (of \"Pink Panther\" fame) - a 10-year-old boy, Petey (Shane Sinutko), wonders how babies are born as his mother (Candace Farrell) is pregnant with his soon to be baby brother, as related through animated fantasies and flashbacks; with friends Oskar (Jarrod Johnson) and Kelly (Rachel Longaker) accompanying him, he visits the office of Lendon Smith, M.D. (as himself) who uses animation to show how babies are really born. This was notable for showing a live birth (taped some three years in advance of this film; that footage was originally shown as part of a 1974 special, Of Birth and Babies, which is why Ms. Farrell may look younger in parts). Most of this cast, save for Ms. Farrell, would later appear in the follow-up / sequel,...",
+			"subject": [
+				"Youtube",
+				"video",
+				"Entertainment",
+				"local",
+				"chicago",
+				"tv",
+				"museum",
+				"television",
+				"broadcast",
+				"history",
+				"historical",
+				"fuzzy",
+				"memories",
+				"fuzzymemories",
+				"fuzzymemories.tv",
+				"classic",
+				"vintage",
+				"retro",
+				"old",
+				"telecast",
+				"woc",
+				"original commercials",
+				"commercials",
+				"abc",
+				"abc network",
+				"network",
+				"after school"
+			],
+			"creator": [
+				"The Museum of Classic Chicago Television (www.FuzzyMemories.TV)"
+			],
+			"collection": [
+				"mirrortube",
+				"additional_collections"
+			],
+			"date": "2023-08-28T00:00:00Z",
+			"year": 2023,
+			"mediatype": "movies",
+			"num_favorites": 8,
+			"item_size": 1129834278,
+			"files_count": 65,
+			"downloads": 474,
+			"week": 7,
+			"month": 26,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2023-09-07T00:25:33Z",
+			"publicdate": "2023-09-07T00:25:33Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2wjsj6GbGbyMcrvUNkrkHofgbvL1iC",
+			"title": "1970s TV COMMERCIAL COMPILATION FOLGER'S COFFEE FOSTER FARMS HERTZ RENT-A-CAR GILLETTE XD8072",
+			"description": "Here is a large compilation of 1970s TV commercials, including many consumer products such as C and H Cane Sugar, Folger's Coffee, Foster Farms Chicken, Nature Valley Granola, and more. There are also a few movie trailers in the group including for Butch Cassidy and the Sunshine Kid, The Three and Four Musketeers, The Sunshine Boys, and The First Nudie Musical. Cafe Mocha Hills Bros - Instant coffee - 00:006 Old fashioned Foremost Heavy Whipping Cream - 00:38 One A Day - Multiple Vitamins plus iron vitamins - 00:52 Candle light - dessert 00:17 Betty Crocker - Snackin' Cakes 01:26 Heinz- BBQ Sauce - 01:58 Maytag - Built in dishwasher - 02:21 Hormel Chili - 02:50 Cheerios - Cereal - 03:22 Listerine - Antiseptic mouthwash - 03:49 Morning star - Breakfast strips (bacon) - 04:193 3 Musketeers and 4 Musketeers - Movie Trailer with Oliver Reed- 04:50 The Sunshine Boys - Movie - 05:20 Mrs Filberts - Margarine 05:50 Foster Farms - Chicken - 06:02 C and H Cane Sugar - 06:32 Hertz Rent a car -...",
+			"subject": [
+				"Mocha Hills Bros",
+				"Cane Sugar",
+				"Foster Farms Chicken",
+				"Nature Valley Granola",
+				"Butch Cassidy",
+				"Sunshine Kid",
+				"The Three",
+				"Four Musketeers",
+				"The Sunshine Boys",
+				"The First Nudie Musical",
+				"Stock Footage",
+				"Periscope Film"
+			],
+			"collection": [
+				"PeriscopeFilm",
+				"ephemera"
+			],
+			"mediatype": "movies",
+			"num_favorites": 3,
+			"item_size": 395765169,
+			"files_count": 38,
+			"downloads": 279,
+			"week": 6,
+			"month": 23,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2024-02-29T21:20:00Z",
+			"publicdate": "2024-02-29T21:20:00Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "CommercialsFrom1959EpisodeOfdennisTheMenace",
+			"title": "Commercials from 1959 episode of ''Dennis the Menace''",
+			"description": "U.S. commercials that aired during the episode \"Tenting Tonight\" of \"Dennis the Menace\". Yes, there's even a \"cast commercial\". Products promoted are: Kellogg's Variety Pack, Kellogg's Frosted Flakes, Kellogg's Rice Krispies. Needless to say the show was sponsored by Kellogg's.",
+			"subject": [
+				"1950s",
+				"50s",
+				"Fifties",
+				"Classic TV",
+				"Television",
+				"Classic Television",
+				"Kellogg's",
+				"Frosted Flakes",
+				"Rice Krispies",
+				"Kelloggs",
+				"Food",
+				"Edible",
+				"Old",
+				"Retro",
+				"Tony the Tiger"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"date": "1959-01-01T00:00:00Z",
+			"year": 1959,
+			"mediatype": "movies",
+			"num_favorites": 15,
+			"num_reviews": 1,
+			"item_size": 75162246,
+			"files_count": 50,
+			"downloads": 3398,
+			"week": 6,
+			"month": 22,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 5,
+			"addeddate": "2012-02-01T07:13:57Z",
+			"reviewdate": "2012-02-01T09:15:54Z",
+			"publicdate": "2012-02-01T07:17:04Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "uncommon-ephemera-vhs-commercials-v1034",
+			"title": "Commercials recovered from VHS tape V1034 from early October 1988",
+			"description": "Presented here are all the commercials on tape V1034. The programming in between, all movies that are otherwise available, have been removed. Some of the commercials are local spots. This tape was recorded off channels in the Binghamton, NY area. TABLE OF CONTENTS 00:10 Dick's Clothing and Sporting Goods 40th Anniversary Sale (Partial) 00:18 WICZ \"NewsTeam 40\" ID 00:21 \"NBC Monday Night at the Movies\" open tease for film \"The People Across the Lake\" 00:51 Dodge \"The New Spirit of Dodge\" jingle 01:21 Sheer Elegance Silken Mist \"Evening wear for your legs\" 01:51 Kraft Singles 02:21 Drixoral cold relief 02:36 Mrs. Dash 02:52 \"Punch Line\" movie 03:22 Gaines Cycle dog foods 03:53 Alka-Seltzer Extra Strength 04:07 Flintstones Vitamins, \"Flintstones Kids\" jingle 04:22 Clusters breakfast cereal 04:37 Subaru \"Up to $1,000 Cash Back\" 04:54 \"NBC Monday Night at the Movies\" bumper 05:02 Unsolved Mysteries (Premiere) 05:23 Dick's Clothing and Sporting Goods 40th Anniversary Sale 05:53 WICZ...",
+			"collection": [
+				"additional_collections",
+				"uncommon-ephemera-vhs"
+			],
+			"mediatype": "movies",
+			"num_favorites": 11,
+			"item_size": 50488406376,
+			"files_count": 75,
+			"downloads": 469,
+			"week": 6,
+			"month": 15,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2023-05-23T16:42:15Z",
+			"publicdate": "2023-05-23T16:42:15Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1964CapnCrunchBreakfastOnTheGuppy",
+			"title": "Cap'n Crunch \"Breakfast On The Guppy\" (First Commercial)",
+			"description": "The very first commercial for Cap'n Crunch cereal.",
+			"subject": [
+				"Classic TV Commercial",
+				"Cap'n Crunch",
+				"Captain Crunch",
+				"Daws Butler",
+				"Jay Ward",
+				"Bill Scott",
+				"1964",
+				"1960s",
+				"60s",
+				"animation",
+				"cartoon"
+			],
+			"creator": [
+				"Quaker Oats"
+			],
+			"collection": [
+				"vinnierattolle",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1964-01-01T00:00:00Z",
+			"year": 1964,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"licenseurl": "http://creativecommons.org/publicdomain/mark/1.0/",
+			"num_favorites": 13,
+			"item_size": 45423002,
+			"files_count": 22,
+			"downloads": 2219,
+			"week": 4,
+			"month": 8,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2014-06-13T20:23:41Z",
+			"publicdate": "2014-06-13T20:23:41Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1996-commercial-for-uncle-tobys-honeycomb-weeties",
+			"title": "1996 commercial for Uncle Tobys Honeycomb Weeties",
+			"description": "An Australian commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"1990s",
+				"Advertising",
+				"Advertisement",
+				"Food"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1996-01-01T00:00:00Z",
+			"year": 1996,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 43561330,
+			"files_count": 13,
+			"downloads": 185,
+			"week": 3,
+			"month": 3,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2021-01-18T04:02:54Z",
+			"publicdate": "2021-01-18T04:02:54Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "Sugar_Crisps_Ad1",
+			"title": "Classic Commercial for Post's Sugar Crisps",
+			"description": "A Classic 1950's Commercial for Post's Sugar Crisps. Cheap, but cute. DISCLAIMER: This video does not represent the quality of major Hollywood cartoons of the time. Nor does it represent the quality of major Tele-cartoons of the time (\"Clutch Cargo\" didn't air until several years after this commercial, so it doesn't count. Then again, \"Clutch Cargo\" was already crap by the standards of it's time). Heck, it stinks by the standards of most advertising cartoons of the time. Despite this, it's quite enjoyable.",
+			"subject": [
+				"Classic TV",
+				"Television",
+				"50s",
+				"50's",
+				"1950s",
+				"1950's",
+				"Fifties",
+				"Vintage",
+				"Classic Commercial",
+				"Classic Commercials",
+				"Advertising",
+				"Cereal",
+				"Retro",
+				"Old"
+			],
+			"collection": [
+				"classic_tv_commercials",
+				"classic_tv",
+				"television"
+			],
+			"mediatype": "movies",
+			"licenseurl": "http://creativecommons.org/licenses/publicdomain/",
+			"num_favorites": 9,
+			"num_reviews": 3,
+			"item_size": 21921228,
+			"files_count": 30,
+			"downloads": 59122,
+			"week": 3,
+			"month": 8,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 4,
+			"addeddate": "2009-01-25T14:11:31Z",
+			"reviewdate": "2009-01-31T18:06:21Z",
+			"publicdate": "2009-01-25T14:26:09Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "honey1967",
+			"title": "1967 commercial for Honey-Comb cereal",
+			"description": "A 1967(?) U.S. commercial for Post Honey-Comb cereal.",
+			"subject": [
+				"Classic TV Commercial",
+				"Cereal",
+				"Breakfast",
+				"1967",
+				"Advertising"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1967-01-01T00:00:00Z",
+			"year": 1967,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 16,
+			"item_size": 25098544,
+			"files_count": 16,
+			"downloads": 2485,
+			"week": 3,
+			"month": 17,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2014-08-06T03:32:02Z",
+			"publicdate": "2014-08-06T03:32:02Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "yt-5s.com-90s-commercials-1997-480p_202210",
+			"title": "USA Network June 1997 Commercial Collection",
+			"description": "A collection of commercials that originally aired on USA Network (presumably) sometime in June 1997, during an episode of Sailor Moon that aired during the USA Action Extreme Team block. Originally recorded by Youtube user N Sands. The commercials are: - We'll be right back after these messages - \"The Swan Princess: Escape from Castle Mountain\" TV spot - Trix Wildberry Blues: \"Racing\"/\"Breakfast Babies beanbag toys\" - \"The Swan Princess: Escape from Castle Mountain\" TV spot (again) - SafeFit - Super Mario Bros All-Stars in USA Action Extreme Team promo - Now back to the show",
+			"subject": [
+				"1997",
+				"June",
+				"June 1997",
+				"Commercials",
+				"USA Network",
+				"USA Action Extreme Team",
+				"Sailor Moon",
+				"The Swan Princess",
+				"The Swan Princess: Escape from Castle Mountain",
+				"Trix",
+				"Cereal",
+				"Trix Cereal",
+				"Beanie Babies",
+				"Cheerios",
+				"Honey Nut Cheerios",
+				"Kix",
+				"Lucky Charms",
+				"Count Chocula",
+				"Cocoa Puffs",
+				"SafeFit",
+				"Mario",
+				"Super Mario Bros",
+				"The Super Mario Bros Super Show",
+				"Super Mario Bros 3",
+				"The Adventures of Super Mario Bros 3",
+				"Super Mario World"
+			],
+			"creator": [
+				"N Sands"
+			],
+			"collection": [
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1997-07-01T00:00:00Z",
+			"year": 1997,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 3,
+			"item_size": 40776630,
+			"files_count": 11,
+			"downloads": 503,
+			"week": 3,
+			"month": 21,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-10-27T14:37:58Z",
+			"publicdate": "2022-10-27T14:37:58Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1953-commercial-for-kelloggs-rice-krispies-3",
+			"title": "1953 commercial for Kellogg's Rice Krispies (3)",
+			"description": "An American commercial. I also uploaded the episode is comes from, but I forget which episode.\u00a0",
+			"subject": [
+				"Classic TV Commercial",
+				"1950s",
+				"Advertising",
+				"Advertisement",
+				"Food",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1953-01-01T00:00:00Z",
+			"year": 1953,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 46623941,
+			"files_count": 24,
+			"downloads": 149,
+			"week": 2,
+			"month": 4,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-09-30T21:09:49Z",
+			"publicdate": "2022-09-30T21:09:49Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1954CommercialForPepCereal",
+			"title": "1954 commercial for Pep cereal",
+			"description": "1954 U.S. commercial for Pep Cereal, a product of Kellogg's which is no longer produced. This commercial aired live, and features the cast of \"Super Circus\" (the complete episode can also be download elsewhere on the Internet Archive).",
+			"subject": [
+				"Cereal",
+				"Food",
+				"Edible",
+				"Kellogg's",
+				"Classic TV Commercial",
+				"1950s",
+				"Fifties",
+				"50s",
+				"Live commercial"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1954-01-01T00:00:00Z",
+			"year": 1954,
+			"mediatype": "movies",
+			"num_favorites": 2,
+			"num_reviews": 1,
+			"item_size": 20463007,
+			"files_count": 18,
+			"downloads": 1957,
+			"week": 2,
+			"month": 6,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 3,
+			"addeddate": "2012-02-18T18:56:12Z",
+			"reviewdate": "2018-10-24T23:53:27Z",
+			"publicdate": "2012-02-18T18:57:21Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1954possiblyAlso1953AdForSugarFrostedFlakes",
+			"title": "1954 commercial: Sugar Frosted Flakes",
+			"description": "A\u00a01950s U.S. commercial for Sugar Frosted Flakes, featuring a terrible attempt at an Australian accent (yes, Australians sounded more English in those days, but not quite like that!). This is taken from a 1954 TV episode, but it may have also aired in 1953.",
+			"subject": [
+				"Classic TV Commercial",
+				"1954",
+				"1950s",
+				"Frosted Flakes",
+				"Kellogg's",
+				"Breakfast",
+				"Food",
+				"Edible",
+				"Cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv",
+				"television",
+				"classic_tv_commercials",
+				"television_inbox"
+			],
+			"date": "1954-01-01T00:00:00Z",
+			"year": 1954,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 10,
+			"item_size": 37902356,
+			"files_count": 23,
+			"downloads": 1526,
+			"week": 2,
+			"month": 6,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2015-09-12T19:02:51Z",
+			"publicdate": "2015-09-12T19:02:51Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1967CommercialForlifeCerealquakerOats",
+			"title": "1967 commercial for Life cereal",
+			"description": "A slightly unusual 1967 U.S. commercial for the oddly-named Life cereal. The colour is badly faded, though.",
+			"subject": [
+				"Classic",
+				"Commercial",
+				"60s",
+				"60's",
+				"1960s",
+				"1960's",
+				"Sixties",
+				"Female",
+				"Woman",
+				"TV",
+				"Television",
+				"Classic TV",
+				"Advertising",
+				"Edible",
+				"Food",
+				"Breakfast",
+				"Quaker Oats",
+				"Cereal",
+				"1967",
+				"Rated G"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"date": "1967-01-01T00:00:00Z",
+			"year": 1967,
+			"mediatype": "movies",
+			"num_favorites": 15,
+			"num_reviews": 3,
+			"item_size": 15557991,
+			"files_count": 16,
+			"downloads": 4855,
+			"week": 2,
+			"month": 8,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 4,
+			"addeddate": "2009-12-11T16:43:32Z",
+			"reviewdate": "2009-12-12T20:05:16Z",
+			"publicdate": "2009-12-11T16:45:05Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1994-commercial-for-uncle-tobys-breakfast-cereals",
+			"title": "1994 commercial for Uncle Tobys breakfast cereals",
+			"description": "An Australian commercial.\u00a0",
+			"subject": [
+				"TV Commercial",
+				"Betamax",
+				"1990s",
+				"Advertising",
+				"Advertisement",
+				"Food",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1994-01-01T00:00:00Z",
+			"year": 1994,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 90927826,
+			"files_count": 12,
+			"downloads": 84,
+			"week": 2,
+			"month": 2,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-09-05T05:46:10Z",
+			"publicdate": "2022-09-05T05:46:10Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2004-commercial-for-kelloggs-froot-loops",
+			"title": "2004 commercial for Kellogg's Froot Loops",
+			"description": "A commercial which I taped off the Australian version of Nickelodeon.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"television_inbox",
+				"television"
+			],
+			"date": "2004-01-01T00:00:00Z",
+			"year": 2004,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_reviews": 1,
+			"item_size": 23644137,
+			"files_count": 13,
+			"downloads": 120,
+			"week": 2,
+			"month": 12,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 5,
+			"addeddate": "2024-08-06T00:23:17Z",
+			"reviewdate": "2024-08-06T02:43:28Z",
+			"publicdate": "2024-08-06T00:23:17Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "RiceKrispies1953",
+			"title": "1953 commercial for Rice Krispies (ad 2)",
+			"description": "A 1953 U.S. commercial for Rice Krispies, depicting Snap, Crackle, and Pop as being extraterrestrials from\u00a0Planet K. This was taken from an episode of....I did take it from a 1953 episode, so I list it as a 1953 commercial, though it may have first\u00a0aired earlier.\u00a0Is that OK?",
+			"subject": [
+				"Classic TV Commercial",
+				"1953",
+				"1950s",
+				"Breakfast",
+				"Cereal",
+				"Rice Krispies",
+				"Advertising",
+				"Advertisement"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"date": "1953-01-01T00:00:00Z",
+			"year": 1953,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 5,
+			"item_size": 45193491,
+			"files_count": 25,
+			"downloads": 1108,
+			"week": 2,
+			"month": 7,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2015-11-03T00:57:23Z",
+			"publicdate": "2015-11-03T00:57:23Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "RiceKrispies1953likelyProduced1952",
+			"title": "1953 commercial for Rice Krispies",
+			"description": "A\u00a0classic U.S. commercial for Rice Krispies. I took this from a 1953 TV episode, but it likely also aired in 1952. I also uploaded the episode it comes from.",
+			"subject": [
+				"Classic TV Commercial",
+				"Advertising",
+				"Advertisement",
+				"Rice Krispies",
+				"1950s",
+				"Breakfast",
+				"Cereal",
+				"1953"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"date": "1953-01-01T00:00:00Z",
+			"year": 1953,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 6,
+			"item_size": 39601237,
+			"files_count": 23,
+			"downloads": 1447,
+			"week": 2,
+			"month": 4,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2014-12-10T01:22:07Z",
+			"publicdate": "2014-12-10T01:22:07Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "airport80-ads-1983",
+			"title": "Channel Seven \u2013 ad breaks etc. from \u201cAirport '80: The Concorde\u201d (02/03/1980)",
+			"description": "Ad breaks and a news update, from a broadcast of \"Airport '80: The Concorde\" (originally titled \"The Concorde ... Airport '79\" on Channel Seven in 1983. Estimated to be from Wednesday, the 2nd of March, 1983, based on the \"Wednesday Night Movie\" screen, and the references to the upcoming election (held on the 5th) There was a newspaper clipping taped to the video case, of the TV guide listing for the movie. Images of the case and tape included in this upload 01 - Airport '80 ads (1st break): Hallmark Cellars Sure & Natural sanitary pads Enhance shampoo and conditioner Kentucky Fried Chicken Australian Labor Party 02 - Airport '80 ads (2nd break): Big M flavoured milk Just Jeans McDonald's Subaru Brumby 03 - Airport '80 ads (3rd break): Liberal Party of Australia Tootsie movie trailer - Hoyts City and Suburban cinemas Delva hair products Lipton Tea Bags 04 - Seven Newsroom Latest: Rainstorms in Adelaide NW-Vic wild storms Cyclones in Fiji and Barrier Reef Election coverage 05 - Airport...",
+			"subject": [
+				"Channel Seven",
+				"commercial",
+				"commercials",
+				"ad",
+				"ads",
+				"advertisement",
+				"tv promo",
+				"logo",
+				"credits",
+				"news"
+			],
+			"collection": [
+				"television_inbox",
+				"television"
+			],
+			"date": "1983-03-02T00:00:00Z",
+			"year": 1983,
+			"mediatype": "movies",
+			"item_size": 650554622,
+			"files_count": 105,
+			"downloads": 257,
+			"week": 2,
+			"month": 9,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-10-01T16:41:06Z",
+			"publicdate": "2022-10-01T16:41:06Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "capture-a-4561",
+			"title": "KCPQ-13 (Fox) commercials, 11/19/1989 part 2",
+			"description": "Aired during 'Dumbo.' - Dumbo will return - Wonderful World of Disney promo - Skipper's Restaurant (Takeout) - Breakfast with Barbie Cereal - The Bon Marche - The Continuing Forest promo - Pillsbury Crescent Dinner Rolls (Extra Special Dinner) - Bambi on VHS - Tropicana - Crest (Pureed Apples) - Jerky Treats - Reynolds Wrap - Golden Grahams (The Golden Boy) - 7-Eleven (Soft Drinks) - Pop-Secret (I've never seen this ad before, didn't know they produced a commercial with 3D animation of the kernels.) - Family Room Furniture/Everett - Breakfast with Barbie Cereal (again) - KCPQ-13 ID - Totally Hidden Video promo - Toys 'R Us - Denny's (Lunchtime Express) - Silo (partial) All rights reserved. I DO NOT OWN ANY OF THE CONTENT IN THIS VIDEO. THESE WERE POSTED FROM MY OWN VHS COLLECTION. IF FOUND TO BE INFRINGED, I WILL TAKE THIS VIDEO DOWN.",
+			"subject": [
+				"KCPQ",
+				"13",
+				"Fox",
+				"1989",
+				"commercials",
+				"Seattle",
+				"Tacoma"
+			],
+			"collection": [
+				"vhscommercials",
+				"vhsvault"
+			],
+			"mediatype": "movies",
+			"num_favorites": 2,
+			"item_size": 71348771,
+			"files_count": 28,
+			"downloads": 593,
+			"week": 2,
+			"month": 5,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2021-11-27T18:55:29Z",
+			"publicdate": "2021-11-27T18:55:29Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "channelnine-survivor-ads-20000825",
+			"title": "Channel Nine - ad breaks etc. from \"Survivor: The Final Four\" and \"Survivor: The Reunion\" (25/08/2000)",
+			"description": "Ad breaks etc. from a continuous recording of Channel Nine in Australia. Starts with the end of a \"Burke's Backyard\" episode, continuing through the last two episodes of \"Survivor: Borneo\", and ending with the start of \"Nightline\". One ad break not recorded - remainder included. 8:25pm 01 - Burke's Backyard end: brought to you by Mitsubishi Magna V6 02 - ad break between programs inc newsbreak: City to Surf Newsbreak Still the One \"Take 2\" TV promo 8:30pm 03 - Survivor The Final Four start: 9 logo brought to you by Nissan Pulsar, Goulburn Valley Fruit Salad, Ambi-Pur Perfume, and ANZ 04 - Survivor The Final Four ads (1st break): 60 Minutes TV promo Nissan Pulsar Sentricon termite colony elimination system Sensodyne toothpaste KFC Footy Feast Avon One.Tel mobile network 05 - Survivor The Final Four ads (2nd break): Survivor: The Reunion TV promo Ambi-Pur Perfume Scary Movie movie trailer Avon repeat Mazda dealers Palmolive Naturals shampoo Scary Movie movie trailer 2 Halifax F.P.: The...",
+			"subject": [
+				"Channel Nine",
+				"ad",
+				"ads",
+				"commercial",
+				"commercials",
+				"tv promo",
+				"logo",
+				"news",
+				"credits"
+			],
+			"collection": [
+				"vhsvault_inbox",
+				"vhsvault"
+			],
+			"date": "2000-08-25T00:00:00Z",
+			"year": 2000,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 4,
+			"item_size": 1985361592,
+			"files_count": 196,
+			"downloads": 341,
+			"week": 2,
+			"month": 11,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2024-05-31T15:51:10Z",
+			"publicdate": "2024-05-31T15:51:10Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "ricekrispies",
+			"title": "Rice Krispies Commercial",
+			"description": "Rice Krispies Commercial",
+			"subject": [
+				"kelloggs",
+				"Rice Krispies",
+				"cereal",
+				"breakfast",
+				"commercial",
+				"ad",
+				"advertisement",
+				"vhs",
+				"tv"
+			],
+			"creator": [
+				"Kelloggs"
+			],
+			"collection": [
+				"vhsvault_inbox",
+				"vhsvault"
+			],
+			"date": "1995-12-05T00:00:00Z",
+			"year": 1995,
+			"mediatype": "movies",
+			"num_favorites": 3,
+			"item_size": 33735555,
+			"files_count": 14,
+			"downloads": 345,
+			"week": 2,
+			"month": 6,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2019-12-10T02:26:00Z",
+			"publicdate": "2019-12-10T02:26:00Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "youtube-Qc56JOtuAfA",
+			"title": "ABC Network - Delta House - \"Guns of October\" - WXYZ-TV (Almost Complete Broadcast, 2/10/1979)",
+			"description": "Here's most of the fourth episode of the ill-fated Delta House, \"The Guns of October,\" as aired over the ABC Network and, here, broadcast via WXYZ Channel 7 in Detroit, MI. (In Chicago, of course, viewers would have seen it over WLS Channel 7 while waiting for the snows from the Blizzard of '79 to be cleared.) Missing are the opening titles and commercials that preceded Act I of the episode. This series featured most of the cast of the 1978 movie \"National Lampoon's Animal House,\" with one notable exception - John Belushi (for whom this would be his last season on NBC's Saturday Night Live) as John \"Bluto\" Blutarsky; here, Josh Mostel played Bluto's brother, Jim \"Blotto\" Blutarsky. Also notice, in the end credits, in the role of \"The Bombshell,\" a young starlet credited here as \"Michele\" Pfeiffer. The recording comes in just as Act I has started. [10:46] - Finally, commercials for: Golden Grahams cereal (family enjoying breakfast near ski slopes) 7 Eleven stores - with a \"guardian...",
+			"subject": [
+				"Youtube",
+				"video",
+				"Entertainment",
+				"local",
+				"chicago",
+				"tv",
+				"museum",
+				"television",
+				"broadcast",
+				"history",
+				"historical",
+				"fuzzy",
+				"memories",
+				"fuzzymemories",
+				"fuzzymemories.tv",
+				"classic",
+				"vintage",
+				"retro",
+				"old",
+				"telecast",
+				"woc",
+				"original commercials",
+				"commercials",
+				"delta house",
+				"animal house",
+				"delta",
+				"house",
+				"animal"
+			],
+			"creator": [
+				"The Museum of Classic Chicago Television (www.FuzzyMemories.TV)"
+			],
+			"collection": [
+				"mirrortube",
+				"additional_collections"
+			],
+			"date": "2021-03-25T00:00:00Z",
+			"year": 2021,
+			"mediatype": "movies",
+			"num_favorites": 3,
+			"item_size": 441852273,
+			"files_count": 37,
+			"downloads": 112,
+			"week": 2,
+			"month": 6,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2023-09-09T00:09:59Z",
+			"publicdate": "2023-09-09T00:09:59Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "youtube-RVqEjOP8C5c",
+			"title": "The ABC Weekend Specials - \u201cBunnicula, the Vampire Rabbit\u201d (Complete Broadcast, 10/29/1983) \ud83d\udcfa \ud83e\udddb\ud83d\udc30",
+			"description": "Here's a repeat of a Halloween-themed edition of the ABC Weekend Special as aired over WLS Channel 7, of \"Bunnicula, the Vampire Rabbit\" which originally aired on January 9th 1982. The hosts were Willie Tyler and Lester, introducing this short about a new-found family bunny rabbit suspected of being a vampire. Includes: Promo for 3:00 Movie presentation of \"Halloween with the Addams Family\" for Monday (the 31st!) (voiceover by ??) Animated \"Closed Captioned\" notice Opening ABC Weekend Special titles, followed by introduction by Willie and Lester Act I of \"Bunnicula,\" starting with opening titles and credits \"We'll Return After These Messages\" bumper (voiceover by Bill Owen) Commercial: Return of the Jedi game from Parker Brothers (voiceover by Adolph Caesar?) Kellogg's Strawberry Rice Krispies (with \"Dennis\" in strawberry suit for school play - featuring the \"Wubby\" kid from the film Mr. Mom - actor Taliesin Jaffe) ABC Weekend Special \"Now back to our story\" bumper (voiceover by Ernie...",
+			"subject": [
+				"Youtube",
+				"video",
+				"Entertainment",
+				"local",
+				"chicago",
+				"tv",
+				"museum",
+				"television",
+				"broadcast",
+				"history",
+				"historical",
+				"fuzzy",
+				"memories",
+				"fuzzymemories",
+				"fuzzymemories.tv",
+				"wls",
+				"wls-tv",
+				"weekend special",
+				"abc weekend special",
+				"bunnicula",
+				"10-29-83",
+				"10/29/83",
+				"dennis polkow",
+				"dennis polkow collection"
+			],
+			"creator": [
+				"The Museum of Classic Chicago Television (www.FuzzyMemories.TV)"
+			],
+			"collection": [
+				"mirrortube",
+				"additional_collections"
+			],
+			"date": "2018-10-16T00:00:00Z",
+			"year": 2018,
+			"mediatype": "movies",
+			"num_favorites": 13,
+			"num_reviews": 1,
+			"item_size": 361784157,
+			"files_count": 41,
+			"downloads": 378,
+			"week": 2,
+			"month": 17,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 1,
+			"addeddate": "2023-09-07T03:56:40Z",
+			"reviewdate": "2023-10-18T03:12:51Z",
+			"publicdate": "2023-09-07T03:56:40Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1953-commercial-for-kelloggs-rice-krispies-4",
+			"title": "1953 commercial for Kellogg's Rice Krispies (4)",
+			"description": "An American commercial.\u00a0",
+			"subject": [
+				"Classic TV Commercial",
+				"1950s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1953-01-01T00:00:00Z",
+			"year": 1953,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 123139457,
+			"files_count": 14,
+			"downloads": 122,
+			"week": 1,
+			"month": 1,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-10-02T02:09:21Z",
+			"publicdate": "2022-10-02T02:09:21Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1953commercialforsugarfrostedflakes",
+			"title": "1953 commercial for Sugar Frosted Flakes",
+			"description": "A 1953 U.S. commercial for Kellogg's Sugar Frosted Flakes, which I took from this.\u00a0",
+			"subject": [
+				"Classic TV Commercial",
+				"1953",
+				"1950s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast",
+				"Cereal",
+				"Frosted Flakes"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1953-01-01T00:00:00Z",
+			"year": 1953,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 3,
+			"item_size": 59436749,
+			"files_count": 18,
+			"downloads": 504,
+			"week": 1,
+			"month": 2,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2020-04-12T09:34:00Z",
+			"publicdate": "2020-04-12T09:34:00Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1957CommercialForKelloggsSpecialK",
+			"title": "1957 commercial for Kellogg's Special K",
+			"description": "A live 1957 U.S. commercial for Kellogg's Special K cereal. The advertisement features Dennis James.",
+			"subject": [
+				"Classic TV Commercial",
+				"1950s",
+				"50s",
+				"Fifties",
+				"Special K",
+				"Food",
+				"Edible",
+				"Breakfast",
+				"Old",
+				"Dennis James"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"date": "1957-01-01T00:00:00Z",
+			"year": 1957,
+			"mediatype": "movies",
+			"num_favorites": 6,
+			"item_size": 51396097,
+			"files_count": 29,
+			"downloads": 1345,
+			"week": 1,
+			"month": 1,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2012-04-20T08:44:46Z",
+			"publicdate": "2012-04-20T08:50:33Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1960CommercialForWheatHoneys",
+			"title": "1960 commercial for Wheat Honeys",
+			"description": "A 1960 U.S. commercial for Wheat Honeys. Also promotes Rice Honeys cereal.",
+			"subject": [
+				"Classic TV Commercial",
+				"1960",
+				"1960s",
+				"Advertising",
+				"Cereal",
+				"Breakfast",
+				"Food",
+				"Edible"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"date": "1960-01-01T00:00:00Z",
+			"year": 1960,
+			"language": [
+				"English"
+			],
+			"mediatype": "movies",
+			"num_favorites": 4,
+			"item_size": 52324083,
+			"files_count": 22,
+			"downloads": 893,
+			"week": 1,
+			"month": 1,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2014-02-26T08:21:12Z",
+			"publicdate": "2014-02-26T08:21:18Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1973-commercial-for-kelloggs-special-k",
+			"title": "1973 commercial for Kellogg's Special K",
+			"description": "An Australian commercial for Kellogg's Special K. Note: as far as I know, many Australian ads of the 1970s are remakes of American ads. However, I don't know if that's the case here.",
+			"subject": [
+				"Classic TV Commercial",
+				"1970s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1973-01-01T00:00:00Z",
+			"year": 1973,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 3,
+			"item_size": 34371181,
+			"files_count": 12,
+			"downloads": 214,
+			"week": 1,
+			"month": 2,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-01-06T22:02:42Z",
+			"publicdate": "2022-01-06T22:02:42Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1993-commercial-for-kelloggs-corn-flakes",
+			"title": "1993 commercial for Kellogg's Corn Flakes",
+			"description": "An Australian commercial.\u00a0",
+			"subject": [
+				"TV Commercial",
+				"Betamax",
+				"1990s",
+				"Advertising",
+				"Advertisement",
+				"Food",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"date": "1993-01-01T00:00:00Z",
+			"year": 1993,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 97403535,
+			"files_count": 13,
+			"downloads": 77,
+			"week": 1,
+			"month": 2,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2023-02-25T04:16:17Z",
+			"publicdate": "2023-02-25T04:16:17Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1994-commercial-for-kelloggs-sustain",
+			"title": "1994 commercial for Kellogg's Sustain",
+			"description": "An Australian commercial for a breakfast cereal.\u00a0",
+			"subject": [
+				"TV Commercial",
+				"Betamax",
+				"1990s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1994-01-01T00:00:00Z",
+			"year": 1994,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 87584618,
+			"files_count": 13,
+			"downloads": 116,
+			"week": 1,
+			"month": 1,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-08-28T00:30:13Z",
+			"publicdate": "2022-08-28T00:30:13Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1996-commercial-for-kelloggs-corn-flakes",
+			"title": "1996 commercial for Kellogg's Corn Flakes",
+			"description": "A commercial.\u00a0",
+			"subject": [
+				"TV Commercial",
+				"Betamax",
+				"1990s",
+				"Advertisement",
+				"Advertising",
+				"Breakfast cereal",
+				"Food"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1996-01-01T00:00:00Z",
+			"year": 1996,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 77558349,
+			"files_count": 13,
+			"downloads": 126,
+			"week": 1,
+			"month": 2,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-09-02T00:55:20Z",
+			"publicdate": "2022-09-02T00:55:20Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1998-meijer-mommy-trunk",
+			"title": "TV commercial - Meijer Inc. & Cheerios (1998)",
+			"description": "TV commercial for Meijer Inc, a supercenter chain and grocery store based out of Michigan, USA, and Cheerios breakfast cereal. Featuring stock car racing driver Johnny Benson Jr . Recorded from TV onto VHS tape in 1998. Digitized in 2023.",
+			"subject": [
+				"tv",
+				"television",
+				"commercial",
+				"tv commercial",
+				"meijer",
+				"cheerios",
+				"grocery story",
+				"supercenter",
+				"cereal",
+				"vhs",
+				"johnny benson jr"
+			],
+			"collection": [
+				"television_inbox",
+				"television"
+			],
+			"date": "1998-01-01T00:00:00Z",
+			"year": 1998,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 39487571,
+			"files_count": 11,
+			"downloads": 36,
+			"week": 1,
+			"month": 1,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2023-06-09T18:00:17Z",
+			"publicdate": "2023-06-09T18:00:17Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2002-commercial-for-kelloggs-coco-pops",
+			"title": "2002 commercial for Kellogg's Coco Pops",
+			"description": "An Australian commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal",
+				"Food"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"television_inbox",
+				"television"
+			],
+			"date": "2002-01-01T00:00:00Z",
+			"year": 2002,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 1,
+			"item_size": 84052134,
+			"files_count": 13,
+			"downloads": 111,
+			"week": 1,
+			"month": 3,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2024-03-06T00:04:06Z",
+			"publicdate": "2024-03-06T00:04:06Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2008-commercial-for-kelloggs-special-k",
+			"title": "2008 commercial for Kellogg's Special K",
+			"description": "An Australian commercial.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"date": "2008-01-01T00:00:00Z",
+			"year": 2008,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 1,
+			"item_size": 49635825,
+			"files_count": 13,
+			"downloads": 161,
+			"week": 1,
+			"month": 2,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-04-02T01:12:24Z",
+			"publicdate": "2022-04-02T01:12:24Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "98574-the-lumberman-vwr",
+			"title": "\" THE LUMBERMAN \" 1970s LOGGING & LUMBERJACKS IN OREGON PACIFIC NORTHWEST EDUCATIONAL FILM 98574",
+			"description": "This is a 1971 color film made by Bert van Bork entitled \"The Lumberman\" was part of the \"Our Changing Way of Life\" series of films released by Encyclopedia Brittanica. The film looks at the seachanges that have come to the timber and logging industries (and more were to come as the environmental movement was in a nascent stage at the time this film was made). The film discusses the past and present of the life of a forest worker and not only how these workers\u2019 lives have changed, but how the industry treats the forests themselves. EB Films presents, The Lumberman. The movie opens with an aerial view of mountains and forest \u2013 timber country in the Pacific Northwest. A map of the United States overlays the screen showing the millions of acres of commercial forest in the country: 31. Sweeping vistas of the forest 1:05. \"Our changing way of life. The Lumberman.\" Produced by Encyclopedia Britannica Films. In collaboration with Gene E Martin, PhD, associate professor of geography at the...",
+			"subject": [
+				"The Lumberman",
+				"1970s",
+				"Logging",
+				"Lumberjack",
+				"Oregon",
+				"Pacific Northwest",
+				"Stock Footage"
+			],
+			"creator": [
+				"PeriscopeFilm"
+			],
+			"collection": [
+				"PeriscopeFilm",
+				"ephemera"
+			],
+			"mediatype": "movies",
+			"num_favorites": 6,
+			"item_size": 221659357,
+			"files_count": 36,
+			"downloads": 367,
+			"week": 1,
+			"month": 6,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2021-03-26T01:03:37Z",
+			"publicdate": "2021-03-26T01:03:37Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "ChexMates1963",
+			"title": "1963 commercial for Chex Mates",
+			"description": "A 1963 U.S. commercial for Chex Mates, promoting Wheat Chex, Rice Chex, and Corn Chex.",
+			"subject": [
+				"Classic TV Commercial",
+				"1960s",
+				"Cereal",
+				"Breakfast",
+				"Edible",
+				"Food",
+				"Wheat Chex",
+				"Rice Chex",
+				"Corn Chex",
+				"1963"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"date": "1963-01-01T00:00:00Z",
+			"year": 1963,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 8,
+			"item_size": 47988686,
+			"files_count": 22,
+			"downloads": 1739,
+			"week": 1,
+			"month": 4,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2014-04-03T07:05:46Z",
+			"publicdate": "2014-04-03T07:05:46Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "IbbtMmTgWupVDTkziTvD3Vdm8zovw8",
+			"title": "1960s CAP'N CRUNCH CEREAL ANIMATED COMMERCIAL BY JAY WARD w/ MAGNOLIA BULKHEAD XD3068",
+			"description": "This animated TV commercial for Cap'n Crunch cereal, \"Cap'n Crunch and the Sea Monster\" dates to the early 1960s. It's possibly from the cereal's debut year of 1963, as the product is identified as \"new\" in voiceover. This Jay Ward produced cartoon features Crunch's nemesis, Magnolia Bulkhead. Cap'n Crunch is a corn and oat breakfast cereal introduced in 1963 and manufactured by Quaker Oats Company (now a subsidiary of PepsiCo). Motion picture films don't last forever; many have already been lost or destroyed. For almost two decades, we've worked to collect, scan and preserve the world as it was captured on 35mm, 16mm and 8mm movies -- including home movies, industrial films, and other non-fiction. If you have endangered films you'd like to have scanned, or wish to donate celluloid to Periscope Film so that we can share them with the world, we'd love to hear from you. Contact us via the weblink below. This film is part of the Periscope Film LLC archive, one of the largest historic...",
+			"subject": [
+				"The Statue",
+				"Sea Monster",
+				"Jay Ward",
+				"Magnolia Bulkhead",
+				"Quaker Oats Company",
+				"New York",
+				"Staten Island Ferry",
+				"Narrows Bridge",
+				"Ellis Island",
+				"Whitehall Terminal",
+				"Stock Footage",
+				"Periscope Film"
+			],
+			"collection": [
+				"PeriscopeFilm",
+				"ephemera"
+			],
+			"mediatype": "movies",
+			"item_size": 23109833,
+			"files_count": 24,
+			"downloads": 34,
+			"week": 1,
+			"month": 2,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2024-02-27T20:23:20Z",
+			"publicdate": "2024-02-27T20:23:20Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "beverly-hillbillies-intro-kelloggs-cereal-commercial-1960s",
+			"title": "Beverly Hillbillies Intro Kellogg's Cereal Commercial 1960s D.D.Teoli Jr. A.C.",
+			"description": "Beverly Hillbillies Intro Kellogg's Cereal Commercial 1960s\u00a0 Selection from the Daniel D. Teoli Jr. Advertising Archives Note: If you have a slow computer or connection, video may best be viewed as a download. Contributed to the Internet Archive in Honor and Memory of Mike Wallace & Arthur Edeson. Daniel D. Teoli Jr. Archival Collection Daniel D. Teoli Jr. Small Gauge Film Archive Daniel D. Teoli Jr. Advertising Archive Daniel D. Teoli Jr. VHS Video Archive Daniel D. Teoli Jr. Popular Culture Archive Daniel D. Teoli Jr. Audio Archive Daniel D. Teoli Jr. Social Documentary Photography",
+			"subject": [
+				"TV",
+				"Madison Avenue",
+				"advertising",
+				"D.D.Teoli Jr.",
+				"art",
+				"TV commercial",
+				"ads",
+				"vintage advertisng",
+				"clothes",
+				"fashion",
+				"special collections",
+				"Beverly Hillbillies",
+				"TV series",
+				"Kellog's",
+				"cereal",
+				"breakfast",
+				"food",
+				"Battle Creek",
+				"Michigan",
+				"food",
+				"Beverly Hills"
+			],
+			"creator": [
+				"D.D.Teoli Jr. A.C."
+			],
+			"collection": [
+				"danieldteolijr",
+				"additional_collections"
+			],
+			"mediatype": "movies",
+			"licenseurl": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+			"item_size": 34804726,
+			"files_count": 22,
+			"downloads": 61,
+			"week": 1,
+			"month": 3,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2024-12-24T00:43:12Z",
+			"publicdate": "2024-12-24T00:43:12Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "kelloggs-bran-flakes",
+			"title": "Kellogg's Bran Flakes \u201cgood luck\u201d TV advert / Commercial 1989, United Kingdom",
+			"description": "Kellogg's Bran Flakes \u201c some say they bring good luck \u201d \u201cl et\u2019s just say they\u2019re very very tasty \u201d commercial / TV advert. Captured and transferred from VHS from a broadcast from 1989 on Thames Television / ITV (UK).\u00a0 #the_cliffs_edge",
+			"subject": [
+				"Kellogg\u2019s",
+				"Bran Flakes",
+				"television commercial",
+				"television advert",
+				"breakfast cereal",
+				"TV ad",
+				"1980s",
+				"UK TV",
+				"cereal"
+			],
+			"creator": [
+				"Kellogg\u2019s"
+			],
+			"collection": [
+				"vhsvault_inbox",
+				"vhsvault"
+			],
+			"date": "1989-01-01T00:00:00Z",
+			"year": 1989,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 14010962,
+			"files_count": 8,
+			"downloads": 119,
+			"week": 1,
+			"month": 3,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2020-11-18T16:23:42Z",
+			"publicdate": "2020-11-18T16:23:42Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "scm-340906-c4iforjuly16stewisbaaack",
+			"title": "C4I for July 16 Stew is baaack!",
+			"description": "Go Stew on this - Lotsa hot happenin's Here is Patricia's research of the week's news - to investigate:\u00a0 Go for it: 30,000 California Prisoners Launch The Largest Hunger Strike In State History - Judge: I can\u2019t stop Guantanamo force-feeding, but Obama can Obama accepts Holder\u2019s investigation of Holder Judge demands tech companies hand activist data over to Chevron Bush-Cheney began illegal NSA spying before 9/11, says telcom CEO And NSA has admitted to tapping into Skype? Interesting!!! New Indiana Law Allows Citizens to Shoot Police Officers Toxic chemicals in personal care products causing 'epidemic' of skin allergies James K. Galbraith: How to Stop the Path of Economic and Social Destruction Glenn Greenwald: Snowden has \u2018blueprints\u2019 of NSA surveillance UK government to force Internet content blocking Swedish professor nominates Edward Snowden for the Nobel Peace Prize United States imprisons a larger percentage of its black population than South Africa did at the height of...",
+			"creator": [
+				"Donald Grahn"
+			],
+			"collection": [
+				"SeattleCommunityMedia",
+				"community_media",
+				"newsandpublicaffairs"
+			],
+			"date": "2013-07-14T00:00:00Z",
+			"year": 2013,
+			"genre": [
+				"Newsmagazine"
+			],
+			"language": [
+				"English"
+			],
+			"mediatype": "movies",
+			"licenseurl": "http://creativecommons.org/licenses/by-nc-nd/3.0/",
+			"num_favorites": 4,
+			"item_size": 3555922632,
+			"files_count": 77,
+			"downloads": 1439,
+			"week": 1,
+			"month": 8,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2013-07-14T00:00:00Z",
+			"publicdate": "2013-07-14T00:00:00Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "youtube-7THOYftmBq0",
+			"title": "WZTV Channel 17 [Nashville, TN] - I Dream of Jeannie -\"With the Light Sound Film-Warble\" (TD, 1977)",
+			"description": "Here's a technical-difficulty moment that plagued WZTV Channel 17 in Nashville, Tennessee during the airing of the I Dream of Jeannie episode \"Nobody Loves a Fat Astronaut\" (originally aired on the NBC network on March 17th 1969) with Barbara Eden as both the title character and her evil sister, Jeannie II. This clip includes: Sound going off on episode 19 seconds into this clip, after brief sprocket sound from 16mm film projector (once again a bit of fortuitous synchronicity as to the timing of the sound going out - reminiscent of this clip where a tornado warning was immediately preceded by huge gusts of wind on film - https://www.youtube.com/watch?v=3Pd0PjQmjso ) \"Please Stand By\" slide, with a drawing of a dog holding onto a cord with his mouth (Can't get more perfect than this, can you? This and similar slides (I am presuming stations from around the country had) were parodied memorably on The Simpsons. ( http://www.mundosimpson.com.ar/imagenes/technical/3f04.jpg ) Commercial:...",
+			"subject": [
+				"Youtube",
+				"video",
+				"Entertainment",
+				"local",
+				"chicago",
+				"tv",
+				"museum",
+				"television",
+				"broadcast",
+				"history",
+				"historical",
+				"fuzzy",
+				"memories",
+				"fuzzymemories",
+				"fuzzymemories.tv",
+				"1977",
+				"08-04-77",
+				"08/04/77",
+				"8-4-77",
+				"8/4/77",
+				"8/04/77",
+				"8-04-77",
+				"wztv",
+				"wztv-tv",
+				"wztv channel 17",
+				"nashville",
+				"td moment"
+			],
+			"creator": [
+				"The Museum of Classic Chicago Television (www.FuzzyMemories.TV)"
+			],
+			"collection": [
+				"mirrortube",
+				"additional_collections"
+			],
+			"date": "2018-03-16T00:00:00Z",
+			"year": 2018,
+			"mediatype": "movies",
+			"num_favorites": 1,
+			"item_size": 21526408,
+			"files_count": 27,
+			"downloads": 151,
+			"week": 1,
+			"month": 6,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2023-09-07T02:55:37Z",
+			"publicdate": "2023-09-07T02:55:37Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "youtube-9-0PqzQLTyk",
+			"title": "Trix Cereal - \"Rabbit Musician\" with Rabbit Air Racer Offer (Commercial, 1973)",
+			"description": "Here's a commercial for Trix Cereal with the Trix rabbit (voiced by Mort Marshall) disguising himself as a marching band xylophonist to try to finagle the cereal from the kids inside (unsuccessfully, of course), followed by an offer for an easy to make (and fly) Trix Rabbit Air Racer that could be found in the back of specially marked boxes. Ending voiceover by ?? This aired on local Chicago TV on Monday, July 2nd 1973 during the 8:30am to 9am timeframe. About The Museum of Classic Chicago Television: The Museum of Classic Chicago Television's primary mission is the preservation and display of off-air, early home videotape recordings (70s and early 80s, primarily) recorded off of any and all Chicago TV channels; footage which would likely be lost if not sought out and preserved digitally. Even though (mostly) short clips are displayed here, we preserve the entire broadcasts in our archives - the complete programs with breaks (or however much is present on the tape), for historical...",
+			"subject": [
+				"Youtube",
+				"video",
+				"Entertainment",
+				"local",
+				"chicago",
+				"tv",
+				"museum",
+				"television",
+				"broadcast",
+				"history",
+				"fuzzy",
+				"memories",
+				"fuzzymemories",
+				"fuzzymemories.tv",
+				"Trix Cereal",
+				"rabbit",
+				"Commercial",
+				"1973",
+				"1970s",
+				"Mort Marshall",
+				"cereal",
+				"Trix (Brand)",
+				"Breakfast Cereal (Food)"
+			],
+			"creator": [
+				"The Museum of Classic Chicago Television (www.FuzzyMemories.TV)"
+			],
+			"collection": [
+				"mirrortube",
+				"additional_collections",
+				"social-media-video",
+				"additional_collections_video"
+			],
+			"date": "2014-07-05T00:00:00Z",
+			"year": 2014,
+			"mediatype": "movies",
+			"num_favorites": 2,
+			"item_size": 2544965,
+			"files_count": 15,
+			"downloads": 119,
+			"week": 1,
+			"month": 7,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2023-09-07T11:07:16Z",
+			"publicdate": "2023-09-07T11:07:16Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "youtube-eQxB70XIgNw",
+			"title": "ABC Afterschool Specials - \"Stoned\" - WLS Channel 7 (Complete Broadcast, 11/12/1980) \ud83d\udcfa \ud83d\udeac \ud83d\ude35",
+			"description": "Here's the (mostly) complete, first-run broadcast of the ABC Afterschool Special, \"Stoned\" (S09E04), as aired over the ABC Network via WLS Channel 7. See below for modification notice. This cautionary tale stars Scott Baio (Happy Days, Charles in Charge) as a go-getting student, Jack Melon, who ends up going far astray - and falling in with the \"wrong\" crowd - after smoking cannabis for the first time, thus putting his future in grave danger. Also starring Vinnie Bufano, introducing Largo Woodruff (as Felicity), and co-starring Jack Frich, Steve Monarque, Barton Heyman, Ira Elliott, and John Herzfeld. Includes: Station ID slide with promo for Adler Planetarium (voiceover by ??) Notice of preemption for Afterschool Specials (voiceover by Bill Owen, who also handles return bumpers and sponsor billboards) Preview of coming show, followed by ABC Afterschool Special opening titles Episode Act I, with opening credits Sponsor billboard for Kellogg's Commercials for: Kellogg's Sugar Corn Pops...",
+			"subject": [
+				"Youtube",
+				"video",
+				"Entertainment",
+				"local",
+				"chicago",
+				"tv",
+				"museum",
+				"television",
+				"broadcast",
+				"history",
+				"historical",
+				"fuzzy",
+				"memories",
+				"fuzzymemories",
+				"fuzzymemories.tv",
+				"classic",
+				"vintage",
+				"retro",
+				"old",
+				"telecast",
+				"woc",
+				"original commercials",
+				"commercials",
+				"1980",
+				"stoned",
+				"after school",
+				"afterschool",
+				"special"
+			],
+			"creator": [
+				"The Museum of Classic Chicago Television (www.FuzzyMemories.TV)"
+			],
+			"collection": [
+				"mirrortube",
+				"additional_collections"
+			],
+			"date": "2023-06-20T00:00:00Z",
+			"year": 2023,
+			"mediatype": "movies",
+			"num_favorites": 8,
+			"item_size": 1027781302,
+			"files_count": 68,
+			"downloads": 219,
+			"week": 1,
+			"month": 21,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2023-09-07T02:44:10Z",
+			"publicdate": "2023-09-07T02:44:10Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "16-january-1996-atv-10-commercial-break-3",
+			"title": "16 January 1996 ATV-10 commercial break (3)",
+			"description": "A commercial break which aired on the Network Ten station in Melbourne, Australia. Commercials/promos include: Sports Tonight, Berri, Nutri-Grain breakfast cereal, Fujifilm, Berri (different ad to previous), The X-Files. Please note that the contents of this break have already been uploaded individually.",
+			"subject": [
+				"Commercial break",
+				"VHS",
+				"1990s",
+				"Advertising"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1996-01-16T00:00:00Z",
+			"year": 1996,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 2,
+			"item_size": 178947167,
+			"files_count": 11,
+			"downloads": 125,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2021-04-19T00:20:50Z",
+			"publicdate": "2021-04-19T00:20:50Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1951-commercial-for-cheerios-2",
+			"title": "1951 commercial for Cheerios (2)",
+			"description": "An American commercial.\u00a0",
+			"subject": [
+				"Classic TV Commercial",
+				"1950s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1951-01-01T00:00:00Z",
+			"year": 1951,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 1,
+			"item_size": 28397584,
+			"files_count": 14,
+			"downloads": 117,
+			"week": 0,
+			"month": 2,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-11-30T00:02:03Z",
+			"publicdate": "2022-11-30T00:02:03Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1953-commercial-for-kelloggs-rice-krispies-5",
+			"title": "1953 commercial for Kellogg's Rice Krispies (5)",
+			"description": "An American commercial which aired several days after Christmas.\u00a0",
+			"subject": [
+				"Classic TV Commercial",
+				"1950s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal",
+				"Food"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1953-01-01T00:00:00Z",
+			"year": 1953,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 158732736,
+			"files_count": 14,
+			"downloads": 144,
+			"week": 0,
+			"month": 1,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-10-06T07:08:39Z",
+			"publicdate": "2022-10-06T07:08:39Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1959CommercialForCheerios",
+			"title": "1959 commercial for Cheerios",
+			"description": "A classic 1959 U.S. commercial for Cheerios cereal. Promotes the fact that it is made from oats.",
+			"subject": [
+				"Classic TV",
+				"Television",
+				"Classic TV Commercial",
+				"Cheerios",
+				"Food",
+				"Edible",
+				"Cereal",
+				"Breakfast",
+				"Breakfast Cereal",
+				"Retro"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"date": "1959-01-01T00:00:00Z",
+			"year": 1959,
+			"mediatype": "movies",
+			"num_favorites": 13,
+			"item_size": 31186125,
+			"files_count": 21,
+			"downloads": 14835,
+			"week": 0,
+			"month": 11,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2012-05-27T14:12:27Z",
+			"publicdate": "2012-05-27T14:14:41Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1976-commercial-for-malted-shreddies",
+			"title": "1976 commercial for Malted Shreddies",
+			"description": "A 1976 British commercial for Malted Shreddies breakfast cereal.\u00a0 T he commercial break this comes from has already been uploaded.\u00a0",
+			"subject": [
+				"Classic TV Commercial",
+				"1976",
+				"1970s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal",
+				"Food"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1976-01-01T00:00:00Z",
+			"year": 1976,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 23895974,
+			"files_count": 13,
+			"downloads": 275,
+			"week": 0,
+			"month": 2,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2020-04-30T07:45:21Z",
+			"publicdate": "2020-04-30T07:45:21Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1982-commercial-for-weet-bix",
+			"title": "1982 commercial for Weet-Bix",
+			"description": "An Australian commercial for a breakfast cereal. Unfortunately, there is tape wear.",
+			"subject": [
+				"TV Commercial",
+				"Betamax",
+				"1980s",
+				"Advertising",
+				"Advertisement",
+				"Food",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"television_inbox",
+				"television"
+			],
+			"date": "1982-01-01T00:00:00Z",
+			"year": 1982,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 89018557,
+			"files_count": 13,
+			"downloads": 17,
+			"week": 0,
+			"month": 1,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2024-12-30T00:09:58Z",
+			"publicdate": "2024-12-30T00:09:58Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1984-commercial-for-kelloggs-rice-bubbles",
+			"title": "1984 commercial for Kellogg's Rice Bubbles",
+			"description": "An Australian commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"Betamax",
+				"1980s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1984-01-01T00:00:00Z",
+			"year": 1984,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 1,
+			"item_size": 48977968,
+			"files_count": 13,
+			"downloads": 167,
+			"week": 0,
+			"month": 1,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-03-29T00:24:18Z",
+			"publicdate": "2022-03-29T00:24:18Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1986-crunch-munch-commercial",
+			"title": "1986 Crunch 'n Munch Commercial",
+			"description": "Aired January of 1986 during Heavy Metal Mania.",
+			"subject": [
+				"cereal",
+				"food",
+				"breakfast",
+				"commecrial",
+				"1986",
+				"tv"
+			],
+			"creator": [
+				"Conagra Brands Inc."
+			],
+			"collection": [
+				"vhscommercials",
+				"vhsvault"
+			],
+			"date": "1986-01-01T00:00:00Z",
+			"year": 1986,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 1,
+			"item_size": 9275969,
+			"files_count": 12,
+			"downloads": 165,
+			"week": 0,
+			"month": 3,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2020-11-21T17:07:34Z",
+			"publicdate": "2020-11-21T17:07:34Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1990-commercial-for-kelloggs-just-right",
+			"title": "1990 commercial for Kellogg's Just Right",
+			"description": "An Australian commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"Betamax",
+				"1990s",
+				"Advertising",
+				"Advertisement",
+				"Food",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"television_inbox",
+				"television"
+			],
+			"date": "1990-01-01T00:00:00Z",
+			"year": 1990,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 93954336,
+			"files_count": 12,
+			"downloads": 35,
+			"week": 0,
+			"month": 1,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2024-07-29T05:18:36Z",
+			"publicdate": "2024-07-29T05:18:36Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1990-commercial-for-willow-valley-multi-bran",
+			"title": "1990 commercial for Willow Valley Multi Bran",
+			"description": "An Australian commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"Betamax",
+				"1990s",
+				"Advertising",
+				"Advertisement",
+				"Food",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"television_inbox",
+				"television"
+			],
+			"date": "1990-01-01T00:00:00Z",
+			"year": 1990,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 112871969,
+			"files_count": 13,
+			"downloads": 39,
+			"week": 0,
+			"month": 1,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2024-07-20T03:20:21Z",
+			"publicdate": "2024-07-20T03:20:21Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "1996-commercial-for-kelloggs-nutri-grain",
+			"title": "1996 commercial for Kellogg's Nutri-Grain",
+			"description": "An Australian commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"1990s",
+				"Advertising",
+				"Advertisement"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1996-01-01T00:00:00Z",
+			"year": 1996,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 2,
+			"item_size": 46199333,
+			"files_count": 12,
+			"downloads": 134,
+			"week": 0,
+			"month": 1,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2021-02-06T00:21:31Z",
+			"publicdate": "2021-02-06T00:21:31Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2000-commercial-for-kelloggs-sultana-bran",
+			"title": "2000 commercial for Kellogg's Sultana Bran",
+			"description": "An Australian commercial.\u00a0",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal",
+				"Food"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"television_inbox",
+				"television"
+			],
+			"date": "2000-01-01T00:00:00Z",
+			"year": 2000,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 66881282,
+			"files_count": 12,
+			"downloads": 0,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2025-06-06T00:34:06Z",
+			"publicdate": "2025-06-06T00:34:06Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2001-commercial-for-kelloggs-competition",
+			"title": "2001 commercial for Kellogg's competition",
+			"description": "An Australian commercial.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"television_inbox",
+				"television"
+			],
+			"date": "2001-01-01T00:00:00Z",
+			"year": 2001,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 78260237,
+			"files_count": 13,
+			"downloads": 39,
+			"week": 0,
+			"month": 2,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2024-02-10T01:20:33Z",
+			"publicdate": "2024-02-10T01:20:33Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2001-commercial-for-kelloggs-just-right-fruit-n-flakes",
+			"title": "2001 commercial for Kellogg's Just Right Fruit 'n' Flakes",
+			"description": "An Australian commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Food",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"television_inbox",
+				"television"
+			],
+			"date": "2001-01-01T00:00:00Z",
+			"year": 2001,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 65797778,
+			"files_count": 10,
+			"downloads": 33,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2024-02-12T00:56:52Z",
+			"publicdate": "2024-02-12T00:56:52Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2001-commercial-for-kelloggs-nutri-grain",
+			"title": "2001 commercial for Kellogg's Nutri-Grain",
+			"description": "An Australian commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"Advertising",
+				"Advertisement",
+				"2000s"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "2001-01-01T00:00:00Z",
+			"year": 2001,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 44385534,
+			"files_count": 9,
+			"downloads": 50,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2021-09-19T02:21:02Z",
+			"publicdate": "2021-09-19T02:21:02Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2001-commercial-for-kelloggs-nutri-grain-2",
+			"title": "2001 commercial for Kellogg's Nutri-Grain (2)",
+			"description": "An Australian commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Food",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"television_inbox",
+				"television"
+			],
+			"date": "2001-01-01T00:00:00Z",
+			"year": 2001,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 1,
+			"item_size": 62391976,
+			"files_count": 11,
+			"downloads": 33,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2024-02-17T00:31:03Z",
+			"publicdate": "2024-02-17T00:31:03Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2003-commercial-for-kelloggs-coco-pops",
+			"title": "2003 commercial for Kellogg's Coco Pops",
+			"description": "An Australian commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "2003-01-01T00:00:00Z",
+			"year": 2003,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 2,
+			"item_size": 43660185,
+			"files_count": 13,
+			"downloads": 364,
+			"week": 0,
+			"month": 3,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2021-03-18T01:10:15Z",
+			"publicdate": "2021-03-18T01:10:15Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2003-commercial-for-kelloggs-coco-pops-2",
+			"title": "2003 commercial for Kellogg's Coco Pops (2)",
+			"description": "An Australian commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"television_inbox",
+				"television"
+			],
+			"date": "2003-01-01T00:00:00Z",
+			"year": 2003,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 84081052,
+			"files_count": 13,
+			"downloads": 110,
+			"week": 0,
+			"month": 3,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2023-12-19T00:23:49Z",
+			"publicdate": "2023-12-19T00:23:49Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2003-commercial-for-kelloggs-corn-flakes",
+			"title": "2003 commercial for Kellogg's Corn Flakes",
+			"description": "An Australian commercial.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal",
+				"Food"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"television_inbox",
+				"television"
+			],
+			"date": "2003-01-01T00:00:00Z",
+			"year": 2003,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 21621994,
+			"files_count": 12,
+			"downloads": 81,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2024-09-08T02:29:39Z",
+			"publicdate": "2024-09-08T02:29:39Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2003-commercial-for-kelloggs-crunchy-nut",
+			"title": "2003 commercial for Kellogg's Crunchy Nut",
+			"description": "A commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"Advertising",
+				"Advertisement",
+				"2000s",
+				"Food",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "2003-01-01T00:00:00Z",
+			"year": 2003,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 42886144,
+			"files_count": 11,
+			"downloads": 74,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2021-10-11T00:15:43Z",
+			"publicdate": "2021-10-11T00:15:43Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2003-commercial-for-weet-bix",
+			"title": "2003 commercial for Weet-Bix",
+			"description": "An Australian commercial for a popular breakfast cereal produced by the Sanitarium Health Food Company, which is owned by the Seventh-day Adventist Church.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "2003-01-01T00:00:00Z",
+			"year": 2003,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 96749658,
+			"files_count": 13,
+			"downloads": 64,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2021-08-04T00:48:21Z",
+			"publicdate": "2021-08-04T00:48:21Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2003-commercial-for-weet-bix-2",
+			"title": "2003 commercial for Weet-Bix (2)",
+			"description": "An Australian commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "2003-01-01T00:00:00Z",
+			"year": 2003,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 50315563,
+			"files_count": 14,
+			"downloads": 60,
+			"week": 0,
+			"month": 1,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-02-24T00:50:10Z",
+			"publicdate": "2022-02-24T00:50:10Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2005-commercial-for-kelloggs-nutri-grain",
+			"title": "2005 commercial for Kellogg's Nutri-Grain",
+			"description": "An Australian television commercial for a breakfast cereal. Includes an offer involving the Sony PlayStation 2.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Food"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "2005-01-01T00:00:00Z",
+			"year": 2005,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 1,
+			"item_size": 32701821,
+			"files_count": 9,
+			"downloads": 239,
+			"week": 0,
+			"month": 2,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2021-01-18T03:58:15Z",
+			"publicdate": "2021-01-18T03:58:15Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2006-commercial-for-cheerios",
+			"title": "2006 commercial for Cheerios",
+			"description": "An Australian commercial. This is one of those Zoot Review ads.\u00a0",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal",
+				"Food"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"date": "2006-01-01T00:00:00Z",
+			"year": 2006,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 91534509,
+			"files_count": 13,
+			"downloads": 79,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2023-03-28T04:35:48Z",
+			"publicdate": "2023-03-28T04:35:48Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2006-commercial-for-just-right",
+			"title": "2006 commercial for Just Right",
+			"description": "An Australian commercial for a breakfast cereal.\u00a0",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"date": "2006-01-01T00:00:00Z",
+			"year": 2006,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 81650232,
+			"files_count": 13,
+			"downloads": 37,
+			"week": 0,
+			"month": 1,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2023-03-24T02:27:45Z",
+			"publicdate": "2023-03-24T02:27:45Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2008-commercial-for-kelloggs-coco-pops-coco-rocks",
+			"title": "2008 commercial for Kellogg's Coco Pops Coco Rocks",
+			"description": "An Australian commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "2008-01-01T00:00:00Z",
+			"year": 2008,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 47608400,
+			"files_count": 13,
+			"downloads": 197,
+			"week": 0,
+			"month": 3,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-01-22T00:07:28Z",
+			"publicdate": "2022-01-22T00:07:28Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2008-commercial-for-kelloggs-nutri-grain",
+			"title": "2008 commercial for Kellogg's Nutri-Grain",
+			"description": "An Australian commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal",
+				"Food"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "2008-01-01T00:00:00Z",
+			"year": 2008,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 76864473,
+			"files_count": 14,
+			"downloads": 130,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-01-11T00:23:36Z",
+			"publicdate": "2022-01-11T00:23:36Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2008-commercial-for-kelloggs-sultana-bran",
+			"title": "2008 commercial for Kellogg's Sultana Bran",
+			"description": "An Australian commercial for a breakfast cereal.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Food",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "2008-01-01T00:00:00Z",
+			"year": 2008,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 71524703,
+			"files_count": 14,
+			"downloads": 105,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-01-15T02:03:30Z",
+			"publicdate": "2022-01-15T02:03:30Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2009-commercial-for-just-right",
+			"title": "2009 commercial for Just Right",
+			"description": "An Australian commercial.\u00a0",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "2009-01-01T00:00:00Z",
+			"year": 2009,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 81031999,
+			"files_count": 13,
+			"downloads": 37,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-10-01T00:10:01Z",
+			"publicdate": "2022-10-01T00:10:01Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2009-commercial-for-kelloggs-special-k",
+			"title": "2009 commercial for Kellogg's Special K",
+			"description": "An Australian commercial.\u00a0",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal",
+				"Food"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "2009-01-01T00:00:00Z",
+			"year": 2009,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 2,
+			"item_size": 81682040,
+			"files_count": 13,
+			"downloads": 99,
+			"week": 0,
+			"month": 2,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-10-06T06:40:40Z",
+			"publicdate": "2022-10-06T06:40:40Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2009-commercial-for-kelloggs-sultana-bran",
+			"title": "2009 commercial for Kellogg's Sultana Bran",
+			"description": "An Australian commercial.\u00a0",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Food",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "2009-01-01T00:00:00Z",
+			"year": 2009,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 81827358,
+			"files_count": 13,
+			"downloads": 72,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-09-17T00:37:36Z",
+			"publicdate": "2022-09-17T00:37:36Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2009-commercial-for-milo-duo-breakfast-cereal",
+			"title": "2009 commercial for Milo Duo breakfast cereal",
+			"description": "An Australian commercial.\u00a0",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "2009-01-01T00:00:00Z",
+			"year": 2009,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 42898327,
+			"files_count": 13,
+			"downloads": 33,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-11-11T00:18:56Z",
+			"publicdate": "2022-11-11T00:18:56Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2009-commercial-for-uncle-tobys-oat-brits",
+			"title": "2009 commercial for Uncle Tobys Oat Brits",
+			"description": "An Australian commercial for a breakfast cereal.\u00a0",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"date": "2009-01-01T00:00:00Z",
+			"year": 2009,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 75036069,
+			"files_count": 14,
+			"downloads": 52,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-04-22T02:04:06Z",
+			"publicdate": "2022-04-22T02:04:06Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2009-commercial-for-uncle-tobys-plus",
+			"title": "2009 commercial for Uncle Tobys Plus",
+			"description": "An Australian commercial for a breakfast cereal.\u00a0",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Breakfast cereal",
+				"Food"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "2009-01-01T00:00:00Z",
+			"year": 2009,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 47271381,
+			"files_count": 12,
+			"downloads": 66,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2022-10-02T00:36:55Z",
+			"publicdate": "2022-10-02T00:36:55Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "2009-commercial-for-weet-bix",
+			"title": "2009 commercial for Weet-Bix",
+			"description": "An Australian commercial.",
+			"subject": [
+				"TV Commercial",
+				"VHS",
+				"2000s",
+				"Advertising",
+				"Advertisement",
+				"Food",
+				"Breakfast cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"television_inbox",
+				"television"
+			],
+			"date": "2009-01-01T00:00:00Z",
+			"year": 2009,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"item_size": 12465405,
+			"files_count": 9,
+			"downloads": 32,
+			"week": 0,
+			"month": 1,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2024-04-23T02:04:59Z",
+			"publicdate": "2024-04-23T02:04:59Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "20240511-s-1",
+			"title": "Commercials for the Week of May 5, 2024: Going Buoy! - Season 20, Episode 22",
+			"description": "A contribution is motivation! Please consider becoming a Patreon Patron at www.patreon.com/coffee4binky and get your name in the credits for $1 a month. (Please, no more than a dollar. We just need to pay bills and buy ramen.) (Had a problem with brightness, as on one monitor, these appeared bright, and other monitor, these appeared dark.) These are all of the X video uploads compiled into one weekly video. Come September, these will be uploaded on Mondays, and not Saturdays. Enjoy. Thanks for watching,",
+			"subject": [
+				"Doug Games",
+				"Nevada",
+				"Nevada Department of Minerals",
+				"Department of Minerals",
+				"Minerals Dept.",
+				"Minerals",
+				"Abandoned Mines",
+				"Nightmare Fuel",
+				"PSA",
+				"Public Service Announcement",
+				"PDFA",
+				"Partnership for a Drug-Free America",
+				"Smoking Crack",
+				"Yu-Gi-Oh",
+				"The CW4Kids",
+				"4KidsTV",
+				"Toonzai",
+				"Fox Box",
+				"Vortexx",
+				"Anime",
+				"Scary",
+				"Japaniamtion",
+				"Eerie Indiana",
+				"Promo",
+				"Hit the Road Jack",
+				"Super Mario World Captain N",
+				"Super Mario World",
+				"Nintendo",
+				"Super Mario Bros.",
+				"Super Mario Brothers",
+				"Super Mario",
+				"Frightening",
+				"Mario",
+				"Luigi",
+				"Princess Peach",
+				"Princess Toadstool",
+				"Captain N The Game Master",
+				"Chip & Pepper",
+				"Commercial Bumpers",
+				"Mario Bros.",
+				"Mario Brothers",
+				"Princess Lana",
+				"Local Las Vegas TV",
+				"Excedrin",
+				"Chip Ahoy",
+				"Chef Boyardee",
+				"Girl Scouts",
+				"Bobby McFerrin",
+				"Ocean Spray",
+				"Crayola",
+				"Crayons",
+				"Apple Jacks",
+				"Breakfast",
+				"Las Vegas History",
+				"Breakfast Cereal",
+				"Kellogg's",
+				"Scott Baio",
+				"Sitcom",
+				"Charles in Charge",
+				"TTISTF",
+				"Visitor 22",
+				"Tyrone L. Warbasse",
+				"Phillip I. Barnes",
+				"Christina A. Murphy",
+				"Las Vegas",
+				"coffee4binky",
+				"mrpib",
+				"superbunnyhopturbo",
+				"Bunnyhop Along",
+				"Sky Harvest Productions",
+				"Lazerverse",
+				"Lazerverse Multimedia-Cinemaworks",
+				"Two Capricorns",
+				"Grumpy Bear Plays",
+				"GBP",
+				"Found Footage",
+				"Annoyed Comic Book Grumpy",
+				"ACBG",
+				"Going Buoy!",
+				"Going Buoy",
+				"Spaced Out Truckers",
+				"Arrakis",
+				"Flying Through Arrakis",
+				"Dune",
+				"Parental Advisory",
+				"Parental Advisory Explicit Content",
+				"Boy at Park",
+				"Explicit Content",
+				"KittyFazbear87",
+				"Kitty Chaos",
+				"Kitty Meow",
+				"Bunga",
+				"Las Vegas Time Machine",
+				"LVTM",
+				"#LasVegasTimeMachine",
+				"#Lazerverse",
+				"George Plimpton",
+				"Intellivision",
+				"Console Wars",
+				"Atari",
+				"Atari 2600",
+				"Mattel",
+				"Mattel Electronics",
+				"007",
+				"Gun Barrell Sequence",
+				"James Bond",
+				"James Bond Theme",
+				"Monty Norman",
+				"Bond Circle",
+				"007 Circle",
+				"Tabasco",
+				"Salsa",
+				"Hot Sauce",
+				"Lloyd Kaufman",
+				"Trim",
+				"Tromaville",
+				"Teenage Catgirls in Heat",
+				"Movie Clip",
+				"Twitter",
+				"X",
+				"Shared on Twitter",
+				"Comedy",
+				"Michigan J. Frog",
+				"The WB",
+				"KFBT",
+				"KFBT-TV",
+				"KFBT 33",
+				"KFBT Ch. 33",
+				"KFBT-TV 33",
+				"Channel 33",
+				"KVCW",
+				"The CW",
+				"Station ID",
+				"Network ID",
+				"Unhappily Ever After",
+				"Theme Song",
+				"Highlander The Final Dimension",
+				"Highlander 3",
+				"Area 51",
+				"KVVU",
+				"Fox 5 Las Vegas",
+				"Fox",
+				"Fox Kids",
+				"Where on Earth is Carmen Sandiego?",
+				"DiC Animation",
+				"X-Men",
+				"X-Men '97",
+				"The Adventures of Batman & Robin",
+				"Vanishing Son",
+				"Red Dog Beer",
+				"Close-Up Toothpaste",
+				"Country Yuppies",
+				"Frat Boy Country Music",
+				"KLAS",
+				"8 New Now",
+				"KTNV",
+				"ABC",
+				"CBS",
+				"NBC",
+				"KVBC",
+				"KSNV",
+				"20/20",
+				"ABC News",
+				"Chester Cheetah",
+				"Cheetos",
+				"Cheetos Paws",
+				"Robin Hood Prince of Thieves",
+				"Robin Hood Prince of Thieves Toys",
+				"Robin Hood Men in Tights",
+				"1991",
+				"1990",
+				"Robin Hood",
+				"Kenner",
+				"Saturday Morning Cartoons",
+				"Hollywood Pictures",
+				"Movie Trailer",
+				"Movie Preview",
+				"The Ties That Bind"
+			],
+			"creator": [
+				"Tyrone L. Warbasse & Lazerverse's Spaced Out Truckers"
+			],
+			"collection": [
+				"podcasts_miscellaneous",
+				"podcasts"
+			],
+			"date": "2024-05-05T00:00:00Z",
+			"year": 2024,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"licenseurl": "https://creativecommons.org/publicdomain/mark/1.0/",
+			"item_size": 646201265,
+			"files_count": 32,
+			"downloads": 164,
+			"week": 0,
+			"month": 5,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2024-05-11T18:37:11Z",
+			"publicdate": "2024-05-11T18:37:11Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "CommercialBreaksFrom1967hogansHeroesEpisode",
+			"title": "Commercial breaks from 1967 ''Hogan's Heroes'' Episode",
+			"description": "All 3 commercial breaks from the original broadcast of episode \"Reverend Kommandant Klink\" of U.S. series \"Hogan's Heroes\". Slightly edited for copyright reasons (the show itself is obviously still under copyright and can't be uploaded here).",
+			"subject": [
+				"1967",
+				"1960s",
+				"60s",
+				"Sixties",
+				"Cigarettes",
+				"Tobacco",
+				"Classic TV",
+				"Classic Commercials",
+				"Commercials",
+				"Classic TV Commercial",
+				"Retro",
+				"Old",
+				"Coffee",
+				"Gum",
+				"Breakfast Cereal",
+				"WTF"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1967-01-01T00:00:00Z",
+			"year": 1967,
+			"mediatype": "movies",
+			"num_favorites": 11,
+			"item_size": 96856761,
+			"files_count": 58,
+			"downloads": 4648,
+			"week": 0,
+			"month": 12,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2012-01-30T11:22:53Z",
+			"publicdate": "2012-01-30T11:27:36Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "LoO673wRaQvto4x3PdXkX2swZIJ62T",
+			"title": "1969 GENERAL MILLS TV COMMERCIALS CHEERIOS FROSTED LUCKY CHARMS BREAKFAST CEREAL XD3065",
+			"description": "These television commercials for General Mills' Lucky Charms and Cheerios breakfast cereals date to the late 1960s/early 1970s.. The commercial for Lucky Charms features the famed animated Lucky the Leprechaun and the \"magically delicious\" frosted marshmallow cereal. The animated Cheerios ad features a kid becoming strong as Popeye by eating the cereal -- with the tagline \"Go with Cheerios!\" Lucky Charms debuted in 1964; Cheerios, originally called Cheeri-Oats, first hit milk in 1941. Motion picture films don't last forever; many have already been lost or destroyed. For almost two decades, we've worked to collect, scan and preserve the world as it was captured on 35mm, 16mm and 8mm movies -- including home movies, industrial films, and other non-fiction. If you have endangered films you'd like to have scanned, or wish to donate celluloid to Periscope Film so that we can share them with the world, we'd love to hear from you. Contact us via the weblink below. This film is part of the...",
+			"subject": [
+				"Stock Footage",
+				"General Mills",
+				"Lucky Charms",
+				"Periscope Film"
+			],
+			"collection": [
+				"PeriscopeFilm",
+				"ephemera"
+			],
+			"mediatype": "movies",
+			"item_size": 20746919,
+			"files_count": 22,
+			"downloads": 55,
+			"week": 0,
+			"month": 8,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2024-02-27T20:18:16Z",
+			"publicdate": "2024-02-27T20:18:16Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "PostToastiesAndyGriffith",
+			"title": "Classic commercial: Post Toasties",
+			"description": "A classic commercial for Post Toasties, starring Andy Griffith.",
+			"subject": [
+				"Classic TV Commercial",
+				"Advertising",
+				"Advertisement",
+				"Breakfast",
+				"Cereal",
+				"Food",
+				"Edible",
+				"Andy Griffith"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 1,
+			"item_size": 27661544,
+			"files_count": 17,
+			"downloads": 750,
+			"week": 0,
+			"month": 1,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2015-09-12T20:34:13Z",
+			"publicdate": "2015-09-12T20:34:13Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "RiceHoneysWheatHoneys1960",
+			"title": "1960 commercial: Rice Honeys/Wheat Honeys",
+			"description": "U.S. commercial. Also promotes the Howdy Doody Action Ring. The two cereals have long since been discontinued.",
+			"subject": [
+				"Classic TV Commercial",
+				"1960",
+				"1960s",
+				"Breakfast",
+				"Cereal",
+				"Food",
+				"Advertising",
+				"Advertisement"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"date": "1960-01-01T00:00:00Z",
+			"year": 1960,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 6,
+			"item_size": 59717037,
+			"files_count": 23,
+			"downloads": 588,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2015-09-04T01:00:31Z",
+			"publicdate": "2015-09-04T01:00:31Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "SpecialK1956",
+			"title": "1956 commercial for Kellogg's Special K",
+			"description": "A 1956 U.S. commercial for Kellogg's Special K cereal. I also uploaded the show this commercial comes from.",
+			"subject": [
+				"Classic TV Commercial",
+				"1956",
+				"Special K",
+				"Breakfast",
+				"Cereal"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television",
+				"television_inbox"
+			],
+			"date": "1956-01-01T00:00:00Z",
+			"year": 1956,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 1,
+			"item_size": 56757607,
+			"files_count": 31,
+			"downloads": 396,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2015-03-27T06:37:33Z",
+			"publicdate": "2015-03-27T06:37:33Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "VHS-005_99457-99907",
+			"title": "Multigrain Cheerios Commercial FOX/KTSU 13 1993-10-31",
+			"description": "This is a commercial for Multigrain Cheerios cereal featuring individuals discovering the taste of the product. The ad includes scenes of a man reading the newspaper and being resistant to try the cereal, a woman encouraging him, close-ups on the cereal and its texture, and ultimately the man trying and enjoying the cereal. From Network/Station: FOX/KTSU 13 Recorded in Salt Lake City, UT on 1993-10-31 Clipped from VHS-005 frames 99457 - 99907",
+			"subject": [
+				"commercial",
+				"cereal",
+				"Cheerios",
+				"food",
+				"breakfast",
+				"advertisement",
+				"Multigrain Cheerios",
+				"FOX",
+				"Halloween"
+			],
+			"collection": [
+				"vhsvault_inbox",
+				"vhsvault"
+			],
+			"date": "1993-10-31T00:00:00Z",
+			"year": 1993,
+			"mediatype": "movies",
+			"item_size": 125163691,
+			"files_count": 8,
+			"downloads": 22,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2023-12-27T08:17:53Z",
+			"publicdate": "2023-12-27T08:17:53Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "VeryShort1950s-eraCommercialForwheatiesCereal",
+			"title": "Very short 1950s-era commercial for Wheaties cereal",
+			"description": "A very short (16 seconds) U.S. commercial for Wheaties Cereal. According to the commercial, \"champions choose wheaties - Breakfast of champions\". As usual, with a sporting theme and a catchy jingle.",
+			"subject": [
+				"1950s",
+				"50s",
+				"1950's",
+				"50's",
+				"Fifties",
+				"TV",
+				"Television",
+				"Wheaties",
+				"Cereal",
+				"Retro",
+				"Advertising",
+				"Edible",
+				"Food",
+				"Cereal",
+				"Product",
+				"Sports",
+				"Very Short. Jingle",
+				"Breakfast",
+				"Commercial",
+				"Classic TV"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"mediatype": "movies",
+			"num_favorites": 1,
+			"num_reviews": 1,
+			"item_size": 8394487,
+			"files_count": 13,
+			"downloads": 2485,
+			"week": 0,
+			"month": 6,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 4,
+			"addeddate": "2010-02-25T21:17:25Z",
+			"reviewdate": "2010-02-26T08:22:24Z",
+			"publicdate": "2010-02-25T21:18:29Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "WhatIsInYourBreakfastCerealNeedToSeeTheyTryingToKillUs",
+			"title": "What Is In Your Breakfast Cereal Need To See ! They Trying To Kill Us !!",
+			"description": "\u00a0 Why is Trisodium Phosphate in Our Food? (Originally\u00a0posted on\u00a0 Mar 25, 2013) Using the example of\u00a0 Banana Nut Cheerios , let\u2019s just forget for a minute that there are GMO ingredients in this cereal. \u00a0And let\u2019s\u00a0 also \u00a0forget that it contains A LOT of sugar\u2026check this out: Sugar Brown Sugar Syrup Corn Syrup \u2026and if that\u00a0wasn\u2019t\u00a0enough sugar, it also has Dried Corn Syrup (Yeah\u2026 \u201cHeart Healthy\u00a0Cereal\u201d \u00a0\u2026wink- wink) So besides all that sugar, could someone please explain to me why this\u00a0cereal\u00a0contains\u00a0 Trisodium Phosphate ? And it\u2019s not just limited to this\u00a0cereal; in fact, it is found in many other\u00a0cereals and\u00a0other types of food as well! So the FDA states that Trisodium Phosphate (TSP) is \u201cNot a risk in food\u201d, yet on the website\u00a0 PAN Pesticides Database \u2013 Chemicals \u00a0it clearly states to\u00a0 \u201cAvoid all Contact\u201d! You may be interested in knowing\u00a0that TSP is also found in: Processed meat products Processed cheeses Many canned soups Acts as a leavening agent in many commercial cakes and baked...",
+			"collection": [
+				"hhvp-videos",
+				"additional_collections_video"
+			],
+			"mediatype": "movies",
+			"num_reviews": 1,
+			"item_size": 24014647,
+			"files_count": 13,
+			"downloads": 322,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 0,
+			"addeddate": "2017-05-07T14:26:34Z",
+			"reviewdate": "2020-03-23T14:35:15Z",
+			"publicdate": "2017-05-07T14:26:34Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "cheerios1951",
+			"title": "1951 commercial for Cheerios",
+			"description": "A 1951 U.S. commercial for Cheerios cereal. According to this commercial, if your child doesn't eat a good breakfast they will fail at school.",
+			"subject": [
+				"Classic TV Commercial",
+				"Cheerios",
+				"Cereal",
+				"Breakfast",
+				"Food",
+				"Edible",
+				"1951"
+			],
+			"collection": [
+				"classic_tv_commercials_emperor",
+				"classic_tv_commercials",
+				"television"
+			],
+			"date": "1951-01-01T00:00:00Z",
+			"year": 1951,
+			"language": [
+				"eng"
+			],
+			"mediatype": "movies",
+			"num_favorites": 4,
+			"item_size": 50976608,
+			"files_count": 28,
+			"downloads": 921,
+			"week": 0,
+			"month": 5,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"addeddate": "2014-07-08T00:18:54Z",
+			"publicdate": "2014-07-08T00:18:54Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "dmbb15707",
+			"title": "Post: Top 3 Cereal, 1960s (dmbb15707)",
+			"description": "Food and Beverage",
+			"creator": [
+				"Duke University Libraries"
+			],
+			"collection": [
+				"adviews_top_3",
+				"movies",
+				"adviews",
+				"television"
+			],
+			"date": "2011-03-02T00:00:00Z",
+			"year": 2011,
+			"mediatype": "movies",
+			"num_favorites": 3,
+			"num_reviews": 1,
+			"item_size": 22882699,
+			"files_count": 23,
+			"downloads": 332,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 4,
+			"addeddate": "2011-03-22T20:13:07Z",
+			"source": "d0c8778e-b374-4284-9053-694291cc25f",
+			"reviewdate": "2014-07-16T03:30:06Z",
+			"publicdate": "2011-03-22T20:13:07Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "dmbb15721",
+			"title": "Post: Top 3 Cereal, 1960s (dmbb15721)",
+			"description": "Food and Beverage",
+			"creator": [
+				"Duke University Libraries"
+			],
+			"collection": [
+				"adviews_top_3",
+				"movies",
+				"adviews",
+				"television"
+			],
+			"date": "2011-03-02T00:00:00Z",
+			"year": 2011,
+			"mediatype": "movies",
+			"num_favorites": 2,
+			"num_reviews": 1,
+			"item_size": 22272055,
+			"files_count": 23,
+			"downloads": 154,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 4,
+			"addeddate": "2011-03-22T20:15:10Z",
+			"source": "f3081845-6ae5-4853-96b1-cf12a4ac261",
+			"reviewdate": "2019-04-10T05:47:05Z",
+			"publicdate": "2011-03-22T20:15:10Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "dmbb16011",
+			"title": "Post: Puffed Corn Flakes Cereal, 1960s (dmbb16011)",
+			"description": "Food and Beverage",
+			"creator": [
+				"Duke University Libraries"
+			],
+			"collection": [
+				"adviews_puffed_corn_flakes",
+				"movies",
+				"adviews",
+				"television"
+			],
+			"date": "2011-03-02T00:00:00Z",
+			"year": 2011,
+			"mediatype": "movies",
+			"num_reviews": 1,
+			"item_size": 22189973,
+			"files_count": 23,
+			"downloads": 139,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 4,
+			"addeddate": "2011-03-21T06:12:09Z",
+			"source": "3659e468-044f-4e3a-af3a-de0c53acf9f",
+			"reviewdate": "2015-01-05T21:58:45Z",
+			"publicdate": "2011-03-21T06:12:09Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "dmbb33704",
+			"title": "Post: Corn Flakes and Fruit Series, 1960s (dmbb33704)",
+			"description": "Food and Beverage",
+			"creator": [
+				"Duke University Libraries"
+			],
+			"collection": [
+				"adviews_corn_flakes",
+				"movies",
+				"adviews",
+				"television"
+			],
+			"date": "2011-03-02T00:00:00Z",
+			"year": 2011,
+			"mediatype": "movies",
+			"num_favorites": 1,
+			"num_reviews": 1,
+			"item_size": 11405050,
+			"files_count": 17,
+			"downloads": 177,
+			"week": 0,
+			"month": 0,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 3,
+			"addeddate": "2011-03-19T17:46:49Z",
+			"source": "fd62913b-a619-4da4-8c44-bf483b193cc",
+			"reviewdate": "2014-07-11T10:19:09Z",
+			"publicdate": "2011-03-19T17:46:49Z"
+		},
+		"highlight": null,
+		"_score": null
+	},
+	{
+		"index": "prod-o-001",
+		"service_backend": "metadata",
+		"hit_type": "item",
+		"fields": {
+			"identifier": "dmbb43224",
+			"title": "Post: Count Off Cereal, 1960s (dmbb43224)",
+			"description": "Food and Beverage",
+			"creator": [
+				"Duke University Libraries"
+			],
+			"collection": [
+				"adviews_count_off",
+				"movies",
+				"adviews",
+				"television"
+			],
+			"date": "2011-03-02T00:00:00Z",
+			"year": 2011,
+			"mediatype": "movies",
+			"num_favorites": 2,
+			"num_reviews": 1,
+			"item_size": 22488928,
+			"files_count": 23,
+			"downloads": 511,
+			"week": 0,
+			"month": 3,
+			"indexflag": [
+				"index",
+				"nonoindex"
+			],
+			"avg_rating": 4,
+			"addeddate": "2011-03-19T18:09:11Z",
+			"source": "ce1addd7-7be1-4423-8635-05528cd2bed",
+			"reviewdate": "2014-07-15T21:15:55Z",
+			"publicdate": "2011-03-19T18:09:11Z"
+		},
+		"highlight": null,
+		"_score": null
+	}
+]

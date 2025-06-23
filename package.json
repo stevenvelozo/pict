@@ -50,12 +50,12 @@
     "@types/sinon": "^17.0.4",
     "eslint": "^9.27.0",
     "globals": "^16.2.0",
-    "quackage": "^1.0.41",
+    "quackage": "^1.0.42",
     "sinon": "^20.0.0"
   },
   "dependencies": {
     "cachetrax": "^1.0.4",
-    "fable": "^3.1.11",
+    "fable": "^3.1.12",
     "pict-application": "^1.0.27",
     "pict-provider": "^1.0.6",
     "pict-template": "^1.0.11",

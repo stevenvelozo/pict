@@ -404,6 +404,8 @@ class Pict extends libFable {
 	/**
 	 * Attach the default template engine renderers.
 	 *
+	 * TODO: Move this to a one-time service
+	 * 
 	 * @private
 	 */
 	initializePictTemplateEngine() {
