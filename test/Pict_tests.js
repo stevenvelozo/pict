@@ -52,6 +52,9 @@ suite(
 						Expect(testPict._Package).to.be.an('object', 'Pict should have a _Package object.');
 						Expect(testPict._Package.name).to.equal('pict', 'Pict _Package.package.name should be set.');
 
+						const testPictNoConfig = new libPict();
+						Expect(testPictNoConfig.settings).to.be.an('object', 'Pict should initialize properly without settings passed in.');
+
 						fDone();
 					}
 				);
