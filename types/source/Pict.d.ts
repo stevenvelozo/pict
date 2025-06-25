@@ -140,6 +140,8 @@ declare class Pict extends Pict_base {
     /**
      * Attach the default template engine renderers.
      *
+     * TODO: Move this to a one-time service
+     *
      * @private
      */
     private initializePictTemplateEngine;

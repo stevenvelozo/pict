@@ -86,7 +86,7 @@ suite
 						{
 							"UUID": "1",
 							"FilterHash": "FilterBookByAuthor[Name]",
-							"Type": "ExternalJoinStringSet",
+							"Type": "ExternalJoinStringMatch",
 							"Values": [ "John", "Jane" ],
 							"ExternalFilterByColumns": [ "Name" ],
 
@@ -112,7 +112,7 @@ suite
 						{
 							/* TODO: User table not in test data server
 							"UUID": "3",
-							"Type": "InternalJoinRecord",
+							"Type": "InternalJoinStringMatch",
 							"Values": [ "Bob" ],
 							"RemoteTable": "User",
 							"ExternalFilterByColumns": [ "NameFirst", "NameLast" ],
@@ -160,7 +160,7 @@ suite
 						{
 							"UUID": "1",
 							"FilterHash": "FilterBookByAuthor[Name]",
-							"Type": "ExternalJoinStringSet",
+							"Type": "ExternalJoinStringMatch",
 							"Values": [ "John", "Jane" ],
 							"ExternalFilterByColumns": [ "Name" ],
 
@@ -186,7 +186,7 @@ suite
 						{
 							/* TODO: User table not in test data server
 							"UUID": "3",
-							"Type": "InternalJoinRecord",
+							"Type": "InternalJoinStringMatch",
 							"Values": [ "Bob" ],
 							"RemoteTable": "User",
 							"ExternalFilterByColumns": [ "NameFirst", "NameLast" ],
@@ -278,7 +278,7 @@ suite
 						{
 							"UUID": "1",
 							"FilterHash": "FilterBookByAuthor[Name]",
-							"Type": "ExternalJoinStringSet",
+							"Type": "ExternalJoinStringMatch",
 							"Values": [ "John", "Jane" ],
 							"ExternalFilterByColumns": [ "Name" ],
 
@@ -304,7 +304,7 @@ suite
 						{
 							/* TODO: User table not in test data server
 							"UUID": "3",
-							"Type": "InternalJoinRecord",
+							"Type": "InternalJoinStringMatch",
 							"Values": [ "Bob" ],
 							"RemoteTable": "User",
 							"ExternalFilterByColumns": [ "NameFirst", "NameLast" ],
@@ -355,7 +355,7 @@ suite
 						{
 							"UUID": "1",
 							"FilterHash": "FilterBookByAuthor[Name]",
-							"Type": "ExternalJoinStringSet",
+							"Type": "ExternalJoinStringMatch",
 							"Values": [ "John", "Jane" ],
 							"ExternalFilterByColumns": [ "Name" ],
 
@@ -381,7 +381,7 @@ suite
 						{
 							/* TODO: User table not in test data server
 							"UUID": "3",
-							"Type": "InternalJoinRecord",
+							"Type": "InternalJoinStringMatch",
 							"Values": [ "Bob" ],
 							"RemoteTable": "User",
 							"ExternalFilterByColumns": [ "NameFirst", "NameLast" ],

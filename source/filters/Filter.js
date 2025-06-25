@@ -52,7 +52,10 @@ class FilterMeadowStanzaTokenGenerator
 			const tmpFilterResult = { GUID: this.pict.getUUID(), Filters: [] };
 			switch (tmpFilterConfig.Type)
 			{
-				case 'ExternalJoinStringSet':
+				case 'ExternalJoinMatch':
+				case 'ExternalJoinStringMatch':
+				case 'ExternalJoinValueMatch':
+				case 'ExternalJoinNumericMatch':
 					/*
 					  "Values": [ "John", "Jane" ],
 					  "ExternalFilterByColumns": [ "Name" ],
@@ -78,7 +81,7 @@ class FilterMeadowStanzaTokenGenerator
 								Instruction: 'FBVOR',
 								Field: tmpField,
 							};
-							if (tmpFilterConfig.ExactMatch)
+							if (tmpFilterConfig.ExactMatch || (typeof tmpFilterConfig.ExactMatch === 'undefined' && tmpFilterConfig.Type == 'ExternalJoinNumericMatch'))
 							{
 								tmpFilter.Operator = 'EQ';
 								tmpFilter.Value = tmpValue;
@@ -86,10 +89,20 @@ class FilterMeadowStanzaTokenGenerator
 							else
 							{
 								tmpFilter.Operator = 'LK';
-								tmpFilter.Value = `%25${tmpValue}%25`;
+								tmpFilter.Value = `%25${tmpValue}%25`; //FIXME: point of URI encoding needs to be addressed
 							}
 							tmpFilterResult.Filters.push(tmpFilter);
 						}
+					}
+					if (!tmpFilterConfig.JoinTable)
+					{
+						this.log.error(`${tmpFilterConfig.Type} filter missing JoinTable, cannot filter join table.`, { FilterConfig: tmpFilterConfig });
+						break;
+					}
+					if (!tmpFilterConfig.JoinTableExternalConnectionColumn)
+					{
+						this.log.error(`${tmpFilterConfig.Type} filter missing JoinTableExternalConnectionColumn, cannot filter join table [${tmpFilterConfig.JoinTable}].`);
+						break;
 					}
 					tmpFilterResult.Filters.push(
 					{
@@ -103,6 +116,11 @@ class FilterMeadowStanzaTokenGenerator
 					});
 					if (tmpFilterResult.Filters.length > 0)
 					{
+						if (!tmpFilterConfig.CoreConnectionColumn)
+						{
+							this.log.error(`${tmpFilterConfig.Type} filter missing CoreConnectionColumn, cannot filter core table [${pFilterState.Entity}].`);
+							break;
+						}
 						tmpFilterResult.JoinConfig =
 						{
 							CoreEntity: pFilterState.Entity,
@@ -113,8 +131,89 @@ class FilterMeadowStanzaTokenGenerator
 						};
 					}
 					break;
+				case 'ExternalJoinStringRange':
+				case 'ExternalJoinNumericRange':
+				case 'ExternalJoinDateRange':
+				case 'ExternalJoinRange':
+					if (!tmpFilterConfig.Values || !tmpFilterConfig.Values.Start || !tmpFilterConfig.Values.End)
+					{
+						break; //TODO: is this right? basically, date isn't populated yet, so just don't do anything
+					}
+
+					for (const tmpField of tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]))
+					{
+						if (tmpFilterConfig.Values && tmpFilterConfig.Values.Start)
+						{
+							tmpFilterResult.Filters.push(
+							{
+								Index: -1,
+								CoreEntity: true,
+								Entity: pFilterState.Entity,
+								Instruction: 'FBVOR',
+								Field: tmpField,
+								Operator: tmpFilterConfig.StartExclusive ? 'GT' : 'GE',
+								Value: tmpFilterConfig.Values.Start,
+							});
+						}
+						if (tmpFilterConfig.Values && tmpFilterConfig.Values.End)
+						{
+							tmpFilterResult.Filters.push(
+							{
+								Index: -1,
+								CoreEntity: true,
+								Entity: pFilterState.Entity,
+								Instruction: 'FBVOR',
+								Field: tmpField,
+								Operator: tmpFilterConfig.EndExclusive ? 'LT' : 'LE',
+								Value: tmpFilterConfig.Values.End,
+							});
+						}
+					}
+					if (!tmpFilterConfig.JoinTable)
+					{
+						this.log.error(`${tmpFilterConfig.Type} filter missing JoinTable, cannot filter join table.`, { FilterConfig: tmpFilterConfig });
+						break;
+					}
+					if (!tmpFilterConfig.JoinTableExternalConnectionColumn)
+					{
+						this.log.error(`${tmpFilterConfig.Type} filter missing JoinTableExternalConnectionColumn, cannot filter join table [${tmpFilterConfig.JoinTable}].`);
+						break;
+					}
+					tmpFilterResult.Filters.push(
+					{
+						Index: 0,
+						Fulcrum: true,
+						Entity: tmpFilterConfig.JoinTable,
+						Instruction: 'FBL',
+						Field: tmpFilterConfig.JoinTableExternalConnectionColumn,
+						Operator: 'INN',
+						ValueTemplate: `{~PJU:,^${tmpFilterConfig.JoinTableExternalConnectionColumn}^Record.State[Step-1]~}`,
+					});
+					if (tmpFilterResult.Filters.length > 0)
+					{
+						if (!tmpFilterConfig.CoreConnectionColumn)
+						{
+							this.log.error(`${tmpFilterConfig.Type} filter missing CoreConnectionColumn, cannot filter core table [${pFilterState.Entity}].`);
+							break;
+						}
+						if (!tmpFilterConfig.JoinTableCoreConnectionColumn)
+						{
+							this.log.error(`${tmpFilterConfig.Type} filter missing JoinTableCoreConnectionColumn, cannot filter core table [${pFilterState.Entity}].`);
+							break;
+						}
+						tmpFilterResult.JoinConfig =
+						{
+							CoreEntity: pFilterState.Entity,
+							Instruction: 'FBLOR',
+							Fields: [ tmpFilterConfig.CoreConnectionColumn ],
+							Operator: 'INN',
+							ValueTemplate: `{~PJU:,^${tmpFilterConfig.JoinTableCoreConnectionColumn}^Record.State[Step0]~}`,
+						};
+					}
+					break;
+				case 'StringRange':
 				case 'DateRange':
-				case 'ValueRange':
+				case 'NumericRange':
 				case 'Range':
 					/*
 					  "Values":
@@ -124,34 +223,38 @@ class FilterMeadowStanzaTokenGenerator
 					  },
 					  "FilterByColumn": "CreateDate",
 					 */
-					if (tmpFilterConfig.Values && tmpFilterConfig.Values.Start)
+					for (const tmpField of tmpFilterConfig.FilterByColumns || (tmpFilterConfig.FilterByColumn ? [ tmpFilterConfig.FilterByColumn ] : [ 'Name' ]))
 					{
-						tmpFilterResult.Filters.push(
+						if (tmpFilterConfig.Values && tmpFilterConfig.Values.Start)
 						{
-							Index: 0,
-							CoreEntity: true,
-							Entity: pFilterState.Entity,
-							Instruction: 'FBVOR',
-							Field: tmpFilterConfig.FilterByColumn,
-							Operator: 'GT',
-							Value: tmpFilterConfig.Values.Start,
-						});
-					}
-					if (tmpFilterConfig.Values && tmpFilterConfig.Values.End)
-					{
-						tmpFilterResult.Filters.push(
+							tmpFilterResult.Filters.push(
+							{
+								Index: 0,
+								CoreEntity: true,
+								Entity: pFilterState.Entity,
+								Instruction: 'FBVOR',
+								Field: tmpField,
+								Operator: tmpFilterConfig.StartExclusive ? 'GT' : 'GE',
+								Value: tmpFilterConfig.Values.Start,
+							});
+						}
+						if (tmpFilterConfig.Values && tmpFilterConfig.Values.End)
 						{
-							Index: 0,
-							CoreEntity: true,
-							Entity: pFilterState.Entity,
-							Instruction: 'FBVOR',
-							Field: tmpFilterConfig.FilterByColumn,
-							Operator: 'LT',
-							Value: tmpFilterConfig.Values.End,
-						});
+							tmpFilterResult.Filters.push(
+							{
+								Index: 0,
+								CoreEntity: true,
+								Entity: pFilterState.Entity,
+								Instruction: 'FBVOR',
+								Field: tmpField,
+								Operator: tmpFilterConfig.EndExclusive ? 'LT' : 'LE',
+								Value: tmpFilterConfig.Values.End,
+							});
+						}
 					}
 					break;
 				case 'StringMatch':
+				case 'DateMatch':
 				case 'NumericMatch':
 				case 'Match':
 					/*
@@ -186,7 +289,63 @@ class FilterMeadowStanzaTokenGenerator
 						}
 					}
 					break;
-				case 'InternalJoinRecord':
+				case 'InternalJoinStringRange':
+				case 'InternalJoinNumericRange':
+				case 'InternalJoinDateRange':
+				case 'InternalJoinRange':
+					if (!tmpFilterConfig.Values || !tmpFilterConfig.Values.Start || !tmpFilterConfig.Values.End)
+					{
+						break; //TODO: is this right? basically, date isn't populated yet, so just don't do anything
+					}
+
+					for (const tmpField of tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]))
+					{
+						if (tmpFilterConfig.Values && tmpFilterConfig.Values.Start)
+						{
+							tmpFilterResult.Filters.push(
+							{
+								Index: 0,
+								Entity: tmpFilterConfig.RemoteTable,
+								Instruction: 'FBVOR',
+								Field: tmpField,
+								Operator: tmpFilterConfig.StartExclusive ? 'GT' : 'GE',
+								Value: tmpFilterConfig.Values.Start,
+							});
+						}
+						if (tmpFilterConfig.Values && tmpFilterConfig.Values.End)
+						{
+							tmpFilterResult.Filters.push(
+							{
+								Index: 0,
+								Entity: tmpFilterConfig.RemoteTable,
+								Instruction: 'FBVOR',
+								Field: tmpField,
+								Operator: tmpFilterConfig.EndExclusive ? 'LT' : 'LE',
+								Value: tmpFilterConfig.Values.End,
+							});
+						}
+					}
+					if (tmpFilterResult.Filters.length > 0)
+					{
+						if (!tmpFilterConfig.JoinInternalConnectionColumn)
+						{
+							this.log.error(`${tmpFilterConfig.Type} filter missing JoinInternalConnectionColumn, cannot filter core table [${pFilterState.Entity}].`);
+							break;
+						}
+						tmpFilterResult.JoinConfig =
+						{
+							Instruction: 'FBLOR',
+							CoreEntity: pFilterState.Entity,
+							Fields: [ tmpFilterConfig.JoinInternalConnectionColumn ],
+							Operator: 'INN',
+							ValueTemplate: `{~PJU:,^${tmpFilterConfig.JoinExternalConnectionColumn}^Record.State[Step0]~}`,
+						};
+					}
+					break;
+				case 'InternalJoinMatch':
+				case 'InternalJoinStringMatch':
+				case 'InternalJoinValueMatch':
+				case 'InternalJoinNumericMatch':
 					/*
 					  "Values": [ "Bob" ],
                       "RemoteTable": "User",
@@ -206,7 +365,7 @@ class FilterMeadowStanzaTokenGenerator
 								Instruction: 'FBV',
 								Field: tmpField,
 							};
-							if (tmpFilterConfig.ExactMatch)
+							if (tmpFilterConfig.ExactMatch || (typeof tmpFilterConfig.ExactMatch === 'undefined' && tmpFilterConfig.Type == 'InternalJoinNumericMatch'))
 							{
 								tmpFilter.Operator = 'EQ';
 								tmpFilter.Value = tmpValue;
@@ -221,6 +380,11 @@ class FilterMeadowStanzaTokenGenerator
 					}
 					if (tmpFilterResult.Filters.length > 0)
 					{
+						if (!tmpFilterConfig.JoinInternalConnectionColumn)
+						{
+							this.log.error(`${tmpFilterConfig.Type} filter missing JoinInternalConnectionColumn, cannot filter core table [${pFilterState.Entity}].`);
+							break;
+						}
 						tmpFilterResult.JoinConfig =
 						{
 							Instruction: 'FBLOR',
