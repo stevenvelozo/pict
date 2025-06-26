@@ -26,6 +26,14 @@
  *   PreparedFilters: Array<PreparedFilter>,
  *   BundleConfig?: Array<Record<string, any>>,
  * }} FilterState
+ *
+ * @typedef { 'None' |
+ * 'Match' | 'StringMatch' | 'DateMatch' | 'NumericMatch' |
+ * 'Range' | 'StringRange' | 'DateRange' | 'NumericRange' |
+ * 'InternalJoinMatch' | 'InternalJoinStringMatch' | 'InternalJoinNumericMatch' | 'InternalJoinDateMatch' |
+ * 'InternalJoinRange' | 'InternalJoinStringRange' | 'InternalJoinNumericRange' | 'InternalJoinDateRange' |
+ * 'ExternalJoinMatch' | 'ExternalJoinStringMatch' | 'ExternalJoinNumericMatch' | 'ExternalJoinDateMatch' |
+ * 'ExternalJoinRange' | 'ExternalJoinStringRange' | 'ExternalJoinNumericRange' | 'ExternalJoinDateRange' } FilterType
  */
 
 class FilterMeadowStanzaTokenGenerator
@@ -54,7 +62,7 @@ class FilterMeadowStanzaTokenGenerator
 			{
 				case 'ExternalJoinMatch':
 				case 'ExternalJoinStringMatch':
-				case 'ExternalJoinValueMatch':
+				case 'ExternalJoinDateMatch':
 				case 'ExternalJoinNumericMatch':
 					/*
 					  "Values": [ "John", "Jane" ],
@@ -81,7 +89,8 @@ class FilterMeadowStanzaTokenGenerator
 								Instruction: 'FBVOR',
 								Field: tmpField,
 							};
-							if (tmpFilterConfig.ExactMatch || (typeof tmpFilterConfig.ExactMatch === 'undefined' && tmpFilterConfig.Type == 'ExternalJoinNumericMatch'))
+							if (tmpFilterConfig.ExactMatch || (typeof tmpFilterConfig.ExactMatch === 'undefined' &&
+									(tmpFilterConfig.Type == 'ExternalJoinNumericMatch' || tmpFilterConfig.Type == 'ExternalJoinDateMatch')))
 							{
 								tmpFilter.Operator = 'EQ';
 								tmpFilter.Value = tmpValue;
@@ -275,7 +284,8 @@ class FilterMeadowStanzaTokenGenerator
 								Field: tmpField,
 							};
 							// don't use like for numbers
-							if (tmpFilterConfig.ExactMatch || (typeof tmpFilterConfig.ExactMatch === 'undefined' && tmpFilterConfig.Type == 'NumericMatch'))
+							if (tmpFilterConfig.ExactMatch || (typeof tmpFilterConfig.ExactMatch === 'undefined' &&
+									(tmpFilterConfig.Type == 'NumericMatch' || tmpFilterConfig.Type == 'DateMatch')))
 							{
 								tmpFilter.Operator = 'EQ';
 								tmpFilter.Value = tmpValue;
@@ -344,12 +354,11 @@ class FilterMeadowStanzaTokenGenerator
 					break;
 				case 'InternalJoinMatch':
 				case 'InternalJoinStringMatch':
-				case 'InternalJoinValueMatch':
+				case 'InternalJoinDateMatch':
 				case 'InternalJoinNumericMatch':
 					/*
 					  "Values": [ "Bob" ],
                       "RemoteTable": "User",
-                      "RecordSet": "Book",
                       "ExternalFilterByColumns": [ "NameFirst", "NameLast" ],
                       "JoinExternalConnectionColumn": "IDUser",
                       "JoinInternalConnectionColumn": "CreatingIDUser",
@@ -365,7 +374,8 @@ class FilterMeadowStanzaTokenGenerator
 								Instruction: 'FBV',
 								Field: tmpField,
 							};
-							if (tmpFilterConfig.ExactMatch || (typeof tmpFilterConfig.ExactMatch === 'undefined' && tmpFilterConfig.Type == 'InternalJoinNumericMatch'))
+							if (tmpFilterConfig.ExactMatch || (typeof tmpFilterConfig.ExactMatch === 'undefined' &&
+									(tmpFilterConfig.Type == 'InternalJoinNumericMatch' || tmpFilterConfig.Type == 'InternalJoinDateMatch')))
 							{
 								tmpFilter.Operator = 'EQ';
 								tmpFilter.Value = tmpValue;

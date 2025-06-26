@@ -52,7 +52,7 @@ suite
 	'Pict FilterProvider Tests',
 	() =>
 	{
-		/** @type {ilbPict} */
+		/** @type {libPict} */
 		let _Pict;
 		setup(() =>
 		{
@@ -61,71 +61,266 @@ suite
 			let _PictEnvironment = new libPict.EnvironmentObject(_Pict);
 		});
 
-			test
-			(
-				'Filter - load all records',
-				async function()
+		test
+		(
+			'Filter - load all records',
+			async function()
+			{
+				let _Application = new DoNothingApplication(_Pict, {});
+				await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
 				{
-					let _Application = new DoNothingApplication(_Pict, {});
-					await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+					if (error)
 					{
-						if (error)
+						return reject(error);
+					}
+					resolve();
+				}));
+				const tmpResults =
+				{
+					"Entity": "Book",
+					"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
+					"ResultDestinationAddress": "AppData.Test",
+				};
+				await new Promise((resolve, reject) => _Pict.providers.FilterManager.loadRecordsByFilter(
+				[
+					{
+						"UUID": "1",
+						"FilterHash": "FilterBookByAuthor[Name]",
+						"Type": "ExternalJoinStringMatch",
+						"Values": [ "John", "Jane" ],
+						"ExternalFilterByColumns": [ "Name" ],
+
+						"CoreConnectionColumn": "IDBook",
+
+						"JoinTable": "BookAuthorJoin",
+						"JoinTableExternalConnectionColumn": "IDAuthor",
+						"JoinTableCoreConnectionColumn": "IDBook",
+
+						"ExternalFilterByTable": "Author",
+						"ExternalFilterByTableConnectionColumn": "IDAuthor"
+					},
+					{
+						"UUID": "2",
+						"Type": "DateRange",
+						"Values":
 						{
-							return reject(error);
-						}
+							"Start": "2023-01-01T00:00:00Z",
+							"End": "2024-01-01T00:00:00Z"
+						},
+						"FilterByColumn": "CreateDate"
+					},
+					{
+						/* TODO: User table not in test data server
+						"UUID": "3",
+						"Type": "InternalJoinStringMatch",
+						"Values": [ "Bob" ],
+						"RemoteTable": "User",
+						"ExternalFilterByColumns": [ "NameFirst", "NameLast" ],
+						"JoinExternalConnectionColumn": "IDUser",
+						"JoinInternalConnectionColumn": "CreatingIDUser"
+						*/
+					}
+				], tmpResults, (pError) =>
+				{
+					try
+					{
+						Expect(pError).to.not.exist;
+						Expect(_Pict.AppData.Test).to.be.an('array');
 						resolve();
-					}));
-					const tmpResults =
+					}
+					catch (pError)
 					{
-						"Entity": "Book",
-						"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
-						"ResultDestinationAddress": "AppData.Test",
-					};
-					await new Promise((resolve, reject) => _Pict.providers.FilterManager.loadRecordsByFilter(
-					[
+						reject(pError);
+					}
+				}));
+			}
+		);
+
+		test
+		(
+			'Filter - load page of records',
+			async function()
+			{
+				let _Application = new DoNothingApplication(_Pict, {});
+				await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+				{
+					if (error)
+					{
+						return reject(error);
+					}
+					resolve();
+				}));
+				let tmpResults = {
+					"Entity": "Book",
+					"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
+					"ResultDestinationAddress": "AppData.Test",
+				};
+				await new Promise((resolve, reject) => _Pict.providers.FilterManager.loadRecordPageByFilter(
+				[
+					{
+						"UUID": "1",
+						"FilterHash": "FilterBookByAuthor[Name]",
+						"Type": "ExternalJoinStringMatch",
+						"Values": [ "John", "Jane" ],
+						"ExternalFilterByColumns": [ "Name" ],
+
+						"CoreConnectionColumn": "IDBook",
+
+						"JoinTable": "BookAuthorJoin",
+						"JoinTableExternalConnectionColumn": "IDAuthor",
+						"JoinTableCoreConnectionColumn": "IDBook",
+
+						"ExternalFilterByTable": "Author",
+						"ExternalFilterByTableConnectionColumn": "IDAuthor"
+					},
+					{
+						"UUID": "2",
+						"Type": "DateRange",
+						"Values":
 						{
-							"UUID": "1",
-							"FilterHash": "FilterBookByAuthor[Name]",
-							"Type": "ExternalJoinStringMatch",
-							"Values": [ "John", "Jane" ],
-							"ExternalFilterByColumns": [ "Name" ],
-
-							"CoreConnectionColumn": "IDBook",
-
-							"JoinTable": "BookAuthorJoin",
-							"JoinTableExternalConnectionColumn": "IDAuthor",
-							"JoinTableCoreConnectionColumn": "IDBook",
-
-							"ExternalFilterByTable": "Author",
-							"ExternalFilterByTableConnectionColumn": "IDAuthor"
+							"Start": "2023-01-01T00:00:00Z",
+							"End": "2024-01-01T00:00:00Z"
 						},
+						"FilterByColumn": "CreateDate"
+					},
+					{
+						/* TODO: User table not in test data server
+						"UUID": "3",
+						"Type": "InternalJoinStringMatch",
+						"Values": [ "Bob" ],
+						"RemoteTable": "User",
+						"ExternalFilterByColumns": [ "NameFirst", "NameLast" ],
+						"JoinExternalConnectionColumn": "IDUser",
+						"JoinInternalConnectionColumn": "CreatingIDUser"
+						*/
+					}
+				], tmpResults, 0, 10, (pError) =>
+				{
+					try
+					{
+						Expect(pError).to.not.exist;
+						Expect(_Pict.AppData.Test).to.be.an('array').with.length(10);
+						resolve();
+					}
+					catch (pError)
+					{
+						reject(pError);
+					}
+				}));
+			}
+		);
+
+		test
+		(
+			'Filter - load single record by exact ID match',
+			async function()
+			{
+				let _Application = new DoNothingApplication(_Pict, {});
+				await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+				{
+					if (error)
+					{
+						return reject(error);
+					}
+					resolve();
+				}));
+				let tmpResults = {
+					"Entity": "Book",
+					"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
+					"ResultDestinationAddress": "AppData.Test",
+				};
+				await new Promise((resolve, reject) => _Pict.providers.FilterManager.loadRecordPageByFilter(
+				[
+					{
+						"UUID": "1",
+						"Type": "NumericMatch",
+						"Values": [ 1 ],
+						"FilterByColumn": "IDBook",
+					}
+				], tmpResults, (pError) =>
+				{
+					try
+					{
+						Expect(pError).to.not.exist;
+						Expect(_Pict.AppData.Test).to.be.an('array').with.length(1);
+						Expect(_Pict.AppData.Test[0].IDBook).to.equal(1);
+						resolve();
+					}
+					catch (pError)
+					{
+						reject(pError);
+					}
+				}));
+			}
+		);
+
+		test
+		(
+			'Filter - load page of records by address',
+			async function()
+			{
+				let _Application = new DoNothingApplication(_Pict, {});
+				await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+				{
+					if (error)
+					{
+						return reject(error);
+					}
+					resolve();
+				}));
+				let tmpResults = {
+					"Entity": "Book",
+					"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
+					"ResultDestinationAddress": "AppData.Test",
+				};
+				_Pict.AppData.FilterConfig =
+				[
+					{
+						"UUID": "1",
+						"FilterHash": "FilterBookByAuthor[Name]",
+						"Type": "ExternalJoinStringMatch",
+						"Values": [ "John", "Jane" ],
+						"ExternalFilterByColumns": [ "Name" ],
+
+						"CoreConnectionColumn": "IDBook",
+
+						"JoinTable": "BookAuthorJoin",
+						"JoinTableExternalConnectionColumn": "IDAuthor",
+						"JoinTableCoreConnectionColumn": "IDBook",
+
+						"ExternalFilterByTable": "Author",
+						"ExternalFilterByTableConnectionColumn": "IDAuthor"
+					},
+					{
+						"UUID": "2",
+						"Type": "DateRange",
+						"Values":
 						{
-							"UUID": "2",
-							"Type": "DateRange",
-							"Values":
-							{
-								"Start": "2023-01-01T00:00:00Z",
-								"End": "2024-01-01T00:00:00Z"
-							},
-							"FilterByColumn": "CreateDate"
+							"Start": "2023-01-01T00:00:00Z",
+							"End": "2024-01-01T00:00:00Z"
 						},
-						{
-							/* TODO: User table not in test data server
-							"UUID": "3",
-							"Type": "InternalJoinStringMatch",
-							"Values": [ "Bob" ],
-							"RemoteTable": "User",
-							"ExternalFilterByColumns": [ "NameFirst", "NameLast" ],
-							"JoinExternalConnectionColumn": "IDUser",
-							"JoinInternalConnectionColumn": "CreatingIDUser"
-							*/
-						}
-					], tmpResults, (pError) =>
+						"FilterByColumn": "CreateDate"
+					},
+					{
+						/* TODO: User table not in test data server
+						"UUID": "3",
+						"Type": "InternalJoinStringMatch",
+						"Values": [ "Bob" ],
+						"RemoteTable": "User",
+						"ExternalFilterByColumns": [ "NameFirst", "NameLast" ],
+						"JoinExternalConnectionColumn": "IDUser",
+						"JoinInternalConnectionColumn": "CreatingIDUser"
+						*/
+					}
+				];
+				_Pict.AppData.FilterExperience = tmpResults;
+				await new Promise((resolve, reject) => _Pict.providers.FilterManager.executeFilterPage(
+					'AppData.FilterConfig', 'AppData.FilterExperience', (pError) =>
 					{
 						try
 						{
 							Expect(pError).to.not.exist;
-							Expect(_Pict.AppData.Test).to.be.an('array');
+							Expect(_Pict.AppData.Test).to.be.an('array').with.length(100);
 							resolve();
 						}
 						catch (pError)
@@ -133,276 +328,161 @@ suite
 							reject(pError);
 						}
 					}));
-				}
-			);
+			}
+		);
 
-			test
-			(
-				'Filter - load page of records',
-				async function()
+		test
+		(
+			'Filter - load records count',
+			async function()
+			{
+				let _Application = new DoNothingApplication(_Pict, {});
+				await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
 				{
-					let _Application = new DoNothingApplication(_Pict, {});
-					await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+					if (error)
 					{
-						if (error)
-						{
-							return reject(error);
-						}
-						resolve();
-					}));
-					let tmpResults = {
-						"Entity": "Book",
-						"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
-						"ResultDestinationAddress": "AppData.Test",
-					};
-					await new Promise((resolve, reject) => _Pict.providers.FilterManager.loadRecordPageByFilter(
-					[
-						{
-							"UUID": "1",
-							"FilterHash": "FilterBookByAuthor[Name]",
-							"Type": "ExternalJoinStringMatch",
-							"Values": [ "John", "Jane" ],
-							"ExternalFilterByColumns": [ "Name" ],
-
-							"CoreConnectionColumn": "IDBook",
-
-							"JoinTable": "BookAuthorJoin",
-							"JoinTableExternalConnectionColumn": "IDAuthor",
-							"JoinTableCoreConnectionColumn": "IDBook",
-
-							"ExternalFilterByTable": "Author",
-							"ExternalFilterByTableConnectionColumn": "IDAuthor"
-						},
-						{
-							"UUID": "2",
-							"Type": "DateRange",
-							"Values":
-							{
-								"Start": "2023-01-01T00:00:00Z",
-								"End": "2024-01-01T00:00:00Z"
-							},
-							"FilterByColumn": "CreateDate"
-						},
-						{
-							/* TODO: User table not in test data server
-							"UUID": "3",
-							"Type": "InternalJoinStringMatch",
-							"Values": [ "Bob" ],
-							"RemoteTable": "User",
-							"ExternalFilterByColumns": [ "NameFirst", "NameLast" ],
-							"JoinExternalConnectionColumn": "IDUser",
-							"JoinInternalConnectionColumn": "CreatingIDUser"
-							*/
-						}
-					], tmpResults, 0, 10, (pError) =>
+						return reject(error);
+					}
+					resolve();
+				}));
+				let tmpResults = {
+					"Entity": "Book",
+					"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
+					"ResultDestinationAddress": "AppData.Test",
+				};
+				await new Promise((resolve, reject) => _Pict.providers.FilterManager.countRecordsByFilter(
+				[
 					{
-						try
-						{
-							Expect(pError).to.not.exist;
-							Expect(_Pict.AppData.Test).to.be.an('array').with.length(10);
-							resolve();
-						}
-						catch (pError)
-						{
-							reject(pError);
-						}
-					}));
-				}
-			);
+						"UUID": "1",
+						"FilterHash": "FilterBookByAuthor[Name]",
+						"Type": "ExternalJoinStringMatch",
+						"Values": [ "John", "Jane" ],
+						"ExternalFilterByColumns": [ "Name" ],
 
-			test
-			(
-				'Filter - load single record by exact ID match',
-				async function()
+						"CoreConnectionColumn": "IDBook",
+
+						"JoinTable": "BookAuthorJoin",
+						"JoinTableExternalConnectionColumn": "IDAuthor",
+						"JoinTableCoreConnectionColumn": "IDBook",
+
+						"ExternalFilterByTable": "Author",
+						"ExternalFilterByTableConnectionColumn": "IDAuthor"
+					},
+					{
+						"UUID": "2",
+						"Type": "DateRange",
+						"Values":
+						{
+							"Start": "2023-01-01T00:00:00Z",
+							"End": "2024-01-01T00:00:00Z"
+						},
+						"FilterByColumn": "CreateDate"
+					},
+					{
+						/* TODO: User table not in test data server
+						"UUID": "3",
+						"Type": "InternalJoinStringMatch",
+						"Values": [ "Bob" ],
+						"RemoteTable": "User",
+						"ExternalFilterByColumns": [ "NameFirst", "NameLast" ],
+						"JoinExternalConnectionColumn": "IDUser",
+						"JoinInternalConnectionColumn": "CreatingIDUser"
+						*/
+					}
+				], tmpResults, (pError) =>
 				{
-					let _Application = new DoNothingApplication(_Pict, {});
-					await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+					try
 					{
-						if (error)
-						{
-							return reject(error);
-						}
+						Expect(pError).to.not.exist;
+						Expect(_Pict.AppData.Test).to.be.greaterThan(400);
 						resolve();
-					}));
-					let tmpResults = {
-						"Entity": "Book",
-						"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
-						"ResultDestinationAddress": "AppData.Test",
-					};
-					await new Promise((resolve, reject) => _Pict.providers.FilterManager.loadRecordPageByFilter(
-					[
-						{
-							"UUID": "1",
-							"Type": "NumericMatch",
-							"Values": [ 1 ],
-							"FilterByColumn": "IDBook",
-						}
-					], tmpResults, (pError) =>
+					}
+					catch (pError)
 					{
-						try
-						{
-							Expect(pError).to.not.exist;
-							Expect(_Pict.AppData.Test).to.be.an('array').with.length(1);
-							Expect(_Pict.AppData.Test[0].IDBook).to.equal(1);
-							resolve();
-						}
-						catch (pError)
-						{
-							reject(pError);
-						}
-					}));
-				}
-			);
+						reject(pError);
+					}
+				}));
+			}
+		);
 
-			test
-			(
-				'Filter - load page of records by address',
-				async function()
-				{
-					let _Application = new DoNothingApplication(_Pict, {});
-					await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+		test
+		(
+			'Filter clauses',
+			async function()
+			{
+				const simpleClause = new libPict.FilterClauseLocal(_Pict);
+
+				simpleClause.type = 'StringMatch';
+				simpleClause.filterByColumn = 'NameFirst';
+				simpleClause.exactMatch = false;
+				simpleClause.values = [ 'John', 'Jane' ];
+
+				Expect(simpleClause.generateFilterClauseConfig()).to.deep.equal(
 					{
-						if (error)
-						{
-							return reject(error);
-						}
-						resolve();
-					}));
-					let tmpResults = {
-						"Entity": "Book",
-						"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
-						"ResultDestinationAddress": "AppData.Test",
-					};
-					_Pict.AppData.FilterConfig =
-					[
-						{
-							"UUID": "1",
-							"FilterHash": "FilterBookByAuthor[Name]",
-							"Type": "ExternalJoinStringMatch",
-							"Values": [ "John", "Jane" ],
-							"ExternalFilterByColumns": [ "Name" ],
+						"Type": "StringMatch",
+						"FilterByColumn": "NameFirst",
+						"ExactMatch": false,
+						"Values": [ "John", "Jane" ]
+					}
+				);
 
-							"CoreConnectionColumn": "IDBook",
+				const internalJoinClause = new libPict.FilterClauseInternalJoin(_Pict);
 
-							"JoinTable": "BookAuthorJoin",
-							"JoinTableExternalConnectionColumn": "IDAuthor",
-							"JoinTableCoreConnectionColumn": "IDBook",
+				internalJoinClause.type = 'InternalJoinDateRange';
+				internalJoinClause.remoteTable = 'User';
+				internalJoinClause.externalFilterByColumn = 'CreateDate';
+				internalJoinClause.joinExternalConnectionColumn = 'IDUser';
+				internalJoinClause.joinInternalConnectionColumn = 'CreatingIDUser';
+				internalJoinClause.values.Start = "2023-01-01T00:00:00Z";
+				internalJoinClause.values.End = "2024-01-01T00:00:00Z";
 
-							"ExternalFilterByTable": "Author",
-							"ExternalFilterByTableConnectionColumn": "IDAuthor"
-						},
-						{
-							"UUID": "2",
-							"Type": "DateRange",
-							"Values":
-							{
-								"Start": "2023-01-01T00:00:00Z",
-								"End": "2024-01-01T00:00:00Z"
-							},
-							"FilterByColumn": "CreateDate"
-						},
-						{
-							/* TODO: User table not in test data server
-							"UUID": "3",
-							"Type": "InternalJoinStringMatch",
-							"Values": [ "Bob" ],
-							"RemoteTable": "User",
-							"ExternalFilterByColumns": [ "NameFirst", "NameLast" ],
-							"JoinExternalConnectionColumn": "IDUser",
-							"JoinInternalConnectionColumn": "CreatingIDUser"
-							*/
-						}
-					];
-					_Pict.AppData.FilterExperience = tmpResults;
-					await new Promise((resolve, reject) => _Pict.providers.FilterManager.executeFilterPage(
-						'AppData.FilterConfig', 'AppData.FilterExperience', (pError) =>
-						{
-							try
-							{
-								Expect(pError).to.not.exist;
-								Expect(_Pict.AppData.Test).to.be.an('array').with.length(100);
-								resolve();
-							}
-							catch (pError)
-							{
-								reject(pError);
-							}
-						}));
-				}
-			);
-
-			test
-			(
-				'Filter - load records count',
-				async function()
-				{
-					let _Application = new DoNothingApplication(_Pict, {});
-					await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+				Expect(internalJoinClause.generateFilterClauseConfig()).to.deep.equal(
 					{
-						if (error)
+						"Type": "InternalJoinDateRange",
+						"RemoteTable": "User",
+						"StartExclusive": undefined,
+						"EndExclusive": undefined,
+						"ExternalFilterByColumn": "CreateDate",
+						"ExternalFilterByColumns": undefined,
+						"JoinExternalConnectionColumn": "IDUser",
+						"JoinInternalConnectionColumn": "CreatingIDUser",
+						"Values":
 						{
-							return reject(error);
+							"Start": "2023-01-01T00:00:00Z",
+							"End": "2024-01-01T00:00:00Z"
 						}
-						resolve();
-					}));
-					let tmpResults = {
-						"Entity": "Book",
-						"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
-						"ResultDestinationAddress": "AppData.Test",
-					};
-					await new Promise((resolve, reject) => _Pict.providers.FilterManager.countRecordsByFilter(
-					[
-						{
-							"UUID": "1",
-							"FilterHash": "FilterBookByAuthor[Name]",
-							"Type": "ExternalJoinStringMatch",
-							"Values": [ "John", "Jane" ],
-							"ExternalFilterByColumns": [ "Name" ],
+					}
+				);
 
-							"CoreConnectionColumn": "IDBook",
+				const externalJoinClause = new libPict.FilterClauseExternalJoin(_Pict);
 
-							"JoinTable": "BookAuthorJoin",
-							"JoinTableExternalConnectionColumn": "IDAuthor",
-							"JoinTableCoreConnectionColumn": "IDBook",
+				externalJoinClause.type = 'ExternalJoinNumericMatch';
 
-							"ExternalFilterByTable": "Author",
-							"ExternalFilterByTableConnectionColumn": "IDAuthor"
-						},
-						{
-							"UUID": "2",
-							"Type": "DateRange",
-							"Values":
-							{
-								"Start": "2023-01-01T00:00:00Z",
-								"End": "2024-01-01T00:00:00Z"
-							},
-							"FilterByColumn": "CreateDate"
-						},
-						{
-							/* TODO: User table not in test data server
-							"UUID": "3",
-							"Type": "InternalJoinStringMatch",
-							"Values": [ "Bob" ],
-							"RemoteTable": "User",
-							"ExternalFilterByColumns": [ "NameFirst", "NameLast" ],
-							"JoinExternalConnectionColumn": "IDUser",
-							"JoinInternalConnectionColumn": "CreatingIDUser"
-							*/
-						}
-					], tmpResults, (pError) =>
+				externalJoinClause.externalFilterByTable = 'Author';
+				externalJoinClause.externalFilterByColumns = [ 'Name' ];
+				externalJoinClause.externalFilterByTableConnectionColumn = 'IDAuthor';
+				externalJoinClause.joinTable = 'BookAuthorJoin';
+				externalJoinClause.joinTableExternalConnectionColumn = 'IDAuthor';
+				externalJoinClause.joinTableCoreConnectionColumn = 'IDBook';
+				externalJoinClause.coreConnectionColumn = 'IDBook';
+				externalJoinClause.values = [ 1, 2, 3 ];
+
+				Expect(externalJoinClause.generateFilterClauseConfig()).to.deep.equal(
 					{
-						try
-						{
-							Expect(pError).to.not.exist;
-							Expect(_Pict.AppData.Test).to.be.greaterThan(400);
-							resolve();
-						}
-						catch (pError)
-						{
-							reject(pError);
-						}
-					}));
-				}
-			);
+						"Type": "ExternalJoinNumericMatch",
+						"ExactMatch": undefined,
+						"ExternalFilterByTable": "Author",
+						"ExternalFilterByColumn": undefined,
+						"ExternalFilterByColumns": [ "Name" ],
+						"JoinTable": "BookAuthorJoin",
+						"JoinTableExternalConnectionColumn": "IDAuthor",
+						"JoinTableCoreConnectionColumn": "IDBook",
+						"CoreConnectionColumn": "IDBook",
+						"ExternalFilterByTableConnectionColumn": "IDAuthor",
+						"Values": [ 1, 2, 3 ]
+					}
+				);
+			}
+		);
 	}
 );

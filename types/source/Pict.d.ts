@@ -235,7 +235,7 @@ declare class Pict extends Pict_base {
     parseTemplateSetWithPayloadByHash(pTemplateHash: string, pDataSet: Array<any> | any, pPayload: any, fCallback?: Function, pContextArray?: Array<any>): string | null;
 }
 declare namespace Pict {
-    export { PictApplicationClass, PictViewClass, PictProviderClass, PictTemplateClass, EnvironmentLog, EnvironmentObject, isBrowser, safeOnDocumentReady, safeLoadPictApplication, Fable };
+    export { PictApplicationClass, PictViewClass, PictProviderClass, PictTemplateClass, EnvironmentLog, EnvironmentObject, FilterClauseLocal, FilterClauseInternalJoin, FilterClauseExternalJoin, isBrowser, safeOnDocumentReady, safeLoadPictApplication, Fable };
 }
 import PictTemplateProvider = require("./Pict-Template-Provider.js");
 import PictMeadowEntityProvider = require("./Pict-Meadow-EntityProvider.js");
@@ -249,6 +249,9 @@ declare const PictProviderClass: typeof import("pict-provider");
 declare const PictTemplateClass: typeof import("pict-template");
 declare const EnvironmentLog: typeof import("./environments/Pict-Environment-Log.js");
 declare const EnvironmentObject: typeof import("./environments/Pict-Environment-Object.js");
+declare const FilterClauseLocal: typeof import("./filters/FilterClauseLocal.js");
+declare const FilterClauseInternalJoin: typeof import("./filters/FilterClauseInternalJoin.js");
+declare const FilterClauseExternalJoin: typeof import("./filters/FilterClauseExternalJoin.js");
 declare const isBrowser: Function;
 declare const safeOnDocumentReady: (fCallback: Function) => void;
 declare const safeLoadPictApplication: (pPictApplication?: import("pict-application"), pLogNoisiness?: number) => void;

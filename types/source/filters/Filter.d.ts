@@ -26,6 +26,14 @@ export = FilterMeadowStanzaTokenGenerator;
  *   PreparedFilters: Array<PreparedFilter>,
  *   BundleConfig?: Array<Record<string, any>>,
  * }} FilterState
+ *
+ * @typedef { 'None' |
+ * 'Match' | 'StringMatch' | 'DateMatch' | 'NumericMatch' |
+ * 'Range' | 'StringRange' | 'DateRange' | 'NumericRange' |
+ * 'InternalJoinMatch' | 'InternalJoinStringMatch' | 'InternalJoinNumericMatch' | 'InternalJoinDateMatch' |
+ * 'InternalJoinRange' | 'InternalJoinStringRange' | 'InternalJoinNumericRange' | 'InternalJoinDateRange' |
+ * 'ExternalJoinMatch' | 'ExternalJoinStringMatch' | 'ExternalJoinNumericMatch' | 'ExternalJoinDateMatch' |
+ * 'ExternalJoinRange' | 'ExternalJoinStringRange' | 'ExternalJoinNumericRange' | 'ExternalJoinDateRange' } FilterType
  */
 declare class FilterMeadowStanzaTokenGenerator {
     /**
@@ -56,7 +64,7 @@ declare class FilterMeadowStanzaTokenGenerator {
     _compileSimpleFilterToString(pFilter: any): string;
 }
 declare namespace FilterMeadowStanzaTokenGenerator {
-    export { FilterConnection, PreparedFilter, FilterState };
+    export { FilterConnection, PreparedFilter, FilterState, FilterType };
 }
 type FilterConnection = {
     ValueTemplate?: string;
@@ -82,4 +90,5 @@ type FilterState = {
     PreparedFilters: Array<PreparedFilter>;
     BundleConfig?: Array<Record<string, any>>;
 };
+type FilterType = "None" | "Match" | "StringMatch" | "DateMatch" | "NumericMatch" | "Range" | "StringRange" | "DateRange" | "NumericRange" | "InternalJoinMatch" | "InternalJoinStringMatch" | "InternalJoinNumericMatch" | "InternalJoinDateMatch" | "InternalJoinRange" | "InternalJoinStringRange" | "InternalJoinNumericRange" | "InternalJoinDateRange" | "ExternalJoinMatch" | "ExternalJoinStringMatch" | "ExternalJoinNumericMatch" | "ExternalJoinDateMatch" | "ExternalJoinRange" | "ExternalJoinStringRange" | "ExternalJoinNumericRange" | "ExternalJoinDateRange";
 //# sourceMappingURL=Filter.d.ts.map
