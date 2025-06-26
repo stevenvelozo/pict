@@ -875,6 +875,7 @@ module.exports.PictTemplateClass = require("pict-template");
 
 module.exports.EnvironmentLog = require("./environments/Pict-Environment-Log.js");
 module.exports.EnvironmentObject = require("./environments/Pict-Environment-Object.js");
+module.exports.FilterClauseBase = require('./filters/FilterClauseBase.js');
 module.exports.FilterClauseLocal = require('./filters/FilterClauseLocal.js');
 module.exports.FilterClauseInternalJoin = require('./filters/FilterClauseInternalJoin.js');
 module.exports.FilterClauseExternalJoin = require('./filters/FilterClauseExternalJoin.js');
