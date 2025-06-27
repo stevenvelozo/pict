@@ -25,6 +25,7 @@
  *   FilterConfiguration: Array<Record<string, any>>,
  *   PreparedFilters: Array<PreparedFilter>,
  *   BundleConfig?: Array<Record<string, any>>,
+ *   UserFilters?: Array<string>,
  * }} FilterState
  *
  * @typedef { 'None' |
@@ -54,6 +55,7 @@ class FilterMeadowStanzaTokenGenerator
 	generateMeadowFilterStanzas(pFilterState)
 	{
 		const tmpResult = [];
+		pFilterState.UserFilters = [];
 		for (const tmpFilterConfig of pFilterState.FilterConfiguration || [])
 		{
 			/** @type {PreparedFilter} */
@@ -405,6 +407,16 @@ class FilterMeadowStanzaTokenGenerator
 						};
 					}
 					break;
+				case 'RawFilter':
+					if (!tmpFilterConfig.Value)
+					{
+						this.log.warn(`RawFilter configuration missing Value, not adding filter.`, { FilterConfig: tmpFilterConfig });
+						break;
+					}
+					pFilterState.UserFilters.push(tmpFilterConfig.Value);
+					break;
+				default:
+					this.log.warn(`Unknown filter type ${tmpFilterConfig.Type} in filter configuration.`, { FilterConfig: tmpFilterConfig });
 			}
 			if (tmpFilterResult.Filters.length > 0)
 			{
@@ -582,7 +594,7 @@ class FilterMeadowStanzaTokenGenerator
 				tmpCoreFilterStrings.push([ 'FOP~0~(~0', ...tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas, 'FCP~0~)~0'].join('~'));
 			}
 		}
-		tmpBundleConfig.push(
+		const tmpCoreLoadStep =
 		{
 			Type: pFilterState.Mode === 'Count' ? 'MeadowEntityCount' : 'MeadowEntity',
 			Entity: tmpCoreEntity,
@@ -591,21 +603,41 @@ class FilterMeadowStanzaTokenGenerator
 			RecordStartCursor: pFilterState.RecordOffset,
 			PageSize: pFilterState.PageSize,
 			Destination: pFilterState.ResultDestinationAddress,
-		});
+		};
+		if (pFilterState.UserFilters.length > 0)
+		{
+			let tmpFilter = '';
+			for (const tmpUserFilter of pFilterState.UserFilters)
+			{
+				if (tmpFilter.length > 0)
+				{
+					tmpFilter += '~';
+				}
+				tmpFilter += 'FOP~0~(~0~';
+				tmpFilter += tmpUserFilter;
+				tmpFilter += '~FCP~0~)~0';
+			}
+			if (tmpCoreLoadStep.Filter)
+			{
+				if (tmpFilter.length > 0)
+				{
+					tmpFilter += '~';
+				}
+				tmpFilter += 'FOP~0~(~0~';
+				tmpFilter += tmpCoreLoadStep.Filter;
+				tmpFilter += '~FCP~0~)~0';
+			}
+			tmpCoreLoadStep.Filter = tmpFilter;
+		}
+		tmpBundleConfig.push(tmpCoreLoadStep);
 		pFilterState.BundleConfig = tmpBundleConfig;
 	}
 
 	_compileSimpleFilterToString(pFilter)
 	{
 		let tmpFilterString = `${pFilter.Instruction}`;
-		if (pFilter.Field)
-		{
-			tmpFilterString += `~${pFilter.Field}`;
-		}
-		if (pFilter.Operator)
-		{
-			tmpFilterString += `~${pFilter.Operator}`;
-		}
+		tmpFilterString += `~${pFilter.Field}`;
+		tmpFilterString += `~${pFilter.Operator}`;
 		if (pFilter.ValueTemplate)
 		{
 			tmpFilterString += `~${pFilter.ValueTemplate}`;

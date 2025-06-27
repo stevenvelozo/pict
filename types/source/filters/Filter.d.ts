@@ -25,6 +25,7 @@ export = FilterMeadowStanzaTokenGenerator;
  *   FilterConfiguration: Array<Record<string, any>>,
  *   PreparedFilters: Array<PreparedFilter>,
  *   BundleConfig?: Array<Record<string, any>>,
+ *   UserFilters?: Array<string>,
  * }} FilterState
  *
  * @typedef { 'None' |
@@ -89,6 +90,7 @@ type FilterState = {
     FilterConfiguration: Array<Record<string, any>>;
     PreparedFilters: Array<PreparedFilter>;
     BundleConfig?: Array<Record<string, any>>;
+    UserFilters?: Array<string>;
 };
 type FilterType = "None" | "Match" | "StringMatch" | "DateMatch" | "NumericMatch" | "Range" | "StringRange" | "DateRange" | "NumericRange" | "InternalJoinMatch" | "InternalJoinStringMatch" | "InternalJoinNumericMatch" | "InternalJoinDateMatch" | "InternalJoinRange" | "InternalJoinStringRange" | "InternalJoinNumericRange" | "InternalJoinDateRange" | "ExternalJoinMatch" | "ExternalJoinStringMatch" | "ExternalJoinNumericMatch" | "ExternalJoinDateMatch" | "ExternalJoinRange" | "ExternalJoinStringRange" | "ExternalJoinNumericRange" | "ExternalJoinDateRange";
 //# sourceMappingURL=Filter.d.ts.map
