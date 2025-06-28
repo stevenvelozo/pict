@@ -594,6 +594,10 @@ class FilterMeadowStanzaTokenGenerator
 				tmpCoreFilterStrings.push([ 'FOP~0~(~0', ...tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas, 'FCP~0~)~0'].join('~'));
 			}
 		}
+		if (!tmpCoreEntity)
+		{
+			tmpCoreEntity = pFilterState.Entity;
+		}
 		const tmpCoreLoadStep =
 		{
 			Type: pFilterState.Mode === 'Count' ? 'MeadowEntityCount' : 'MeadowEntity',

@@ -49,15 +49,23 @@ class PictRecordSetFilterManager extends libPictProvider
 	 *
 	 * @param {Array<Record<string, any>>} pFilterConfiguration
 	 * @param {Record<string, any>} pFilterExperience
-	 * @param {number | ((pError?: Error) => void)} pRecordOffset
-	 * @param {number | ((pError?: Error) => void)} pPageSize
+	 * @param {number | string | ((pError?: Error) => void)} pRecordOffset
+	 * @param {number | string | ((pError?: Error) => void)} pPageSize
 	 * @param {(pError?: Error) => void} fCallback
 	 */
 	loadRecordPageByFilter(pFilterConfiguration, pFilterExperience, pRecordOffset, pPageSize, fCallback)
 	{
 		const tmpCallback = typeof pRecordOffset === 'function' ? pRecordOffset : typeof pPageSize === 'function' ? pPageSize : fCallback;
-		const tmpRecordOffset = typeof pRecordOffset === 'number' ? pRecordOffset : 0;
-		const tmpPageSize = typeof pPageSize === 'number' ? pPageSize : 100;
+		let tmpRecordOffset = typeof pRecordOffset === 'function' ? 0 : parseInt(String(pRecordOffset));
+		if (isNaN(tmpRecordOffset) || tmpRecordOffset < 0)
+		{
+			tmpRecordOffset = 0;
+		}
+		let tmpPageSize = typeof pPageSize === 'function' ? 0 : parseInt(String(pPageSize));
+		if (isNaN(tmpPageSize) || tmpPageSize < 0)
+		{
+			tmpPageSize = 0;
+		}
 		/** @type {import('../filters/Filter.js').FilterState} */
 		const tmpState = JSON.parse(JSON.stringify(pFilterExperience));
 		tmpState.Mode = 'Records';
