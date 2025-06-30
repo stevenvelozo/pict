@@ -115,18 +115,18 @@ class FilterMeadowStanzaTokenGenerator
 						this.log.error(`${tmpFilterConfig.Type} filter missing JoinTableExternalConnectionColumn, cannot filter join table [${tmpFilterConfig.JoinTable}].`);
 						break;
 					}
-					tmpFilterResult.Filters.push(
-					{
-						Index: 0,
-						Fulcrum: true,
-						Entity: tmpFilterConfig.JoinTable,
-						Instruction: 'FBL',
-						Field: tmpFilterConfig.JoinTableExternalConnectionColumn,
-						Operator: 'INN',
-						ValueTemplate: `{~PJU:,^${tmpFilterConfig.JoinTableExternalConnectionColumn}^Record.State[Step-1]~}`,
-					});
 					if (tmpFilterResult.Filters.length > 0)
 					{
+						tmpFilterResult.Filters.push(
+						{
+							Index: 0,
+							Fulcrum: true,
+							Entity: tmpFilterConfig.JoinTable,
+							Instruction: 'FBL',
+							Field: tmpFilterConfig.JoinTableExternalConnectionColumn,
+							Operator: 'INN',
+							ValueTemplate: `{~PJU:,^${tmpFilterConfig.JoinTableExternalConnectionColumn}^Record.State[Step-1]~}`,
+						});
 						if (!tmpFilterConfig.CoreConnectionColumn)
 						{
 							this.log.error(`${tmpFilterConfig.Type} filter missing CoreConnectionColumn, cannot filter core table [${pFilterState.Entity}].`);
@@ -190,18 +190,18 @@ class FilterMeadowStanzaTokenGenerator
 						this.log.error(`${tmpFilterConfig.Type} filter missing JoinTableExternalConnectionColumn, cannot filter join table [${tmpFilterConfig.JoinTable}].`);
 						break;
 					}
-					tmpFilterResult.Filters.push(
-					{
-						Index: 0,
-						Fulcrum: true,
-						Entity: tmpFilterConfig.JoinTable,
-						Instruction: 'FBL',
-						Field: tmpFilterConfig.JoinTableExternalConnectionColumn,
-						Operator: 'INN',
-						ValueTemplate: `{~PJU:,^${tmpFilterConfig.JoinTableExternalConnectionColumn}^Record.State[Step-1]~}`,
-					});
 					if (tmpFilterResult.Filters.length > 0)
 					{
+						tmpFilterResult.Filters.push(
+						{
+							Index: 0,
+							Fulcrum: true,
+							Entity: tmpFilterConfig.JoinTable,
+							Instruction: 'FBL',
+							Field: tmpFilterConfig.JoinTableExternalConnectionColumn,
+							Operator: 'INN',
+							ValueTemplate: `{~PJU:,^${tmpFilterConfig.JoinTableExternalConnectionColumn}^Record.State[Step-1]~}`,
+						});
 						if (!tmpFilterConfig.CoreConnectionColumn)
 						{
 							this.log.error(`${tmpFilterConfig.Type} filter missing CoreConnectionColumn, cannot filter core table [${pFilterState.Entity}].`);

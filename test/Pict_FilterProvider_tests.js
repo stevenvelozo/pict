@@ -400,6 +400,91 @@ suite
 
 		test
 		(
+			'Filter - load page of records by address - ignores filters with no values',
+			async function()
+			{
+				let _Application = new DoNothingApplication(_Pict, {});
+				await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+				{
+					if (error)
+					{
+						return reject(error);
+					}
+					resolve();
+				}));
+				let tmpResults = {
+					"Entity": "Book",
+					"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
+					"ResultDestinationAddress": "AppData.Test",
+				};
+				_Pict.AppData.FilterConfig =
+				[
+					{
+						"UUID": "1",
+						"FilterHash": "FilterBookByAuthor[Name]",
+						"Type": "ExternalJoinStringMatch",
+						"Values": [ ],
+						"ExternalFilterByColumns": [ "Name" ],
+
+						"CoreConnectionColumn": "IDBook",
+
+						"JoinTable": "BookAuthorJoin",
+						"JoinTableExternalConnectionColumn": "IDAuthor",
+						"JoinTableCoreConnectionColumn": "IDBook",
+
+						"ExternalFilterByTable": "Author",
+						"ExternalFilterByTableConnectionColumn": "IDAuthor"
+					},
+					{
+						"UUID": "2",
+						"Type": "DateRange",
+						"Values":
+						{
+							"Start": undefined,
+							"End": undefined,
+						},
+						"FilterByColumn": "CreateDate"
+					},
+					{
+						/* TODO: User table not in test data server
+						"UUID": "3",
+						"Type": "InternalJoinStringMatch",
+						"Values": [ "Bob" ],
+						"RemoteTable": "User",
+						"ExternalFilterByColumns": [ "NameFirst", "NameLast" ],
+						"JoinExternalConnectionColumn": "IDUser",
+						"JoinInternalConnectionColumn": "CreatingIDUser"
+						*/
+					}
+				];
+				_Pict.AppData.FilterExperience = tmpResults;
+				const tmpUnfilteredCount = await new Promise((resolve, reject) => _Pict.EntityProvider.getEntitySetRecordCount('Book', '%20', (pError, pCount) =>
+				{
+					if (pError)
+					{
+						return reject(pError);
+					}
+					resolve(pCount);
+				}));
+				await new Promise((resolve, reject) => _Pict.providers.FilterManager.countRecordsByFilter(
+					_Pict.AppData.FilterConfig, tmpResults, (pError) =>
+					{
+						try
+						{
+							Expect(pError).to.not.exist;
+							Expect(_Pict.AppData.Test).to.equal(tmpUnfilteredCount);
+							resolve();
+						}
+						catch (pError)
+						{
+							reject(pError);
+						}
+					}));
+			}
+		);
+
+		test
+		(
 			'Filter - load records count',
 			async function()
 			{
