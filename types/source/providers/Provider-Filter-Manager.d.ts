@@ -3,6 +3,32 @@ declare class PictRecordSetFilterManager extends libPictProvider {
     constructor(pFable: any, pOptions: any, pServiceHash: any);
     /** @type {import('../Pict.js')} */
     pict: import("../Pict.js");
+    filters: {};
+    filterCriteria: {};
+    /**
+     * @param {string} pFilterHash
+     * @param {Record<string, any>} pFilterConfig
+     *
+     * @return {void}
+     */
+    addFilter(pFilterHash: string, pFilterConfig: Record<string, any>): void;
+    /**
+     * @param {string} pFilterCriteriaHash
+     * @param {Record<string, any>} pFilterCriteriaConfig
+     *
+     * @return {void}
+     */
+    addFilterCriteria(pFilterCriteriaHash: string, pFilterCriteriaConfig: Record<string, any>): void;
+    /**
+     * @param {string} pFilterHash
+     * @return {Record<string, any> | undefined}
+     */
+    getFilter(pFilterHash: string): Record<string, any> | undefined;
+    /**
+     * @param {string} pFilterCriteriaHash
+     * @return {Record<string, any> | undefined}
+     */
+    getFilterCriteria(pFilterCriteriaHash: string): Record<string, any> | undefined;
     /**
      * Run a filter configuration against a filter experience and return ALL matched records.
      *

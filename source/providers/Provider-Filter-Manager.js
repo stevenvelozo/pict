@@ -21,6 +21,76 @@ class PictRecordSetFilterManager extends libPictProvider
 		this.options;
 		/** @type {import('../Pict.js')} */
 		this.pict;
+
+		this.filters = {};
+		this.filterCriteria = {};
+	}
+
+	/**
+	 * @param {string} pFilterHash
+	 * @param {Record<string, any>} pFilterConfig
+	 *
+	 * @return {void}
+	 */
+	addFilter(pFilterHash, pFilterConfig)
+	{
+		if (!pFilterHash || typeof pFilterHash !== 'string')
+		{
+			this.log.error('Invalid filter hash provided. It must be a non-empty string.');
+			return;
+		}
+		if (!pFilterConfig || typeof pFilterConfig !== 'object' || !pFilterConfig.Type)
+		{
+			this.log.error('Invalid filter configuration provided. It must be an object with a Type property.');
+			return;
+		}
+		const tmpFilterConfig = JSON.parse(JSON.stringify(pFilterConfig));
+		if (tmpFilterConfig.Hash && tmpFilterConfig.Hash !== pFilterHash)
+		{
+			this.log.warn(`Filter configuration hash mismatch: provided ${tmpFilterConfig.Hash}, expected ${pFilterHash}. Overriding with provided hash.`);
+		}
+		tmpFilterConfig.Hash = pFilterHash;
+		this.filters[tmpFilterConfig.Hash] = tmpFilterConfig;
+	}
+
+	/**
+	 * @param {string} pFilterCriteriaHash
+	 * @param {Record<string, any>} pFilterCriteriaConfig
+	 *
+	 * @return {void}
+	 */
+	addFilterCriteria(pFilterCriteriaHash, pFilterCriteriaConfig)
+	{
+		if (!pFilterCriteriaHash || typeof pFilterCriteriaHash !== 'string')
+		{
+			this.log.error('Invalid filter criteria hash provided. It must be a non-empty string.');
+			return;
+		}
+		if (!pFilterCriteriaConfig || !Array.isArray(pFilterCriteriaConfig))
+		{
+			this.log.error('Invalid filter criteria configuration provided. It must be an array of filter clauses.');
+			return;
+		}
+		const tmpFilterCriteriaConfig = JSON.parse(JSON.stringify(pFilterCriteriaConfig));
+		this.filterCriteria[pFilterCriteriaHash] = tmpFilterCriteriaConfig;
+	}
+
+	/**
+	 * @param {string} pFilterHash
+	 * @return {Record<string, any> | undefined}
+	 */
+	getFilter(pFilterHash)
+	{
+		return this.filters[pFilterHash];
+	}
+
+	/**
+	 * @param {string} pFilterCriteriaHash
+	 * @return {Record<string, any> | undefined}
+	 */
+	getFilterCriteria(pFilterCriteriaHash)
+	{
+		return this.filterCriteria[pFilterCriteriaHash];
 	}
 
 	/**
