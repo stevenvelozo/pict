@@ -58,9 +58,9 @@ class PictTemplateProviderData extends libPictTemplate
 				if (this.pict.LogNoisiness > 3)
 				{
 					this.log.trace(`PICT DataWithTemplateFallback [fDataRender]::[${tmpHash}] - Found value: ${tmpValue}`);
-					// If a value is found, return it
-					return tmpValue;
 				}
+				// If a value is found, return it
+				return tmpValue;
 			}
 		}
 		// If the value is not found or is undefined, try to use the fallback template
