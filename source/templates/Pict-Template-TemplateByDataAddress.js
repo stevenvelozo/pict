@@ -24,10 +24,11 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 	 * @param {string} pTemplateDataAddress - The hash contents of the template (what's between the template start and stop tags)
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
 	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {string} The rendered template
 	 */
-	render(pTemplateDataAddress, pRecord, pContextArray)
+	render(pTemplateDataAddress, pRecord, pContextArray, pScope)
 	{
 		let tmpDataAddress = pTemplateDataAddress.trim();
 		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
@@ -63,7 +64,7 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 			return '';
 		}
 
-		let tmpTemplate = this.pict.resolveStateFromAddress(tmpTemplateDataAddress, pRecord, pContextArray);
+		let tmpTemplate = this.pict.resolveStateFromAddress(tmpTemplateDataAddress, pRecord, pContextArray, null, pScope);
 		if (!tmpTemplate)
 		{
 			if (this.pict.LogNoisiness > 2)
@@ -75,11 +76,11 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 		if (!tmpAddressOfData)
 		{
 			// No address was provided, just render the template with what this template has.
-			return this.pict.parseTemplate(tmpTemplate, pRecord, null, pContextArray);
+			return this.pict.parseTemplate(tmpTemplate, pRecord, null, pContextArray, pScope);
 		}
 		else
 		{
-			return this.pict.parseTemplate(tmpTemplate, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray), null, pContextArray);
+			return this.pict.parseTemplate(tmpTemplate, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope), null, pContextArray);
 		}
 	}
 
@@ -88,12 +89,13 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 	 *
 	 * @param {string} pTemplateDataAddress - The hash contents of the template (what's between the template start and stop tags)
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
-	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
 	 * @param {(error?: Error, content?: String) => void} fCallback - callback function invoked with the rendered template, or an error
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {void}
 	 */
-	renderAsync(pTemplateDataAddress, pRecord, fCallback, pContextArray)
+	renderAsync(pTemplateDataAddress, pRecord, fCallback, pContextArray, pScope)
 	{
 		let tmpDataAddress = pTemplateDataAddress.trim();
 		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
@@ -130,7 +132,7 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 			return tmpCallback(null, '');
 		}
 
-		let tmpTemplate = this.pict.resolveStateFromAddress(tmpTemplateDataAddress, pRecord, pContextArray) || '';
+		let tmpTemplate = this.pict.resolveStateFromAddress(tmpTemplateDataAddress, pRecord, pContextArray, null, pScope) || '';
 		if (!tmpTemplate)
 		{
 			if (this.pict.LogNoisiness > 2)
@@ -151,11 +153,11 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 						return tmpCallback(pError, '');
 					}
 					return tmpCallback(null, pValue);
-				}, pContextArray);
+				}, pContextArray, pScope);
 		}
 		else
 		{
-			this.pict.parseTemplate(tmpTemplate, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray),
+			this.pict.parseTemplate(tmpTemplate, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope),
 				(pError, pValue) =>
 				{
 					if (pError)
@@ -163,7 +165,7 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 						return tmpCallback(pError, '');
 					}
 					return tmpCallback(null, pValue);
-				}, pContextArray);
+				}, pContextArray, pScope);
 		}
 	}
 }

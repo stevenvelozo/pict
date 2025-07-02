@@ -24,10 +24,11 @@ class PictTemplateProviderDataValueTree extends libPictTemplate
 	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
 	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {string} The rendered template
 	 */
-	render(pTemplateHash, pRecord, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray, pScope)
 	{
 		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 		tmpData.TemplateHash = pTemplateHash.trim();
@@ -37,7 +38,7 @@ class PictTemplateProviderDataValueTree extends libPictTemplate
 		{
 			return '';
 		}
-		tmpData.ResolvedValue = this.resolveStateFromAddress(tmpData.ValueTreeParameters[0], tmpData, pContextArray);
+		tmpData.ResolvedValue = this.resolveStateFromAddress(tmpData.ValueTreeParameters[0], tmpData, pContextArray, null, pScope);
 		tmpData.ResolvedValueType = typeof (tmpData.ResolvedValue);
 
 		try
@@ -58,7 +59,7 @@ class PictTemplateProviderDataValueTree extends libPictTemplate
 
 		if (tmpData.ResolvedValueType == 'object')
 		{
-			tmpData.ObjectValueTree = this.dataValueTreeObjectSet(tmpData.ResolvedValue, tmpData.ResolvedValue, 0, tmpData.TreeMaxDepth, pContextArray);
+			tmpData.ObjectValueTree = this.dataValueTreeObjectSet(tmpData.ResolvedValue, tmpData.ResolvedValue, 0, tmpData.TreeMaxDepth, pContextArray, pScope);
 		}
 		else
 		{
@@ -66,10 +67,22 @@ class PictTemplateProviderDataValueTree extends libPictTemplate
 			tmpData.ObjectValueTree = tmpData.ResolveValue;
 		}
 
-		return this.pict.parseTemplate(tmpPictObjectWrapTemplate, tmpData, null, pContextArray);
+		return this.pict.parseTemplate(tmpPictObjectWrapTemplate, tmpData, null, pContextArray, pScope);
 	}
 
-	dataValueTreeObjectSet(pObject, pRootObject, pCurrentDepth, pMaxDepth, pContextArray)
+	/**
+	 * Render a template expression, returning a string with the resulting content.
+	 *
+	 * @param {Object} pObject - The object to be rendered as a value tree
+	 * @param {Object} pRootObject - The root object for the value tree, used to provide context
+	 * @param {number} pCurrentDepth - The current depth in the value tree
+	 * @param {number} pMaxDepth - The maximum depth to render in the value tree
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 *
+	 * @return {string} The rendered template
+	 */
+	dataValueTreeObjectSet(pObject, pRootObject, pCurrentDepth, pMaxDepth, pContextArray, pScope)
 	{
 		let tmpTemplateResult = '';
 
@@ -104,7 +117,7 @@ class PictTemplateProviderDataValueTree extends libPictTemplate
 					}
 					else
 					{
-						tmpBranchValue = this.dataValueTreeObjectSet(pObject[tmpObjectValueKeys[i]], pRootObject, pCurrentDepth + 1, pMaxDepth, pContextArray);
+						tmpBranchValue = this.dataValueTreeObjectSet(pObject[tmpObjectValueKeys[i]], pRootObject, pCurrentDepth + 1, pMaxDepth, pContextArray, pScope);
 					}
 					break;
 
@@ -131,7 +144,7 @@ class PictTemplateProviderDataValueTree extends libPictTemplate
 				CurrentDepth: pCurrentDepth,
 				MaxDepth: pMaxDepth
 			};
-			tmpTemplateResult += this.pict.parseTemplate(tmpPictObjectBranchTemplate, tmpDataValue, null, pContextArray);
+			tmpTemplateResult += this.pict.parseTemplate(tmpPictObjectBranchTemplate, tmpDataValue, null, pContextArray, pScope);
 		}
 
 		return tmpTemplateResult;

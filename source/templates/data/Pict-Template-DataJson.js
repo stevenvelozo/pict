@@ -24,10 +24,11 @@ class PictTemplateProviderJSONOutput extends libPictTemplate
 	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
 	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {string} The rendered template
 	 */
-	render(pTemplateHash, pRecord, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray, pScope)
 	{
 		let tmpHash = pTemplateHash.trim();
 		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
@@ -41,7 +42,7 @@ class PictTemplateProviderJSONOutput extends libPictTemplate
 			this.log.trace(`PICT Template [fDataJson]::[${tmpHash}]`);
 		}
 
-		let tmpDataToStringify = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray);
+		let tmpDataToStringify = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray, null, pScope);
 
 		if (!tmpDataToStringify)
 		{

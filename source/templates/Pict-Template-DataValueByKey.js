@@ -24,10 +24,11 @@ class PictTemplateProviderDataValueByKey extends libPictTemplate
 	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
 	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {string} The rendered template
 	 */
-	render(pTemplateHash, pRecord, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray, pScope)
 	{
 		let tmpHash = pTemplateHash.trim();
 		let tmpRecord = (typeof(pRecord) === 'object') ? pRecord : {};
@@ -55,8 +56,8 @@ class PictTemplateProviderDataValueByKey extends libPictTemplate
 			tmpDefaultValue = tmpHashArray[2];
 		}
 
-		let tmpValueObject = this.resolveStateFromAddress(tmpHashArray[0], tmpRecord, pContextArray);
-		let tmpValueAddress = this.resolveStateFromAddress(tmpHashArray[1], tmpRecord, pContextArray);
+		let tmpValueObject = this.resolveStateFromAddress(tmpHashArray[0], tmpRecord, pContextArray, null, pScope);
+		let tmpValueAddress = this.resolveStateFromAddress(tmpHashArray[1], tmpRecord, pContextArray, null, pScope);
 		let tmpValue = this.pict.manifest.getValueByHash(tmpValueObject, tmpValueAddress);
 		if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
 		{

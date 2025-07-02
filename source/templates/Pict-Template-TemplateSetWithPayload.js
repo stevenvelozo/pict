@@ -24,10 +24,11 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
 	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {string} The rendered template
 	 */
-	render(pTemplateHash, pRecord, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray, pScope)
 	{
 		let tmpHash = pTemplateHash.trim();
 
@@ -55,7 +56,7 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 		tmpAddressOfData = tmpTemplateHashes[1];
 		tmpAddressOfPayload = tmpTemplateHashes[2];
 
-		let tmpData = this.resolveStateFromAddress(tmpAddressOfData, pRecord, pContextArray);
+		let tmpData = this.resolveStateFromAddress(tmpAddressOfData, pRecord, pContextArray, null, pScope);
 		if (!tmpData)
 		{
 			tmpData = pRecord;
@@ -65,7 +66,7 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 			tmpData = {};
 		}
 
-		let tmpPayloadData = this.resolveStateFromAddress(tmpAddressOfPayload, pRecord, pContextArray);
+		let tmpPayloadData = this.resolveStateFromAddress(tmpAddressOfPayload, pRecord, pContextArray, null, pScope);
 		if (!tmpPayloadData)
 		{
 			tmpPayloadData = pRecord;
@@ -75,7 +76,7 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 			tmpPayloadData = {};
 		}
 
-		return this.pict.parseTemplateSetWithPayloadByHash(tmpTemplateHash, tmpData, tmpPayloadData, null, pContextArray);
+		return this.pict.parseTemplateSetWithPayloadByHash(tmpTemplateHash, tmpData, tmpPayloadData, null, pContextArray, pScope);
 	}
 
 	/**
@@ -83,12 +84,13 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 	 *
 	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
-	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
 	 * @param {(error?: Error, content?: String) => void} fCallback - callback function invoked with the rendered template, or an error
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {void}
 	 */
-	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)
+	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray, pScope)
 	{
 		let tmpHash = pTemplateHash.trim();
 		let tmpCallback = (typeof (fCallback) === 'function') ? fCallback : () => { return ''; };
@@ -117,7 +119,7 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 		tmpAddressOfData = tmpTemplateHashes[1];
 		tmpAddressOfPayload = tmpTemplateHashes[2];
 
-		let tmpData = this.resolveStateFromAddress(tmpAddressOfData, pRecord, pContextArray);
+		let tmpData = this.resolveStateFromAddress(tmpAddressOfData, pRecord, pContextArray, null, pScope);
 		if (!tmpData)
 		{
 			tmpData = pRecord;
@@ -127,7 +129,7 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 			tmpData = {};
 		}
 
-		let tmpPayloadData = this.resolveStateFromAddress(tmpAddressOfPayload, pRecord, pContextArray);
+		let tmpPayloadData = this.resolveStateFromAddress(tmpAddressOfPayload, pRecord, pContextArray, null, pScope);
 		if (!tmpPayloadData)
 		{
 			tmpPayloadData = pRecord;
@@ -137,7 +139,7 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 			tmpPayloadData = {};
 		}
 
-		return this.pict.parseTemplateSetWithPayloadByHash(tmpTemplateHash, tmpData, tmpPayloadData,
+		this.pict.parseTemplateSetWithPayloadByHash(tmpTemplateHash, tmpData, tmpPayloadData,
 			(pError, pValue) =>
 			{
 				if (pError)
@@ -145,7 +147,7 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 					return tmpCallback(pError, '');
 				}
 				return tmpCallback(null, pValue);
-			}, pContextArray);
+			}, pContextArray, pScope);
 	}
 }
 

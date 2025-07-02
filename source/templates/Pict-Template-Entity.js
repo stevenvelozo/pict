@@ -24,10 +24,11 @@ class PictTemplateProviderEntity extends libPictTemplate
 	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
 	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {string} The rendered template
 	 */
-	render(pTemplateHash, pRecord, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray, pScope)
 	{
 		// TODO: Better messaging
 		this.log.error(`Pict: Entity Render [${pTemplateHash}]: Render called in a non-asynchronous fashion.  This should not happen.`);
@@ -39,12 +40,13 @@ class PictTemplateProviderEntity extends libPictTemplate
 	 *
 	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
-	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
 	 * @param {(error?: Error, content?: String) => void} fCallback - callback function invoked with the rendered template, or an error
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {void}
 	 */
-	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)
+	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray, pScope)
 	{
 		let tmpHash = pTemplateHash.trim();
 		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
@@ -92,7 +94,7 @@ class PictTemplateProviderEntity extends libPictTemplate
 		else
 		{
 			// This is an address, so we need to get the value at the address
-			tmpEntityID = this.resolveStateFromAddress(String(tmpEntityID), tmpData, pContextArray);
+			tmpEntityID = this.resolveStateFromAddress(String(tmpEntityID), tmpData, pContextArray, null, pScope);
 		}
 
 		// No Entity or EntityID
@@ -120,7 +122,7 @@ class PictTemplateProviderEntity extends libPictTemplate
 				// Now render the template
 				if (tmpEntityTemplate)
 				{
-					this.pict.parseTemplateByHash(tmpEntityTemplate, pRecord, tmpCallback, pContextArray);
+					this.pict.parseTemplateByHash(tmpEntityTemplate, pRecord, tmpCallback, pContextArray, pScope);
 				}
 				else
 				{

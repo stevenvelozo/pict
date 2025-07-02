@@ -24,10 +24,11 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
 	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {string} The rendered template
 	 */
-	render(pTemplateHash, pRecord, pContextArray)
+	render(pTemplateHash, pRecord, pContextArray, pScope)
 	{
 		let tmpHash = pTemplateHash.trim();
 		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
@@ -66,8 +67,8 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 		}
 
 		// Now resolve the data
-		let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData, pContextArray);
-		let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData, pContextArray);
+		let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData, pContextArray, null, pScope);
+		let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData, pContextArray, null, pScope);
 
 		if (!tmpMap)
 		{
@@ -80,11 +81,11 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 		if (!tmpData)
 		{
 			// No address was provided, just render the TemplateFromMap with what this TemplateFromMap has.
-			return this.pict.parseTemplateByHash(tmpTemplateFromMapHash, pRecord, null, pContextArray);
+			return this.pict.parseTemplateByHash(tmpTemplateFromMapHash, pRecord, null, pContextArray, pScope);
 		}
 		else
 		{
-			return this.pict.parseTemplateByHash(tmpTemplateFromMapHash, tmpData, null, pContextArray);
+			return this.pict.parseTemplateByHash(tmpTemplateFromMapHash, tmpData, null, pContextArray, pScope);
 		}
 	}
 
@@ -93,12 +94,13 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 	 *
 	 * @param {string} pTemplateHash - The hash contents of the template (what's between the template start and stop tags)
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
-	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
 	 * @param {(error?: Error, content?: String) => void} fCallback - callback function invoked with the rendered template, or an error
+	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {void}
 	 */
-	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray)
+	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray, pScope)
 	{
 		let tmpHash = pTemplateHash.trim();
 		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
@@ -138,8 +140,8 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 		}
 
 		// Now resolve the data
-		let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData, pContextArray);
-		let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData, pContextArray);
+		let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData, pContextArray, null, pScope);
+		let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData, pContextArray, null, pScope);
 
 		if (!tmpMap)
 		{
@@ -161,7 +163,7 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 						return tmpCallback(pError, '');
 					}
 					return tmpCallback(null, pValue);
-				}, pContextArray);
+				}, pContextArray, pScope);
 		}
 		else
 		{
@@ -173,7 +175,7 @@ class PictTemplateProviderTemplateFromMap extends libPictTemplate
 						return tmpCallback(pError, '');
 					}
 					return tmpCallback(null, pValue);
-				}, pContextArray);
+				}, pContextArray, pScope);
 		}
 	}
 }

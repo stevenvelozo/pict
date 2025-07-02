@@ -541,25 +541,28 @@ class Pict extends libFable {
 	 * Read a value from a nested object using a dot notation string.
 	 *
 	 * @param {string} pAddress - The address to resolve
-	 * @param {any} pRecord - The record to resolve
-	 * @param {Array<any>} [pContextArray] - The context array to resolve
+	 * @param {Record<string, any>} [pRecord] - The record to resolve
+	 * @param {Array<any>} [pContextArray] - The context array to resolve (optional)
+	 * @param {Record<string, any>} [pRootDataObject] - The root data object to resolve (optional)
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {any} The value at the given address, or undefined
 	 */
-	resolveStateFromAddress(pAddress, pRecord, pContextArray)
+	resolveStateFromAddress(pAddress, pRecord, pContextArray, pRootDataObject, pScope)
 	{
-		let tmpContextArray = Array.isArray(pContextArray) ? pContextArray : [ this ];
+		let tmpContextArray = (Array.isArray(pContextArray)) ? pContextArray : [ this ];
+		let tmpScope = pScope || this;
+		let tmpRootDataObject = typeof(pRootDataObject) === 'object' && pRootDataObject != null ? pRootDataObject : {};
 
-		return this.manifest.getValueByHash(
-			{
-				Pict: this,
-				AppData: this.AppData,
-				Bundle: this.Bundle,
-				Context: tmpContextArray,
-				Record: pRecord,
-			},
-			pAddress,
-		);
+		tmpRootDataObject.Fable = this;
+		tmpRootDataObject.Pict = this;
+		tmpRootDataObject.AppData = this.AppData;
+		tmpRootDataObject.Bundle = this.Bundle;
+		tmpRootDataObject.Context = tmpContextArray;
+		tmpRootDataObject.Record = pRecord;
+		tmpRootDataObject.Scope = tmpScope;
+
+		return this.manifest.getValueByHash(tmpRootDataObject, pAddress);
 	}
 
 	/**
@@ -569,12 +572,14 @@ class Pict extends libFable {
 	 * @param {any} pRecord - The record to resolve
 	 * @param {any} pValue - The value to set at the given address
 	 * @param {Array<any>} [pContextArray] - The context array to resolve
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {any} The value at the given address, or undefined
 	 */
-	setStateValueAtAddress(pAddress, pRecord, pValue, pContextArray)
+	setStateValueAtAddress(pAddress, pRecord, pValue, pContextArray, pScope)
 	{
 		let tmpContextArray = (Array.isArray(pContextArray)) ? pContextArray : [ this ];
+		let tmpScope = pScope || this;
 		const tmpAddressSpace =
 		{
 			Fable: this.fable,
@@ -583,6 +588,7 @@ class Pict extends libFable {
 			Bundle: this.Bundle,
 			Context: tmpContextArray,
 			Record: pRecord,
+			Scope: tmpScope,
 		};
 		return this.manifest.setValueByHash(tmpAddressSpace, pAddress, pValue);
 	}
@@ -594,12 +600,15 @@ class Pict extends libFable {
 	 * @param {Object} pData - The data to use in the template
 	 * @param {Function} [fCallback] - The callback to call when the template is parsed
 	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
-	parseTemplate(pTemplateString, pData, fCallback, pContextArray) {
+	parseTemplate(pTemplateString, pData, fCallback, pContextArray, pScope)
+	{
 		let tmpData = typeof pData === "object" ? pData : {};
 		let tmpContextArray = Array.isArray(pContextArray) ? pContextArray : [ this ];
+		let tmpScope = pScope || this;
 		let tmpParseUUID;
 		if (this.LogControlFlow) {
 			tmpParseUUID = this.fable.getUUID();
@@ -633,6 +642,7 @@ class Pict extends libFable {
 					return fCallback(pError, pParsedTemplate);
 				},
 				tmpContextArray,
+				tmpScope,
 			);
 		} else {
 			let tmpResult = this.MetaTemplate.parseString(
@@ -640,6 +650,7 @@ class Pict extends libFable {
 				tmpData,
 				null,
 				tmpContextArray,
+				tmpScope,
 			);
 			if (this.LogControlFlow && this.LogNoisiness > 1) {
 				this.log.info(
@@ -657,10 +668,12 @@ class Pict extends libFable {
 	 * @param {Object} pData - The data to use in the template
 	 * @param {Function} [fCallback] - The callback to call when the template is parsed
 	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
-	parseTemplateByHash(pTemplateHash, pData, fCallback, pContextArray) {
+	parseTemplateByHash(pTemplateHash, pData, fCallback, pContextArray, pScope)
+	{
 		let tmpTemplateString = this.TemplateProvider.getTemplate(pTemplateHash);
 
 		// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
@@ -672,6 +685,7 @@ class Pict extends libFable {
 			pData,
 			fCallback,
 			pContextArray,
+			pScope,
 		);
 	}
 
@@ -682,10 +696,12 @@ class Pict extends libFable {
 	 * @param {Array<any>|Object} pDataSet - The data set to use in the template
 	 * @param {Function} [fCallback] - The callback to call when the template set is parsed
 	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
-	parseTemplateSet(pTemplateString, pDataSet, fCallback, pContextArray) {
+	parseTemplateSet(pTemplateString, pDataSet, fCallback, pContextArray, pScope)
+	{
 		// TODO: This will need streaming -- for now janky old string append does the trick
 		let tmpValue = "";
 		if (typeof fCallback == "function") {
@@ -722,6 +738,7 @@ class Pict extends libFable {
 							pDataSet[i],
 							null,
 							pContextArray,
+							pScope,
 						);
 					}
 				} else {
@@ -732,6 +749,7 @@ class Pict extends libFable {
 							pDataSet[tmpKeys[i]],
 							null,
 							pContextArray,
+							pScope,
 						);
 					}
 				}
@@ -750,10 +768,12 @@ class Pict extends libFable {
 	 * @param {Array<any>|Object} pDataSet - The data set to use in the template
 	 * @param {Function} [fCallback] - The callback to call when the template is parsed
 	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
-	parseTemplateSetByHash(pTemplateHash, pDataSet, fCallback, pContextArray) {
+	parseTemplateSetByHash(pTemplateHash, pDataSet, fCallback, pContextArray, pScope)
+	{
 		let tmpTemplateString = this.TemplateProvider.getTemplate(pTemplateHash);
 
 		// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
@@ -765,6 +785,7 @@ class Pict extends libFable {
 			pDataSet,
 			fCallback,
 			pContextArray,
+			pScope,
 		);
 	}
 
@@ -776,10 +797,12 @@ class Pict extends libFable {
 	 * @param {Array<any>|Object} pDataSet - The data set to use in the template
 	 * @param {Function} [fCallback] - The callback to call when the template set is parsed
 	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
-	parseTemplateSetWithPayload(pTemplateString, pDataSet, pPayload, fCallback, pContextArray) {
+	parseTemplateSetWithPayload(pTemplateString, pDataSet, pPayload, fCallback, pContextArray, pScope)
+	{
 		// TODO: This will need streaming -- for now janky old string append does the trick
 		let tmpValue = "";
 		if (typeof fCallback == "function") {
@@ -816,6 +839,7 @@ class Pict extends libFable {
 							{ Data: pDataSet[i], Payload: pPayload },
 							null,
 							pContextArray,
+							pScope,
 						);
 					}
 				} else {
@@ -826,6 +850,7 @@ class Pict extends libFable {
 							{ Data: pDataSet[tmpKeys[i]], Payload: pPayload },
 							null,
 							pContextArray,
+							pScope,
 						);
 					}
 				}
@@ -845,10 +870,12 @@ class Pict extends libFable {
 	 * @param {Object} pPayload - The payload to use in the template
 	 * @param {Function} [fCallback] - The callback to call when the template is parsed
 	 * @param {Array<any>} [pContextArray] - The context array to use in the template
+	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
 	 *
 	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
-	parseTemplateSetWithPayloadByHash(pTemplateHash, pDataSet, pPayload, fCallback, pContextArray) {
+	parseTemplateSetWithPayloadByHash(pTemplateHash, pDataSet, pPayload, fCallback, pContextArray, pScope)
+	{
 		let tmpTemplateString = this.TemplateProvider.getTemplate(pTemplateHash);
 
 		// TODO: Unsure if returning empty is always the right behavior -- if it isn't we will use config to set the behavior
@@ -860,7 +887,8 @@ class Pict extends libFable {
 			pDataSet,
 			pPayload,
 			fCallback,
-			pContextArray
+			pContextArray,
+			pScope,
 		);
 	}
 }
