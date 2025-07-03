@@ -387,7 +387,9 @@ suite
 						try
 						{
 							Expect(pError).to.not.exist;
-							Expect(_Pict.AppData.Test).to.be.an('array').with.length(100);
+							//FIXME: this should be limited to the page size - but we bumped that up to 10k for short-term so this is just getting everything
+							//Expect(_Pict.AppData.Test).to.be.an('array').with.length(100);
+							Expect(_Pict.AppData.Test).to.be.an('array').with.length(431);
 							resolve();
 						}
 						catch (pError)

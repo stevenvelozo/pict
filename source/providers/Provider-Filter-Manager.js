@@ -134,7 +134,8 @@ class PictRecordSetFilterManager extends libPictProvider
 		let tmpPageSize = typeof pPageSize === 'function' ? 0 : parseInt(String(pPageSize));
 		if (isNaN(tmpPageSize) || tmpPageSize < 0)
 		{
-			tmpPageSize = 100;
+			//TODO: this is a safety measure to try and not break things when we release this pict version; should be a lower value
+			tmpPageSize = 10000;
 		}
 		/** @type {import('../filters/Filter.js').FilterState} */
 		const tmpState = JSON.parse(JSON.stringify(pFilterExperience));

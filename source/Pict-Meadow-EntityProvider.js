@@ -108,7 +108,8 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		//TODO: consider ChunkSize for cases when AllRecords is set and we want to control the to-server page size
 		if (!('PageSize' in pEntityInformation) || (typeof(pEntityInformation.PageSize) != 'number'))
 		{
-			pEntityInformation.PageSize = 100;
+			//TODO: this is a safety measure to try and not break things when we release this pict version; should be a lower value
+			pEntityInformation.PageSize = 10000;
 		}
 		if (!('AllRecords' in pEntityInformation) || (typeof(pEntityInformation.AllRecords) != 'boolean'))
 		{
