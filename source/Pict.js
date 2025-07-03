@@ -151,7 +151,7 @@ class Pict extends libFable {
 		this.addServiceType("PictApplication", require("pict-application"));
 
 		// Expose the named views directly, through a convenience accessor
-		/** @type {{ FilterManager: libProviderFilterManager, [key: string]: import('pict-provider') }} */
+		/** @type {{ FilterManager: libProviderFilterManager, [key: string]: any }} */
 		this.providers = this.servicesMap.PictProvider;
 		this.views = this.servicesMap.PictView;
 

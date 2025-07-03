@@ -59,10 +59,10 @@ declare class Pict extends Pict_base {
     LogControlFlow: boolean;
     LogControlFlowWatchAddressList: any[];
     _DefaultPictTemplatesInitialized: boolean;
-    /** @type {{ FilterManager: libProviderFilterManager, [key: string]: import('pict-provider') }} */
+    /** @type {{ FilterManager: libProviderFilterManager, [key: string]: any }} */
     providers: {
         FilterManager: libProviderFilterManager;
-        [key: string]: import("pict-provider");
+        [key: string]: any;
     };
     views: any;
     /**
