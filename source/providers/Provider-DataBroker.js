@@ -64,10 +64,17 @@ class PictDataBrokerProvider extends libPictProvider
 	set marshalDestination(pMarshalDestinationAddress)
 	{
 		this._marshalDestination = pMarshalDestinationAddress;
-		this._marshalDestinationObject = this.pict.resolveStateFromAddress(pMarshalDestinationAddress);
-		if (!this._marshalDestinationObject)
+		if (!pMarshalDestinationAddress)
 		{
-			throw new Error(`Invalid marshal destination address: ${pMarshalDestinationAddress}`);
+			this._marshalDestinationObject = null;
+		}
+		else
+		{
+			this._marshalDestinationObject = this.pict.resolveStateFromAddress(pMarshalDestinationAddress);
+			if (!this._marshalDestinationObject)
+			{
+				throw new Error(`Invalid marshal destination address: ${pMarshalDestinationAddress}`);
+			}
 		}
 	}
 
@@ -76,6 +83,10 @@ class PictDataBrokerProvider extends libPictProvider
 	 */
 	get marshalDestinationObject()
 	{
+		if (!this._marshalDestinationObject)
+		{
+			throw new Error(`Attempt to access marshal destination object with no marshal destination set.`);
+		}
 		return this._marshalDestinationObject;
 	}
 
