@@ -36,6 +36,10 @@ declare class PictDataBrokerProvider extends libPictProvider {
      */
     get marshalDestinationObject(): Record<string, any>;
     getMarshalDestinationObject(): Record<string, any>;
+    /**
+     * @param {string} [pOverrideMarshalDestination] - Optional override for the marshal destination address.
+     */
+    resolveMarshalDestinationObject(pOverrideMarshalDestination?: string): any;
 }
 declare namespace PictDataBrokerProvider {
     export { _DEFAULT_PROVIDER_CONFIGURATION as default_configuration };

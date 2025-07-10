@@ -542,6 +542,8 @@ class Pict extends libFable {
 	/**
 	 * Read a value from a nested object using a dot notation string.
 	 *
+	 * TODO: re-home this in the data broker
+	 *
 	 * @param {string} pAddress - The address to resolve
 	 * @param {Record<string, any>} [pRecord] - The record to resolve
 	 * @param {Array<any>} [pContextArray] - The context array to resolve (optional)
@@ -568,7 +570,9 @@ class Pict extends libFable {
 	}
 
 	/**
-	 * Read a value from a nested object using a dot notation string.
+	 * Set a value from a nested object using a dot notation string.
+	 *
+	 * TODO: re-home this in the data broker
 	 *
 	 * @param {string} pAddress - The address to resolve
 	 * @param {any} pRecord - The record to resolve

@@ -81,7 +81,12 @@ class PictDataBrokerProvider extends libPictProvider
 			this._marshalDestinationObject = this.pict.resolveStateFromAddress(pMarshalDestinationAddress);
 			if (!this._marshalDestinationObject)
 			{
-				throw new Error(`Invalid marshal destination address: ${pMarshalDestinationAddress}`);
+				//FIXME: create, but log error
+				if (!this._marshalDestinationObject)
+				{
+					this.log.error(`Data Broker bootstrapping missing object at marshal destination address: ${pMarshalDestinationAddress}`);
+					this.pict.setStateValueAtAddress(pMarshalDestinationAddress, null, {});
+				}
 			}
 		}
 	}
@@ -101,6 +106,33 @@ class PictDataBrokerProvider extends libPictProvider
 	getMarshalDestinationObject()
 	{
 		return this.marshalDestinationObject;
+	}
+
+	/**
+	 * @param {string} [pOverrideMarshalDestination] - Optional override for the marshal destination address.
+	 */
+	resolveMarshalDestinationObject(pOverrideMarshalDestination)
+	{
+		const tmpMarshalDestinationAddress = pOverrideMarshalDestination || this.marshalDestination;
+		if (!tmpMarshalDestinationAddress)
+		{
+			throw new Error(`Attempt to resolve marshal destination object with no marshal destination set.`);
+		}
+		let tmpMarshalDestinationObject;
+		if (pOverrideMarshalDestination)
+		{
+			tmpMarshalDestinationObject = this.pict.resolveStateFromAddress(pOverrideMarshalDestination);
+			if (!tmpMarshalDestinationObject)
+			{
+				this.log.error(`Data Broker bootstrapping missing object at marshal destination address: ${tmpMarshalDestinationAddress}`);
+				this.pict.setStateValueAtAddress(tmpMarshalDestinationAddress, null, {});
+			}
+		}
+		else
+		{
+			tmpMarshalDestinationObject = this.getMarshalDestinationObject();
+		}
+		return tmpMarshalDestinationObject;
 	}
 }
 

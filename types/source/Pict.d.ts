@@ -148,6 +148,8 @@ declare class Pict extends Pict_base {
     /**
      * Read a value from a nested object using a dot notation string.
      *
+     * TODO: re-home this in the data broker
+     *
      * @param {string} pAddress - The address to resolve
      * @param {Record<string, any>} [pRecord] - The record to resolve
      * @param {Array<any>} [pContextArray] - The context array to resolve (optional)
@@ -158,7 +160,9 @@ declare class Pict extends Pict_base {
      */
     resolveStateFromAddress(pAddress: string, pRecord?: Record<string, any>, pContextArray?: Array<any>, pRootDataObject?: Record<string, any>, pScope?: any): any;
     /**
-     * Read a value from a nested object using a dot notation string.
+     * Set a value from a nested object using a dot notation string.
+     *
+     * TODO: re-home this in the data broker
      *
      * @param {string} pAddress - The address to resolve
      * @param {any} pRecord - The record to resolve
