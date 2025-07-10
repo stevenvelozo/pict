@@ -26,6 +26,7 @@ const libFable = require('fable');
 
 const libPackage = require('../package.json');
 const libProviderFilterManager = require('./providers/Provider-Filter-Manager.js');
+const libProviderDataBroker = require('./providers/Provider-DataBroker.js');
 
 const PictTemplateProvider = require('./Pict-Template-Provider.js');
 const PictContentAssignment = require('./Pict-Content-Assignment.js');
@@ -156,6 +157,7 @@ class Pict extends libFable {
 		this.views = this.servicesMap.PictView;
 
 		this.addProvider('FilterManager', {}, libProviderFilterManager);
+		this.addProvider('DataBroker', {}, libProviderDataBroker);
 	}
 
 	/**
