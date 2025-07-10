@@ -59,6 +59,14 @@ class PictDataBrokerProvider extends libPictProvider
 	}
 
 	/**
+	 * @return {string} - The address of the marshal destination.
+	 */
+	get marshalDestination()
+	{
+		return this._marshalDestination;
+	}
+
+	/**
 	 * @param {string} pMarshalDestinationAddress - The address of the marshal destination.
 	 */
 	set marshalDestination(pMarshalDestinationAddress)

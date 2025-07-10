@@ -8,6 +8,10 @@ declare class PictDataBrokerProvider extends libPictProvider {
      */
     set marshalDestination(pMarshalDestinationAddress: string);
     /**
+     * @return {string} - The address of the marshal destination.
+     */
+    get marshalDestination(): string;
+    /**
      * @param {string} pHash - The hash of the value to retrieve.
      */
     getValue(pHash: string): any;
