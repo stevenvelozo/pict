@@ -164,7 +164,7 @@ class FilterMeadowStanzaTokenGenerator
 
 					for (const tmpField of tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]))
 					{
-						if (tmpFilterConfig.Values && tmpFilterConfig.Values.Start)
+						if (tmpFilterConfig.Values && tmpFilterConfig.Values.Start && (tmpFilterConfig.Type != 'ExternalJoinDateRange' || tmpFilterConfig.Values.Start != '0'))
 						{
 							tmpFilterResult.Filters.push(
 							{
@@ -177,7 +177,7 @@ class FilterMeadowStanzaTokenGenerator
 								Value: tmpFilterConfig.Values.Start,
 							});
 						}
-						if (tmpFilterConfig.Values && tmpFilterConfig.Values.End)
+						if (tmpFilterConfig.Values && tmpFilterConfig.Values.End && (tmpFilterConfig.Type != 'ExternalJoinDateRange' || tmpFilterConfig.Values.End != '0'))
 						{
 							tmpFilterResult.Filters.push(
 							{
@@ -261,7 +261,7 @@ class FilterMeadowStanzaTokenGenerator
 					 */
 					for (const tmpField of tmpFilterConfig.FilterByColumns || (tmpFilterConfig.FilterByColumn ? [ tmpFilterConfig.FilterByColumn ] : [ 'Name' ]))
 					{
-						if (tmpFilterConfig.Values && tmpFilterConfig.Values.Start)
+						if (tmpFilterConfig.Values && tmpFilterConfig.Values.Start && (tmpFilterConfig.Type != 'DateRange' || tmpFilterConfig.Values.Start != '0'))
 						{
 							tmpFilterResult.Filters.push(
 							{
@@ -274,7 +274,7 @@ class FilterMeadowStanzaTokenGenerator
 								Value: tmpFilterConfig.Values.Start,
 							});
 						}
-						if (tmpFilterConfig.Values && tmpFilterConfig.Values.End)
+						if (tmpFilterConfig.Values && tmpFilterConfig.Values.End && (tmpFilterConfig.Type != 'DateRange' || tmpFilterConfig.Values.End != '0'))
 						{
 							tmpFilterResult.Filters.push(
 							{
@@ -347,7 +347,7 @@ class FilterMeadowStanzaTokenGenerator
 
 					for (const tmpField of tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]))
 					{
-						if (tmpFilterConfig.Values && tmpFilterConfig.Values.Start)
+						if (tmpFilterConfig.Values && tmpFilterConfig.Values.Start && (tmpFilterConfig.Type != 'InternalJoinDateRange' || tmpFilterConfig.Values.Start != '0'))
 						{
 							tmpFilterResult.Filters.push(
 							{
@@ -359,7 +359,7 @@ class FilterMeadowStanzaTokenGenerator
 								Value: tmpFilterConfig.Values.Start,
 							});
 						}
-						if (tmpFilterConfig.Values && tmpFilterConfig.Values.End)
+						if (tmpFilterConfig.Values && tmpFilterConfig.Values.End && (tmpFilterConfig.Type != 'InternalJoinDateRange' || tmpFilterConfig.Values.End != '0'))
 						{
 							tmpFilterResult.Filters.push(
 							{

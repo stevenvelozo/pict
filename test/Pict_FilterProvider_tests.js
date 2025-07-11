@@ -443,7 +443,7 @@ suite
 						"Values":
 						{
 							"Start": undefined,
-							"End": undefined,
+							"End": "0",
 						},
 						"FilterByColumn": "CreateDate"
 					},
