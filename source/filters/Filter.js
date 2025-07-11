@@ -60,6 +60,7 @@ class FilterMeadowStanzaTokenGenerator
 		{
 			/** @type {PreparedFilter} */
 			const tmpFilterResult = { GUID: this.pict.getUUID(), Filters: [] };
+			const tmpValuesArray = Array.isArray(tmpFilterConfig.Values) ? tmpFilterConfig.Values : tmpFilterConfig.Value != null ? [ tmpFilterConfig.Value ] : [];
 			switch (tmpFilterConfig.Type)
 			{
 				case 'ExternalJoinMatch':
@@ -82,7 +83,7 @@ class FilterMeadowStanzaTokenGenerator
 					 */
 					for (const tmpField of tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]))
 					{
-						for (const tmpValue of tmpFilterConfig.Values || [])
+						for (const tmpValue of tmpValuesArray)
 						{
 							const tmpFilter =
 							{
@@ -146,9 +147,19 @@ class FilterMeadowStanzaTokenGenerator
 				case 'ExternalJoinNumericRange':
 				case 'ExternalJoinDateRange':
 				case 'ExternalJoinRange':
-					if (!tmpFilterConfig.Values || !tmpFilterConfig.Values.Start || !tmpFilterConfig.Values.End)
+					if (!tmpFilterConfig.Values || (tmpFilterConfig.Values.Start == null && tmpFilterConfig.Values.End == null))
 					{
-						break; //TODO: is this right? basically, date isn't populated yet, so just don't do anything
+						break;
+					}
+
+					// do not honor '0' for dates
+					if (tmpFilterConfig.Type == 'ExternalJoinDateRange')
+					{
+						if ((!tmpFilterConfig.Values.Start || tmpFilterConfig.Values.Start == '0') &&
+								(!tmpFilterConfig.Values.End || tmpFilterConfig.Values.End == '0'))
+						{
+							break;
+						}
 					}
 
 					for (const tmpField of tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]))
@@ -160,7 +171,7 @@ class FilterMeadowStanzaTokenGenerator
 								Index: -1,
 								CoreEntity: true,
 								Entity: pFilterState.Entity,
-								Instruction: 'FBVOR',
+								Instruction: 'FBV',
 								Field: tmpField,
 								Operator: tmpFilterConfig.StartExclusive ? 'GT' : 'GE',
 								Value: tmpFilterConfig.Values.Start,
@@ -173,7 +184,7 @@ class FilterMeadowStanzaTokenGenerator
 								Index: -1,
 								CoreEntity: true,
 								Entity: pFilterState.Entity,
-								Instruction: 'FBVOR',
+								Instruction: 'FBV',
 								Field: tmpField,
 								Operator: tmpFilterConfig.EndExclusive ? 'LT' : 'LE',
 								Value: tmpFilterConfig.Values.End,
@@ -226,6 +237,20 @@ class FilterMeadowStanzaTokenGenerator
 				case 'DateRange':
 				case 'NumericRange':
 				case 'Range':
+					if (!tmpFilterConfig.Values || (tmpFilterConfig.Values.Start == null && tmpFilterConfig.Values.End == null))
+					{
+						break;
+					}
+
+					// do not honor '0' for dates
+					if (tmpFilterConfig.Type == 'DateRange')
+					{
+						if ((!tmpFilterConfig.Values.Start || tmpFilterConfig.Values.Start == '0') &&
+								(!tmpFilterConfig.Values.End || tmpFilterConfig.Values.End == '0'))
+						{
+							break;
+						}
+					}
 					/*
 					  "Values":
 					  {
@@ -275,7 +300,7 @@ class FilterMeadowStanzaTokenGenerator
 					 */
 					for (const tmpField of tmpFilterConfig.FilterByColumns || (tmpFilterConfig.FilterByColumn ? [ tmpFilterConfig.FilterByColumn ] : [ 'Name' ]))
 					{
-						for (const tmpValue of tmpFilterConfig.Values || [])
+						for (const tmpValue of tmpValuesArray)
 						{
 							const tmpFilter =
 							{
@@ -305,9 +330,19 @@ class FilterMeadowStanzaTokenGenerator
 				case 'InternalJoinNumericRange':
 				case 'InternalJoinDateRange':
 				case 'InternalJoinRange':
-					if (!tmpFilterConfig.Values || !tmpFilterConfig.Values.Start || !tmpFilterConfig.Values.End)
+					if (!tmpFilterConfig.Values || (tmpFilterConfig.Values.Start == null && tmpFilterConfig.Values.End == null))
 					{
-						break; //TODO: is this right? basically, date isn't populated yet, so just don't do anything
+						break;
+					}
+
+					// do not honor '0' for dates
+					if (tmpFilterConfig.Type == 'InternalJoinDateRange')
+					{
+						if ((!tmpFilterConfig.Values.Start || tmpFilterConfig.Values.Start == '0') &&
+								(!tmpFilterConfig.Values.End || tmpFilterConfig.Values.End == '0'))
+						{
+							break;
+						}
 					}
 
 					for (const tmpField of tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]))
@@ -367,7 +402,7 @@ class FilterMeadowStanzaTokenGenerator
 					 */
 					for (const tmpField of tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]))
 					{
-						for (const tmpValue of tmpFilterConfig.Values || [])
+						for (const tmpValue of tmpValuesArray)
 						{
 							const tmpFilter =
 							{
