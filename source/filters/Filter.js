@@ -652,12 +652,21 @@ class FilterMeadowStanzaTokenGenerator
 			let tmpFilter = '';
 			for (const tmpUserFilter of pFilterState.UserFilters)
 			{
+				let tmpSanitizedUserFilter = tmpUserFilter;
+				if (pFilterState.Mode === 'Count')
+				{
+					tmpSanitizedUserFilter = this._sanitizeFilterForCount(tmpUserFilter);
+				}
+				if (!tmpSanitizedUserFilter)
+				{
+					continue;
+				}
 				if (tmpFilter.length > 0)
 				{
 					tmpFilter += '~';
 				}
 				tmpFilter += 'FOP~0~(~0~';
-				tmpFilter += tmpUserFilter;
+				tmpFilter += tmpSanitizedUserFilter;
 				tmpFilter += '~FCP~0~)~0';
 			}
 			if (tmpCoreLoadStep.Filter)
@@ -674,6 +683,30 @@ class FilterMeadowStanzaTokenGenerator
 		}
 		tmpBundleConfig.push(tmpCoreLoadStep);
 		pFilterState.BundleConfig = tmpBundleConfig;
+	}
+
+	/**
+	 * @param {string} pFilter
+	 *
+	 * @return {string}
+	 */
+	_sanitizeFilterForCount(pFilter)
+	{
+		if (!pFilter || typeof pFilter !== 'string')
+		{
+			return pFilter;
+		}
+
+		let tmpMicroStanzas = pFilter.split('~');
+		for (let i = 0; i < tmpMicroStanzas.length; i += 4)
+		{
+			if (tmpMicroStanzas[i] === 'FSF')
+			{
+				tmpMicroStanzas = tmpMicroStanzas.slice(0, i).concat(tmpMicroStanzas.slice(i + 4));
+				i -= 4; // adjust for removed elements
+			}
+		}
+		return tmpMicroStanzas.join('~');
 	}
 
 	_compileSimpleFilterToString(pFilter)

@@ -259,7 +259,7 @@ suite
 					},
 					{
 						"Type": "RawFilter",
-						"Value": "FBV~IDBook~LT~50"
+						"Value": "FBV~IDBook~LT~50~FSF~IDBook~ASC~0"
 					}
 				], tmpResults, 0, 10, (pError) =>
 				{
@@ -402,7 +402,7 @@ suite
 
 		test
 		(
-			'Filter - load page of records by address - ignores filters with no values',
+			'Filter - count page of records by address - ignores filters with no values',
 			async function()
 			{
 				let _Application = new DoNothingApplication(_Pict, {});
@@ -446,6 +446,10 @@ suite
 							"End": "0",
 						},
 						"FilterByColumn": "CreateDate"
+					},
+					{
+						"Type": "RawFilter",
+						"Value": "FBV~IDBook~GT~0~FSF~IDBook~ASC~0~FBV~CreateDate~GT~0"
 					},
 					{
 						/* TODO: User table not in test data server

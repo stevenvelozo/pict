@@ -62,6 +62,12 @@ declare class FilterMeadowStanzaTokenGenerator {
      * @param {FilterState} pFilterState
      */
     compileMeadowFilterStanzas(pFilterState: FilterState): void;
+    /**
+     * @param {string} pFilter
+     *
+     * @return {string}
+     */
+    _sanitizeFilterForCount(pFilter: string): string;
     _compileSimpleFilterToString(pFilter: any): string;
 }
 declare namespace FilterMeadowStanzaTokenGenerator {

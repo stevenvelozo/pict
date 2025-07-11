@@ -135,15 +135,17 @@ class PictMeadowEntityProvider extends libFableServiceBase
 				return fCallback(pError, '');
 			}
 
-			this.log.trace(`EntityBundleRequest found ${pRecordSet.length} records for ${pEntityInformation.Entity} filtered to [${tmpFilterString}]${!pEntityInformation.CountOnly && !pEntityInformation.AllRecords ? ` [${tmpRecordStartCursor}/${tmpPageSize}]` : ''}`);
-
 			if (pEntityInformation.CountOnly)
 			{
+				this.log.trace(`EntityBundleRequest counted ${pRecordSet} records for ${pEntityInformation.Entity} filtered to [${tmpFilterString}]${!pEntityInformation.CountOnly && !pEntityInformation.AllRecords ? ` [${tmpRecordStartCursor}/${tmpPageSize}]` : ''}`);
+
 				this.fable.manifest.setValueByHash(pContext, pEntityInformation.Destination, pRecordSet);
 			}
 			// Now assign it back to the destination; because this is not view specific it doesn't use the manifests from them (to deal with scope overlap with subgrids).
 			else if (pEntityInformation.SingleRecord)
 			{
+				this.log.trace(`EntityBundleRequest found ${pRecordSet.length} records for ${pEntityInformation.Entity} filtered to [${tmpFilterString}]${!pEntityInformation.CountOnly && !pEntityInformation.AllRecords ? ` [${tmpRecordStartCursor}/${tmpPageSize}]` : ''}`);
+
 				if (pRecordSet.length > 1)
 				{
 					this.log.warn(`EntityBundleRequest found more than one record for ${pEntityInformation.Entity} filtered to [${tmpFilterString}] but SingleRecord is true; setting the first record.`);
@@ -156,6 +158,8 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			}
 			else
 			{
+				this.log.trace(`EntityBundleRequest found ${pRecordSet.length} records for ${pEntityInformation.Entity} filtered to [${tmpFilterString}]${!pEntityInformation.CountOnly && !pEntityInformation.AllRecords ? ` [${tmpRecordStartCursor}/${tmpPageSize}]` : ''}`);
+
 				this.fable.manifest.setValueByHash(pContext, pEntityInformation.Destination, pRecordSet);
 			}
 
