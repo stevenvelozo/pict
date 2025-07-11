@@ -259,8 +259,12 @@ suite
 					},
 					{
 						"Type": "RawFilter",
-						"Value": "FBV~IDBook~LT~50~FSF~IDBook~ASC~0"
-					}
+						"Value": "FSF~IDBook~ASC~0"
+					},
+					{
+						"Type": "RawFilter",
+						"Value": "FBV~IDBook~LT~50"
+					},
 				], tmpResults, 0, 10, (pError) =>
 				{
 					try

@@ -649,13 +649,31 @@ class FilterMeadowStanzaTokenGenerator
 		};
 		if (pFilterState.UserFilters.length > 0)
 		{
+			let tmpAllSorts = '';
 			let tmpFilter = '';
 			for (const tmpUserFilter of pFilterState.UserFilters)
 			{
+				let tmpSorts;
 				let tmpSanitizedUserFilter = tmpUserFilter;
 				if (pFilterState.Mode === 'Count')
 				{
 					tmpSanitizedUserFilter = this._sanitizeFilterForCount(tmpUserFilter);
+				}
+				else
+				{
+					[ tmpSanitizedUserFilter, tmpSorts ] = this._extractSortsFromFilter(tmpUserFilter);
+					if (tmpSorts)
+					{
+						if (tmpAllSorts.length > 0)
+						{
+							tmpAllSorts += '~';
+						}
+						tmpAllSorts += tmpSorts;
+					}
+					if (!tmpSanitizedUserFilter)
+					{
+						continue;
+					}
 				}
 				if (!tmpSanitizedUserFilter)
 				{
@@ -678,6 +696,14 @@ class FilterMeadowStanzaTokenGenerator
 				tmpFilter += 'FOP~0~(~0~';
 				tmpFilter += tmpCoreLoadStep.Filter;
 				tmpFilter += '~FCP~0~)~0';
+			}
+			if (tmpAllSorts)
+			{
+				if (tmpFilter.length > 0)
+				{
+					tmpFilter += '~';
+				}
+				tmpFilter += tmpAllSorts;
 			}
 			tmpCoreLoadStep.Filter = tmpFilter;
 		}
@@ -707,6 +733,32 @@ class FilterMeadowStanzaTokenGenerator
 			}
 		}
 		return tmpMicroStanzas.join('~');
+	}
+
+	/**
+	 * @param {string} pFilter
+	 *
+	 * @return {Array<string>}
+	 */
+	_extractSortsFromFilter(pFilter)
+	{
+		if (!pFilter || typeof pFilter !== 'string')
+		{
+			return [ pFilter, '' ];
+		}
+
+		let tmpSortStanzas = [];
+		let tmpMicroStanzas = pFilter.split('~');
+		for (let i = 0; i < tmpMicroStanzas.length; i += 4)
+		{
+			if (tmpMicroStanzas[i] === 'FSF')
+			{
+				tmpSortStanzas.push(tmpMicroStanzas.slice(i, i + 4).join('~'));
+				tmpMicroStanzas = tmpMicroStanzas.slice(0, i).concat(tmpMicroStanzas.slice(i + 4));
+				i -= 4; // adjust for removed elements
+			}
+		}
+		return [ tmpMicroStanzas.join('~'), tmpSortStanzas.join('~') ];
 	}
 
 	_compileSimpleFilterToString(pFilter)

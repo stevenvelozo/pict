@@ -68,6 +68,12 @@ declare class FilterMeadowStanzaTokenGenerator {
      * @return {string}
      */
     _sanitizeFilterForCount(pFilter: string): string;
+    /**
+     * @param {string} pFilter
+     *
+     * @return {Array<string>}
+     */
+    _extractSortsFromFilter(pFilter: string): Array<string>;
     _compileSimpleFilterToString(pFilter: any): string;
 }
 declare namespace FilterMeadowStanzaTokenGenerator {
