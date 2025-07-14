@@ -442,14 +442,36 @@ suite
 						"ExternalFilterByTableConnectionColumn": "IDAuthor"
 					},
 					{
+						"UUID": "1.5",
+						"FilterHash": "FilterBookByAuthor[IDAuthor]",
+						"Type": "ExternalJoinNumericMatch",
+						"Value": 0,
+						"ExternalFilterByColumns": [ "IDAuthor" ],
+
+						"CoreConnectionColumn": "IDBook",
+
+						"JoinTable": "BookAuthorJoin",
+						"JoinTableExternalConnectionColumn": "IDAuthor",
+						"JoinTableCoreConnectionColumn": "IDBook",
+
+						"ExternalFilterByTable": "Author",
+						"ExternalFilterByTableConnectionColumn": "IDAuthor"
+					},
+					{
 						"UUID": "2",
 						"Type": "DateRange",
 						"Values":
 						{
-							"Start": undefined,
+							"Start": "",
 							"End": "0",
 						},
 						"FilterByColumn": "CreateDate"
+					},
+					{
+						"UUID": "3",
+						"Type": "DateRange",
+						"Value": "",
+						"FilterByColumn": "Genre"
 					},
 					{
 						"Type": "RawFilter",

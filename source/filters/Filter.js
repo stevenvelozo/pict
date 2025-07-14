@@ -60,7 +60,7 @@ class FilterMeadowStanzaTokenGenerator
 		{
 			/** @type {PreparedFilter} */
 			const tmpFilterResult = { GUID: this.pict.getUUID(), Filters: [] };
-			const tmpValuesArray = Array.isArray(tmpFilterConfig.Values) ? tmpFilterConfig.Values : tmpFilterConfig.Value != null ? [ tmpFilterConfig.Value ] : [];
+			const tmpValuesArray = Array.isArray(tmpFilterConfig.Values) ? tmpFilterConfig.Values : tmpFilterConfig.Value != null && tmpFilterConfig.Value != '' && (tmpFilterConfig.Type != 'ExternalJoinDateMatch' || tmpFilterConfig.Value != 0) ? [ tmpFilterConfig.Value ] : [];
 			switch (tmpFilterConfig.Type)
 			{
 				case 'ExternalJoinMatch':
