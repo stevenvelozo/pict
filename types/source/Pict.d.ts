@@ -110,6 +110,10 @@ declare class Pict extends Pict_base {
      */
     addProviderSingleton(pProviderHash: string, pOptions?: any, pProviderPrototype?: any): any;
     /**
+     * @return {libFableServiceTransactionTracking}
+     */
+    newTransactionTracker(): libFableServiceTransactionTracking;
+    /**
      * Just passing an options will construct one for us.
      * Passing a hash will set the hash.
      * Passing a prototype will use that!
@@ -256,6 +260,7 @@ import PictDataProvider = require("./Pict-DataProvider.js");
 import PictContentAssignment = require("./Pict-Content-Assignment.js");
 import PictCSS = require("./Pict-CSS.js");
 import libProviderFilterManager = require("./providers/Provider-Filter-Manager.js");
+import libFableServiceTransactionTracking = require("./services/Fable-Service-TransactionTracking.js");
 declare const PictApplicationClass: typeof import("pict-application");
 declare const PictViewClass: typeof import("pict-view");
 declare const PictProviderClass: typeof import("pict-provider");
@@ -275,8 +280,10 @@ type Fable = {
     fable: Fable;
     servicesMap: any;
     addAndInstantiateServiceType: (hash: string, prototype: any) => any;
+    addServiceTypeIfNotExists: (hash: string, prototype: any) => any;
     addServiceType: (hash: string, prototype: any) => any;
     instantiateServiceProvider: (hash: string, options?: any, prototype?: any) => any;
+    instantiateServiceProviderWithoutRegistration: (hash: string) => any;
     instantiateServiceProviderFromPrototype: (pServiceType: string, pOptions?: any, pCustomServiceHash?: string, pServicePrototype?: any) => any;
     getUUID: () => string;
     Utility: {

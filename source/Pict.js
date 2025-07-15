@@ -1,6 +1,7 @@
 /**
  * @author <steven@velozo.com>
  */
+const libFableServiceTransactionTracking = require(`./services/Fable-Service-TransactionTracking.js`);
 
 /**
  * @typedef {{
@@ -9,8 +10,10 @@
  *    fable: Fable,
  *    servicesMap: any,
  *    addAndInstantiateServiceType: (hash: string, prototype: any) => any,
+ *    addServiceTypeIfNotExists: (hash: string, prototype: any) => any,
  *    addServiceType: (hash: string, prototype: any) => any,
  *    instantiateServiceProvider: (hash: string, options?: any, prototype?: any) => any,
+ *    instantiateServiceProviderWithoutRegistration: (hash: string) => any,
  *    instantiateServiceProviderFromPrototype: (pServiceType: string, pOptions?: any, pCustomServiceHash?: string, pServicePrototype?: any) => any,
  *    getUUID: () => string,
  *    Utility:
@@ -93,6 +96,8 @@ class Pict extends libFable {
 		 */
 		this.DataProvider = null;
 		this.addAndInstantiateServiceType("DataProvider", PictDataProvider);
+
+		this.addServiceTypeIfNotExists('TransactionTracking', libFableServiceTransactionTracking);
 		/**
 		 * The content assignment module.
 		 *
@@ -291,6 +296,14 @@ class Pict extends libFable {
 			return this.providers[pProviderHash];
 		}
 		return this.addProvider(pProviderHash, pOptions, pProviderPrototype);
+	}
+
+	/**
+	 * @return {libFableServiceTransactionTracking}
+	 */
+	newTransactionTracker()
+	{
+		return this.instantiateServiceProviderWithoutRegistration('TransactionTracking');
 	}
 
 	/**
