@@ -72,23 +72,6 @@ class PictDataBrokerProvider extends libPictProvider
 	set marshalDestination(pMarshalDestinationAddress)
 	{
 		this._marshalDestination = pMarshalDestinationAddress;
-		if (!pMarshalDestinationAddress)
-		{
-			this._marshalDestinationObject = null;
-		}
-		else
-		{
-			this._marshalDestinationObject = this.pict.resolveStateFromAddress(pMarshalDestinationAddress);
-			if (!this._marshalDestinationObject)
-			{
-				//FIXME: create, but log error
-				if (!this._marshalDestinationObject)
-				{
-					this.log.error(`Data Broker bootstrapping missing object at marshal destination address: ${pMarshalDestinationAddress}`);
-					this.pict.setStateValueAtAddress(pMarshalDestinationAddress, null, {});
-				}
-			}
-		}
 	}
 
 	/**
@@ -96,11 +79,24 @@ class PictDataBrokerProvider extends libPictProvider
 	 */
 	get marshalDestinationObject()
 	{
-		if (!this._marshalDestinationObject)
+		const tmpMarshalDestinationAddress = this.marshalDestination;
+		if (!tmpMarshalDestinationAddress)
 		{
 			throw new Error(`Attempt to access marshal destination object with no marshal destination set.`);
 		}
-		return this._marshalDestinationObject;
+		//TODO: figure out a clean way to cache this object that sanely invalidates if the destination changes
+		let tmpMarshalDestinationObject = this.pict.resolveStateFromAddress(tmpMarshalDestinationAddress);
+		if (!tmpMarshalDestinationObject)
+		{
+			this.log.error(`Data Broker bootstrapping missing object at marshal destination address: ${tmpMarshalDestinationAddress}`);
+			this.pict.setStateValueAtAddress(tmpMarshalDestinationAddress, null, {});
+			tmpMarshalDestinationObject = this.pict.resolveStateFromAddress(tmpMarshalDestinationAddress);
+			if (!tmpMarshalDestinationObject)
+			{
+				throw new Error(`Attempt to access marshal destination object with no marshal destination set.`);
+			}
+		}
+		return tmpMarshalDestinationObject;
 	}
 
 	getMarshalDestinationObject()

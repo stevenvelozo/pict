@@ -30,7 +30,6 @@ declare class PictDataBrokerProvider extends libPictProvider {
      */
     setValueByHash(pHash: string, pValue: any): any;
     _marshalDestination: string;
-    _marshalDestinationObject: any;
     /**
      * @return {Record<string, any>} - The marshal destination object.
      */
