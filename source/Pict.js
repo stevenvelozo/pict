@@ -620,10 +620,11 @@ class Pict extends libFable {
 	 * @param {Function} [fCallback] - The callback to call when the template is parsed
 	 * @param {Array<any>} [pContextArray] - The context array to use in the template
 	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 * @param {any} [pState] - A catchall state object for plumbing data through template processing.
 	 *
 	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
-	parseTemplate(pTemplateString, pData, fCallback, pContextArray, pScope)
+	parseTemplate(pTemplateString, pData, fCallback, pContextArray, pScope, pState)
 	{
 		let tmpData = typeof pData === "object" ? pData : {};
 		let tmpContextArray = Array.isArray(pContextArray) ? pContextArray : [ this ];
@@ -662,6 +663,7 @@ class Pict extends libFable {
 				},
 				tmpContextArray,
 				tmpScope,
+				pState,
 			);
 		} else {
 			let tmpResult = this.MetaTemplate.parseString(
@@ -670,6 +672,7 @@ class Pict extends libFable {
 				null,
 				tmpContextArray,
 				tmpScope,
+				pState,
 			);
 			if (this.LogControlFlow && this.LogNoisiness > 1) {
 				this.log.info(
@@ -688,10 +691,11 @@ class Pict extends libFable {
 	 * @param {Function} [fCallback] - The callback to call when the template is parsed
 	 * @param {Array<any>} [pContextArray] - The context array to use in the template
 	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 * @param {any} [pState] - A catchall state object for plumbing data through template processing.
 	 *
 	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
-	parseTemplateByHash(pTemplateHash, pData, fCallback, pContextArray, pScope)
+	parseTemplateByHash(pTemplateHash, pData, fCallback, pContextArray, pScope, pState)
 	{
 		let tmpTemplateString = this.TemplateProvider.getTemplate(pTemplateHash);
 
@@ -705,6 +709,7 @@ class Pict extends libFable {
 			fCallback,
 			pContextArray,
 			pScope,
+			pState,
 		);
 	}
 
@@ -716,10 +721,11 @@ class Pict extends libFable {
 	 * @param {Function} [fCallback] - The callback to call when the template set is parsed
 	 * @param {Array<any>} [pContextArray] - The context array to use in the template
 	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 * @param {any} [pState] - A catchall state object for plumbing data through template processing.
 	 *
 	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
-	parseTemplateSet(pTemplateString, pDataSet, fCallback, pContextArray, pScope)
+	parseTemplateSet(pTemplateString, pDataSet, fCallback, pContextArray, pScope, pState)
 	{
 		// TODO: This will need streaming -- for now janky old string append does the trick
 		let tmpValue = "";
@@ -758,6 +764,7 @@ class Pict extends libFable {
 							null,
 							pContextArray,
 							pScope,
+							pState,
 						);
 					}
 				} else {
@@ -769,6 +776,7 @@ class Pict extends libFable {
 							null,
 							pContextArray,
 							pScope,
+							pState,
 						);
 					}
 				}
@@ -788,10 +796,11 @@ class Pict extends libFable {
 	 * @param {Function} [fCallback] - The callback to call when the template is parsed
 	 * @param {Array<any>} [pContextArray] - The context array to use in the template
 	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 * @param {any} [pState] - A catchall state object for plumbing data through template processing.
 	 *
 	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
-	parseTemplateSetByHash(pTemplateHash, pDataSet, fCallback, pContextArray, pScope)
+	parseTemplateSetByHash(pTemplateHash, pDataSet, fCallback, pContextArray, pScope, pState)
 	{
 		let tmpTemplateString = this.TemplateProvider.getTemplate(pTemplateHash);
 
@@ -805,6 +814,7 @@ class Pict extends libFable {
 			fCallback,
 			pContextArray,
 			pScope,
+			pState,
 		);
 	}
 
@@ -817,10 +827,11 @@ class Pict extends libFable {
 	 * @param {Function} [fCallback] - The callback to call when the template set is parsed
 	 * @param {Array<any>} [pContextArray] - The context array to use in the template
 	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 * @param {any} [pState] - A catchall state object for plumbing data through template processing.
 	 *
 	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
-	parseTemplateSetWithPayload(pTemplateString, pDataSet, pPayload, fCallback, pContextArray, pScope)
+	parseTemplateSetWithPayload(pTemplateString, pDataSet, pPayload, fCallback, pContextArray, pScope, pState)
 	{
 		// TODO: This will need streaming -- for now janky old string append does the trick
 		let tmpValue = "";
@@ -859,6 +870,7 @@ class Pict extends libFable {
 							null,
 							pContextArray,
 							pScope,
+							pState,
 						);
 					}
 				} else {
@@ -870,6 +882,7 @@ class Pict extends libFable {
 							null,
 							pContextArray,
 							pScope,
+							pState,
 						);
 					}
 				}
@@ -890,10 +903,11 @@ class Pict extends libFable {
 	 * @param {Function} [fCallback] - The callback to call when the template is parsed
 	 * @param {Array<any>} [pContextArray] - The context array to use in the template
 	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 * @param {any} [pState] - A catchall state object for plumbing data through template processing.
 	 *
 	 * @return {String?} The parsed template string, or undefined if a callback was provided
 	 */
-	parseTemplateSetWithPayloadByHash(pTemplateHash, pDataSet, pPayload, fCallback, pContextArray, pScope)
+	parseTemplateSetWithPayloadByHash(pTemplateHash, pDataSet, pPayload, fCallback, pContextArray, pScope, pState)
 	{
 		let tmpTemplateString = this.TemplateProvider.getTemplate(pTemplateHash);
 
@@ -908,6 +922,7 @@ class Pict extends libFable {
 			fCallback,
 			pContextArray,
 			pScope,
+			pState,
 		);
 	}
 }

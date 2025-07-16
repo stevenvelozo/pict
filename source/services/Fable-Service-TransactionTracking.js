@@ -11,7 +11,7 @@ class TransactionTracking extends libFableServiceProviderBase
 		// Intersect default options, parent constructor, service information
 		super(pFable, pOptions, pServiceHash);
 
-		/** @type {import('pict') & { addAndInstantiateSingletonService: (hash: string, options: any, prototype: any) => any }} */
+		/** @type {import('../Pict') & { addAndInstantiateSingletonService: (hash: string, options: any, prototype: any) => any }} */
 		this.fable;
 		/** @type {any} */
 		this.log;

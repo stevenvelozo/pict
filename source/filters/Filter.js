@@ -58,6 +58,14 @@ class FilterMeadowStanzaTokenGenerator
 		pFilterState.UserFilters = [];
 		for (const tmpFilterConfig of pFilterState.FilterConfiguration || [])
 		{
+			if (tmpFilterConfig.Enabled === false)
+			{
+				if (this.pict.LogNoisiness > 1)
+				{
+					this.log.info(`Skipping disabled filter configuration: ${tmpFilterConfig.Type}`, { FilterConfig: tmpFilterConfig });
+				}
+				continue;
+			}
 			/** @type {PreparedFilter} */
 			const tmpFilterResult = { GUID: this.pict.getUUID(), Filters: [] };
 			const tmpValuesArray = Array.isArray(tmpFilterConfig.Values) ? tmpFilterConfig.Values : tmpFilterConfig.Value != null && tmpFilterConfig.Value != '' && (tmpFilterConfig.Type != 'ExternalJoinDateMatch' || tmpFilterConfig.Value != 0) ? [ tmpFilterConfig.Value ] : [];

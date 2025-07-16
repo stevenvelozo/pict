@@ -185,10 +185,11 @@ declare class Pict extends Pict_base {
      * @param {Function} [fCallback] - The callback to call when the template is parsed
      * @param {Array<any>} [pContextArray] - The context array to use in the template
      * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+     * @param {any} [pState] - A catchall state object for plumbing data through template processing.
      *
      * @return {String?} The parsed template string, or undefined if a callback was provided
      */
-    parseTemplate(pTemplateString: string, pData: any, fCallback?: Function, pContextArray?: Array<any>, pScope?: any): string | null;
+    parseTemplate(pTemplateString: string, pData: any, fCallback?: Function, pContextArray?: Array<any>, pScope?: any, pState?: any): string | null;
     /**
      * Parse a template by hash.
      *
@@ -197,10 +198,11 @@ declare class Pict extends Pict_base {
      * @param {Function} [fCallback] - The callback to call when the template is parsed
      * @param {Array<any>} [pContextArray] - The context array to use in the template
      * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+     * @param {any} [pState] - A catchall state object for plumbing data through template processing.
      *
      * @return {String?} The parsed template string, or undefined if a callback was provided
      */
-    parseTemplateByHash(pTemplateHash: string, pData: any, fCallback?: Function, pContextArray?: Array<any>, pScope?: any): string | null;
+    parseTemplateByHash(pTemplateHash: string, pData: any, fCallback?: Function, pContextArray?: Array<any>, pScope?: any, pState?: any): string | null;
     /**
      * Parse a template set.
      *
@@ -209,10 +211,11 @@ declare class Pict extends Pict_base {
      * @param {Function} [fCallback] - The callback to call when the template set is parsed
      * @param {Array<any>} [pContextArray] - The context array to use in the template
      * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+     * @param {any} [pState] - A catchall state object for plumbing data through template processing.
      *
      * @return {String?} The parsed template string, or undefined if a callback was provided
      */
-    parseTemplateSet(pTemplateString: string, pDataSet: Array<any> | any, fCallback?: Function, pContextArray?: Array<any>, pScope?: any): string | null;
+    parseTemplateSet(pTemplateString: string, pDataSet: Array<any> | any, fCallback?: Function, pContextArray?: Array<any>, pScope?: any, pState?: any): string | null;
     /**
      * Parse a template set by hash.
      *
@@ -221,10 +224,11 @@ declare class Pict extends Pict_base {
      * @param {Function} [fCallback] - The callback to call when the template is parsed
      * @param {Array<any>} [pContextArray] - The context array to use in the template
      * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+     * @param {any} [pState] - A catchall state object for plumbing data through template processing.
      *
      * @return {String?} The parsed template string, or undefined if a callback was provided
      */
-    parseTemplateSetByHash(pTemplateHash: string, pDataSet: Array<any> | any, fCallback?: Function, pContextArray?: Array<any>, pScope?: any): string | null;
+    parseTemplateSetByHash(pTemplateHash: string, pDataSet: Array<any> | any, fCallback?: Function, pContextArray?: Array<any>, pScope?: any, pState?: any): string | null;
     /**
      * Parse a template set.
      *
@@ -233,10 +237,11 @@ declare class Pict extends Pict_base {
      * @param {Function} [fCallback] - The callback to call when the template set is parsed
      * @param {Array<any>} [pContextArray] - The context array to use in the template
      * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+     * @param {any} [pState] - A catchall state object for plumbing data through template processing.
      *
      * @return {String?} The parsed template string, or undefined if a callback was provided
      */
-    parseTemplateSetWithPayload(pTemplateString: string, pDataSet: Array<any> | any, pPayload: any, fCallback?: Function, pContextArray?: Array<any>, pScope?: any): string | null;
+    parseTemplateSetWithPayload(pTemplateString: string, pDataSet: Array<any> | any, pPayload: any, fCallback?: Function, pContextArray?: Array<any>, pScope?: any, pState?: any): string | null;
     /**
      * Parse a template set by hash.
      *
@@ -246,10 +251,11 @@ declare class Pict extends Pict_base {
      * @param {Function} [fCallback] - The callback to call when the template is parsed
      * @param {Array<any>} [pContextArray] - The context array to use in the template
      * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+     * @param {any} [pState] - A catchall state object for plumbing data through template processing.
      *
      * @return {String?} The parsed template string, or undefined if a callback was provided
      */
-    parseTemplateSetWithPayloadByHash(pTemplateHash: string, pDataSet: Array<any> | any, pPayload: any, fCallback?: Function, pContextArray?: Array<any>, pScope?: any): string | null;
+    parseTemplateSetWithPayloadByHash(pTemplateHash: string, pDataSet: Array<any> | any, pPayload: any, fCallback?: Function, pContextArray?: Array<any>, pScope?: any, pState?: any): string | null;
 }
 declare namespace Pict {
     export { PictApplicationClass, PictViewClass, PictProviderClass, PictTemplateClass, EnvironmentLog, EnvironmentObject, FilterClauseBase, FilterClauseLocal, FilterClauseInternalJoin, FilterClauseExternalJoin, isBrowser, safeOnDocumentReady, safeLoadPictApplication, Fable };

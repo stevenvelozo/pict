@@ -25,10 +25,11 @@ class PictTemplateProviderDataValueTree extends libPictTemplate
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
 	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
 	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 * @param {any} [pState] - A catchall state object for plumbing data through template processing.
 	 *
 	 * @return {string} The rendered template
 	 */
-	render(pTemplateHash, pRecord, pContextArray, pScope)
+	render(pTemplateHash, pRecord, pContextArray, pScope, pState)
 	{
 		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 		tmpData.TemplateHash = pTemplateHash.trim();
@@ -67,7 +68,7 @@ class PictTemplateProviderDataValueTree extends libPictTemplate
 			tmpData.ObjectValueTree = tmpData.ResolveValue;
 		}
 
-		return this.pict.parseTemplate(tmpPictObjectWrapTemplate, tmpData, null, pContextArray, pScope);
+		return this.pict.parseTemplate(tmpPictObjectWrapTemplate, tmpData, null, pContextArray, pScope, pState);
 	}
 
 	/**
@@ -79,10 +80,11 @@ class PictTemplateProviderDataValueTree extends libPictTemplate
 	 * @param {number} pMaxDepth - The maximum depth to render in the value tree
 	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
 	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 * @param {any} [pState] - A catchall state object for plumbing data through template processing.
 	 *
 	 * @return {string} The rendered template
 	 */
-	dataValueTreeObjectSet(pObject, pRootObject, pCurrentDepth, pMaxDepth, pContextArray, pScope)
+	dataValueTreeObjectSet(pObject, pRootObject, pCurrentDepth, pMaxDepth, pContextArray, pScope, pState)
 	{
 		let tmpTemplateResult = '';
 
@@ -144,7 +146,7 @@ class PictTemplateProviderDataValueTree extends libPictTemplate
 				CurrentDepth: pCurrentDepth,
 				MaxDepth: pMaxDepth
 			};
-			tmpTemplateResult += this.pict.parseTemplate(tmpPictObjectBranchTemplate, tmpDataValue, null, pContextArray, pScope);
+			tmpTemplateResult += this.pict.parseTemplate(tmpPictObjectBranchTemplate, tmpDataValue, null, pContextArray, pScope, pState);
 		}
 
 		return tmpTemplateResult;

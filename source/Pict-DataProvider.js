@@ -6,7 +6,7 @@ class PictDataProvider extends libFableServiceBase
 	{
 		super(pFable, pOptions, pServiceHash);
 
-		/** @type {import('fable') & import('pict')} */
+		/** @type {import('fable') & import('./Pict')} */
 		this.fable;
 
 		this.serviceType = 'PictDataProvider';

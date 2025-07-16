@@ -25,10 +25,11 @@ class PictTemplateProviderData extends libPictTemplate
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
 	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
 	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 * @param {any} [pState] - A catchall state object for plumbing data through template processing.
 	 *
 	 * @return {string} The rendered template
 	 */
-	render(pTemplateHash, pRecord, pContextArray, pScope)
+	render(pTemplateHash, pRecord, pContextArray, pScope, pState)
 	{
 		let tmpHash = pTemplateHash.trim();
 		let tmpRecord = (typeof(pRecord) === 'object') ? pRecord : {};
@@ -65,7 +66,7 @@ class PictTemplateProviderData extends libPictTemplate
 			}
 		}
 		// If the value is not found or is undefined, try to use the fallback template
-		const tmpFallbackTemplate = this.pict.parseTemplateByHash(tmpTemplateFallbackAddress, tmpRecord, null, pContextArray, pScope);
+		const tmpFallbackTemplate = this.pict.parseTemplateByHash(tmpTemplateFallbackAddress, tmpRecord, null, pContextArray, pScope, pState);
 		if (tmpFallbackTemplate == null || tmpFallbackTemplate === '')
 		{
 			this.log.warn(`PICT DataWithTemplateFallback [fDataRender]::[${tmpHash}] - No fallback template found at address: ${tmpTemplateFallbackAddress}`);
@@ -87,10 +88,11 @@ class PictTemplateProviderData extends libPictTemplate
 	 * @param {(pError?: Error, pResult?: string) => void} fCallback - The callback function to be called with the result
 	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
 	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 * @param {any} [pState] - A catchall state object for plumbing data through template processing.
 	 *
 	 * @return {void} The result is passed to the callback function
 	 */
-	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray, pScope)
+	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray, pScope, pState)
 	{
 		let tmpHash = pTemplateHash.trim();
 		let tmpRecord = (typeof (pRecord) === 'object') ? pRecord : {};
@@ -144,7 +146,7 @@ class PictTemplateProviderData extends libPictTemplate
 					this.log.trace(`PICT DataWithTemplateFallback [fDataRender]::[${tmpHash}] - Using fallback template from address: ${tmpTemplateFallbackAddress}`);
 				}
 				return tmpCallback(null, pValue);
-			}, pContextArray, pScope);
+			}, pContextArray, pScope, pState);
 	}
 
 }

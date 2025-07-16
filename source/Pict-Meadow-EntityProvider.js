@@ -8,7 +8,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 		/** @type {any} */
 		this.options;
-		/** @type {import('pict') & { settings: any } & { newAnticipate: any }} */
+		/** @type {import('./Pict') & { settings: any } & { newAnticipate: any }} */
 		this.fable;
 		/** @type {any} */
 		this.log;

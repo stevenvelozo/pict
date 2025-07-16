@@ -25,10 +25,11 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
 	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
 	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 * @param {any} [pState] - A catchall state object for plumbing data through template processing.
 	 *
 	 * @return {string} The rendered template
 	 */
-	render(pTemplateDataAddress, pRecord, pContextArray, pScope)
+	render(pTemplateDataAddress, pRecord, pContextArray, pScope, pState)
 	{
 		let tmpDataAddress = pTemplateDataAddress.trim();
 		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
@@ -76,11 +77,11 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 		if (!tmpAddressOfData)
 		{
 			// No address was provided, just render the template with what this template has.
-			return this.pict.parseTemplate(tmpTemplate, pRecord, null, pContextArray, pScope);
+			return this.pict.parseTemplate(tmpTemplate, pRecord, null, pContextArray, pScope, pState);
 		}
 		else
 		{
-			return this.pict.parseTemplate(tmpTemplate, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope), null, pContextArray);
+			return this.pict.parseTemplate(tmpTemplate, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope), null, pContextArray, pScope, pState);
 		}
 	}
 
@@ -92,10 +93,11 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 	 * @param {(error?: Error, content?: String) => void} fCallback - callback function invoked with the rendered template, or an error
 	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
 	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 * @param {any} [pState] - A catchall state object for plumbing data through template processing.
 	 *
 	 * @return {void}
 	 */
-	renderAsync(pTemplateDataAddress, pRecord, fCallback, pContextArray, pScope)
+	renderAsync(pTemplateDataAddress, pRecord, fCallback, pContextArray, pScope, pState)
 	{
 		let tmpDataAddress = pTemplateDataAddress.trim();
 		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
@@ -153,7 +155,7 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 						return tmpCallback(pError, '');
 					}
 					return tmpCallback(null, pValue);
-				}, pContextArray, pScope);
+				}, pContextArray, pScope, pState);
 		}
 		else
 		{
@@ -165,7 +167,7 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 						return tmpCallback(pError, '');
 					}
 					return tmpCallback(null, pValue);
-				}, pContextArray, pScope);
+				}, pContextArray, pScope, pState);
 		}
 	}
 }

@@ -25,10 +25,11 @@ class PictTemplateProviderEntity extends libPictTemplate
 	 * @param {any} pRecord - The json object to be used as the Record for the template render
 	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
 	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 * @param {any} [pState] - A catchall state object for plumbing data through template processing.
 	 *
 	 * @return {string} The rendered template
 	 */
-	render(pTemplateHash, pRecord, pContextArray, pScope)
+	render(pTemplateHash, pRecord, pContextArray, pScope, pState)
 	{
 		// TODO: Better messaging
 		this.log.error(`Pict: Entity Render [${pTemplateHash}]: Render called in a non-asynchronous fashion.  This should not happen.`);
@@ -43,10 +44,11 @@ class PictTemplateProviderEntity extends libPictTemplate
 	 * @param {(error?: Error, content?: String) => void} fCallback - callback function invoked with the rendered template, or an error
 	 * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
 	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 * @param {any} [pState] - A catchall state object for plumbing data through template processing.
 	 *
 	 * @return {void}
 	 */
-	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray, pScope)
+	renderAsync(pTemplateHash, pRecord, fCallback, pContextArray, pScope, pState)
 	{
 		let tmpHash = pTemplateHash.trim();
 		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
@@ -122,7 +124,7 @@ class PictTemplateProviderEntity extends libPictTemplate
 				// Now render the template
 				if (tmpEntityTemplate)
 				{
-					this.pict.parseTemplateByHash(tmpEntityTemplate, pRecord, tmpCallback, pContextArray, pScope);
+					this.pict.parseTemplateByHash(tmpEntityTemplate, pRecord, tmpCallback, pContextArray, pScope, pState);
 				}
 				else
 				{

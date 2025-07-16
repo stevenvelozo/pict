@@ -1,8 +1,8 @@
 export = TransactionTracking;
 declare class TransactionTracking {
     constructor(pFable: any, pOptions: any, pServiceHash: any);
-    /** @type {import('pict') & { addAndInstantiateSingletonService: (hash: string, options: any, prototype: any) => any }} */
-    fable: import("pict") & {
+    /** @type {import('../Pict') & { addAndInstantiateSingletonService: (hash: string, options: any, prototype: any) => any }} */
+    fable: import("../Pict") & {
         addAndInstantiateSingletonService: (hash: string, options: any, prototype: any) => any;
     };
     /** @type {any} */

@@ -3,8 +3,8 @@ declare class PictMeadowEntityProvider {
     constructor(pFable: any, pOptions: any, pServiceHash: any);
     /** @type {any} */
     options: any;
-    /** @type {import('pict') & { settings: any } & { newAnticipate: any }} */
-    fable: import("pict") & {
+    /** @type {import('./Pict') & { settings: any } & { newAnticipate: any }} */
+    fable: import("./Pict") & {
         settings: any;
     } & {
         newAnticipate: any;

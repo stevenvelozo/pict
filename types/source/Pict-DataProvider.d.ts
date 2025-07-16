@@ -1,8 +1,8 @@
 export = PictDataProvider;
 declare class PictDataProvider {
     constructor(pFable: any, pOptions: any, pServiceHash: any);
-    /** @type {import('fable') & import('pict')} */
-    fable: any & import("pict");
+    /** @type {import('fable') & import('./Pict')} */
+    fable: any & import("./Pict");
     serviceType: string;
     /**
      * @param {string} pAddress - The address of the data to retrieve

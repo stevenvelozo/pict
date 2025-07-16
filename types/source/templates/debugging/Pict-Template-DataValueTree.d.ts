@@ -17,10 +17,11 @@ declare class PictTemplateProviderDataValueTree extends libPictTemplate {
      * @param {number} pMaxDepth - The maximum depth to render in the value tree
      * @param {Array<any>} pContextArray - An array of context objects accessible from the template; safe to leave empty
      * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+     * @param {any} [pState] - A catchall state object for plumbing data through template processing.
      *
      * @return {string} The rendered template
      */
-    dataValueTreeObjectSet(pObject: any, pRootObject: any, pCurrentDepth: number, pMaxDepth: number, pContextArray: Array<any>, pScope?: any): string;
+    dataValueTreeObjectSet(pObject: any, pRootObject: any, pCurrentDepth: number, pMaxDepth: number, pContextArray: Array<any>, pScope?: any, pState?: any): string;
 }
 import libPictTemplate = require("pict-template");
 //# sourceMappingURL=Pict-Template-DataValueTree.d.ts.map
