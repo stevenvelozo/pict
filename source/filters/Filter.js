@@ -542,7 +542,7 @@ class FilterMeadowStanzaTokenGenerator
 					{
 						const tmpLocalIndex = match.substring(5, match.length - 1);
 						const tmpGlobalIndex = tmpFilterGroup.Filters.find((f) => f.Index == tmpLocalIndex)?.ComputedIndex;
-						if (!tmpGlobalIndex)
+						if (tmpGlobalIndex == null)
 						{
 							throw new Error(`Filter index ${tmpLocalIndex} not found in group filters.`);
 						}
