@@ -46,7 +46,7 @@ class PictTemplateProviderNotEmpty extends libPictTemplate
 		let tmpHashParts = tmpHash.split('^');
 
 		// For now just check truthiness.  Not sure if this is grand.
-		if (this.resolveStateFromAddress(tmpHashParts[0], tmpData, pContextArray, null, pScope))
+		if (this.resolveStateFromAddress(tmpHashParts[0], tmpData, pContextArray, null, pScope, pState))
 		{
 			return tmpHashParts[1];
 		}

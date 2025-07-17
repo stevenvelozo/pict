@@ -159,10 +159,11 @@ declare class Pict extends Pict_base {
      * @param {Array<any>} [pContextArray] - The context array to resolve (optional)
      * @param {Record<string, any>} [pRootDataObject] - The root data object to resolve (optional)
      * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+     * @param {any} [pState] - A catchall state object for plumbing data through template processing.
      *
      * @return {any} The value at the given address, or undefined
      */
-    resolveStateFromAddress(pAddress: string, pRecord?: Record<string, any>, pContextArray?: Array<any>, pRootDataObject?: Record<string, any>, pScope?: any): any;
+    resolveStateFromAddress(pAddress: string, pRecord?: Record<string, any>, pContextArray?: Array<any>, pRootDataObject?: Record<string, any>, pScope?: any, pState?: any): any;
     /**
      * Set a value from a nested object using a dot notation string.
      *

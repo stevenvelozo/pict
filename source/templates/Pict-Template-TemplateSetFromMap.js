@@ -68,8 +68,8 @@ class PictTemplateProviderTemplateSetFromMap extends libPictTemplate
 		}
 
 		// Now resolve the data
-		let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData, pContextArray, null, pScope);
-		let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData, pContextArray, null, pScope);
+		let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData, pContextArray, null, pScope, pState);
+		let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData, pContextArray, null, pScope, pState);
 
 		if (!tmpMap)
 		{
@@ -142,8 +142,8 @@ class PictTemplateProviderTemplateSetFromMap extends libPictTemplate
 		}
 
 		// Now resolve the data
-		let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData, pContextArray, null, pScope);
-		let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData, pContextArray, null, pScope);
+		let tmpMap = this.resolveStateFromAddress(tmpAddressOfMap, tmpData, pContextArray, null, pScope, pState);
+		let tmpKey = this.resolveStateFromAddress(tmpAddressOfKey, tmpData, pContextArray, null, pScope, pState);
 
 		if (!tmpMap)
 		{

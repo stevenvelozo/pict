@@ -39,7 +39,7 @@ class PictTemplateProviderLogValueTree extends libPictTemplate
 		{
 			return '';
 		}
-		tmpData.ResolvedValue = this.resolveStateFromAddress(tmpData.ValueTreeParameters[0], tmpData, pContextArray, null, pScope);
+		tmpData.ResolvedValue = this.resolveStateFromAddress(tmpData.ValueTreeParameters[0], tmpData, pContextArray, null, pScope, pState);
 		tmpData.ResolvedValueType = typeof (tmpData.ResolvedValue);
 
 

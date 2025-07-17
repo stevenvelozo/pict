@@ -57,7 +57,7 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 		tmpAddressOfData = tmpTemplateHashes[1];
 		tmpAddressOfPayload = tmpTemplateHashes[2];
 
-		let tmpData = this.resolveStateFromAddress(tmpAddressOfData, pRecord, pContextArray, null, pScope);
+		let tmpData = this.resolveStateFromAddress(tmpAddressOfData, pRecord, pContextArray, null, pScope, pState);
 		if (!tmpData)
 		{
 			tmpData = pRecord;
@@ -67,7 +67,7 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 			tmpData = {};
 		}
 
-		let tmpPayloadData = this.resolveStateFromAddress(tmpAddressOfPayload, pRecord, pContextArray, null, pScope);
+		let tmpPayloadData = this.resolveStateFromAddress(tmpAddressOfPayload, pRecord, pContextArray, null, pScope, pState);
 		if (!tmpPayloadData)
 		{
 			tmpPayloadData = pRecord;
@@ -121,7 +121,7 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 		tmpAddressOfData = tmpTemplateHashes[1];
 		tmpAddressOfPayload = tmpTemplateHashes[2];
 
-		let tmpData = this.resolveStateFromAddress(tmpAddressOfData, pRecord, pContextArray, null, pScope);
+		let tmpData = this.resolveStateFromAddress(tmpAddressOfData, pRecord, pContextArray, null, pScope, pState);
 		if (!tmpData)
 		{
 			tmpData = pRecord;
@@ -131,7 +131,7 @@ class PictTemplateProviderTemplateSetWithPayload extends libPictTemplate
 			tmpData = {};
 		}
 
-		let tmpPayloadData = this.resolveStateFromAddress(tmpAddressOfPayload, pRecord, pContextArray, null, pScope);
+		let tmpPayloadData = this.resolveStateFromAddress(tmpAddressOfPayload, pRecord, pContextArray, null, pScope, pState);
 		if (!tmpPayloadData)
 		{
 			tmpPayloadData = pRecord;

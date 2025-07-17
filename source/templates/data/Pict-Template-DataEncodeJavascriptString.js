@@ -43,7 +43,7 @@ class PictTemplateProviderDataEncodeJavascriptString extends libPictTemplate
 			this.log.trace(`PICT Template [fDataJson]::[${tmpHash}]`);
 		}
 
-		let tmpDataToEncode = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray, null, pScope);
+		let tmpDataToEncode = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray, null, pScope, pState);
 
 		return this.pict.DataFormat.stringEncodeForJavascript(tmpDataToEncode);
 	}

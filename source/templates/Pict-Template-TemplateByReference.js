@@ -66,7 +66,7 @@ class PictTemplateProviderTemplate extends libPictTemplate
 		}
 
 		// Now look up the template by the reference
-		let tmpTemplateHash = this.resolveStateFromAddress(tmpTemplateHashReferenceLocation, pRecord, pContextArray, null, pScope);
+		let tmpTemplateHash = this.resolveStateFromAddress(tmpTemplateHashReferenceLocation, pRecord, pContextArray, null, pScope, pState);
 
 		// No template hash
 		if (!tmpTemplateHash)
@@ -82,7 +82,7 @@ class PictTemplateProviderTemplate extends libPictTemplate
 		}
 		else
 		{
-			return this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope), null, pContextArray, pScope, pState);
+			return this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope, pState), null, pContextArray, pScope, pState);
 		}
 	}
 
@@ -136,7 +136,7 @@ class PictTemplateProviderTemplate extends libPictTemplate
 		}
 
 		// Now look up the template by the reference
-		let tmpTemplateHash = this.resolveStateFromAddress(tmpTemplateHashReferenceLocation, pRecord, pContextArray, null, pScope);
+		let tmpTemplateHash = this.resolveStateFromAddress(tmpTemplateHashReferenceLocation, pRecord, pContextArray, null, pScope, pState);
 
 		// No template hash
 		if (!tmpTemplateHash)
@@ -161,7 +161,7 @@ class PictTemplateProviderTemplate extends libPictTemplate
 		}
 		else
 		{
-			this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope),
+			this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope, pState),
 				(pError, pValue) =>
 				{
 					if (pError)

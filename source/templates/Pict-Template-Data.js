@@ -53,7 +53,7 @@ class PictTemplateProviderData extends libPictTemplate
 		let tmpValue = '';
 		if (tmpHash != null)
 		{
-			tmpValue = this.resolveStateFromAddress(tmpHash, tmpRecord, pContextArray, null, pScope);
+			tmpValue = this.resolveStateFromAddress(tmpHash, tmpRecord, pContextArray, null, pScope, pState);
 		}
 		if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined') || (tmpValue === ''))
 		{

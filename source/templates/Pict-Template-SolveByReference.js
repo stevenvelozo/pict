@@ -44,7 +44,7 @@ class PictTemplateProviderSolveByReference extends libPictTemplate
 			this.log.trace(`PICT SolveByReference [fTemplateRender]::[${pSolveParams}]`);
 		}
 
-		const tmpEquation = this.pict.resolveStateFromAddress(tmpEquationAddress, tmpContextualRecord, pContextArray, null, pScope);
+		const tmpEquation = this.pict.resolveStateFromAddress(tmpEquationAddress, tmpContextualRecord, pContextArray, null, pScope, pState);
 		if (!tmpEquation)
 		{
 			if (this.pict.LogNoisiness > 2)
@@ -53,8 +53,8 @@ class PictTemplateProviderSolveByReference extends libPictTemplate
 			}
 			return '';
 		}
-		const tmpRecord = (tmpRecordAddress && this.pict.resolveStateFromAddress(tmpRecordAddress, tmpContextualRecord, pContextArray, null, pScope)) || tmpContextualRecord;
-		const tmpManifest = (tmpManifestAddress && this.pict.resolveStateFromAddress(tmpManifestAddress, tmpContextualRecord, pContextArray, null, pScope)) || this.pict.manifest;
+		const tmpRecord = (tmpRecordAddress && this.pict.resolveStateFromAddress(tmpRecordAddress, tmpContextualRecord, pContextArray, null, pScope, pState)) || tmpContextualRecord;
+		const tmpManifest = (tmpManifestAddress && this.pict.resolveStateFromAddress(tmpManifestAddress, tmpContextualRecord, pContextArray, null, pScope, pState)) || this.pict.manifest;
 		const expressionParser = this.fable.instantiateServiceProviderIfNotExists('ExpressionParser');
 		const tmpResultObject = { };
 		return expressionParser.solve(tmpEquation, tmpRecord, tmpResultObject, tmpManifest, tmpRecord);

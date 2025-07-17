@@ -65,7 +65,7 @@ class PictTemplateProviderTemplateValueSet extends libPictTemplate
 			return '';
 		}
 
-		tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope);
+		tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope, pState);
 
 		let tmpDataValueSet = [];
 		if (Array.isArray(tmpData))
@@ -149,7 +149,7 @@ class PictTemplateProviderTemplateValueSet extends libPictTemplate
 		}
 
 		// Now resolve the data
-		tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope);
+		tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope, pState);
 
 		let tmpDataValueSet = [];
 		if (Array.isArray(tmpData))

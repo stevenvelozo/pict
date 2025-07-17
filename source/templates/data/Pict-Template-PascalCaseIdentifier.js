@@ -44,7 +44,7 @@ class PictTemplateProviderPascalCaseIdentifier extends libPictTemplate
 			this.log.trace(`PICT Template [fPascalCaseIdentifier]::[${tmpHash}]`);
 		}
 
-		let tmpValue = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray, null, pScope);
+		let tmpValue = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray, null, pScope, pState);
 		if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof (tmpValue) == 'undefined'))
 		{
 			return '';

@@ -43,7 +43,7 @@ class PictTemplateProviderJSONOutput extends libPictTemplate
 			this.log.trace(`PICT Template [fDataJson]::[${tmpHash}]`);
 		}
 
-		let tmpDataToStringify = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray, null, pScope);
+		let tmpDataToStringify = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray, null, pScope, pState);
 
 		if (!tmpDataToStringify)
 		{

@@ -562,10 +562,11 @@ class Pict extends libFable {
 	 * @param {Array<any>} [pContextArray] - The context array to resolve (optional)
 	 * @param {Record<string, any>} [pRootDataObject] - The root data object to resolve (optional)
 	 * @param {any} [pScope] - A sticky scope that can be used to carry state and simplify template
+	 * @param {any} [pState] - A catchall state object for plumbing data through template processing.
 	 *
 	 * @return {any} The value at the given address, or undefined
 	 */
-	resolveStateFromAddress(pAddress, pRecord, pContextArray, pRootDataObject, pScope)
+	resolveStateFromAddress(pAddress, pRecord, pContextArray, pRootDataObject, pScope, pState)
 	{
 		let tmpContextArray = (Array.isArray(pContextArray)) ? pContextArray : [ this ];
 		let tmpScope = pScope || this;
@@ -578,6 +579,7 @@ class Pict extends libFable {
 		tmpRootDataObject.Context = tmpContextArray;
 		tmpRootDataObject.Record = pRecord;
 		tmpRootDataObject.Scope = tmpScope;
+		tmpRootDataObject.__State = pState;
 
 		return this.manifest.getValueByHash(tmpRootDataObject, pAddress);
 	}

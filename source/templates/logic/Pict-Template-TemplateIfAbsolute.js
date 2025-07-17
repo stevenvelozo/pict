@@ -83,7 +83,7 @@ class PictTemplateProviderTemplateIfAbsolute extends libPictTemplateIf
 		// Now look up the data at the comparison location
 		try
 		{
-			let tmpComparisonResult = this.compareValues(this.resolveStateFromAddress(tmpComparisonParts[0], tmpData, pContextArray, null, pScope), tmpComparisonParts[1], tmpComparisonParts[2]);
+			let tmpComparisonResult = this.compareValues(this.resolveStateFromAddress(tmpComparisonParts[0], tmpData, pContextArray, null, pScope, pState), tmpComparisonParts[1], tmpComparisonParts[2]);
 			if (!tmpComparisonResult)
 			{
 				return '';
@@ -95,7 +95,7 @@ class PictTemplateProviderTemplateIfAbsolute extends libPictTemplateIf
 			}
 			else
 			{
-				return this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope), null, pContextArray, pScope, pState);
+				return this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope, pState), null, pContextArray, pScope, pState);
 			}
 		}
 		catch (pError)
@@ -172,7 +172,7 @@ class PictTemplateProviderTemplateIfAbsolute extends libPictTemplateIf
 		// Now look up the data at the comparison location
 		try
 		{
-			let tmpComparisonResult = this.compareValues(this.resolveStateFromAddress(tmpComparisonParts[0], tmpData, pContextArray, null, pScope), tmpComparisonParts[1], tmpComparisonParts[2]);
+			let tmpComparisonResult = this.compareValues(this.resolveStateFromAddress(tmpComparisonParts[0], tmpData, pContextArray, null, pScope, pState), tmpComparisonParts[1], tmpComparisonParts[2]);
 			if (!tmpComparisonResult)
 			{
 				return tmpCallback(null, '');
@@ -191,7 +191,7 @@ class PictTemplateProviderTemplateIfAbsolute extends libPictTemplateIf
 			}
 			else
 			{
-				this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope),
+				this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope, pState),
 					(pError, pValue) =>
 					{
 						if (pError)

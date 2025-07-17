@@ -34,7 +34,7 @@ class PictTemplateProviderDateOnlyYMD extends libPictTemplate
 	{
 		let tmpHash = pTemplateHash.trim();
 		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
-		let tmpDateValue = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray, null, pScope);
+		let tmpDateValue = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray, null, pScope, pState);
 
 
 		if (this.pict.LogNoisiness > 4)

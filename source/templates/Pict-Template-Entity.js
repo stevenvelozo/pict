@@ -96,7 +96,7 @@ class PictTemplateProviderEntity extends libPictTemplate
 		else
 		{
 			// This is an address, so we need to get the value at the address
-			tmpEntityID = this.resolveStateFromAddress(String(tmpEntityID), tmpData, pContextArray, null, pScope);
+			tmpEntityID = this.resolveStateFromAddress(String(tmpEntityID), tmpData, pContextArray, null, pScope, pState);
 		}
 
 		// No Entity or EntityID

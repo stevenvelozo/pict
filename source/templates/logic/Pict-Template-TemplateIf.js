@@ -84,9 +84,9 @@ class PictTemplateProviderTemplateIf extends libPictTemplateIf
 		try
 		{
 			let tmpComparisonResult = this.compareValues(
-				this.resolveStateFromAddress(tmpComparisonParts[0], tmpData, pContextArray, null, pScope),
+				this.resolveStateFromAddress(tmpComparisonParts[0], tmpData, pContextArray, null, pScope, pState),
 				tmpComparisonParts[1],
-				this.resolveStateFromAddress(tmpComparisonParts[2], tmpData, pContextArray, null, pScope));
+				this.resolveStateFromAddress(tmpComparisonParts[2], tmpData, pContextArray, null, pScope, pState));
 
 			if (!tmpComparisonResult)
 			{
@@ -99,7 +99,7 @@ class PictTemplateProviderTemplateIf extends libPictTemplateIf
 			}
 			else
 			{
-				return this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope), null, pContextArray, pScope, pState);
+				return this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope, pState), null, pContextArray, pScope, pState);
 			}
 		}
 		catch (pError)
@@ -178,9 +178,9 @@ class PictTemplateProviderTemplateIf extends libPictTemplateIf
 		{
 			// This is the only thing that's different from the absolute value function above.  Collapse these.
 			let tmpComparisonResult = this.compareValues(
-				this.resolveStateFromAddress(tmpComparisonParts[0], tmpData, pContextArray, null, pScope),
+				this.resolveStateFromAddress(tmpComparisonParts[0], tmpData, pContextArray, null, pScope, pState),
 				tmpComparisonParts[1],
-				this.resolveStateFromAddress(tmpComparisonParts[2], tmpData, pContextArray, null, pScope));
+				this.resolveStateFromAddress(tmpComparisonParts[2], tmpData, pContextArray, null, pScope, pState));
 
 			if (!tmpComparisonResult)
 			{
@@ -200,7 +200,7 @@ class PictTemplateProviderTemplateIf extends libPictTemplateIf
 			}
 			else
 			{
-				this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope),
+				this.pict.parseTemplateByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope, pState),
 					(pError, pValue) =>
 					{
 						if (pError)

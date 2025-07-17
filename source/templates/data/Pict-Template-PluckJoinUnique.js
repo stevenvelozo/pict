@@ -59,7 +59,7 @@ class PictTemplateProviderPluckJoinUnique extends libPictTemplate
 		let tmpValueMap = {};
 		for (let i = 0; i < tmpDataAddresses.length; i++)
 		{
-			let tmpValueSet = this.resolveStateFromAddress(tmpDataAddresses[i], tmpData, pContextArray, null, pScope);
+			let tmpValueSet = this.resolveStateFromAddress(tmpDataAddresses[i], tmpData, pContextArray, null, pScope, pState);
 
 			if (tmpValueSet && Array.isArray(tmpValueSet))
 			{

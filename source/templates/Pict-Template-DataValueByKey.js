@@ -57,8 +57,8 @@ class PictTemplateProviderDataValueByKey extends libPictTemplate
 			tmpDefaultValue = tmpHashArray[2];
 		}
 
-		let tmpValueObject = this.resolveStateFromAddress(tmpHashArray[0], tmpRecord, pContextArray, null, pScope);
-		let tmpValueAddress = this.resolveStateFromAddress(tmpHashArray[1], tmpRecord, pContextArray, null, pScope);
+		let tmpValueObject = this.resolveStateFromAddress(tmpHashArray[0], tmpRecord, pContextArray, null, pScope, pState);
+		let tmpValueAddress = this.resolveStateFromAddress(tmpHashArray[1], tmpRecord, pContextArray, null, pScope, pState);
 		let tmpValue = this.pict.manifest.getValueByHash(tmpValueObject, tmpValueAddress);
 		if ((tmpValue == null) || (tmpValue == 'undefined') || (typeof(tmpValue) == 'undefined'))
 		{

@@ -65,7 +65,7 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 			return '';
 		}
 
-		let tmpTemplate = this.pict.resolveStateFromAddress(tmpTemplateDataAddress, pRecord, pContextArray, null, pScope);
+		let tmpTemplate = this.pict.resolveStateFromAddress(tmpTemplateDataAddress, pRecord, pContextArray, null, pScope, pState);
 		if (!tmpTemplate)
 		{
 			if (this.pict.LogNoisiness > 2)
@@ -81,7 +81,7 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 		}
 		else
 		{
-			return this.pict.parseTemplate(tmpTemplate, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope), null, pContextArray, pScope, pState);
+			return this.pict.parseTemplate(tmpTemplate, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope, pState), null, pContextArray, pScope, pState);
 		}
 	}
 
@@ -134,7 +134,7 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 			return tmpCallback(null, '');
 		}
 
-		let tmpTemplate = this.pict.resolveStateFromAddress(tmpTemplateDataAddress, pRecord, pContextArray, null, pScope) || '';
+		let tmpTemplate = this.pict.resolveStateFromAddress(tmpTemplateDataAddress, pRecord, pContextArray, null, pScope, pState) || '';
 		if (!tmpTemplate)
 		{
 			if (this.pict.LogNoisiness > 2)
@@ -159,7 +159,7 @@ class PictTemplateProviderTemplateByDataAddress extends libPictTemplate
 		}
 		else
 		{
-			this.pict.parseTemplate(tmpTemplate, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope),
+			this.pict.parseTemplate(tmpTemplate, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope, pState),
 				(pError, pValue) =>
 				{
 					if (pError)

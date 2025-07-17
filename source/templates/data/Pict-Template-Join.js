@@ -57,7 +57,7 @@ class PictTemplateProviderJoin extends libPictTemplate
 		let tmpValueList = [];
 		for (let i = 0; i < tmpDataAddresses.length; i++)
 		{
-			let tmpValueSet = this.resolveStateFromAddress(tmpDataAddresses[i], tmpData, pContextArray, null, pScope);
+			let tmpValueSet = this.resolveStateFromAddress(tmpDataAddresses[i], tmpData, pContextArray, null, pScope, pState);
 			if (tmpValueSet && Array.isArray(tmpValueSet))
 			{
 				for (let j = 0; j < tmpValueSet.length; j++)

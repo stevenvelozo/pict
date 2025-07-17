@@ -44,7 +44,7 @@ class PictTemplateProviderDollars extends libPictTemplate
 			this.log.trace(`PICT Template [fDollars]::[${tmpHash}]`);
 		}
 
-		let tmpColumnData = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray, null, pScope);
+		let tmpColumnData = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray, null, pScope, pState);
 		return this.fable.DataFormat.formatterDollars(tmpColumnData);
 	}
 }

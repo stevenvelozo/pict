@@ -34,7 +34,7 @@ class PictTemplateProviderLogValue extends libPictTemplate
 		let tmpHash = pTemplateHash.trim();
 		let tmpData = (typeof (pRecord) === 'object') ? pRecord : {};
 
-		let tmpValue = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray, null, pScope);
+		let tmpValue = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray, null, pScope, pState);
 		let tmpValueType = typeof (tmpValue);
 		if ((tmpValue == null) || (tmpValueType == 'undefined'))
 		{

@@ -44,7 +44,7 @@ class PictTemplateProviderDigits extends libPictTemplate
 			this.log.trace(`PICT Template [fDigits]::[${tmpHash}]`);
 		}
 
-		let tmpColumnData = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray, null, pScope);
+		let tmpColumnData = this.resolveStateFromAddress(tmpHash, tmpData, pContextArray, null, pScope, pState);
 		return this.fable.DataFormat.formatterAddCommasToNumber(this.fable.DataFormat.formatterRoundNumber(tmpColumnData, 2));
 	}
 }

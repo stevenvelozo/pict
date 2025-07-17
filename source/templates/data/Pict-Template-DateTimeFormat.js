@@ -43,7 +43,7 @@ class PictTemplateProviderDateTimeFormat extends libPictTemplate
 			return '';
 		}
 
-		let tmpDateValue = this.resolveStateFromAddress(tmpDateValueSet[0], tmpData, pContextArray, null, pScope);
+		let tmpDateValue = this.resolveStateFromAddress(tmpDateValueSet[0], tmpData, pContextArray, null, pScope, pState);
 
 		if (this.pict.LogNoisiness > 4)
 		{

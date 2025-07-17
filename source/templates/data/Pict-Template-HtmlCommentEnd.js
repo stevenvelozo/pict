@@ -46,7 +46,7 @@ class PictTemplateProviderHTMLCommandEnd extends libPictTemplate
 		let tmpValue = false;
 		if (tmpHash != null)
 		{
-			tmpValue = this.resolveStateFromAddress(tmpHash, tmpRecord, pContextArray, null, pScope);
+			tmpValue = this.resolveStateFromAddress(tmpHash, tmpRecord, pContextArray, null, pScope, pState);
 		}
 		if (!tmpValue)
 		{

@@ -72,7 +72,7 @@ class PictTemplateProviderTemplateSet extends libPictTemplate
 		}
 		else
 		{
-			return this.pict.parseTemplateSetByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope), null, pContextArray, pScope, pState);
+			return this.pict.parseTemplateSetByHash(tmpTemplateHash, this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope, pState), null, pContextArray, pScope, pState);
 		}
 	}
 
@@ -126,7 +126,7 @@ class PictTemplateProviderTemplateSet extends libPictTemplate
 		}
 
 		// Now resolve the data
-		tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope);
+		tmpData = this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope, pState);
 
 		if (!tmpData)
 		{
