@@ -142,6 +142,25 @@ class PictRecordSetFilterManager extends libPictProvider
 	 */
 	loadRecordPageByFilter(pFilterConfiguration, pFilterExperience, pRecordOffset, pPageSize, fCallback)
 	{
+		return this.loadRecordPageByFilterUsingProvider(this.pict.EntityProvider, pFilterConfiguration, pFilterExperience, pRecordOffset, pPageSize, fCallback);
+	}
+
+	/**
+	 * Run a filter configuration against a filter experience and return a page of records.
+	 *
+	 * @param {import('../Pict-Meadow-EntityProvider.js')} pEntityProvider
+	 * @param {Array<Record<string, any>>} pFilterConfiguration
+	 * @param {Record<string, any>} pFilterExperience
+	 * @param {number | string | ((pError?: Error) => void)} pRecordOffset
+	 * @param {number | string | ((pError?: Error) => void)} pPageSize
+	 * @param {(pError?: Error) => void} fCallback
+	 */
+	loadRecordPageByFilterUsingProvider(pEntityProvider, pFilterConfiguration, pFilterExperience, pRecordOffset, pPageSize, fCallback)
+	{
+		if (!pEntityProvider || typeof pEntityProvider.gatherDataFromServer !== 'function')
+		{
+			return fCallback(new Error('loadRecordPageByFilter: Missing or invalid EntityProvider.'));
+		}
 		const tmpCallback = typeof pRecordOffset === 'function' ? pRecordOffset : typeof pPageSize === 'function' ? pPageSize : fCallback;
 		let tmpRecordOffset = typeof pRecordOffset === 'function' ? 0 : parseInt(String(pRecordOffset));
 		if (isNaN(tmpRecordOffset) || tmpRecordOffset < 0)
@@ -165,7 +184,7 @@ class PictRecordSetFilterManager extends libPictProvider
 		tmpFilter.linkPreparedFilters(tmpState);
 		tmpFilter.normalizeMeadowFilterStanzas(tmpState);
 		tmpFilter.compileMeadowFilterStanzas(tmpState);
-		this.pict.EntityProvider.gatherDataFromServer(tmpState.BundleConfig, tmpCallback);
+		pEntityProvider.gatherDataFromServer(tmpState.BundleConfig, tmpCallback);
 	}
 
 	/**
@@ -252,6 +271,21 @@ class PictRecordSetFilterManager extends libPictProvider
 	 */
 	executeFilterPage(pFilterConfigurationAddress, pFilterExperienceAddress, pRecordOffset, pPageSize, fCallback)
 	{
+		return this.executeFilterPageUsingProvider(this.pict.EntityProvider, pFilterConfigurationAddress, pFilterExperienceAddress, pRecordOffset, pPageSize, fCallback);
+	}
+
+	/**
+	 * Run a filter configuration against a filter experience and return a page of records.
+	 *
+	 * @param {import('../Pict-Meadow-EntityProvider.js')} pEntityProvider
+	 * @param {string} pFilterConfigurationAddress
+	 * @param {string} pFilterExperienceAddress
+	 * @param {number | ((pError?: Error) => void)} pRecordOffset
+	 * @param {number | ((pError?: Error) => void)} pPageSize
+	 * @param {(pError?: Error) => void} fCallback
+	 */
+	executeFilterPageUsingProvider(pEntityProvider, pFilterConfigurationAddress, pFilterExperienceAddress, pRecordOffset, pPageSize, fCallback)
+	{
 		const tmpCallback = typeof pRecordOffset === 'function' ? pRecordOffset : typeof pPageSize === 'function' ? pPageSize : fCallback;
 		const tmpFilterConfiguration = this.pict.resolveStateFromAddress(pFilterConfigurationAddress);
 		if (!Array.isArray(tmpFilterConfiguration))
@@ -263,7 +297,7 @@ class PictRecordSetFilterManager extends libPictProvider
 		{
 			return tmpCallback(new Error(`Filter experience at address ${pFilterExperienceAddress} is not an object.`));
 		}
-		return this.loadRecordPageByFilter(tmpFilterConfiguration, tmpFilterExperience, pRecordOffset, pPageSize, fCallback);
+		return this.loadRecordPageByFilterUsingProvider(pEntityProvider, tmpFilterConfiguration, tmpFilterExperience, pRecordOffset, pPageSize, fCallback);
 	}
 
 	/**
