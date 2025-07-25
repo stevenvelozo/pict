@@ -38,6 +38,15 @@ declare class PictRecordSetFilterManager extends libPictProvider {
      */
     loadRecordsByFilter(pFilterConfiguration: Array<Record<string, any>>, pFilterExperience: Record<string, any>, fCallback: (pError?: Error) => void): void;
     /**
+     * Run a filter configuration against a filter experience and return ALL matched records.
+     *
+     * @param {import('../Pict-Meadow-EntityProvider.js')} pEntityProvider
+     * @param {Array<Record<string, any>>} pFilterConfiguration
+     * @param {Record<string, any>} pFilterExperience
+     * @param {(pError?: Error) => void} fCallback
+     */
+    loadRecordsByFilterUsingProvider(pEntityProvider: import("../Pict-Meadow-EntityProvider.js"), pFilterConfiguration: Array<Record<string, any>>, pFilterExperience: Record<string, any>, fCallback: (pError?: Error) => void): void;
+    /**
      * Run a filter configuration against a filter experience and return a page of records.
      *
      * @param {Array<Record<string, any>>} pFilterConfiguration
@@ -55,7 +64,32 @@ declare class PictRecordSetFilterManager extends libPictProvider {
      * @param {(pError?: Error) => void} fCallback
      */
     countRecordsByFilter(pFilterConfiguration: Array<Record<string, any>>, pFilterExperience: Record<string, any>, fCallback: (pError?: Error) => void): void;
-    executeFilter(pFilterConfigurationAddress: any, pFilterExperienceAddress: any, fCallback: any): any;
+    /**
+     * Run a filter configuration against a filter experience and return the count of records.
+     *
+     * @param {import('../Pict-Meadow-EntityProvider.js')} pEntityProvider
+     * @param {Array<Record<string, any>>} pFilterConfiguration
+     * @param {Record<string, any>} pFilterExperience
+     * @param {(pError?: Error) => void} fCallback
+     */
+    countRecordsByFilterUsingProivider(pEntityProvider: import("../Pict-Meadow-EntityProvider.js"), pFilterConfiguration: Array<Record<string, any>>, pFilterExperience: Record<string, any>, fCallback: (pError?: Error) => void): void;
+    /**
+     * @param {string} pFilterConfigurationAddress
+     * @param {string} pFilterExperienceAddress
+     * @param {(pError?: Error) => void} fCallback
+     *
+     * @return {void}
+     */
+    executeFilter(pFilterConfigurationAddress: string, pFilterExperienceAddress: string, fCallback: (pError?: Error) => void): void;
+    /**
+     * @param {import('../Pict-Meadow-EntityProvider.js')} pEntityProvider
+     * @param {string} pFilterConfigurationAddress
+     * @param {string} pFilterExperienceAddress
+     * @param {(pError?: Error) => void} fCallback
+     *
+     * @return {void}
+     */
+    executeFilterUsingProvider(pEntityProvider: import("../Pict-Meadow-EntityProvider.js"), pFilterConfigurationAddress: string, pFilterExperienceAddress: string, fCallback: (pError?: Error) => void): void;
     /**
      * Run a filter configuration against a filter experience and return a page of records.
      *
@@ -66,7 +100,23 @@ declare class PictRecordSetFilterManager extends libPictProvider {
      * @param {(pError?: Error) => void} fCallback
      */
     executeFilterPage(pFilterConfigurationAddress: string, pFilterExperienceAddress: string, pRecordOffset: number | ((pError?: Error) => void), pPageSize: number | ((pError?: Error) => void), fCallback: (pError?: Error) => void): void;
-    executeFilterCount(pFilterConfigurationAddress: any, pFilterExperienceAddress: any, fCallback: any): any;
+    /**
+     * @param {string} pFilterConfigurationAddress
+     * @param {string} pFilterExperienceAddress
+     * @param {(pError?: Error) => void} fCallback
+     *
+     * @return {void}
+     */
+    executeFilterCount(pFilterConfigurationAddress: string, pFilterExperienceAddress: string, fCallback: (pError?: Error) => void): void;
+    /**
+     * @param {import('../Pict-Meadow-EntityProvider.js')} pEntityProvider
+     * @param {string} pFilterConfigurationAddress
+     * @param {string} pFilterExperienceAddress
+     * @param {(pError?: Error) => void} fCallback
+     *
+     * @return {void}
+     */
+    executeFilterCountUsingProvider(pEntityProvider: import("../Pict-Meadow-EntityProvider.js"), pFilterConfigurationAddress: string, pFilterExperienceAddress: string, fCallback: (pError?: Error) => void): void;
 }
 declare namespace PictRecordSetFilterManager {
     export { _DEFAULT_PROVIDER_CONFIGURATION as default_configuration };

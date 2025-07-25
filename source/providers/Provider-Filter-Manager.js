@@ -102,6 +102,23 @@ class PictRecordSetFilterManager extends libPictProvider
 	 */
 	loadRecordsByFilter(pFilterConfiguration, pFilterExperience, fCallback)
 	{
+		return this.loadRecordsByFilterUsingProvider(this.pict.EntityProvider, pFilterConfiguration, pFilterExperience, fCallback);
+	}
+
+	/**
+	 * Run a filter configuration against a filter experience and return ALL matched records.
+	 *
+	 * @param {import('../Pict-Meadow-EntityProvider.js')} pEntityProvider
+	 * @param {Array<Record<string, any>>} pFilterConfiguration
+	 * @param {Record<string, any>} pFilterExperience
+	 * @param {(pError?: Error) => void} fCallback
+	 */
+	loadRecordsByFilterUsingProvider(pEntityProvider, pFilterConfiguration, pFilterExperience, fCallback)
+	{
+		if (!pEntityProvider || typeof pEntityProvider.gatherDataFromServer !== 'function')
+		{
+			return fCallback(new Error('loadRecordsByFilter: Missing or invalid EntityProvider.'));
+		}
 		/** @type {import('../filters/Filter.js').FilterState} */
 		const tmpState = JSON.parse(JSON.stringify(pFilterExperience));
 		tmpState.Mode = 'Records';
@@ -111,7 +128,7 @@ class PictRecordSetFilterManager extends libPictProvider
 		tmpFilter.linkPreparedFilters(tmpState);
 		tmpFilter.normalizeMeadowFilterStanzas(tmpState);
 		tmpFilter.compileMeadowFilterStanzas(tmpState);
-		this.pict.EntityProvider.gatherDataFromServer(tmpState.BundleConfig, fCallback);
+		pEntityProvider.gatherDataFromServer(tmpState.BundleConfig, fCallback);
 	}
 
 	/**
@@ -160,6 +177,19 @@ class PictRecordSetFilterManager extends libPictProvider
 	 */
 	countRecordsByFilter(pFilterConfiguration, pFilterExperience, fCallback)
 	{
+		return this.countRecordsByFilterUsingProivider(this.pict.EntityProvider, pFilterConfiguration, pFilterExperience, fCallback);
+	}
+
+	/**
+	 * Run a filter configuration against a filter experience and return the count of records.
+	 *
+	 * @param {import('../Pict-Meadow-EntityProvider.js')} pEntityProvider
+	 * @param {Array<Record<string, any>>} pFilterConfiguration
+	 * @param {Record<string, any>} pFilterExperience
+	 * @param {(pError?: Error) => void} fCallback
+	 */
+	countRecordsByFilterUsingProivider(pEntityProvider, pFilterConfiguration, pFilterExperience, fCallback)
+	{
 		/** @type {import('../filters/Filter.js').FilterState} */
 		const tmpState = JSON.parse(JSON.stringify(pFilterExperience));
 		tmpState.Mode = 'Count';
@@ -169,11 +199,35 @@ class PictRecordSetFilterManager extends libPictProvider
 		tmpFilter.linkPreparedFilters(tmpState);
 		tmpFilter.normalizeMeadowFilterStanzas(tmpState);
 		tmpFilter.compileMeadowFilterStanzas(tmpState);
-		this.pict.EntityProvider.gatherDataFromServer(tmpState.BundleConfig, fCallback);
+		pEntityProvider.gatherDataFromServer(tmpState.BundleConfig, fCallback);
 	}
 
+	/**
+	 * @param {string} pFilterConfigurationAddress
+	 * @param {string} pFilterExperienceAddress
+	 * @param {(pError?: Error) => void} fCallback
+	 *
+	 * @return {void}
+	 */
 	executeFilter(pFilterConfigurationAddress, pFilterExperienceAddress, fCallback)
 	{
+		return this.executeFilterUsingProvider(this.pict.EntityProvider, pFilterConfigurationAddress, pFilterExperienceAddress, fCallback);
+	}
+
+	/**
+	 * @param {import('../Pict-Meadow-EntityProvider.js')} pEntityProvider
+	 * @param {string} pFilterConfigurationAddress
+	 * @param {string} pFilterExperienceAddress
+	 * @param {(pError?: Error) => void} fCallback
+	 *
+	 * @return {void}
+	 */
+	executeFilterUsingProvider(pEntityProvider, pFilterConfigurationAddress, pFilterExperienceAddress, fCallback)
+	{
+		if (!pEntityProvider || typeof pEntityProvider.gatherDataFromServer !== 'function')
+		{
+			return fCallback(new Error('executeFilter: Missing or invalid EntityProvider.'));
+		}
 		const tmpFilterConfiguration = this.pict.resolveStateFromAddress(pFilterConfigurationAddress);
 		if (!Array.isArray(tmpFilterConfiguration))
 		{
@@ -184,7 +238,7 @@ class PictRecordSetFilterManager extends libPictProvider
 		{
 			return fCallback(new Error(`Filter experience at address ${pFilterExperienceAddress} is not an object.`));
 		}
-		return this.loadRecordsByFilter(tmpFilterConfiguration, tmpFilterExperience, fCallback);
+		return this.loadRecordsByFilterUsingProvider(pEntityProvider, tmpFilterConfiguration, tmpFilterExperience, fCallback);
 	}
 
 	/**
@@ -212,7 +266,27 @@ class PictRecordSetFilterManager extends libPictProvider
 		return this.loadRecordPageByFilter(tmpFilterConfiguration, tmpFilterExperience, pRecordOffset, pPageSize, fCallback);
 	}
 
+	/**
+	 * @param {string} pFilterConfigurationAddress
+	 * @param {string} pFilterExperienceAddress
+	 * @param {(pError?: Error) => void} fCallback
+	 *
+	 * @return {void}
+	 */
 	executeFilterCount(pFilterConfigurationAddress, pFilterExperienceAddress, fCallback)
+	{
+		return this.executeFilterCountUsingProvider(this.pict.EntityProvider, pFilterConfigurationAddress, pFilterExperienceAddress, fCallback);
+	}
+
+	/**
+	 * @param {import('../Pict-Meadow-EntityProvider.js')} pEntityProvider
+	 * @param {string} pFilterConfigurationAddress
+	 * @param {string} pFilterExperienceAddress
+	 * @param {(pError?: Error) => void} fCallback
+	 *
+	 * @return {void}
+	 */
+	executeFilterCountUsingProvider(pEntityProvider, pFilterConfigurationAddress, pFilterExperienceAddress, fCallback)
 	{
 		const tmpFilterConfiguration = this.pict.resolveStateFromAddress(pFilterConfigurationAddress);
 		if (!Array.isArray(tmpFilterConfiguration))
@@ -224,7 +298,7 @@ class PictRecordSetFilterManager extends libPictProvider
 		{
 			return fCallback(new Error(`Filter experience at address ${pFilterExperienceAddress} is not an object.`));
 		}
-		return this.countRecordsByFilter(tmpFilterConfiguration, tmpFilterExperience, fCallback);
+		return this.countRecordsByFilterUsingProivider(pEntityProvider, tmpFilterConfiguration, tmpFilterExperience, fCallback);
 	}
 }
 
