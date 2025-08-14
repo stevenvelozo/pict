@@ -29,6 +29,8 @@ class FilterClauseInternalJoin extends libFilterClauseBase
 		this.externalFilterByColumn;
 		/** @type {string[]?} */
 		this.externalFilterByColumns;
+		/** @type {string?} */
+		this.externalFilterTableLookupColumn;
 		/** @type {string} */
 		this.joinExternalConnectionColumn = '';
 		/** @type {string} */
@@ -53,6 +55,19 @@ class FilterClauseInternalJoin extends libFilterClauseBase
 					RemoteTable: this.remoteTable,
 					ExternalFilterByColumn: this.externalFilterByColumn,
 					ExternalFilterByColumns: this.externalFilterByColumns,
+					JoinExternalConnectionColumn: this.joinExternalConnectionColumn,
+					JoinInternalConnectionColumn: this.joinInternalConnectionColumn,
+				};
+			case 'InternalJoinSelectedValue':
+			case 'InternalJoinSelectedValueList':
+				return {
+					Type: this._type,
+					Values: Array.isArray(this.values) ? this.values : [],
+					ExactMatch: this.exactMatch,
+					RemoteTable: this.remoteTable,
+					ExternalFilterByColumn: this.externalFilterByColumn,
+					ExternalFilterByColumns: this.externalFilterByColumns,
+					ExternalFilterTableLookupColumn: this.externalFilterTableLookupColumn,
 					JoinExternalConnectionColumn: this.joinExternalConnectionColumn,
 					JoinInternalConnectionColumn: this.joinInternalConnectionColumn,
 				};

@@ -32,9 +32,9 @@
  * 'Match' | 'StringMatch' | 'DateMatch' | 'NumericMatch' |
  * 'Range' | 'StringRange' | 'DateRange' | 'NumericRange' |
  * 'InternalJoinMatch' | 'InternalJoinStringMatch' | 'InternalJoinNumericMatch' | 'InternalJoinDateMatch' |
- * 'InternalJoinRange' | 'InternalJoinStringRange' | 'InternalJoinNumericRange' | 'InternalJoinDateRange' |
+ * 'InternalJoinRange' | 'InternalJoinStringRange' | 'InternalJoinNumericRange' | 'InternalJoinDateRange'  | 'InternalJoinSelectedValue' | 'InternalJoinSelectedValueList' |
  * 'ExternalJoinMatch' | 'ExternalJoinStringMatch' | 'ExternalJoinNumericMatch' | 'ExternalJoinDateMatch' |
- * 'ExternalJoinRange' | 'ExternalJoinStringRange' | 'ExternalJoinNumericRange' | 'ExternalJoinDateRange' } FilterType
+ * 'ExternalJoinRange' | 'ExternalJoinStringRange' | 'ExternalJoinNumericRange' | 'ExternalJoinDateRange' | 'ExternalJoinSelectedValue' | 'ExternalJoinSelectedValueList' } FilterType
  */
 
 class FilterMeadowStanzaTokenGenerator
@@ -69,8 +69,13 @@ class FilterMeadowStanzaTokenGenerator
 			/** @type {PreparedFilter} */
 			const tmpFilterResult = { GUID: this.pict.getUUID(), Filters: [] };
 			const tmpValuesArray = Array.isArray(tmpFilterConfig.Values) ? tmpFilterConfig.Values : tmpFilterConfig.Value != null && tmpFilterConfig.Value != '' && (tmpFilterConfig.Type != 'ExternalJoinDateMatch' || tmpFilterConfig.Value != 0) ? [ tmpFilterConfig.Value ] : [];
+			let tmpFilterByColumns;
 			switch (tmpFilterConfig.Type)
 			{
+				case 'ExternalJoinSelectedValue':
+				case 'ExternalJoinSelectedValueList':
+					tmpFilterByColumns = [ tmpFilterConfig.ExternalFilterTableLookupColumn || `ID${tmpFilterConfig.ExternalFilterByTable}` ];
+					// fall through
 				case 'ExternalJoinMatch':
 				case 'ExternalJoinStringMatch':
 				case 'ExternalJoinDateMatch':
@@ -89,7 +94,11 @@ class FilterMeadowStanzaTokenGenerator
 					  "ExternalFilterByTable": "Author",
 					  "ExternalFilterByTableConnectionColumn": "IDAuthor",
 					 */
-					for (const tmpField of tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]))
+					if (!tmpFilterByColumns)
+					{
+						tmpFilterByColumns = tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]);
+					}
+					for (const tmpField of tmpFilterByColumns)
 					{
 						for (const tmpValue of tmpValuesArray)
 						{
@@ -101,8 +110,9 @@ class FilterMeadowStanzaTokenGenerator
 								Field: tmpField,
 							};
 							if (tmpFilterConfig.ExactMatch || (typeof tmpFilterConfig.ExactMatch === 'undefined' &&
-									(tmpFilterConfig.Type == 'ExternalJoinNumericMatch' || tmpFilterConfig.Type == 'ExternalJoinDateMatch')))
+									(tmpFilterConfig.Type == 'ExternalJoinNumericMatch' || tmpFilterConfig.Type == 'ExternalJoinDateMatch' || tmpFilterConfig.Type == 'ExternalJoinSelectedValue' || tmpFilterConfig.Type == 'ExternalJoinSelectedValueList')))
 							{
+								//TODO: optimize this to use in-list, but requires restructuring of this code
 								tmpFilter.Operator = 'EQ';
 								tmpFilter.Value = tmpValue;
 							}
@@ -179,7 +189,7 @@ class FilterMeadowStanzaTokenGenerator
 								Index: -1,
 								CoreEntity: true,
 								Entity: pFilterState.Entity,
-								Instruction: 'FBV',
+								Instruction: 'FBVOR',
 								Field: tmpField,
 								Operator: tmpFilterConfig.StartExclusive ? 'GT' : 'GE',
 								Value: tmpFilterConfig.Values.Start,
@@ -192,7 +202,7 @@ class FilterMeadowStanzaTokenGenerator
 								Index: -1,
 								CoreEntity: true,
 								Entity: pFilterState.Entity,
-								Instruction: 'FBV',
+								Instruction: 'FBVOR',
 								Field: tmpField,
 								Operator: tmpFilterConfig.EndExclusive ? 'LT' : 'LE',
 								Value: tmpFilterConfig.Values.End,
@@ -276,7 +286,7 @@ class FilterMeadowStanzaTokenGenerator
 								Index: 0,
 								CoreEntity: true,
 								Entity: pFilterState.Entity,
-								Instruction: 'FBV',
+								Instruction: 'FBVOR',
 								Field: tmpField,
 								Operator: tmpFilterConfig.StartExclusive ? 'GT' : 'GE',
 								Value: tmpFilterConfig.Values.Start,
@@ -289,7 +299,7 @@ class FilterMeadowStanzaTokenGenerator
 								Index: 0,
 								CoreEntity: true,
 								Entity: pFilterState.Entity,
-								Instruction: 'FBV',
+								Instruction: 'FBVOR',
 								Field: tmpField,
 								Operator: tmpFilterConfig.EndExclusive ? 'LT' : 'LE',
 								Value: tmpFilterConfig.Values.End,
@@ -361,7 +371,7 @@ class FilterMeadowStanzaTokenGenerator
 							{
 								Index: 0,
 								Entity: tmpFilterConfig.RemoteTable,
-								Instruction: 'FBV',
+								Instruction: 'FBVOR',
 								Field: tmpField,
 								Operator: tmpFilterConfig.StartExclusive ? 'GT' : 'GE',
 								Value: tmpFilterConfig.Values.Start,
@@ -373,7 +383,7 @@ class FilterMeadowStanzaTokenGenerator
 							{
 								Index: 0,
 								Entity: tmpFilterConfig.RemoteTable,
-								Instruction: 'FBV',
+								Instruction: 'FBVOR',
 								Field: tmpField,
 								Operator: tmpFilterConfig.EndExclusive ? 'LT' : 'LE',
 								Value: tmpFilterConfig.Values.End,
@@ -397,6 +407,10 @@ class FilterMeadowStanzaTokenGenerator
 						};
 					}
 					break;
+				case 'InternalJoinSelectedValue':
+				case 'InternalJoinSelectedValueList':
+					tmpFilterByColumns = [ tmpFilterConfig.ExternalFilterTableLookupColumn || `ID${tmpFilterConfig.RemoteTable}` ];
+					// fall through
 				case 'InternalJoinMatch':
 				case 'InternalJoinStringMatch':
 				case 'InternalJoinDateMatch':
@@ -408,7 +422,11 @@ class FilterMeadowStanzaTokenGenerator
                       "JoinExternalConnectionColumn": "IDUser",
                       "JoinInternalConnectionColumn": "CreatingIDUser",
 					 */
-					for (const tmpField of tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]))
+					if (!tmpFilterByColumns)
+					{
+						tmpFilterByColumns = tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]);
+					}
+					for (const tmpField of tmpFilterByColumns)
 					{
 						for (const tmpValue of tmpValuesArray)
 						{
@@ -416,12 +434,13 @@ class FilterMeadowStanzaTokenGenerator
 							{
 								Index: 0,
 								Entity: tmpFilterConfig.RemoteTable,
-								Instruction: 'FBV',
+								Instruction: 'FBVOR',
 								Field: tmpField,
 							};
 							if (tmpFilterConfig.ExactMatch || (typeof tmpFilterConfig.ExactMatch === 'undefined' &&
-									(tmpFilterConfig.Type == 'InternalJoinNumericMatch' || tmpFilterConfig.Type == 'InternalJoinDateMatch')))
+									(tmpFilterConfig.Type == 'InternalJoinNumericMatch' || tmpFilterConfig.Type == 'InternalJoinDateMatch' || tmpFilterConfig.Type == 'InternalJoinSelectedValue' || tmpFilterConfig.Type == 'InternalJoinSelectedValueList')))
 							{
+								//TODO: optimize this to use in-list, but requires restructuring of this code
 								tmpFilter.Operator = 'EQ';
 								tmpFilter.Value = tmpValue;
 							}

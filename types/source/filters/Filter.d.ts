@@ -32,9 +32,9 @@ export = FilterMeadowStanzaTokenGenerator;
  * 'Match' | 'StringMatch' | 'DateMatch' | 'NumericMatch' |
  * 'Range' | 'StringRange' | 'DateRange' | 'NumericRange' |
  * 'InternalJoinMatch' | 'InternalJoinStringMatch' | 'InternalJoinNumericMatch' | 'InternalJoinDateMatch' |
- * 'InternalJoinRange' | 'InternalJoinStringRange' | 'InternalJoinNumericRange' | 'InternalJoinDateRange' |
+ * 'InternalJoinRange' | 'InternalJoinStringRange' | 'InternalJoinNumericRange' | 'InternalJoinDateRange'  | 'InternalJoinSelectedValue' | 'InternalJoinSelectedValueList' |
  * 'ExternalJoinMatch' | 'ExternalJoinStringMatch' | 'ExternalJoinNumericMatch' | 'ExternalJoinDateMatch' |
- * 'ExternalJoinRange' | 'ExternalJoinStringRange' | 'ExternalJoinNumericRange' | 'ExternalJoinDateRange' } FilterType
+ * 'ExternalJoinRange' | 'ExternalJoinStringRange' | 'ExternalJoinNumericRange' | 'ExternalJoinDateRange' | 'ExternalJoinSelectedValue' | 'ExternalJoinSelectedValueList' } FilterType
  */
 declare class FilterMeadowStanzaTokenGenerator {
     /**
@@ -104,5 +104,5 @@ type FilterState = {
     BundleConfig?: Array<Record<string, any>>;
     UserFilters?: Array<string>;
 };
-type FilterType = "None" | "Match" | "StringMatch" | "DateMatch" | "NumericMatch" | "Range" | "StringRange" | "DateRange" | "NumericRange" | "InternalJoinMatch" | "InternalJoinStringMatch" | "InternalJoinNumericMatch" | "InternalJoinDateMatch" | "InternalJoinRange" | "InternalJoinStringRange" | "InternalJoinNumericRange" | "InternalJoinDateRange" | "ExternalJoinMatch" | "ExternalJoinStringMatch" | "ExternalJoinNumericMatch" | "ExternalJoinDateMatch" | "ExternalJoinRange" | "ExternalJoinStringRange" | "ExternalJoinNumericRange" | "ExternalJoinDateRange";
+type FilterType = "None" | "Match" | "StringMatch" | "DateMatch" | "NumericMatch" | "Range" | "StringRange" | "DateRange" | "NumericRange" | "InternalJoinMatch" | "InternalJoinStringMatch" | "InternalJoinNumericMatch" | "InternalJoinDateMatch" | "InternalJoinRange" | "InternalJoinStringRange" | "InternalJoinNumericRange" | "InternalJoinDateRange" | "InternalJoinSelectedValue" | "InternalJoinSelectedValueList" | "ExternalJoinMatch" | "ExternalJoinStringMatch" | "ExternalJoinNumericMatch" | "ExternalJoinDateMatch" | "ExternalJoinRange" | "ExternalJoinStringRange" | "ExternalJoinNumericRange" | "ExternalJoinDateRange" | "ExternalJoinSelectedValue" | "ExternalJoinSelectedValueList";
 //# sourceMappingURL=Filter.d.ts.map

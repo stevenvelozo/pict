@@ -23,6 +23,16 @@
  *    JoinExternalConnectionColumn: string,
  *    JoinInternalConnectionColumn: string,
  * } | {
+ *    Type: 'InternalJoinSelectedValue' | 'InternalJoinSelectedValueList',
+ *    Values: string[] | number[],
+ *    ExactMatch?: boolean,
+ *    RemoteTable: string,
+ *    ExternalFilterByColumn?: string,
+ *    ExternalFilterByColumns?: string[],
+ *    ExternalFilterTableLookupColumn?: string,
+ *    JoinExternalConnectionColumn: string,
+ *    JoinInternalConnectionColumn: string,
+ * } | {
  *    Type: 'InternalJoinRange' | 'InternalJoinStringRange' | 'InternalJoinNumericRange' | 'InternalJoinDateRange',
  *    Values: { Start?: string | number, End?: string | number },
  *    StartExclusive?: boolean,
@@ -56,6 +66,20 @@
  *    JoinTableExternalConnectionColumn: string,
  *    JoinTableCoreConnectionColumn: string,
  *    ExternalFilterByTable: string,
+ *    ExternalFilterByTableConnectionColumn: string,
+ * } | {
+ *    Type: 'ExternalJoinSelectedValue' | 'ExternalJoinSelectedValueList',
+ *    Values: { Start?: string | number, End?: string | number },
+ *    StartExclusive?: boolean,
+ *    EndExclusive?: boolean,
+ *    ExternalFilterByColumn?: string,
+ *    ExternalFilterByColumns?: string[],
+ *    CoreConnectionColumn: string,
+ *    JoinTable: string,
+ *    JoinTableExternalConnectionColumn: string,
+ *    JoinTableCoreConnectionColumn: string,
+ *    ExternalFilterByTable: string,
+ *    ExternalFilterTableLookupColumn?: string,
  *    ExternalFilterByTableConnectionColumn: string,
  * }} FilterClauseConfig
  */

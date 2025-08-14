@@ -63,6 +63,240 @@ suite
 
 		test
 		(
+			'Filter - load all records by extrnal selected values',
+			async function()
+			{
+				let _Application = new DoNothingApplication(_Pict, {});
+				await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+				{
+					if (error)
+					{
+						return reject(error);
+					}
+					resolve();
+				}));
+				const tmpResults =
+				{
+					"Entity": "Book",
+					"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
+					"ResultDestinationAddress": "AppData.Test",
+				};
+				await new Promise((resolve, reject) => _Pict.providers.FilterManager.loadRecordsByFilter(
+				[
+					{
+						"UUID": "1",
+						"FilterHash": "FilterBookByAuthor[Selection]",
+						"Type": "ExternalJoinSelectedValueList",
+						"Values": [ 1, 2, 3 ],
+						"ExternalFilterByColumns": [ "Name" ],
+
+						"CoreConnectionColumn": "IDBook",
+
+						"JoinTable": "BookAuthorJoin",
+						"JoinTableExternalConnectionColumn": "IDAuthor",
+						"JoinTableCoreConnectionColumn": "IDBook",
+
+						"ExternalFilterByTable": "Author",
+						"ExternalFilterTableIdentityColumn": "IDAuthor", //NOTE: optional
+						"ExternalFilterByTableConnectionColumn": "IDAuthor"
+					},
+					{
+						"UUID": "2",
+						"Type": "DateRange",
+						"Values":
+						{
+							"Start": "2023-01-01T00:00:00Z",
+							"End": "2024-01-01T00:00:00Z"
+						},
+						"FilterByColumn": "CreateDate"
+					}
+				], tmpResults, (pError) =>
+				{
+					try
+					{
+						Expect(pError).to.not.exist;
+						Expect(_Pict.AppData.Test).to.be.an('array');
+						resolve();
+					}
+					catch (pError)
+					{
+						reject(pError);
+					}
+				}));
+			}
+		);
+
+		test
+		(
+			'Filter - load all records by external selected value',
+			async function()
+			{
+				let _Application = new DoNothingApplication(_Pict, {});
+				await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+				{
+					if (error)
+					{
+						return reject(error);
+					}
+					resolve();
+				}));
+				const tmpResults =
+				{
+					"Entity": "Book",
+					"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
+					"ResultDestinationAddress": "AppData.Test",
+				};
+				await new Promise((resolve, reject) => _Pict.providers.FilterManager.loadRecordsByFilter(
+				[
+					{
+						"UUID": "1",
+						"FilterHash": "FilterBookByAuthor[Selection]",
+						"Type": "ExternalJoinSelectedValue",
+						"Value": 1,
+						"ExternalFilterByColumns": [ "Name" ],
+
+						"CoreConnectionColumn": "IDBook",
+
+						"JoinTable": "BookAuthorJoin",
+						"JoinTableExternalConnectionColumn": "IDAuthor",
+						"JoinTableCoreConnectionColumn": "IDBook",
+
+						"ExternalFilterByTable": "Author",
+						"ExternalFilterTableIdentityColumn": "IDAuthor", //NOTE: optional
+						"ExternalFilterByTableConnectionColumn": "IDAuthor"
+					},
+					{
+						"UUID": "2",
+						"Type": "DateRange",
+						"Values":
+						{
+							"Start": "2023-01-01T00:00:00Z",
+							"End": "2024-01-01T00:00:00Z"
+						},
+						"FilterByColumn": "CreateDate"
+					}
+				], tmpResults, (pError) =>
+				{
+					try
+					{
+						Expect(pError).to.not.exist;
+						Expect(_Pict.AppData.Test).to.be.an('array');
+						resolve();
+					}
+					catch (pError)
+					{
+						reject(pError);
+					}
+				}));
+			}
+		);
+
+		test
+		(
+			'Filter - load all records by internal selected values',
+			async function()
+			{
+				let _Application = new DoNothingApplication(_Pict, {});
+				await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+				{
+					if (error)
+					{
+						return reject(error);
+					}
+					resolve();
+				}));
+				const tmpResults =
+				{
+					"Entity": "Book",
+					"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
+					"ResultDestinationAddress": "AppData.Test",
+				};
+				await new Promise((resolve, reject) => _Pict.providers.FilterManager.loadRecordsByFilter(
+				[
+					{
+						"UUID": "1",
+						"FilterHash": "FilterBookByAuthor[Selection]",
+						"Type": "InternalJoinSelectedValueList",
+						"Values": [ 1, 2, 3 ],
+						"ExternalFilterByColumns": [ "IDAuthor" ],
+
+						"CoreConnectionColumn": "IDBook",
+
+						"RemoteTable": "BookAuthorJoin",
+						"JoinExternalConnectionColumn": "IDBook",
+						"JoinInternalConnectionColumn": "IDBook"
+					}
+				], tmpResults, (pError) =>
+				{
+					try
+					{
+						Expect(pError).to.not.exist;
+						Expect(_Pict.AppData.Test).to.be.an('array');
+						Expect(_Pict.AppData.Test.length).to.equal(3);
+						resolve();
+					}
+					catch (pError)
+					{
+						reject(pError);
+					}
+				}));
+			}
+		);
+
+		test
+		(
+			'Filter - load all records by internal selected value',
+			async function()
+			{
+				let _Application = new DoNothingApplication(_Pict, {});
+				await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+				{
+					if (error)
+					{
+						return reject(error);
+					}
+					resolve();
+				}));
+				const tmpResults =
+				{
+					"Entity": "Book",
+					"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
+					"ResultDestinationAddress": "AppData.Test",
+				};
+				await new Promise((resolve, reject) => _Pict.providers.FilterManager.loadRecordsByFilter(
+				[
+					{
+						"UUID": "1",
+						"FilterHash": "FilterBookByAuthor[Selection]",
+						"Type": "InternalJoinSelectedValueList",
+						"Value": 1,
+						"ExternalFilterByColumns": [ "IDAuthor" ],
+
+						"CoreConnectionColumn": "IDBook",
+
+						"RemoteTable": "BookAuthorJoin",
+						"JoinExternalConnectionColumn": "IDBook",
+						"JoinInternalConnectionColumn": "IDBook"
+					}
+				], tmpResults, (pError) =>
+				{
+					try
+					{
+						Expect(pError).to.not.exist;
+						Expect(_Pict.AppData.Test).to.be.an('array');
+						Expect(_Pict.AppData.Test.length).to.equal(1);
+						resolve();
+					}
+					catch (pError)
+					{
+						reject(pError);
+					}
+				}));
+			}
+		);
+
+		test
+		(
 			'Filter - load all records',
 			async function()
 			{

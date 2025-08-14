@@ -15,6 +15,8 @@ declare class FilterClauseInternalJoin extends libFilterClauseBase {
     externalFilterByColumn: string | null;
     /** @type {string[]?} */
     externalFilterByColumns: string[] | null;
+    /** @type {string?} */
+    externalFilterTableLookupColumn: string | null;
     /** @type {string} */
     joinExternalConnectionColumn: string;
     /** @type {string} */

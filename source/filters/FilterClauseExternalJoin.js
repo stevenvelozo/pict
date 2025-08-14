@@ -38,6 +38,8 @@ class FilterClauseExternalJoin extends libFilterClauseBase
 		/** @type {string} */
 		this.externalFilterByTable = '';
 		/** @type {string} */
+		this.externalFilterTableLookupColumn = '';
+		/** @type {string} */
 		this.externalFilterByTableConnectionColumn = '';
 	}
 
@@ -81,6 +83,23 @@ class FilterClauseExternalJoin extends libFilterClauseBase
 					JoinTableExternalConnectionColumn: this.joinTableExternalConnectionColumn,
 					JoinTableCoreConnectionColumn: this.joinTableCoreConnectionColumn,
 					ExternalFilterByTable: this.externalFilterByTable,
+					ExternalFilterByTableConnectionColumn: this.externalFilterByTableConnectionColumn,
+				};
+			case 'ExternalJoinSelectedValue':
+			case 'ExternalJoinSelectedValueList':
+				return {
+					Type: this.type,
+					Values: Array.isArray(this.values) ? { Start: undefined, End: undefined } : Object.assign({}, this.values),
+					StartExclusive: this.startExclusive,
+					EndExclusive: this.endExclusive,
+					ExternalFilterByColumn: this.externalFilterByColumn,
+					ExternalFilterByColumns: this.externalFilterByColumns,
+					CoreConnectionColumn: this.coreConnectionColumn,
+					JoinTable: this.joinTable,
+					JoinTableExternalConnectionColumn: this.joinTableExternalConnectionColumn,
+					JoinTableCoreConnectionColumn: this.joinTableCoreConnectionColumn,
+					ExternalFilterByTable: this.externalFilterByTable,
+					ExternalFilterTableLookupColumn: this.externalFilterTableLookupColumn,
 					ExternalFilterByTableConnectionColumn: this.externalFilterByTableConnectionColumn,
 				};
 			default:

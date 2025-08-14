@@ -24,6 +24,8 @@ declare class FilterClauseExternalJoin extends libFilterClauseBase {
     /** @type {string} */
     externalFilterByTable: string;
     /** @type {string} */
+    externalFilterTableLookupColumn: string;
+    /** @type {string} */
     externalFilterByTableConnectionColumn: string;
 }
 import libFilterClauseBase = require("./FilterClauseBase.js");
