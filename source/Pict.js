@@ -746,6 +746,9 @@ class Pict extends libFable {
 								tmpValue += pTemplateResult;
 								return fRecordTemplateCallback();
 							},
+							pContextArray,
+							pScope,
+							pState,
 						);
 					},
 					(pError) => {
@@ -852,6 +855,9 @@ class Pict extends libFable {
 								tmpValue += pTemplateResult;
 								return fRecordTemplateCallback();
 							},
+							pContextArray,
+							pScope,
+							pState,
 						);
 					},
 					(pError) => {
