@@ -590,6 +590,10 @@ suite(
 
 									Expect(tmpTemplateByReference).to.equal('<h1>Dog</h1><p>Fido is a Dog that is 3 years old.</p>', 'The template system should parse a simple template from a hash.');
 
+									let tmpTemplateFromAddress = testPict.parseTemplate('{~TFA:Record.TemplateContent~}', { TemplateContent: '<h1>{~D:Pict.AppData.RecordSet.Type~}</h1>{~T:Animal-View:Pict.AppData.RecordSet~}'})
+
+									Expect(tmpTemplateFromAddress).to.equal('<h1>Dog</h1><p>Fido is a Dog that is 3 years old.</p>', 'The template system should parse a simple template from a hash.');
+
 									testPict.parseTemplateByHash('Book-Author-Content', { IDBook: 10000, Title: 'I learn things.' },
 										(pError, pValue) =>
 										{
@@ -613,7 +617,19 @@ suite(
 												{
 													return fDone(err);
 												}
-												return fDone();
+												testPict.parseTemplate('{~TFA:Record.TemplateContent~}', { TemplateContent: '<h1>{~D:Pict.AppData.RecordSet.Type~}</h1>{~T:Animal-View:Pict.AppData.RecordSet~}'}, (pError, pValue) =>
+												{
+													try
+													{
+														Expect(pError).to.not.exist;
+														Expect(pValue).to.equal('<h1>Dog</h1><p>Fido is a Dog that is 3 years old.</p>', 'The template system should parse a simple template from a hash.');
+													}
+													catch (err)
+													{
+														return fDone(err);
+													}
+													return fDone();
+												});
 											});
 										});
 								}
