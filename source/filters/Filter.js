@@ -182,27 +182,33 @@ class FilterMeadowStanzaTokenGenerator
 
 					for (const tmpField of tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]))
 					{
-						if (tmpFilterConfig.Values && tmpFilterConfig.Values.Start && (tmpFilterConfig.Type != 'ExternalJoinDateRange' || tmpFilterConfig.Values.Start != '0'))
+						const hasStartValue = tmpFilterConfig.Values && tmpFilterConfig.Values.Start && (tmpFilterConfig.Type != 'ExternalJoinDateRange' || tmpFilterConfig.Values.Start != '0');
+						const hasEndValue = tmpFilterConfig.Values && tmpFilterConfig.Values.End && (tmpFilterConfig.Type != 'ExternalJoinDateRange' || tmpFilterConfig.Values.End != '0');
+						if (hasStartValue)
 						{
 							tmpFilterResult.Filters.push(
 							{
 								Index: -1,
-								CoreEntity: true,
-								Entity: pFilterState.Entity,
+								Entity: tmpFilterConfig.ExternalFilterByTable,
 								Instruction: 'FBVOR',
+								OpenParen: true,
+								OpenParenOr: true,
+								CloseParen: !hasEndValue,
 								Field: tmpField,
 								Operator: tmpFilterConfig.StartExclusive ? 'GT' : 'GE',
 								Value: tmpFilterConfig.Values.Start,
 							});
 						}
-						if (tmpFilterConfig.Values && tmpFilterConfig.Values.End && (tmpFilterConfig.Type != 'ExternalJoinDateRange' || tmpFilterConfig.Values.End != '0'))
+						if (hasEndValue)
 						{
 							tmpFilterResult.Filters.push(
 							{
 								Index: -1,
-								CoreEntity: true,
-								Entity: pFilterState.Entity,
-								Instruction: 'FBVOR',
+								Entity: tmpFilterConfig.ExternalFilterByTable,
+								Instruction: 'FBV',
+								OpenParen: !hasStartValue,
+								OpenParenOr: !hasStartValue,
+								CloseParen: true,
 								Field: tmpField,
 								Operator: tmpFilterConfig.EndExclusive ? 'LT' : 'LE',
 								Value: tmpFilterConfig.Values.End,
@@ -279,7 +285,9 @@ class FilterMeadowStanzaTokenGenerator
 					 */
 					for (const tmpField of tmpFilterConfig.FilterByColumns || (tmpFilterConfig.FilterByColumn ? [ tmpFilterConfig.FilterByColumn ] : [ 'Name' ]))
 					{
-						if (tmpFilterConfig.Values && tmpFilterConfig.Values.Start && (tmpFilterConfig.Type != 'DateRange' || tmpFilterConfig.Values.Start != '0'))
+						const hasStartValue = tmpFilterConfig.Values && tmpFilterConfig.Values.Start && (tmpFilterConfig.Type != 'DateRange' || tmpFilterConfig.Values.Start != '0');
+						const hasEndValue = tmpFilterConfig.Values && tmpFilterConfig.Values.End && (tmpFilterConfig.Type != 'DateRange' || tmpFilterConfig.Values.End != '0');
+						if (hasStartValue)
 						{
 							tmpFilterResult.Filters.push(
 							{
@@ -288,18 +296,24 @@ class FilterMeadowStanzaTokenGenerator
 								Entity: pFilterState.Entity,
 								Instruction: 'FBVOR',
 								Field: tmpField,
+								OpenParen: true,
+								OpenParenOr: true,
+								CloseParen: !hasEndValue,
 								Operator: tmpFilterConfig.StartExclusive ? 'GT' : 'GE',
 								Value: tmpFilterConfig.Values.Start,
 							});
 						}
-						if (tmpFilterConfig.Values && tmpFilterConfig.Values.End && (tmpFilterConfig.Type != 'DateRange' || tmpFilterConfig.Values.End != '0'))
+						if (hasEndValue)
 						{
 							tmpFilterResult.Filters.push(
 							{
 								Index: 0,
 								CoreEntity: true,
 								Entity: pFilterState.Entity,
-								Instruction: 'FBVOR',
+								Instruction: 'FBV',
+								OpenParen: !hasStartValue,
+								OpenParenOr: !hasStartValue,
+								CloseParen: true,
 								Field: tmpField,
 								Operator: tmpFilterConfig.EndExclusive ? 'LT' : 'LE',
 								Value: tmpFilterConfig.Values.End,
@@ -365,7 +379,9 @@ class FilterMeadowStanzaTokenGenerator
 
 					for (const tmpField of tmpFilterConfig.ExternalFilterByColumns || (tmpFilterConfig.ExternalFilterByColumn ? [ tmpFilterConfig.ExternalFilterByColumn ] : [ 'Name' ]))
 					{
-						if (tmpFilterConfig.Values && tmpFilterConfig.Values.Start && (tmpFilterConfig.Type != 'InternalJoinDateRange' || tmpFilterConfig.Values.Start != '0'))
+						const hasStartValue = tmpFilterConfig.Values && tmpFilterConfig.Values.Start && (tmpFilterConfig.Type != 'InternalJoinDateRange' || tmpFilterConfig.Values.Start != '0');
+						const hasEndValue = tmpFilterConfig.Values && tmpFilterConfig.Values.End && (tmpFilterConfig.Type != 'InternalJoinDateRange' || tmpFilterConfig.Values.End != '0');
+						if (hasStartValue)
 						{
 							tmpFilterResult.Filters.push(
 							{
@@ -373,17 +389,23 @@ class FilterMeadowStanzaTokenGenerator
 								Entity: tmpFilterConfig.RemoteTable,
 								Instruction: 'FBVOR',
 								Field: tmpField,
+								OpenParen: true,
+								OpenParenOr: true,
+								CloseParen: !hasEndValue,
 								Operator: tmpFilterConfig.StartExclusive ? 'GT' : 'GE',
 								Value: tmpFilterConfig.Values.Start,
 							});
 						}
-						if (tmpFilterConfig.Values && tmpFilterConfig.Values.End && (tmpFilterConfig.Type != 'InternalJoinDateRange' || tmpFilterConfig.Values.End != '0'))
+						if (hasEndValue)
 						{
 							tmpFilterResult.Filters.push(
 							{
 								Index: 0,
 								Entity: tmpFilterConfig.RemoteTable,
-								Instruction: 'FBVOR',
+								Instruction: 'FBV',
+								OpenParen: !hasStartValue,
+								OpenParenOr: !hasStartValue,
+								CloseParen: true,
 								Field: tmpField,
 								Operator: tmpFilterConfig.EndExclusive ? 'LT' : 'LE',
 								Value: tmpFilterConfig.Values.End,
@@ -800,6 +822,14 @@ class FilterMeadowStanzaTokenGenerator
 		else
 		{
 			tmpFilterString += `~${pFilter.Value || ''}`;
+		}
+		if (pFilter.OpenParen)
+		{
+			tmpFilterString = `${ pFilter.OpenParenOr ? 'FOPOR' : 'FOP' }~0~(~0~${tmpFilterString}`;
+		}
+		if (pFilter.CloseParen)
+		{
+			tmpFilterString = `${tmpFilterString}~FCP~0~)~0`;
 		}
 		return tmpFilterString;
 	}
