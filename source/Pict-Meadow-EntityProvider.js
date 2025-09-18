@@ -441,10 +441,14 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	 */
 	projectDataset(pConfiguration, pContext)
 	{
-		const tmpInputRecordset = this.fable.manifest.getValueByHash(pContext, pConfiguration.InputRecordsetAddress);
+		let tmpInputRecordset = this.fable.manifest.getValueByHash(pContext, pConfiguration.InputRecordsetAddress);
+		if (typeof tmpInputRecordset == null || typeof tmpInputRecordset !== 'object')
+		{
+			throw new Error(`EntityBundleRequest failed to project dataset because the input recordset [${pConfiguration.InputRecordsetAddress}] did not return an valid object.`);
+		}
 		if (!Array.isArray(tmpInputRecordset))
 		{
-			throw new Error(`EntityBundleRequest failed to project dataset because the input recordset [${pConfiguration.InputRecordsetAddress}] did not return an array.`);
+			tmpInputRecordset = [ tmpInputRecordset ];
 		}
 		let tmpDefaultOutputRecordset = this.fable.manifest.getValueByHash(pContext, pConfiguration.OutputRecordsetAddress);
 		if (!tmpDefaultOutputRecordset)
