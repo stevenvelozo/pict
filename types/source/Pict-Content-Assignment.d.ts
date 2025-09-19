@@ -44,6 +44,22 @@ declare class PictContentAssignment {
      */
     customAppendFunction: Function;
     /**
+     * Set this to override the default mechanism for appending content to a DOM element.
+     *
+     * @type {(pBeforeAddress: string|HTMLElement, pContent: string) => void}
+     * @param {string|HTMLElement} pBeforeAddress - The address of the element (a CSS selector), or the element itself.
+     * @param {string} pContent - The content to append.
+     */
+    customInsertBeforeFunction: (pBeforeAddress: string | HTMLElement, pContent: string) => void;
+    /**
+     * Set this to override the default mechanism for appending content to a DOM element.
+     *
+     * @type {(pAfterAddress: string|HTMLElement, pContent: string) => void}
+     * @param {string|HTMLElement} pAfterAddress - The address of the element (a CSS selector), or the element itself.
+     * @param {string} pContent - The content to append.
+     */
+    customInsertAfterFunction: (pAfterAddress: string | HTMLElement, pContent: string) => void;
+    /**
      * Set this to override the default mechanism for reading content from the DOM.
      *
      * @type {Function}
@@ -85,6 +101,20 @@ declare class PictContentAssignment {
      * @param {string} pContent - The content to append.
      */
     appendContent(pAddress: string | HTMLElement, pContent: string): any;
+    /**
+     * Insert content before an element. The new content will be a sibling of the target element.
+     *
+     * @param {string|HTMLElement} pBeforeAddress - The address of the element (a CSS selector), or the element itself.
+     * @param {string} pContent - The content to insert.
+     */
+    insertContentBefore(pBeforeAddress: string | HTMLElement, pContent: string): void;
+    /**
+     * Insert content after an element. The new content will be a sibling of the target element.
+     *
+     * @param {string|HTMLElement} pAfterAddress - The address of the element (a CSS selector), or the element itself.
+     * @param {string} pContent - The content to insert.
+     */
+    insertContentAfter(pAfterAddress: string | HTMLElement, pContent: string): void;
     /**
      * Prepend content to an element.
      *

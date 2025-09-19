@@ -68,6 +68,22 @@ class PictContentAssignment extends libFableServiceBase
 		 * @param {string} pContent - The content to append.
 		 */
 		this.customAppendFunction = null;
+		/**
+		 * Set this to override the default mechanism for appending content to a DOM element.
+		 *
+		 * @type {(pBeforeAddress: string|HTMLElement, pContent: string) => void}
+		 * @param {string|HTMLElement} pBeforeAddress - The address of the element (a CSS selector), or the element itself.
+		 * @param {string} pContent - The content to append.
+		 */
+		this.customInsertBeforeFunction = null;
+		/**
+		 * Set this to override the default mechanism for appending content to a DOM element.
+		 *
+		 * @type {(pAfterAddress: string|HTMLElement, pContent: string) => void}
+		 * @param {string|HTMLElement} pAfterAddress - The address of the element (a CSS selector), or the element itself.
+		 * @param {string} pContent - The content to append.
+		 */
+		this.customInsertAfterFunction = null;
 
 		/**
 		 * Set this to override the default mechanism for reading content from the DOM.
@@ -264,6 +280,68 @@ class PictContentAssignment extends libFableServiceBase
 		{
 			// Just log it out for now -- nothing browser in our mix.
 			this.log.trace(`PICT Content APPEND to [${pAddress}]:`, pContent);
+		}
+	}
+
+	/**
+	 * Insert content before an element. The new content will be a sibling of the target element.
+	 *
+	 * @param {string|HTMLElement} pBeforeAddress - The address of the element (a CSS selector), or the element itself.
+	 * @param {string} pContent - The content to insert.
+	 */
+	insertContentBefore(pBeforeAddress, pContent)
+	{
+		if (this.customInsertBeforeFunction)
+		{
+			return this.customInsertBeforeFunction(pBeforeAddress, pContent);
+		}
+		else if (this.hasJquery)
+		{
+			window.jQuery(pContent).insertBefore(pBeforeAddress);
+		}
+		else if (this.inBrowser && this.hasDocument)
+		{
+			const tmpTargetElementSet = typeof pBeforeAddress === 'string' ? window.document.querySelectorAll(pBeforeAddress) : [ pBeforeAddress ];
+			for (let i = 0; i < tmpTargetElementSet.length; i++)
+			{
+				tmpTargetElementSet[i].insertAdjacentHTML("beforebegin", pContent);
+			}
+		}
+		else
+		{
+			// Just log it out for now -- nothing browser in our mix.
+			this.log.trace(`PICT Content INSERT BEFORE [${pBeforeAddress}]:`, pContent);
+		}
+	}
+
+	/**
+	 * Insert content after an element. The new content will be a sibling of the target element.
+	 *
+	 * @param {string|HTMLElement} pAfterAddress - The address of the element (a CSS selector), or the element itself.
+	 * @param {string} pContent - The content to insert.
+	 */
+	insertContentAfter(pAfterAddress, pContent)
+	{
+		if (this.customInsertAfterFunction)
+		{
+			return this.customInsertAfterFunction(pAfterAddress, pContent);
+		}
+		else if (this.hasJquery)
+		{
+			window.jQuery(pContent).insertAfter(pAfterAddress);
+		}
+		else if (this.inBrowser && this.hasDocument)
+		{
+			const tmpTargetElementSet = typeof pAfterAddress === 'string' ? window.document.querySelectorAll(pAfterAddress) : [ pAfterAddress ];
+			for (let i = 0; i < tmpTargetElementSet.length; i++)
+			{
+				tmpTargetElementSet[i].insertAdjacentHTML("afterend", pContent);
+			}
+		}
+		else
+		{
+			// Just log it out for now -- nothing browser in our mix.
+			this.log.trace(`PICT Content INSERT AFTER [${pAfterAddress}]:`, pContent);
 		}
 	}
 
