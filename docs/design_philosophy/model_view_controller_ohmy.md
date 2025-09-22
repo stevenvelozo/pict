@@ -60,4 +60,4 @@ In the case of most applications, the `pict-application` acts as the higher leve
 
 Because of the ubiquitous leveraging of templates and a consistent address space for the model, often times behavior management happens within the templates themselves.
 
-It's possible to make a view work really fast and slowly refactor out complexity if necessary without rewriting the whole application.  This is by design!
+It's possible to make a do what you want work with quick and dirty code, all in one place, and slowly refactor out complexity if necessary without rewriting the whole application.  This is by design!
