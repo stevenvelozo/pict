@@ -44,11 +44,13 @@ class PictTemplateProviderHTMLCommandEnd extends libPictTemplate
 		}
 
 		let tmpValue = false;
-		if (tmpHash != null)
+		const [ tmpValueAddress, tmpPolarityStr ] = tmpHash.split(':');
+		if (tmpValueAddress != null)
 		{
-			tmpValue = this.resolveStateFromAddress(tmpHash, tmpRecord, pContextArray, null, pScope, pState);
+			tmpValue = this.resolveStateFromAddress(tmpValueAddress, tmpRecord, pContextArray, null, pScope, pState);
 		}
-		if (!tmpValue)
+		const tmpPolarity = tmpPolarityStr != null ? tmpPolarityStr === '1' || tmpPolarityStr.toLowerCase() === 'true' || tmpPolarityStr.toLowerCase() === 't' : false;
+		if (Boolean(tmpValue) == tmpPolarity)
 		{
 			return ' -->';
 		}

@@ -837,6 +837,94 @@ suite(
 										});
 								}
 							);
+						test(
+								'Comments based on record state; open, true',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+									testPict.AppData.ChocoData = _SampleChocoData;
+									let tmpTemplateOutput = testPict.parseTemplate('{~HCS:Record.True~}', { True: true });
+									Expect(tmpTemplateOutput).to.equal('');
+									fDone();
+								}
+							);
+						test(
+								'Conditional comments based on record state; open, true, inverted polarity',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+									testPict.AppData.ChocoData = _SampleChocoData;
+									let tmpTemplateOutput = testPict.parseTemplate('{~HCS:Record.True:1~}', { True: true });
+									Expect(tmpTemplateOutput).to.equal('<!-- ');
+									fDone();
+								}
+							);
+						test(
+								'Comments based on record state; open, false',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+									testPict.AppData.ChocoData = _SampleChocoData;
+									let tmpTemplateOutput = testPict.parseTemplate('{~HCS:Record.False~}', { False: false });
+									Expect(tmpTemplateOutput).to.equal('<!-- ');
+									fDone();
+								}
+							);
+						test(
+								'Conditional comments based on record state; open, false, inverted polarity',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+									testPict.AppData.ChocoData = _SampleChocoData;
+									let tmpTemplateOutput = testPict.parseTemplate('{~HCS:Record.False:1~}', { False: false });
+									Expect(tmpTemplateOutput).to.equal('');
+									fDone();
+								}
+							);
+						test(
+								'Comments based on record state; close true',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+									testPict.AppData.ChocoData = _SampleChocoData;
+									let tmpTemplateOutput = testPict.parseTemplate('{~HCE:Record.True~}', { True: true });
+									Expect(tmpTemplateOutput).to.equal('');
+									fDone();
+								}
+							);
+						test(
+								'Conditional comments based on record state; close, true, inverted polarity',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+									testPict.AppData.ChocoData = _SampleChocoData;
+									let tmpTemplateOutput = testPict.parseTemplate('{~HCE:Record.True:1~}', { True: true });
+									Expect(tmpTemplateOutput).to.equal(' -->');
+									fDone();
+								}
+							);
+						test(
+								'Comments based on record state; close, false',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+									testPict.AppData.ChocoData = _SampleChocoData;
+									let tmpTemplateOutput = testPict.parseTemplate('{~HCE:Record.False~}', { False: false });
+									Expect(tmpTemplateOutput).to.equal(' -->');
+									fDone();
+								}
+							);
+						test(
+								'Conditional comments based on record state; close, false, inverted polarity',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+									testPict.AppData.ChocoData = _SampleChocoData;
+									let tmpTemplateOutput = testPict.parseTemplate('{~HCE:Record.False:1~}', { False: false });
+									Expect(tmpTemplateOutput).to.equal('');
+									fDone();
+								}
+							);
 					}
 				);
 		}
