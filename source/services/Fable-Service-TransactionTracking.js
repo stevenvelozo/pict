@@ -1,5 +1,9 @@
 const libFableServiceProviderBase = require('fable-serviceproviderbase');
 
+/** @typedef {{ TimeStamp: Date, Category: string, Message: string }} TransactionLogEntry */
+/** @typedef {{ Timestamp: number, Data: any, Type: string }} TransactionQueueItem */
+/** @typedef {{ TransactionKey: string, Events: Record<string, Record<string, boolean>>, Log: Array<TransactionLogEntry>, TransactionQueue: Array<TransactionQueueItem> }} TransactionInfo */
+
 /*
  * Provides transaction tracking with keys and events, allowing us to block repeat attempts.
  * Once the shape is solidified, will move it back to the fable codebase
@@ -18,14 +22,25 @@ class TransactionTracking extends libFableServiceProviderBase
 		/** @type {string} */
 		this.UUID;
 
+		/**
+		 * @type {Record<string, TransactionInfo>}
+		 */
 		this.transactionMap = {};
 	}
 
+	/**
+	 * @return {Record<string, TransactionInfo>}
+	 */
 	get transactions()
 	{
 		return this.transactionMap;
 	}
 
+	/**
+	 * @param {string} pKey
+	 * @param {string} pMessage
+	 * @param {string} [pCategory='General']
+	 */
 	logToTransaction(pKey, pMessage, pCategory)
 	{
 		let tmpTransaction = this.transactionMap[pKey];
@@ -44,6 +59,11 @@ class TransactionTracking extends libFableServiceProviderBase
 		return true;
 	}
 
+	/**
+	 * @param {string} pKey
+	 *
+	 * @return {TransactionInfo}
+	 */
 	registerTransaction(pKey)
 	{
 		if (this.transactionMap[pKey] != null)
@@ -89,7 +109,7 @@ class TransactionTracking extends libFableServiceProviderBase
 	 *
 	 * @param {string} pKey
 	 *
-	 * @return {Array<{Timestamp: number, Data: any}>}
+	 * @return {Array<TransactionQueueItem>}
 	 */
 	checkTransactionQueue(pKey)
 	{
@@ -126,7 +146,7 @@ class TransactionTracking extends libFableServiceProviderBase
 	/**
 	 * @param {string} pKey
 	 *
-	 * @return {Array<{Timestamp: number, Data: any}>}
+	 * @return {Array<TransactionQueueItem>}
 	 */
 	clearTransactionQueue(pKey)
 	{
@@ -144,6 +164,13 @@ class TransactionTracking extends libFableServiceProviderBase
 		return tmpQueue;
 	}
 
+	/**
+	 * @param {string} pKey
+	 * @param {string} pEvent
+	 * @param {string} [pHash='']
+	 *
+	 * @return {boolean} true if the event is new, false if it has already been registered
+	 */
 	checkEvent(pKey, pEvent, pHash)
 	{
 		let tmpHash = (typeof(pHash) === 'string') ? pHash : '';

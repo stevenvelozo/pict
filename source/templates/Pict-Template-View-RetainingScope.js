@@ -82,7 +82,7 @@ class PictTemplateProviderViewRetainingScope extends libPictTemplate
 		/** @type {import('pict-view')} */
 		const tmpView = this.pict.views[tmpViewHash];
 
-		return tmpView.renderWithScopeAsync(pScope, '__Virtual', `__TemplateOutputCache.${tmpRenderGUID}`, pRecord, pState ? pState.RootRenderable : undefined,  
+		return tmpView.renderWithScopeAsync(pScope, '__Virtual', `__TemplateOutputCache.${tmpRenderGUID}`, pRecord, pState ? pState.RootRenderable : undefined,
 			(pError, pResult) =>
 			{
 				if (pError)

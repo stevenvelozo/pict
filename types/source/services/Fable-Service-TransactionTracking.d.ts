@@ -1,4 +1,7 @@
 export = TransactionTracking;
+/** @typedef {{ TimeStamp: Date, Category: string, Message: string }} TransactionLogEntry */
+/** @typedef {{ Timestamp: number, Data: any, Type: string }} TransactionQueueItem */
+/** @typedef {{ TransactionKey: string, Events: Record<string, Record<string, boolean>>, Log: Array<TransactionLogEntry>, TransactionQueue: Array<TransactionQueueItem> }} TransactionInfo */
 declare class TransactionTracking {
     constructor(pFable: any, pOptions: any, pServiceHash: any);
     /** @type {import('../Pict') & { addAndInstantiateSingletonService: (hash: string, options: any, prototype: any) => any }} */
@@ -9,10 +12,26 @@ declare class TransactionTracking {
     log: any;
     /** @type {string} */
     UUID: string;
-    transactionMap: {};
-    get transactions(): {};
-    logToTransaction(pKey: any, pMessage: any, pCategory: any): boolean;
-    registerTransaction(pKey: any): any;
+    /**
+     * @type {Record<string, TransactionInfo>}
+     */
+    transactionMap: Record<string, TransactionInfo>;
+    /**
+     * @return {Record<string, TransactionInfo>}
+     */
+    get transactions(): Record<string, TransactionInfo>;
+    /**
+     * @param {string} pKey
+     * @param {string} pMessage
+     * @param {string} [pCategory='General']
+     */
+    logToTransaction(pKey: string, pMessage: string, pCategory?: string): boolean;
+    /**
+     * @param {string} pKey
+     *
+     * @return {TransactionInfo}
+     */
+    registerTransaction(pKey: string): TransactionInfo;
     /**
      * @param {string} pKey
      * @param {any} pData
@@ -26,12 +45,9 @@ declare class TransactionTracking {
      *
      * @param {string} pKey
      *
-     * @return {Array<{Timestamp: number, Data: any}>}
+     * @return {Array<TransactionQueueItem>}
      */
-    checkTransactionQueue(pKey: string): Array<{
-        Timestamp: number;
-        Data: any;
-    }>;
+    checkTransactionQueue(pKey: string): Array<TransactionQueueItem>;
     /**
      * Returns an array of object registered in the transaction queue for a given transaction ID.
      *
@@ -43,15 +59,36 @@ declare class TransactionTracking {
     /**
      * @param {string} pKey
      *
-     * @return {Array<{Timestamp: number, Data: any}>}
+     * @return {Array<TransactionQueueItem>}
      */
-    clearTransactionQueue(pKey: string): Array<{
-        Timestamp: number;
-        Data: any;
-    }>;
-    checkEvent(pKey: any, pEvent: any, pHash: any): boolean;
+    clearTransactionQueue(pKey: string): Array<TransactionQueueItem>;
+    /**
+     * @param {string} pKey
+     * @param {string} pEvent
+     * @param {string} [pHash='']
+     *
+     * @return {boolean} true if the event is new, false if it has already been registered
+     */
+    checkEvent(pKey: string, pEvent: string, pHash?: string): boolean;
 }
 declare namespace TransactionTracking {
-    let default_configuration: Record<string, any>;
+    export { default_configuration, TransactionLogEntry, TransactionQueueItem, TransactionInfo };
 }
+declare var default_configuration: Record<string, any>;
+type TransactionLogEntry = {
+    TimeStamp: Date;
+    Category: string;
+    Message: string;
+};
+type TransactionQueueItem = {
+    Timestamp: number;
+    Data: any;
+    Type: string;
+};
+type TransactionInfo = {
+    TransactionKey: string;
+    Events: Record<string, Record<string, boolean>>;
+    Log: Array<TransactionLogEntry>;
+    TransactionQueue: Array<TransactionQueueItem>;
+};
 //# sourceMappingURL=Fable-Service-TransactionTracking.d.ts.map
