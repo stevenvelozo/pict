@@ -74,6 +74,37 @@ suite(
 								}
 							);
 						test(
+								'Templates can branch by type.',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+									testPict.TemplateProvider.addTemplate('Visualize-String', '<p>String value: {~Data:AppData.SomeString~}</p>');
+									testPict.TemplateProvider.addTemplate('Visualize-Number', '<p>Number value: {~Data:AppData.SomeNumber~}</p>');
+									testPict.TemplateProvider.addTemplate('Visualize-Array', '<p>Array length: {~Data:AppData.SomeArray.length~}</p>');
+									testPict.TemplateProvider.addTemplate('Visualize-Object', '<p>Object value: {~TVS:Visualize-ObjectEntry:AppData.SomeObject~}</p>');
+									testPict.TemplateProvider.addTemplate('Visualize-ObjectEntry', '<span>Object value: {~Data:Record.Value.Name~}</span>');
+									testPict.TemplateProvider.addTemplate('Visualize-Default', '<span>Default value.</span>');
+
+									testPict.AppData = (
+										{
+											SomeString: "This is a string",
+											SomeNumber: 42,
+											SomeObject: { a: { Name: 'wrong'}, b: { Name: 'right' } },
+											SomeArray: [1, 2, 3]
+										});
+									Expect(testPict.parseTemplate('<div>{~TBT:AppData.SomeString:string:Visualize-String~}</div>')).to.equal('<div><p>String value: This is a string</p></div>');
+									Expect(testPict.parseTemplate('<div>{~TBT:AppData.SomeObject:string:Visualize-String~}</div>')).to.equal('<div></div>');
+									Expect(testPict.parseTemplate('<div>{~TBT:AppData.SomeObject:object:Visualize-Object:Visualize-Default~}</div>')).to.equal('<div><p>Object value: <span>Object value: wrong</span><span>Object value: right</span></p></div>');
+									Expect(testPict.parseTemplate('<div>{~TBT:AppData.SomeNumber:object:Visualize-Object:Appdata:Visualize-Default~}</div>')).to.equal('<div><span>Default value.</span></div>');
+									testPict.parseTemplate('<div>{~TBT:AppData.SomeArray:array:Visualize-Array~}</div>', {},
+										(pError, pValue) =>
+										{
+											Expect(pValue).to.equal('<div><p>Array length: 3</p></div>');
+											fDone();
+										});
+								}
+							);
+						test(
 								'Value trees can log with specified depth.',
 								function (fDone)
 								{
