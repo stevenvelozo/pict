@@ -59,9 +59,9 @@ class PictTemplateProviderDateTimeFormat extends libPictTemplate
 		try
 		{
 			// Try to cast the day to be a specific timezone if one is set for the app
-			if (this.options.Timezone)
+			if (this.pict.options.Timezone)
 			{
-				tmpDayJS = tmpDayJS.tz(this.options.Timezone);
+				tmpDayJS = tmpDayJS.tz(this.pict.options.Timezone);
 			}
 			else
 			{

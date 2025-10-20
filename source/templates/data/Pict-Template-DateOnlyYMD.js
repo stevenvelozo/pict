@@ -46,13 +46,15 @@ class PictTemplateProviderDateOnlyYMD extends libPictTemplate
 			this.log.trace(`PICT Template [fDateTimeYMD]::[${tmpHash}]`);
 		}
 
-		// TODO: Modularize this
-		const tmpDayJS = this.fable.Dates.dayJS.utc(tmpDateValue).tz('UTC');
+		// Because this is "Date Only", we force the time to be UTC 00:00:00 and go with the date part only.
+		let tmpDayJS = this.fable.Dates.dayJS.utc(tmpDateValue);
+
 		//FIXME: this is kind of wacked out; -62167219200000 is the unix ms timestamp for 0000-01-01 00:00:00 UTC
 		//       not even sure showing negative is right; showing the era is probably better (BCE vs CE)
-		const prefix = tmpDayJS.valueOf() < -62167219200000 ? '-' : '';
+		//const prefix = tmpDayJS.valueOf() < -62167219200000 ? '-' : '';
+		const tmpPrefix = '';
 
-		return prefix + tmpDayJS.format('YYYY-MM-DD');
+		return tmpPrefix + tmpDayJS.format('YYYY-MM-DD');
 	}
 }
 

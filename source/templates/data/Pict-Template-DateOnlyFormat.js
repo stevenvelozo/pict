@@ -53,8 +53,8 @@ class PictTemplateProviderDateOnlyFormat extends libPictTemplate
 			this.log.trace(`PICT Template [fDateOnlyFormat]::[${tmpHash}]`);
 		}
 
-		// TODO: Modularize this
-		const tmpDayJS = this.fable.Dates.dayJS.utc(tmpDateValue).tz('UTC');
+		// Because this is "Date Only", we force the time to be UTC 00:00:00 and go with the date part only.
+		let tmpDayJS = this.fable.Dates.dayJS.utc(tmpDateValue);
 
 		return tmpDayJS.format(tmpDateValueSet[1]);
 	}
