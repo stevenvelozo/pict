@@ -277,6 +277,26 @@ class Pict extends libFable {
 	}
 
 	/**
+	 * Add a view unless one already exists, then return that one.
+	 * Just passing an options will construct one for us.
+	 * Passing a hash will set the hash.
+	 * Passing a prototype will use that!
+	 * 	
+	 * @param {String} pViewHash - The hash of the view.
+	 * @param {Object<String, any>} [pOptions] - The options for the view.
+	 * @param {any} [pViewPrototype] - The prototype for the view.
+	 * @return {any} The view instance.
+	 */
+	addViewSingleton(pViewHash, pOptions, pViewPrototype)
+	{
+		if (pViewHash in this.views)
+		{
+			return this.views[pViewHash];
+		}
+		return this.addView(pViewHash, pOptions, pViewPrototype);
+	}
+
+	/**
 	 * Add a provider unless one already exists, then return that one.
 	 *
 	 * Just passing an options will construct one for us.

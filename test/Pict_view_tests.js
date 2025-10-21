@@ -102,6 +102,34 @@ suite(
 						);
 					}
 				);
+				test(
+					'Check that adding a view singleton works as expected',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+
+						let tmpEnvironment = new libPict.EnvironmentLog(testPict, {});
+
+                        let tmpView = testPict.addView('ExampleView', _BasicConfigurationView);
+
+						Expect(testPict.views.ExampleView.ExtraProperty).to.equal(undefined);
+
+						tmpView.ExtraProperty = 'TestValue';
+
+						Expect(testPict.views.ExampleView.ExtraProperty).to.equal('TestValue');
+
+						let tmpView2 = testPict.addViewSingleton('ExampleView', _BasicConfigurationView);
+						Expect(tmpView2.ExtraProperty).to.equal('TestValue');
+
+						Expect(testPict.views.ExampleView.ExtraProperty).to.equal('TestValue');
+
+						let tmpView3 = testPict.addView('ExampleView', _BasicConfigurationView);
+						Expect(tmpView3.ExtraProperty).to.equal(undefined);
+						Expect(testPict.views.ExampleView.ExtraProperty).to.equal(undefined);
+
+						return fDone();
+					}
+				);
 			}
 		);
 	}
