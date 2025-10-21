@@ -94,6 +94,18 @@ declare class Pict extends Pict_base {
      */
     addView<T extends new (...args: any[]) => any = typeof import("pict-view")>(pViewHash: string, pOptions?: any, pViewPrototype?: T): InstanceType<T>;
     /**
+     * Add a view unless one already exists, then return that one.
+     * Just passing an options will construct one for us.
+     * Passing a hash will set the hash.
+     * Passing a prototype will use that!
+     *
+     * @param {String} pViewHash - The hash of the view.
+     * @param {Object<String, any>} [pOptions] - The options for the view.
+     * @param {any} [pViewPrototype] - The prototype for the view.
+     * @return {any} The view instance.
+     */
+    addViewSingleton(pViewHash: string, pOptions?: any, pViewPrototype?: any): any;
+    /**
      * Add a provider unless one already exists, then return that one.
      *
      * Just passing an options will construct one for us.
