@@ -698,7 +698,7 @@ class PictContentAssignment extends libFableServiceBase
 	 * Check if an element has a class.
 	 *
 	 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
-	 * @param {string} pClass - The class to check for.
+	 * @param {string} pClass - The class to toggle.
 	 *
 	 * @return {boolean} - Whether the element has the class. If multiple elements are matched, returns true if any have the class.
 	 */
@@ -731,6 +731,24 @@ class PictContentAssignment extends libFableServiceBase
 		{
 			this.log.trace(`PICT Content HASCLASS for [${pAddress}] CLASS [${pClass}]:`);
 			return false;
+		}
+	}
+
+	/**
+	 * Toggle a class on or off an element
+	 *
+	 * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
+	 * @param {string} pClass - The class to check for.
+	 */
+	toggleClass(pAddress, pClass)
+	{
+		if (this.hasClass(pAddress, pClass))
+		{
+			this.removeClass(pAddress, pClass);
+		}
+		else
+		{
+			this.addClass(pAddress, pClass);
 		}
 	}
 }

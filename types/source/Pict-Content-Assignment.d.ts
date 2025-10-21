@@ -185,10 +185,17 @@ declare class PictContentAssignment {
      * Check if an element has a class.
      *
      * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
-     * @param {string} pClass - The class to check for.
+     * @param {string} pClass - The class to toggle.
      *
      * @return {boolean} - Whether the element has the class. If multiple elements are matched, returns true if any have the class.
      */
     hasClass(pAddress: string | HTMLElement, pClass: string): boolean;
+    /**
+     * Toggle a class on or off an element
+     *
+     * @param {string|HTMLElement} pAddress - The address of the element (a CSS selector), or the element itself.
+     * @param {string} pClass - The class to check for.
+     */
+    toggleClass(pAddress: string | HTMLElement, pClass: string): void;
 }
 //# sourceMappingURL=Pict-Content-Assignment.d.ts.map

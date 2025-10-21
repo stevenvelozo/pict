@@ -86,6 +86,16 @@ suite(
 						tmpSandwich = testPict.ContentAssignment.removeClass('#MySandwich', 'pickles');
 						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'pickles');
 						Expect(tmpCondimentMatch).to.equal(false);
+
+
+						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'Chives');
+						Expect(tmpCondimentMatch).to.equal(false);
+						testPict.ContentAssignment.toggleClass('#MySandwich', 'Chives');
+						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'Chives');
+						Expect(tmpCondimentMatch).to.equal(true);
+						tmpSandwich = testPict.ContentAssignment.toggleClass('#MySandwich', 'Chives');
+						tmpCondimentMatch = testPict.ContentAssignment.hasClass('#MySandwich', 'Chives');
+						Expect(tmpCondimentMatch).to.equal(false);
 						fDone();
 					}
 				);
