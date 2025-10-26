@@ -848,6 +848,29 @@ suite(
 								}
 							);
 						test(
+								'Solve',
+								function (fDone)
+								{
+									const testPict = new libPict(_MockSettings);
+
+									testPict.AppData =
+									{
+										Width: 105,
+										Height: 48,
+										Radius: 47.124
+									};
+
+									Expect(testPict.parseTemplate('{~S:100+55~}')).to.equal('155');
+									Expect(testPict.parseTemplate('{~S:Width*Height~}')).to.equal('0');
+									Expect(testPict.parseTemplate('{~S:Width*Height:AppData~}')).to.equal('5040');
+									Expect(testPict.parseTemplate('{~S:ROUND(PI()*Radius*Radius,3):AppData~}')).to.equal('6976.445');
+
+									Expect(testPict.parseTemplate('{~S:CONCAT("Dog height is ",Height,"."):AppData~}')).to.equal('Dog height is 48.');
+
+									return fDone();
+								}
+							);
+						test(
 								'TemplateValueSet from Array',
 								function (fDone)
 								{
