@@ -452,6 +452,8 @@ class Pict extends libFable {
 
 			this.addTemplate(require(`./templates/Pict-Template-DataWithTemplateFallback.js`));
 
+			this.addTemplate(require(`./templates/Pict-Template-DataWithAbsoluteFallback.js`));
+
 			this.addTemplate(require(`./templates/Pict-Template-TemplateByReference.js`));
 
 			this.addTemplate(require(`./templates/Pict-Template-TemplateFromAddress.js`));

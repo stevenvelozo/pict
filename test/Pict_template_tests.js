@@ -498,6 +498,18 @@ suite(
 									testPict.TemplateProvider.addTemplate('Book-Author-Title', '<h1>{~DWTF:Record.Title:MissingTitle~}</h1>');
 									testPict.TemplateProvider.addTemplate('MissingTitle', '<span class="empty-message">Oh no! No title!</span>');
 
+									Expect(testPict.parseTemplate('<p>{~DWAF:Record.Title:No Title Specified -- 100% Missing Titles!~}</p>',
+										{
+											Title: undefined
+										}))
+										.to.equal('<p>No Title Specified -- 100% Missing Titles!</p>');	
+
+									Expect(testPict.parseTemplate('<p>{~DWAF:Record.Title:No Title Specified -- 100% Missing Titles!~}</p>',
+										{
+											Title: 'The Great Gatsby'
+										}))
+										.to.equal('<p>The Great Gatsby</p>');	
+
 									testPict.parseTemplateByHash('Book-Author-Title', { Title: undefined },
 										(pError, pValue) =>
 										{
