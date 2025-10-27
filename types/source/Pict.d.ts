@@ -43,6 +43,7 @@ declare class Pict extends Pict_base {
      * @type {PictContentAssignment}
      */
     ContentAssignment: PictContentAssignment;
+    expressionParser: any;
     /**
      * The CSS module.
      *
@@ -125,6 +126,15 @@ declare class Pict extends Pict_base {
      * @return {libFableServiceTransactionTracking}
      */
     newTransactionTracker(): libFableServiceTransactionTracking;
+    /**
+     * Add an Expression Parser function to the solver.
+     *
+     * @param {Object} pExpressionParser - The expresssion parser to add the function to
+     * @param {string} pFunctionName - The name of the function
+     * @param {string} pFunctionAddress - The address of the function
+     * @param {string} pFunctionComment - A comment about the function
+     */
+    addSolverFunction(pExpressionParser: any, pFunctionName: string, pFunctionAddress: string, pFunctionComment: string): any;
     /**
      * Just passing an options will construct one for us.
      * Passing a hash will set the hash.

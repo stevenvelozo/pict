@@ -40,6 +40,20 @@ suite(
 					}
 				);
 				test(
+					'Color from numeric.',
+					(fDone) =>
+					{
+						let testPict = new libPict(_MockSettings);
+						Expect(testPict.CSSMap.createCssColorRGBFromNumeric(0.5, 0.5, 0.5)).to.equal('#808080');
+						Expect(testPict.CSSMap.createCssColorRGBFromNumeric(1, 0, 0)).to.equal('#ff0000');
+						Expect(testPict.CSSMap.createCssColorRGBFromNumeric(0, 1, 0)).to.equal('#00ff00');
+						Expect(testPict.CSSMap.createCssColorRGBFromNumeric(0, 0, 1)).to.equal('#0000ff');
+						Expect(testPict.CSSMap.createCssColorRGBFromNumeric(255, 255, 255)).to.equal('#ffffff');
+						Expect(testPict.CSSMap.createCssColorRGBFromNumeric(300, -20, 128)).to.equal('#ff116d');
+						fDone();
+					}
+				);
+				test(
 					'Test priority, and, assignment.',
 					(fDone) =>
 					{

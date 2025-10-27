@@ -26,6 +26,8 @@ class PictCSS extends libFableServiceBase
 		}
 
 		this.inlineCSSMap = {};
+
+		this.fable.addSolverFunction(this.fable.expressionParser, 'createcsscolorrgbfromnumeric', this.createCssColorRGBFromNumeric.bind(this), 'Create a CSS color from RGB components');
 	}
 
 	// Add a CSS fragment to the CSS map (each view can have its own CSS fragment)
@@ -40,6 +42,49 @@ class PictCSS extends libFableServiceBase
 	removeCSS(pHash)
 	{
 		delete this.inlineCSSMap[pHash];
+	}
+
+	createCssColorRGBFromNumeric(pRed, pGreen, pBlue)
+	{
+		// 1. cast red, green and blue to floating point numbers
+		// 2. If the numbers are all three less than or equal to 1.0, multiply each by 255 and round to the nearest integer.
+		// 2a. If any of the numbers are greater than 1.0, round each to the nearest integer and make sure it's less than or equal to 255.
+		// 3. Return a #RRGGBB string.
+		let tmpRed = parseFloat(pRed);
+		let tmpGreen = parseFloat(pGreen);
+		let tmpBlue = parseFloat(pBlue);
+		if (isNaN(tmpRed) || isNaN(tmpGreen) || isNaN(tmpBlue))
+		{
+			return '#000000';
+		}
+		if (tmpRed <= 1.0 && tmpGreen <= 1.0 && tmpBlue <= 1.0)
+		{
+			tmpRed = Math.round(tmpRed * 255);
+			tmpGreen = Math.round(tmpGreen * 255);
+			tmpBlue = Math.round(tmpBlue * 255);
+		}
+		// If they are less than or equal to 255, cast them to integers and round them.
+		else if (tmpRed <= 255 && tmpGreen <= 255 && tmpBlue <= 255)
+		{
+			tmpRed = Math.round(tmpRed);
+			tmpGreen = Math.round(tmpGreen);
+			tmpBlue = Math.round(tmpBlue);
+		}
+		// Otherwise get the maximum of the three and quantize them to 255
+		else
+		{
+			let tmpMax = Math.max(Math.max(tmpRed, tmpGreen), tmpBlue);
+			tmpRed = Math.round((tmpRed / tmpMax) * 255);
+			tmpGreen = Math.round((tmpGreen / tmpMax) * 255);
+			tmpBlue = Math.round((tmpBlue / tmpMax) * 255);
+		}
+		tmpRed = Math.abs(tmpRed);
+		tmpGreen = Math.abs(tmpGreen);
+		tmpBlue = Math.abs(tmpBlue);
+		let tmpRedHex = tmpRed.toString(16).padStart(2, '0');
+		let tmpGreenHex = tmpGreen.toString(16).padStart(2, '0');
+		let tmpBlueHex = tmpBlue.toString(16).padStart(2, '0');
+		return `#${tmpRedHex}${tmpGreenHex}${tmpBlueHex}`;
 	}
 
 	generateCSS()
