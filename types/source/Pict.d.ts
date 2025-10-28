@@ -55,6 +55,8 @@ declare class Pict extends Pict_base {
     /** @type {Record<string, any>} */
     AppData: Record<string, any>;
     /** @type {Record<string, any>} */
+    TempData: Record<string, any>;
+    /** @type {Record<string, any>} */
     Bundle: Record<string, any>;
     LogNoisiness: number;
     LogControlFlow: boolean;
