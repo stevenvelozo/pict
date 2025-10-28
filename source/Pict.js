@@ -132,6 +132,10 @@ class Pict extends libFable {
 		}
 
 		/** @type {Record<string, any>} */
+		// Added for transitory data like chart data caches
+		this.TempData = {};
+
+		/** @type {Record<string, any>} */
 		this.Bundle = {};
 		if ("DefaultBundle" in this.fable.settings)
 		{
@@ -633,6 +637,7 @@ class Pict extends libFable {
 		tmpRootDataObject.Fable = this;
 		tmpRootDataObject.Pict = this;
 		tmpRootDataObject.AppData = this.AppData;
+		tmpRootDataObject.TempData = this.TempData;
 		tmpRootDataObject.Bundle = this.Bundle;
 		tmpRootDataObject.Context = tmpContextArray;
 		tmpRootDataObject.Record = pRecord;
@@ -664,6 +669,7 @@ class Pict extends libFable {
 			Fable: this.fable,
 			Pict: this,
 			AppData: this.AppData,
+			TempData: this.TempData,
 			Bundle: this.Bundle,
 			Context: tmpContextArray,
 			Record: pRecord,

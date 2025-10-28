@@ -508,7 +508,12 @@ suite(
 										{
 											Title: 'The Great Gatsby'
 										}))
-										.to.equal('<p>The Great Gatsby</p>');	
+										.to.equal('<p>The Great Gatsby</p>');
+
+									testPict.TempData.ChartContents = `[##### ##### ] 50% complete`;
+
+									Expect(testPict.parseTemplate('<div>{~DWAF:TempData.ChartContents:No Chart Data Available~}</div>'))
+										.to.equal('<div>[##### ##### ] 50% complete</div>');
 
 									testPict.parseTemplateByHash('Book-Author-Title', { Title: undefined },
 										(pError, pValue) =>
