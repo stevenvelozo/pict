@@ -101,7 +101,7 @@ declare class PictMeadowEntityProvider {
      * @param {boolean} pLiteRecords - If true, only cache lite records (ID and Name fields).
      * @returns
      */
-    cacheConnectedEntityRecords(pRecordSet: any[], pIDListToCache: any[], pEntityListToCache: any[], pLiteRecords: boolean, fCallback: any): void;
+    cacheConnectedEntityRecords(pRecordSet: any[], pIDListToCache: any[], pEntityListToCache: any[], pLiteRecords: boolean, fCallback: any): any;
     /**
      * Cache an array of records, likely from a meadow endpoint
      *
