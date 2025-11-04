@@ -395,6 +395,85 @@ suite(
 						tmpAnticipate.wait(fDone);
 					}
 				);
+
+				test(
+					'Manually exercise the cache function',
+					function(fDone)
+					{
+						const testPict = new libPict(_MockSettings);
+						const getJSONSpy = Sinon.spy(testPict.EntityProvider.restClient, 'getJSON');
+
+						let tmpAnticipate = testPict.newAnticipate();
+						let tmpTestState = {};
+
+						let tmpRecordList = [
+							{ IDBook: 191, IDAuthor: 10, Reviewer: 'Alice', Rating: 4 },
+							{ IDBook: 192, IDAuthor: 11, Reviewer: 'Bob', Rating: 5 },
+							{ IDBook: 193, IDAuthor: 12, Reviewer: 'Charlie', Rating: 3 },
+							{ IDBook: 194, IDAuthor: 13, Reviewer: 'Diana', Rating: 4 },
+							{ IDBook: 195, IDAuthor: 14, Reviewer: 'Eve', Rating: 5 },
+							{ IDBook: 196, IDAuthor: 15, Reviewer: 'Frank', Rating: 2 },
+							{ IDBook: 197, IDAuthor: 16, Reviewer: 'Grace', Rating: 4 },
+							{ IDBook: 198, IDAuthor: 17, Reviewer: 'Heidi', Rating: 3 },
+							{ IDBook: 199, IDAuthor: 18, Reviewer: 'Ivan', Rating: 1 },
+							{ IDBook: 196, IDAuthor: 15, Reviewer: 'Frank', Rating: 2 },
+							{ IDBook: 197, IDAuthor: 16, Reviewer: 'Grace', Rating: 4 },
+							{ IDBook: 198, IDAuthor: 17, Reviewer: 'Heidi', Rating: 3 },
+							{ IDBook: 199, IDAuthor: 18, Reviewer: 'Ivan', Rating: 1 }
+						];
+
+						// First, get 10 books which should automatically prime both the list cache and single record caches.
+						tmpAnticipate.anticipate(
+							(fStageComplete) =>
+							{
+								testPict.EntityProvider.cacheConnectedEntityRecords(tmpRecordList, ['IDBook', 'IDAuthor'], [], false, fStageComplete)
+							});
+						
+						// Now, get a single book within the ID range that should be in the cache already.
+						tmpAnticipate.anticipate(
+							(fStageComplete) =>
+							{
+								testPict.EntityProvider.getEntity('Book', 195,
+									(pError, pRecord) =>
+									{
+										Expect(pRecord).to.be.an('object');
+										Expect(pRecord.IDBook).to.equal(195);
+										Sinon.assert.callCount(getJSONSpy, 4);
+										return fStageComplete(pError);
+									});
+							});
+
+						// Now, get a single book outside the ID range that should not be in the cache already.
+						tmpAnticipate.anticipate(
+							(fStageComplete) =>
+							{
+								testPict.EntityProvider.getEntity('Book', 88,
+									(pError, pRecord) =>
+									{
+										Expect(pRecord).to.be.an('object');
+										Expect(pRecord.IDBook).to.equal(88);
+										Sinon.assert.callCount(getJSONSpy, 5);
+										return fStageComplete(pError);
+									});
+							});
+
+						// Now, get a single book within the ID range that should be in the cache already again.
+						tmpAnticipate.anticipate(
+							(fStageComplete) =>
+							{
+								testPict.EntityProvider.getEntity('Author', 16,
+									(pError, pRecord) =>
+									{
+										Expect(pRecord).to.be.an('object');
+										Sinon.assert.callCount(getJSONSpy, 5);
+										return fStageComplete(pError);
+									});
+							});
+
+						// Wait for everything asynchronous to be completed
+						tmpAnticipate.wait(fDone);
+					}
+				);
 			}
 		);
 	}

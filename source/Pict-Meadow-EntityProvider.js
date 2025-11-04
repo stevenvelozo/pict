@@ -812,6 +812,99 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			}.bind(this));
 	}
 
+	/**
+	 * For a given list of objects, cache connected entity records.
+	 * @param {Array} pRecordSet - An array of objects to check cache on joined records for, and, get/cache the records as needed.
+	 * @param {Array} pIDListToCache - An array of property strings that are the ID fields to cache connected records for.
+	 * @param {Array} pEntityListToCache - An array of entity names, which can override the speculative entity name derived from the ID field name.
+	 * @param {boolean} pLiteRecords - If true, only cache lite records (ID and Name fields).
+	 * @returns 
+	 */
+	cacheConnectedEntityRecords(pRecordSet, pIDListToCache, pEntityListToCache, pLiteRecords, fCallback)
+	{
+		if (!Array.isArray(pRecordSet) || pRecordSet.length < 1)
+		{
+			return fCallback();
+		}
+
+		if (!Array.isArray(pIDListToCache) || pIDListToCache.length < 1)
+		{
+			return fCallback();
+		};
+
+		const tmpAnticipate = this.fable.newAnticipate();
+
+		const tmpEntityListToCache = pEntityListToCache || [];
+
+		for (let i = 0; i < pIDListToCache.length; i++)
+		{
+			const tmpEntityIDSourceField = pIDListToCache[i];
+			// If an entity name override is provided, use it, otherwise speculate the joined entity name ID field from the source ID field name.
+			const tmpEntityName = tmpEntityListToCache[i] || tmpEntityIDSourceField.replace(/^ID/, '');
+			const tmpIDField = `ID${tmpEntityName}`;
+
+			// Make a set of IDs to fetch for this entity.
+			const tmpEntityIDsToFetch = new Set();
+
+			// Initialize the cache
+			this.initializeCache(tmpEntityName);
+
+			// First pass: gather IDs to fetch
+			for (const tmpRecord of pRecordSet)
+			{
+				const tmpIDValue = tmpRecord[tmpEntityIDSourceField];
+				if (tmpIDValue)
+				{
+					const tmpCachedRecord = this.recordCache[tmpEntityName].read(tmpIDValue);
+					if (!tmpCachedRecord)
+					{
+						tmpEntityIDsToFetch.add(tmpIDValue);
+					}
+				}
+			}
+
+			// Now if there are records to fetch, do the request.
+			if (tmpEntityIDsToFetch.size > 0)
+			{
+				tmpAnticipate.anticipate(
+					function (fRequestComplete)
+					{
+						const tmpIDRecordsArray = Array.from(tmpEntityIDsToFetch);
+						const tmpMeadowFilterExpression = `FBL~ID${tmpEntityName}~INN~${tmpIDRecordsArray.join(',')}`;
+
+						this.getEntitySet(tmpEntityName, tmpMeadowFilterExpression,
+							(pError, pEntitySet) =>
+							{
+								if (pError)
+								{
+									this.log.error(`cacheConnectedEntityRecords error getting connected entity records for [${tmpEntityName}] with IDs [${tmpIDRecordsArray.join(',')}]: ${pError}`, { Stack: pError.stack });
+									return fRequestComplete(pError);
+								}
+								// The method automagically cached them for us!  Just move on to the next...
+								return fRequestComplete();
+							});
+					}.bind(this));
+			}
+		}
+
+		tmpAnticipate.wait(
+			(pError) =>
+			{
+				if (pError)
+				{
+					this.log.error(`cacheConnectedEntityRecords error gathering connected entity records: ${pError}`, { Stack: pError.stack });
+					return fCallback(pError);
+				}
+				return fCallback();
+			});
+	}
+
+	/**
+	 * Cache an array of records, likely from a meadow endpoint
+	 * 
+	 * @param {string} pEntity - The entity to cache individual records for
+	 * @param {*} pRecordSet - An array of records to cache
+	 */
 	cacheIndividualEntityRecords(pEntity, pRecordSet)
 	{
 		this.initializeCache(pEntity);
