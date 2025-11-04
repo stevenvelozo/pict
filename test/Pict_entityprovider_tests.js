@@ -323,6 +323,78 @@ suite(
 						});
 					}
 				);
+
+
+				test(
+					'Get a book list then expect single record cache to be populated',
+					function(fDone)
+					{
+						const testPict = new libPict(_MockSettings);
+						const getJSONSpy = Sinon.spy(testPict.EntityProvider.restClient, 'getJSON');
+
+						let tmpAnticipate = testPict.newAnticipate();
+						let tmpTestState = {};
+
+						// First, get 10 books which should automatically prime both the list cache and single record caches.
+						tmpAnticipate.anticipate(
+							(fStageComplete) =>
+							{
+								testPict.EntityProvider.getEntitySet('Book', `FBV~IDBook~GT~190~FBV~IDBook~LT~200`,
+									(pError, pRecords) =>
+									{
+										Expect(pRecords).to.be.an('array');
+										Expect(pRecords.length).to.equal(9);
+										Expect(pRecords[8].IDBook).to.equal(199);
+										return fStageComplete(pError);
+									});
+							});
+						
+						// Now, get a single book within the ID range that should be in the cache already.
+						tmpAnticipate.anticipate(
+							(fStageComplete) =>
+							{
+								testPict.EntityProvider.getEntity('Book', 195,
+									(pError, pRecord) =>
+									{
+										Expect(pRecord).to.be.an('object');
+										Expect(pRecord.IDBook).to.equal(195);
+										Sinon.assert.calledTwice(getJSONSpy);
+										return fStageComplete(pError);
+									});
+							});
+
+						// Now, get a single book outside the ID range that should not be in the cache already.
+						tmpAnticipate.anticipate(
+							(fStageComplete) =>
+							{
+								testPict.EntityProvider.getEntity('Book', 88,
+									(pError, pRecord) =>
+									{
+										Expect(pRecord).to.be.an('object');
+										Expect(pRecord.IDBook).to.equal(88);
+										Sinon.assert.calledThrice(getJSONSpy);
+										return fStageComplete(pError);
+									});
+							});
+
+						// Now, get a single book within the ID range that should be in the cache already again.
+						tmpAnticipate.anticipate(
+							(fStageComplete) =>
+							{
+								testPict.EntityProvider.getEntity('Book', 195,
+									(pError, pRecord) =>
+									{
+										Expect(pRecord).to.be.an('object');
+										Expect(pRecord.IDBook).to.equal(195);
+										Sinon.assert.calledThrice(getJSONSpy);
+										return fStageComplete(pError);
+									});
+							});
+
+						// Wait for everything asynchronous to be completed
+						tmpAnticipate.wait(fDone);
+					}
+				);
 			}
 		);
 	}

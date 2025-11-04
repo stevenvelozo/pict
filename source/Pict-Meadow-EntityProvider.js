@@ -812,6 +812,32 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			}.bind(this));
 	}
 
+	cacheIndividualEntityRecords(pEntity, pRecordSet)
+	{
+		this.initializeCache(pEntity);
+		
+		const tmpEntitySet = pRecordSet;
+
+		if ((typeof(tmpEntitySet) == 'object') && Array.isArray(tmpEntitySet) && (tmpEntitySet.length > 0))
+		{
+			// Cache each record individually.
+			// This code is here because the downstream getEntitySet function uses this to load records, so both are covered here.
+			let tmpSpeculativeRecordIDColumn = `ID${pEntity}`;
+			if (tmpSpeculativeRecordIDColumn in tmpEntitySet[0])
+			{
+				for (let i = 0; i < tmpEntitySet.length; i++)
+				{
+					const tmpRecord = tmpEntitySet[i];
+					const tmpIDRecord = tmpRecord[tmpSpeculativeRecordIDColumn];
+					if (tmpIDRecord)
+					{
+						this.recordCache[pEntity].put(tmpRecord, tmpIDRecord);
+					}
+				}
+			}
+		}
+	}
+
 	getEntitySetPage(pEntity, pMeadowFilterExpression, pRecordStartCursor, pRecordCount, fCallback)
 	{
 		const tmpFilterStanza = pMeadowFilterExpression ? `/FilteredTo/${pMeadowFilterExpression}` : '';
@@ -825,6 +851,9 @@ class PictMeadowEntityProvider extends libFableServiceBase
 					this.log.error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] [${pRecordStartCursor}/${pRecordCount}] from url [${tmpURL}]: ${pDownloadResponse.statusCode} ${pDownloadResponse.statusMessage}`);
 					return fCallback(new Error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] [${pRecordStartCursor}/${pRecordCount}] from url [${tmpURL}]: ${pDownloadResponse.statusCode} ${JSON.stringify(pDownloadBody || {})}`));
 				}
+
+				this.cacheIndividualEntityRecords(pEntity, pDownloadBody);
+
 				return fCallback(pDownloadError, pDownloadBody);
 			}.bind(this));
 	}
@@ -921,6 +950,9 @@ class PictMeadowEntityProvider extends libFableServiceBase
 								{
 									this.recordSetCache[pEntity].put(tmpEntitySet, pMeadowFilterExpression);
 								}
+
+								this.cacheIndividualEntityRecords(pEntity, tmpEntitySet);
+
 								return fCallback(pFullDownloadError, tmpEntitySet);
 							})
 					});
