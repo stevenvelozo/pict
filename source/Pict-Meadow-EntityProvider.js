@@ -44,6 +44,13 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		/** @type {Record<string, import('cachetrax')>} */
 		this.recordSetCache = {};
 
+		this.entityColumnTranslations = (
+			{
+				CreatingIDUser: 'User',
+				UpdatingIDUser: 'User',
+				DeletingIDUser: 'User'
+			});
+
 		this.prepareRequestOptions = (pOptions) => { return pOptions; };
 	}
 
@@ -975,6 +982,95 @@ class PictMeadowEntityProvider extends libFableServiceBase
 					tmpRecordCount = pBody.Count;
 				}
 				return fCallback(pError, tmpRecordCount);
+			}.bind(this));
+	}
+
+	getEntitySetWithAutoCaching(pEntity, pMeadowFilterExpression, fCallback)
+	{
+		let tmpAnticipate = this.fable.newAnticipate();
+
+		let tmpRequestState = {Entity: pEntity, MeadowFilterExpression: pMeadowFilterExpression, EntitySet: null};
+
+		tmpAnticipate.anticipate(
+			function(fNext)
+			{
+				this.getEntitySet(pEntity, pMeadowFilterExpression,
+					(pError, pEntitySet) =>
+					{
+						if (pError)
+						{
+							this.log.error(`getEntitySetWithAutoCaching error getting entity set for [${pEntity}] filtered to [${pMeadowFilterExpression}]: ${pError}`, { Stack: pError.stack });
+							return fNext(pError);
+						}
+						tmpRequestState.EntitySet = pEntitySet;
+						return fNext();
+					});
+			}.bind(this));
+		
+		tmpAnticipate.anticipate(
+			function(fNext)
+			{
+				// Now see if we can infer some entities from this set to cache individual records for.
+				if ((typeof(tmpRequestState.EntitySet) == 'object') && Array.isArray(tmpRequestState.EntitySet) && (tmpRequestState.EntitySet.length > 0))
+				{
+					// Look at each column and if it starts with `ID` and is longer than `ID` then speculate it is an entity join.
+					const tmpFirstRecord = tmpRequestState.EntitySet[0];
+					const tmpIDColumnsToCache = [];
+					const tmpEntityNamesToCache = [];
+					for (const tmpColumnName of Object.keys(tmpFirstRecord))
+					{
+						if ((tmpColumnName.startsWith('ID')) && (tmpColumnName.length > 2))
+						{
+							// Speculate this is an entity join.
+							tmpIDColumnsToCache.push(tmpColumnName);
+							const tmpSpeculatedEntityName = tmpColumnName.substring(2);
+							tmpEntityNamesToCache.push(tmpSpeculatedEntityName);
+						}
+						// Mutate any `CreatingIDUser`, `UpdatingIDUser`, `DeletingIDUser` to the proper entiity
+						else if (tmpColumnName in this.entityColumnTranslations)
+						{
+							tmpIDColumnsToCache.push(tmpColumnName);
+							tmpEntityNamesToCache.push(this.entityColumnTranslations[tmpColumnName]);
+						}
+					}
+
+					if (tmpIDColumnsToCache.length > 0)
+					{
+						return this.cacheConnectedEntityRecords(
+							tmpRequestState.EntitySet,
+							tmpIDColumnsToCache,
+							tmpEntityNamesToCache,
+							false,
+							(pError) =>
+							{
+								if (pError)
+								{
+									this.log.error(`getEntitySetWithAutoCaching error caching connected entity records for [${pEntity}] filtered to [${pMeadowFilterExpression}]: ${pError}`, { Stack: pError.stack });
+									return fNext(pError);
+								}
+								return fNext();
+							});
+					}
+					else
+					{
+						return fNext();
+					}
+				}
+				else
+				{
+					return fNext();
+				}
+			}.bind(this));
+		
+		tmpAnticipate.wait(
+			function (pError)
+			{
+				if (pError)
+				{
+					this.log.error(`getEntitySetWithAutoCaching error gathering entity set for [${pEntity}] filtered to [${pMeadowFilterExpression}]: ${pError}`, { Stack: pError.stack });
+					return fCallback(pError);
+				}
+				return fCallback(null, tmpRequestState.EntitySet);
 			}.bind(this));
 	}
 

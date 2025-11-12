@@ -474,6 +474,66 @@ suite(
 						tmpAnticipate.wait(fDone);
 					}
 				);
+
+
+				test(
+					'Exercise the automagic cache function',
+					function(fDone)
+					{
+						const testPict = new libPict(_MockSettings);
+						const getJSONSpy = Sinon.spy(testPict.EntityProvider.restClient, 'getJSON');
+
+						// The test database does not have a users table yet.
+						delete testPict.EntityProvider.entityColumnTranslations.CreatingIDUser;
+						delete testPict.EntityProvider.entityColumnTranslations.UpdatingIDUser;
+						delete testPict.EntityProvider.entityColumnTranslations.DeletingIDUser;
+
+						let tmpAnticipate = testPict.newAnticipate();
+						let tmpTestState = {};
+
+						// First, get 10 books which should automatically prime both the list cache and single record caches.
+						tmpAnticipate.anticipate(
+							(fStageComplete) =>
+							{
+								testPict.EntityProvider.getEntitySetWithAutoCaching('BookAuthorJoin', `FBV~IDAuthor~GT~40~FBV~IDAuthor~LT~75`, fStageComplete);
+							});
+						
+						// Now, get a single author within the ID range that should be in the cache already.
+						tmpAnticipate.anticipate(
+							(fStageComplete) =>
+							{
+								Sinon.assert.callCount(getJSONSpy, 10);
+								testPict.EntityProvider.getEntity('Author', 42,
+									(pError, pRecord) =>
+									{
+										Expect(pRecord).to.be.an('object');
+										Expect(pRecord.IDAuthor).to.equal(42);
+										Sinon.assert.callCount(getJSONSpy, 10);
+										return fStageComplete(pError);
+									});
+							});
+
+						
+						// Now, get a single author outside the ID range of what should be in the cache already.
+						tmpAnticipate.anticipate(
+							(fStageComplete) =>
+							{
+								Sinon.assert.callCount(getJSONSpy, 10);
+								testPict.EntityProvider.getEntity('Author', 188,
+									(pError, pRecord) =>
+									{
+										Expect(pRecord).to.be.an('object');
+										Expect(pRecord.IDAuthor).to.equal(188);
+										// Expect a network request to happen
+										Sinon.assert.callCount(getJSONSpy, 11);
+										return fStageComplete(pError);
+									});
+							});
+
+						// Wait for everything asynchronous to be completed
+						tmpAnticipate.wait(fDone);
+					}
+				);
 			}
 		);
 	}
