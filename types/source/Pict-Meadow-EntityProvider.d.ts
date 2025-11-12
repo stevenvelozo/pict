@@ -17,6 +17,11 @@ declare class PictMeadowEntityProvider {
     recordCache: Record<string, any>;
     /** @type {Record<string, import('cachetrax')>} */
     recordSetCache: Record<string, any>;
+    entityColumnTranslations: {
+        CreatingIDUser: string;
+        UpdatingIDUser: string;
+        DeletingIDUser: string;
+    };
     prepareRequestOptions: (pOptions: any) => any;
     initializeCache(pEntity: any): void;
     gatherEntitySetCount(pEntityInformation: any, pContext: any, fCallback: any): any;
@@ -111,6 +116,7 @@ declare class PictMeadowEntityProvider {
     cacheIndividualEntityRecords(pEntity: string, pRecordSet: any): void;
     getEntitySetPage(pEntity: any, pMeadowFilterExpression: any, pRecordStartCursor: any, pRecordCount: any, fCallback: any): any;
     getEntitySetRecordCount(pEntity: any, pMeadowFilterExpression: any, fCallback: any): any;
+    getEntitySetWithAutoCaching(pEntity: any, pMeadowFilterExpression: any, fCallback: any): void;
     getEntitySet(pEntity: any, pMeadowFilterExpression: any, fCallback: any): void;
 }
 //# sourceMappingURL=Pict-Meadow-EntityProvider.d.ts.map
