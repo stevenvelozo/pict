@@ -118,5 +118,56 @@ declare class PictMeadowEntityProvider {
     getEntitySetRecordCount(pEntity: any, pMeadowFilterExpression: any, fCallback: any): any;
     getEntitySetWithAutoCaching(pEntity: any, pMeadowFilterExpression: any, fCallback: any): void;
     getEntitySet(pEntity: any, pMeadowFilterExpression: any, fCallback: any): void;
+    formatUrl(pEntityType: any): string;
+    /**
+     * Create a new entity record.
+     *
+     * @param {String} pEntityType - The entity type to create.
+     * @param {Object<String, any>} pRecord - The record to create.
+     * @param {(pError?: Error, pResult?: any) => void} fCallback - The callback to call when the request is complete.
+     *
+     * @return {void}
+     */
+    createEntity(pEntityType: string, pRecord: any, fCallback: (pError?: Error, pResult?: any) => void): void;
+    /**
+     * Update an entity record.
+     *
+     * @param {String} pEntityType - The entity type to create.
+     * @param {Object<String, any>} pRecord - The record to create.
+     * @param {(pError?: Error, pResult?: any) => void} fCallback - The callback to call when the request is complete.
+     *
+     * @return {void}
+     */
+    updateEntity(pEntityType: string, pRecord: any, fCallback: (pError?: Error, pResult?: any) => void): void;
+    /**
+     * Upsert an entity record.
+     *
+     * @param {String} pEntityType - The entity type to be upserted.
+     * @param {Object<String, any>} pRecord - The record to upsert.
+     * @param {(pError?: Error, pResult?: any) => void} fCallback - The callback to call when the request is complete.
+     *
+     * @return {void}
+     */
+    upsertEntity(pEntityType: string, pRecord: any, fCallback: (pError?: Error, pResult?: any) => void): void;
+    /**
+     * Upsert a array of entity records.
+     *
+     * @param {String} pEntityType - The entity type to be upserted.
+     * @param {Array<Object<String, any>>} pRecords - The records to upsert.
+     * @param {(pError?: Error, pResults?: Array<any>) => void} fCallback - The callback to call when the request is complete.
+     *
+     * @return {void}
+     */
+    upsertEntities(pEntityType: string, pRecords: Array<any>, fCallback: (pError?: Error, pResults?: Array<any>) => void): void;
+    /**
+     * Delete an entity record.
+     *
+     * @param {String} pEntityType - The entity type to create.
+     * @param {String | Number} pIDRecord - The ID of the record to delete.
+     * @param {Function} fCallback - The callback to call when the request is complete.
+     *
+     * @return {void}
+     */
+    deleteEntity(pEntityType: string, pIDRecord: string | number, fCallback: Function): void;
 }
 //# sourceMappingURL=Pict-Meadow-EntityProvider.d.ts.map
