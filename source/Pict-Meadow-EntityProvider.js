@@ -1147,6 +1147,173 @@ class PictMeadowEntityProvider extends libFableServiceBase
 					});
 			}.bind(this));
 	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	// Entity Creation and Update Methods
+	formatUrl(pEntityType)
+	{
+		return `${this.options.urlPrefix}${pEntityType}`;
+	}
+
+
+	/**
+	 * Create a new entity record.
+	 *
+	 * @param {String} pEntityType - The entity type to create.
+	 * @param {Object<String, any>} pRecord - The record to create.
+	 * @param {(pError?: Error, pResult?: any) => void} fCallback - The callback to call when the request is complete.
+	 *
+	 * @return {void}
+	 */
+	createEntity(pEntityType, pRecord, fCallback)
+	{
+		let tmpRequestOptions = (
+			{
+				url: this.formatUrl(pEntityType),
+				body: pRecord
+			});
+
+		this.restClient.postJSON(tmpRequestOptions,
+			(pError, pResponse, pBody) =>
+			{
+				if (pError)
+				{
+					this.log.error(`Error creating ${pEntityType} record: ${pError.message}`);
+				}
+				else
+				{
+					this.log.info(`Created ${pEntityType} record ID ${pBody[`ID${pEntityType}`]}`);
+				}
+				return fCallback(pError, pBody);
+			});
+	}
+
+	/**
+	 * Update an entity record.
+	 *
+	 * @param {String} pEntityType - The entity type to create.
+	 * @param {Object<String, any>} pRecord - The record to create.
+	 * @param {(pError?: Error, pResult?: any) => void} fCallback - The callback to call when the request is complete.
+	 *
+	 * @return {void}
+	 */
+	updateEntity(pEntityType, pRecord, fCallback)
+	{
+		let tmpRequestOptions = (
+			{
+				url: this.formatUrl(pEntityType),
+				body: pRecord
+			});
+
+		this.restClient.putJSON(tmpRequestOptions,
+			(pError, pResponse, pBody) =>
+			{
+				if (pError)
+				{
+					this.log.error(`Error updating ${pEntityType} record: ${pError.message}`);
+				}
+				else
+				{
+					this.log.info(`Updated ${pEntityType} record ID ${pBody[`ID${pEntityType}`]}`);
+				}
+				return fCallback(pError, pBody);
+			});
+	}
+
+	/**
+	 * Upsert an entity record.
+	 *
+	 * @param {String} pEntityType - The entity type to be upserted.
+	 * @param {Object<String, any>} pRecord - The record to upsert.
+	 * @param {(pError?: Error, pResult?: any) => void} fCallback - The callback to call when the request is complete.
+	 *
+	 * @return {void}
+	 */
+	upsertEntity(pEntityType, pRecord, fCallback)
+	{
+		let tmpRequestOptions = (
+			{
+				url: this.formatUrl(`${pEntityType}/Upsert`),
+				body: pRecord
+			});
+
+		this.restClient.putJSON(tmpRequestOptions,
+			(pError, pResponse, pBody) =>
+			{
+				if (pError)
+				{
+					this.log.error(`Error upserting ${pEntityType} record: ${pError.message}`);
+				}
+				else
+				{
+					this.log.info(`Upserted ${pEntityType} record ID ${pBody[`ID${pEntityType}`]}`);
+				}
+				return fCallback(pError, pBody);
+			});
+	}
+
+	/**
+	 * Upsert a array of entity records.
+	 *
+	 * @param {String} pEntityType - The entity type to be upserted.
+	 * @param {Array<Object<String, any>>} pRecords - The records to upsert.
+	 * @param {(pError?: Error, pResults?: Array<any>) => void} fCallback - The callback to call when the request is complete.
+	 *
+	 * @return {void}
+	 */
+	upsertEntities(pEntityType, pRecords, fCallback)
+	{
+		let tmpRequestOptions = (
+			{
+				url: this.formatUrl(`${pEntityType}/Upserts`),
+				body: pRecords
+			});
+
+		this.restClient.putJSON(tmpRequestOptions,
+			(pError, pResponse, pBody) =>
+			{
+				if (pError)
+				{
+					this.log.error(`Error upserting ${pEntityType} records: ${pError.message}`);
+				}
+				else
+				{
+					this.log.info(`Upserted multiple ${pEntityType} records (count: ${pBody.length})`);
+				}
+				return fCallback(pError, pBody);
+			});
+	}
+
+	/**
+	 * Delete an entity record.
+	 *
+	 * @param {String} pEntityType - The entity type to create.
+	 * @param {String | Number} pIDRecord - The ID of the record to delete.
+	 * @param {Function} fCallback - The callback to call when the request is complete.
+	 *
+	 * @return {void}
+	 */
+	deleteEntity(pEntityType, pIDRecord, fCallback)
+	{
+		let tmpRequestOptions = (
+			{
+				url: this.formatUrl(`${pEntityType}/${pIDRecord}`),
+			});
+
+		this.restClient.delJSON(tmpRequestOptions,
+			(pError, pResponse, pBody) =>
+			{
+				if (pError)
+				{
+					this.log.error(`Error deleting ${pEntityType} record ID ${pIDRecord}: ${pError.message}`);
+				}
+				else
+				{
+					this.log.info(`Deleted ${pEntityType} record ID ${pIDRecord}`);
+				}
+				return fCallback(pError, pBody);
+			});
+	}
 }
 
 module.exports = PictMeadowEntityProvider;
