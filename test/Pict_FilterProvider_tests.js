@@ -895,6 +895,8 @@ suite
 						"JoinTable": "BookAuthorJoin",
 						"JoinTableExternalConnectionColumn": "IDAuthor",
 						"JoinTableCoreConnectionColumn": "IDBook",
+						"PolyJoinRemoteColumn": "",
+						"PolyJoinRemoteType": "",
 						"CoreConnectionColumn": "IDBook",
 						"ExternalFilterByTableConnectionColumn": "IDAuthor",
 						"Values": [ 1, 2, 3 ]
