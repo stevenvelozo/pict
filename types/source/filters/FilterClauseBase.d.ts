@@ -54,6 +54,8 @@ export = FilterClauseBase;
  *    JoinTableCoreConnectionColumn: string,
  *    ExternalFilterByTable: string,
  *    ExternalFilterByTableConnectionColumn: string,
+ * 	  PolyJoinRemoteType: string,
+ *    PolyJoinRemoteColumn: string
  * } | {
  *    Type: 'ExternalJoinRange' | 'ExternalJoinStringRange' | 'ExternalJoinNumericRange' | 'ExternalJoinDateRange',
  *    Values: { Start?: string | number, End?: string | number },
@@ -67,6 +69,8 @@ export = FilterClauseBase;
  *    JoinTableCoreConnectionColumn: string,
  *    ExternalFilterByTable: string,
  *    ExternalFilterByTableConnectionColumn: string,
+ * 	  PolyJoinRemoteType: string,
+ *    PolyJoinRemoteColumn: string
  * } | {
  *    Type: 'ExternalJoinSelectedValue' | 'ExternalJoinSelectedValueList',
  *    Values: { Start?: string | number, End?: string | number },
@@ -81,6 +85,8 @@ export = FilterClauseBase;
  *    ExternalFilterByTable: string,
  *    ExternalFilterTableLookupColumn?: string,
  *    ExternalFilterByTableConnectionColumn: string,
+ * 	  PolyJoinRemoteType: string,
+ *    PolyJoinRemoteColumn: string
  * }} FilterClauseConfig
  */
 declare class FilterClauseBase {
@@ -174,6 +180,8 @@ type FilterClauseConfig = {
     JoinTableCoreConnectionColumn: string;
     ExternalFilterByTable: string;
     ExternalFilterByTableConnectionColumn: string;
+    PolyJoinRemoteType: string;
+    PolyJoinRemoteColumn: string;
 } | {
     Type: "ExternalJoinRange" | "ExternalJoinStringRange" | "ExternalJoinNumericRange" | "ExternalJoinDateRange";
     Values: {
@@ -190,6 +198,8 @@ type FilterClauseConfig = {
     JoinTableCoreConnectionColumn: string;
     ExternalFilterByTable: string;
     ExternalFilterByTableConnectionColumn: string;
+    PolyJoinRemoteType: string;
+    PolyJoinRemoteColumn: string;
 } | {
     Type: "ExternalJoinSelectedValue" | "ExternalJoinSelectedValueList";
     Values: {
@@ -207,5 +217,7 @@ type FilterClauseConfig = {
     ExternalFilterByTable: string;
     ExternalFilterTableLookupColumn?: string;
     ExternalFilterByTableConnectionColumn: string;
+    PolyJoinRemoteType: string;
+    PolyJoinRemoteColumn: string;
 };
 //# sourceMappingURL=FilterClauseBase.d.ts.map

@@ -54,6 +54,8 @@
  *    JoinTableCoreConnectionColumn: string,
  *    ExternalFilterByTable: string,
  *    ExternalFilterByTableConnectionColumn: string,
+ * 	  PolyJoinRemoteType: string,
+ *    PolyJoinRemoteColumn: string
  * } | {
  *    Type: 'ExternalJoinRange' | 'ExternalJoinStringRange' | 'ExternalJoinNumericRange' | 'ExternalJoinDateRange',
  *    Values: { Start?: string | number, End?: string | number },
@@ -67,6 +69,8 @@
  *    JoinTableCoreConnectionColumn: string,
  *    ExternalFilterByTable: string,
  *    ExternalFilterByTableConnectionColumn: string,
+ * 	  PolyJoinRemoteType: string,
+ *    PolyJoinRemoteColumn: string
  * } | {
  *    Type: 'ExternalJoinSelectedValue' | 'ExternalJoinSelectedValueList',
  *    Values: { Start?: string | number, End?: string | number },
@@ -81,6 +85,8 @@
  *    ExternalFilterByTable: string,
  *    ExternalFilterTableLookupColumn?: string,
  *    ExternalFilterByTableConnectionColumn: string,
+ * 	  PolyJoinRemoteType: string,
+ *    PolyJoinRemoteColumn: string
  * }} FilterClauseConfig
  */
 

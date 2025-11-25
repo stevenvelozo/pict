@@ -27,6 +27,10 @@ declare class FilterClauseExternalJoin extends libFilterClauseBase {
     externalFilterTableLookupColumn: string;
     /** @type {string} */
     externalFilterByTableConnectionColumn: string;
+    /** @type {string} */
+    polyJoinRemoteType: string;
+    /** @type {string} */
+    polyJoinRemoteColumn: string;
 }
 import libFilterClauseBase = require("./FilterClauseBase.js");
 //# sourceMappingURL=FilterClauseExternalJoin.d.ts.map

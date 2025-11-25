@@ -144,8 +144,21 @@ class FilterMeadowStanzaTokenGenerator
 							Instruction: 'FBL',
 							Field: tmpFilterConfig.JoinTableExternalConnectionColumn,
 							Operator: 'INN',
-							ValueTemplate: `{~PJU:,^${tmpFilterConfig.JoinTableExternalConnectionColumn}^Record.State[Step-1]~}`,
+							ValueTemplate: `{~PJU:,^${tmpFilterConfig.ExternalFilterByTableConnectionColumn || tmpFilterConfig.JoinTableExternalConnectionColumn}^Record.State[Step-1]~}`,
 						});
+						if (tmpFilterConfig.PolyJoinRemoteType)
+						{
+							tmpFilterResult.Filters.push(
+							{
+								Index: 0,
+								Fulcrum: true,
+								Entity: tmpFilterConfig.JoinTable,
+								Instruction: 'FBV',
+								Field: tmpFilterConfig.PolyJoinRemoteColumn || 'RemoteType',
+								Operator: 'EQ',
+								ValueTemplate: tmpFilterConfig.PolyJoinRemoteType,
+							});
+						}
 						if (!tmpFilterConfig.CoreConnectionColumn)
 						{
 							this.log.error(`${tmpFilterConfig.Type} filter missing CoreConnectionColumn, cannot filter core table [${pFilterState.Entity}].`);
@@ -235,8 +248,21 @@ class FilterMeadowStanzaTokenGenerator
 							Instruction: 'FBL',
 							Field: tmpFilterConfig.JoinTableExternalConnectionColumn,
 							Operator: 'INN',
-							ValueTemplate: `{~PJU:,^${tmpFilterConfig.JoinTableExternalConnectionColumn}^Record.State[Step-1]~}`,
+							ValueTemplate: `{~PJU:,^${tmpFilterConfig.ExternalFilterByTableConnectionColumn || tmpFilterConfig.JoinTableExternalConnectionColumn}^Record.State[Step-1]~}`,
 						});
+						if (tmpFilterConfig.PolyJoinRemoteType)
+						{
+							tmpFilterResult.Filters.push(
+							{
+								Index: 0,
+								Fulcrum: true,
+								Entity: tmpFilterConfig.JoinTable,
+								Instruction: 'FBV',
+								Field: tmpFilterConfig.PolyJoinRemoteColumn || 'RemoteType',
+								Operator: 'EQ',
+								ValueTemplate: tmpFilterConfig.PolyJoinRemoteType,
+							});
+						}
 						if (!tmpFilterConfig.CoreConnectionColumn)
 						{
 							this.log.error(`${tmpFilterConfig.Type} filter missing CoreConnectionColumn, cannot filter core table [${pFilterState.Entity}].`);

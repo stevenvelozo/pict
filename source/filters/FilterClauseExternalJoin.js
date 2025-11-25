@@ -41,6 +41,10 @@ class FilterClauseExternalJoin extends libFilterClauseBase
 		this.externalFilterTableLookupColumn = '';
 		/** @type {string} */
 		this.externalFilterByTableConnectionColumn = '';
+		/** @type {string} */
+		this.polyJoinRemoteType = '';
+		/** @type {string} */
+		this.polyJoinRemoteColumn = '';
 	}
 
 	/**
@@ -66,6 +70,8 @@ class FilterClauseExternalJoin extends libFilterClauseBase
 					JoinTableCoreConnectionColumn: this.joinTableCoreConnectionColumn,
 					ExternalFilterByTable: this.externalFilterByTable,
 					ExternalFilterByTableConnectionColumn: this.externalFilterByTableConnectionColumn,
+					PolyJoinRemoteType: this.polyJoinRemoteType,
+					PolyJoinRemoteColumn: this.polyJoinRemoteColumn
 				};
 			case 'ExternalJoinRange':
 			case 'ExternalJoinStringRange':
@@ -84,6 +90,8 @@ class FilterClauseExternalJoin extends libFilterClauseBase
 					JoinTableCoreConnectionColumn: this.joinTableCoreConnectionColumn,
 					ExternalFilterByTable: this.externalFilterByTable,
 					ExternalFilterByTableConnectionColumn: this.externalFilterByTableConnectionColumn,
+					PolyJoinRemoteType: this.polyJoinRemoteType,
+					PolyJoinRemoteColumn: this.polyJoinRemoteColumn
 				};
 			case 'ExternalJoinSelectedValue':
 			case 'ExternalJoinSelectedValueList':
@@ -101,6 +109,8 @@ class FilterClauseExternalJoin extends libFilterClauseBase
 					ExternalFilterByTable: this.externalFilterByTable,
 					ExternalFilterTableLookupColumn: this.externalFilterTableLookupColumn,
 					ExternalFilterByTableConnectionColumn: this.externalFilterByTableConnectionColumn,
+					PolyJoinRemoteType: this.polyJoinRemoteType,
+					PolyJoinRemoteColumn: this.polyJoinRemoteColumn
 				};
 			default:
 				throw new Error(`Unsupported filter type: ${this.type}`);
