@@ -758,7 +758,7 @@ generateUUIDv4(){let tmpBuffer=new Array(16);var tmpRandomBytes=this.randomByteG
 tmpRandomBytes[6]=tmpRandomBytes[6]&0x0f|0x40;tmpRandomBytes[8]=tmpRandomBytes[8]&0x3f|0x80;return this.bytesToUUID(tmpRandomBytes);}// Simple random UUID generation
 generateRandom(){let tmpUUID='';for(let i=0;i<this._UUIDLength;i++){tmpUUID+=this._UUIDRandomDictionary.charAt(Math.floor(Math.random()*(this._UUIDRandomDictionary.length-1)));}return tmpUUID;}// Adapted from node-uuid (https://github.com/kelektiv/node-uuid)
 getUUID(){if(this._UUIDModeRandom){return this.generateRandom();}else{return this.generateUUIDv4();}}}// This is for backwards compatibility
-function autoConstruct(pSettings){return new FableUUID(pSettings);}module.exports=FableUUID;module.exports.new=autoConstruct;},{"../package.json":64,"./Fable-UUID-Random.js":65,"fable-serviceproviderbase":59}],67:[function(require,module,exports){module.exports={"name":"fable","version":"3.1.49","description":"A service dependency injection, configuration and logging library.","main":"source/Fable.js","scripts":{"start":"node source/Fable.js","coverage":"./node_modules/.bin/nyc --reporter=lcov --reporter=text-lcov ./node_modules/mocha/bin/_mocha -- -u tdd -R spec","test":"./node_modules/.bin/mocha -u tdd -R spec","build":"npx quack build","docker-dev-build":"docker build ./ -f Dockerfile_LUXURYCode -t fable-image:local","docker-dev-run":"docker run -it -d --name fable-dev -p 30001:8080 -p 38086:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/fable\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" fable-image:local","docker-dev-shell":"docker exec -it fable-dev /bin/bash","tests":"./node_modules/mocha/bin/_mocha -u tdd --exit -R spec --grep"},"mocha":{"diff":true,"extension":["js"],"package":"./package.json","reporter":"spec","slow":"75","timeout":"5000","ui":"tdd","watch-files":["source/**/*.js","test/**/*.js"],"watch-ignore":["lib/vendor"]},"browser":{"./source/service/Fable-Service-EnvironmentData.js":"./source/service/Fable-Service-EnvironmentData-Web.js","./source/service/Fable-Service-FilePersistence.js":"./source/service/Fable-Service-FilePersistence-Web.js"},"repository":{"type":"git","url":"https://github.com/stevenvelozo/fable.git"},"keywords":["entity","behavior"],"author":"Steven Velozo <steven@velozo.com> (http://velozo.com/)","license":"MIT","bugs":{"url":"https://github.com/stevenvelozo/fable/issues"},"homepage":"https://github.com/stevenvelozo/fable","devDependencies":{"quackage":"^1.0.45"},"dependencies":{"async.eachlimit":"^0.5.2","async.waterfall":"^0.5.2","big.js":"^7.0.1","cachetrax":"^1.0.4","cookie":"^1.0.2","data-arithmatic":"^1.0.7","dayjs":"^1.11.19","fable-log":"^3.0.16","fable-serviceproviderbase":"^3.0.15","fable-settings":"^3.0.12","fable-uuid":"^3.0.11","manyfest":"^1.0.42","simple-get":"^4.0.1"}};},{}],68:[function(require,module,exports){/**
+function autoConstruct(pSettings){return new FableUUID(pSettings);}module.exports=FableUUID;module.exports.new=autoConstruct;},{"../package.json":64,"./Fable-UUID-Random.js":65,"fable-serviceproviderbase":59}],67:[function(require,module,exports){module.exports={"name":"fable","version":"3.1.51","description":"A service dependency injection, configuration and logging library.","main":"source/Fable.js","scripts":{"start":"node source/Fable.js","coverage":"./node_modules/.bin/nyc --reporter=lcov --reporter=text-lcov ./node_modules/mocha/bin/_mocha -- -u tdd -R spec","test":"./node_modules/.bin/mocha -u tdd -R spec","build":"npx quack build","docker-dev-build":"docker build ./ -f Dockerfile_LUXURYCode -t fable-image:local","docker-dev-run":"docker run -it -d --name fable-dev -p 30001:8080 -p 38086:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/fable\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" fable-image:local","docker-dev-shell":"docker exec -it fable-dev /bin/bash","tests":"./node_modules/mocha/bin/_mocha -u tdd --exit -R spec --grep"},"mocha":{"diff":true,"extension":["js"],"package":"./package.json","reporter":"spec","slow":"75","timeout":"5000","ui":"tdd","watch-files":["source/**/*.js","test/**/*.js"],"watch-ignore":["lib/vendor"]},"browser":{"./source/service/Fable-Service-EnvironmentData.js":"./source/service/Fable-Service-EnvironmentData-Web.js","./source/service/Fable-Service-FilePersistence.js":"./source/service/Fable-Service-FilePersistence-Web.js"},"repository":{"type":"git","url":"https://github.com/stevenvelozo/fable.git"},"keywords":["entity","behavior"],"author":"Steven Velozo <steven@velozo.com> (http://velozo.com/)","license":"MIT","bugs":{"url":"https://github.com/stevenvelozo/fable/issues"},"homepage":"https://github.com/stevenvelozo/fable","devDependencies":{"quackage":"^1.0.45"},"dependencies":{"async.eachlimit":"^0.5.2","async.waterfall":"^0.5.2","big.js":"^7.0.1","cachetrax":"^1.0.4","cookie":"^1.0.2","data-arithmatic":"^1.0.7","dayjs":"^1.11.19","fable-log":"^3.0.16","fable-serviceproviderbase":"^3.0.15","fable-settings":"^3.0.12","fable-uuid":"^3.0.11","manyfest":"^1.0.43","simple-get":"^4.0.1"}};},{}],68:[function(require,module,exports){/**
 * Fable Application Services Support Library
 * @author <steven@velozo.com>
 */// Pre-init services
@@ -1533,7 +1533,7 @@ tmpCurrentTokenType='Value';tmpCurrentToken+=tmpCharacter;// 	continue;
 // tmpResults.ExpressionParserLog.push(`ExpressionParser.tokenize found an unknown character code ${tmpCharCode} character ${tmpCharacter} in the expression: ${pExpression} at index ${i}`);
 // this.log.warn(tmpResults.ExpressionParserLog[tmpResults.ExpressionParserLog.length-1]);
 }if(tmpCurrentTokenType&&tmpCurrentToken.length>0){tmpResults.RawTokens.push(tmpCurrentToken);}tmpResults.OriginalRawTokens=Array.from(tmpResults.RawTokens);// Potentially mutate the tokens based on directives in the tokenized expression
-this.TokenizerDirectiveMutation.parseDirectives(tmpResults);return tmpResults.RawTokens;}}module.exports=ExpressionTokenizer;},{"./Fable-Service-ExpressionParser-Base.js":77}],80:[function(require,module,exports){module.exports={"sqrt":{"Name":"Square Root","Address":"fable.Math.sqrtPrecise"},"percent":{"Name":"Compute Percent (in IS over OF format)","Address":"fable.Math.percentagePrecise"},"compare":{"Name":"Compare","Address":"fable.Math.comparePrecise"},"abs":{"Name":"Absolute Value","Address":"fable.Math.absPrecise"},"floor":{"Name":"Floor Value","Address":"fable.Math.floorPrecise"},"ceil":{"Name":"Ceiling Value","Address":"fable.Math.ceilPrecise"},"rad":{"Name":"Degrees to Radians","Address":"fable.Math.radPrecise"},"pi":{"Name":"Pi","Address":"fable.Math.piPrecise"},"euler":{"Name":"Euler","Address":"fable.Math.eulerPrecise"},"log":{"Name":"Logarithm","Address":"fable.Math.logPrecise"},"exp":{"Name":"Eulers Number to the Power Of N","Address":"fable.Math.expPrecise"},"sin":{"Name":"Sine","Address":"fable.Math.sin"},"cos":{"Name":"Cosine","Address":"fable.Math.cos"},"tan":{"Name":"Tangent","Address":"fable.Math.tan"},"count":{"Name":"Count Set Elements","Address":"fable.Math.countSetElements"},"countset":{"Name":"Count Set Elements","Address":"fable.Math.countSetElements"},"sortset":{"Name":"Sort Set","Address":"fable.Math.sortSetPrecise"},"bucketset":{"Name":"Bucket Set","Address":"fable.Math.bucketSetPrecise"},"sorthistogram":{"Name":"Sort Histogram","Address":"fable.Math.sortHistogramPrecise"},"sorthistogrambykeys":{"Name":"Sort Histogram by Keys","Address":"fable.Math.sortHistogramByKeys"},"max":{"Name":"Maximum","Address":"fable.Math.maxPrecise"},"min":{"Name":"Minimum","Address":"fable.Math.minPrecise"},"sum":{"Name":"Sum","Address":"fable.Math.sumPrecise"},"avg":{"Name":"Average","Address":"fable.Math.averagePrecise"},"mean":{"Name":"Mean","Address":"fable.Math.meanPrecise"},"median":{"Name":"Median","Address":"fable.Math.medianPrecise"},"mode":{"Name":"Mode","Address":"fable.Math.modePrecise"},"round":{"Name":"Round","Address":"fable.Math.roundPrecise"},"tofixed":{"Name":"To Fixed","Address":"fable.Math.toFixedPrecise"},"cumulativesummation":{"Name":"Sum each value in a Histogram or Value Map cumulatively, creating or setting a property with the result on each row","Address":"fable.Math.cumulativeSummation"},"subtractingsummation":{"Name":"Subtract each subsequent value in a Histogram or Value Map cumulatively (by default from the first row), creating or setting a property with the result on each row.","Address":"fable.Math.subtractingSummation"},"iterativeseries":{"Name":"Perform an Iterative Series of Mathematical Operations on Set Elements","Address":"fable.Math.iterativeSeries"},"countsetelements":{"Name":"Count Set Elements in a Histogram or Value Map","Address":"fable.Math.countSetElements"},"getvalue":{"Name":"Get Value from Application State or Services (AppData, etc.)","Address":"fable.Utility.getInternalValueByHash"},"objectkeystoarray":{"Name":"Get Array of an Object's keys","Address":"fable.Utility.objectKeysToArray"},"objectvaluestoarray":{"Name":"Get Array of an Object's values","Address":"fable.Utility.objectValuesToArray"},"generatearrayofobjectsfromsets":{"Name":"Generate Array of Objects from Sets","Address":"fable.Utility.generateArrayOfObjectsFromSets"},"objectvaluessortbyexternalobjectarray":{"Name":"Get Array of an Object's values sorted by an external array","Address":"fable.Utility.objectValuesSortByExternalArray"},"setkeystoarray":{"Name":"Get Array of an Object's keys","Address":"fable.Utility.objectKeysToArray"},"setvaluestoarray":{"Name":"Get Array of an Object's values","Address":"fable.Utility.objectValuesToArray"},"histogramkeystoarray":{"Name":"Get Array of an Object's keys","Address":"fable.Utility.objectKeysToArray"},"histogramvaluestoarray":{"Name":"Get Array of an Object's values","Address":"fable.Utility.objectValuesToArray"},"createarrayfromabsolutevalues":{"Name":"Create Array from Absolute Values","Address":"fable.Utility.createArrayFromAbsoluteValues"},"flatten":{"Name":"flatten an array of values","Address":"fable.Utility.flattenArrayOfSolverInputs"},"findfirstvaluebyexactmatch":{"Name":"find + map on array of objects","Address":"fable.Utility.findFirstValueByExactMatchInternal"},"findfirstvaluebystringincludes":{"Name":"find + map on array of objects","Address":"fable.Utility.findFirstValueByStringIncludesInternal"},"match":{"Name":"Implementation of sheets MATCH() function","Address":"fable.Utility.findIndexInternal"},"resolvehtmlentities":{"Name":"resolve HTML entities","Address":"fable.DataFormat.resolveHtmlEntities"},"concat":{"Name":"concatenate an array of values and output a string","Address":"fable.DataFormat.concatenateStringsInternal"},"concatraw":{"Name":"concatenate an array of values and output a string","Address":"fable.DataFormat.concatenateStringsRawInternal"},"arrayconcat":{"Name":"concatenate two or more arrays generating a single output array","Address":"fable.Utility.concatenateArrays"},"join":{"Name":"join an array of values and output a string","Address":"fable.DataFormat.joinStringsInternal"},"joinraw":{"Name":"join an array of values and output a string","Address":"fable.DataFormat.joinStringsRawInternal"},"if":{"Name":"perform a conditional operator on two values, and choose one of two outcomes based on the result","Address":"fable.Logic.checkIf"},"when":{"Name":"perform a 'truthy' check on one value, and return one of two outcomes based on the result","Address":"fable.Logic.when"},"entryinset":{"Name":"Entry in Set","Address":"fable.Math.entryInSet"},"smallestinset":{"Name":"Smallest in Set","Address":"fable.Math.smallestInSet"},"largestinset":{"Name":"Largest in Set","Address":"fable.Math.largestInSet"},"aggregationhistogram":{"Name":"Generate a Histogram by Exact Value Aggregation","Address":"fable.Math.histogramAggregationByExactValueFromInternalState"},"aggregationhistogrambyobject":{"Name":"Generate a Histogram by Exact Value Aggregation from Object Property","Address":"fable.Math.histogramAggregationByExactValue"},"distributionhistogram":{"Name":"Generate a Histogram Based on Value Distribution","Address":"fable.Math.histogramDistributionByExactValueFromInternalState"},"distributionhistogrambyobject":{"Name":"Generate a Histogram Based on Value Distribution from Object Property","Address":"fable.Math.histogramDistributionByExactValue"},"setconcatenate":{"Name":"Set Concatenate","Address":"fable.Math.setConcatenate"},"getvaluearray":{"Name":"Get Value Array from Application State or Services (AppData, etc.)","Address":"fable.Utility.createValueArrayByHashParametersFromInternal"},"getvalueobject":{"Name":"Get Value Object from Application State or Services (AppData, etc.)","Address":"fable.Utility.createValueObjectByHashParametersFromInternal"},"cleanvaluearray":{"Name":"Clean Value Array","Address":"fable.Math.cleanValueArray"},"cleanvalueobject":{"Name":"Clean Value Object","Address":"fable.Math.cleanValueObject"},"polynomialregression":{"Name":"Perform an nth degree Polynomial Regression on a Set of X and Y Values","Address":"fable.Math.polynomialRegression"},"randominteger":{"Name":"Random Integer","Address":"fable.DataGeneration.randomInteger"},"randomintegerbetween":{"Name":"Random Integer Between Two Numbers","Address":"fable.DataGeneration.randomIntegerBetween"},"randomintegerupto":{"Name":"Random Integer","Address":"fable.DataGeneration.randomIntegerUpTo"},"randomfloat":{"Name":"Random Float","Address":"fable.DataGeneration.randomFloat"},"randomfloatbetween":{"Name":"Random Float","Address":"fable.DataGeneration.randomFloatBetween"},"randomfloatupto":{"Name":"Random Float","Address":"fable.DataGeneration.randomFloatUpTo"},"datemilliseconddifference":{"Name":"Date Difference in Milliseconds","Address":"fable.Dates.dateMillisecondDifference"},"dateseconddifference":{"Name":"Date Difference in Seconds","Address":"fable.Dates.dateSecondDifference"},"dateminutedifference":{"Name":"Date Difference in Minutes","Address":"fable.Dates.dateMinuteDifference"},"datehourdifference":{"Name":"Date Difference in Hours","Address":"fable.Dates.dateHourDifference"},"datedaydifference":{"Name":"Date Difference in Days","Address":"fable.Dates.dateDayDifference"},"dateweekdifference":{"Name":"Date Difference in Weeks","Address":"fable.Dates.dateWeekDifference"},"datemonthdifference":{"Name":"Date Difference in Months","Address":"fable.Dates.dateMonthDifference"},"dateyeardifference":{"Name":"Date Difference in Years","Address":"fable.Dates.dateYearDifference"},"datemathadd":{"Name":"Date Math Add","Address":"fable.Dates.dateMath"},"dateaddmilliseconds":{"Name":"Date Add Milliseconds","Address":"fable.Dates.dateAddMilliseconds"},"dateaddseconds":{"Name":"Date Add Seconds","Address":"fable.Dates.dateAddSeconds"},"dateaddminutes":{"Name":"Date Add Minutes","Address":"fable.Dates.dateAddMinutes"},"dateaddhours":{"Name":"Date Add Hours","Address":"fable.Dates.dateAddHours"},"dateadddays":{"Name":"Date Add Days","Address":"fable.Dates.dateAddDays"},"dateaddweeks":{"Name":"Date Add Weeks","Address":"fable.Dates.dateAddWeeks"},"dateaddmonths":{"Name":"Date Add Months","Address":"fable.Dates.dateAddMonths"},"dateaddyears":{"Name":"Date Add Years","Address":"fable.Dates.dateAddYears"},"datefromparts":{"Name":"Date From Parts","Address":"fable.Dates.dateFromParts"},"slice":{"Name":"Slice Array","Address":"fable.Utility.slice"},"createvalueobjectbyhashes":{"Name":"Create Value Object by Hashes","Address":"fable.Utility.createValueObjectByHashes"},"polynomialregression":{"Name":"Perform an nth degree Polynomial Regression on a Set of X and Y Values","Address":"fable.Math.polynomialRegression"},"leastsquares":{"Name":"Perform a Least Squares Regression on a Set of Independent Variable Vectors and a Dependent Variable Vector","Address":"fable.Math.leastSquares"},"linest":{"Name":"Perform a Least Squares Regression on a Set of Independent Variable Vectors and a Dependent Variable Vector","Address":"fable.Math.leastSquares"},"matrixtranspose":{"Name":"Transpose a Matrix","Address":"fable.Math.matrixTranspose"},"matrixmultiply":{"Name":"Multiply Two Matrices","Address":"fable.Math.matrixMultiply"},"matrixvectormultiply":{"Name":"Multiply a Matrix by a Vector","Address":"fable.Math.matrixVectorMultiply"},"matrixinverse":{"Name":"Inverse a Matrix","Address":"fable.Math.matrixInverse"},"gaussianelimination":{"Name":"Solve a System of Linear Equations using Gaussian Elimination","Address":"fable.Math.gaussianElimination"},"predict":{"Name":"Predict Y Values from X Values using a Regression Model","Address":"fable.Math.predictFromRegressionModel"},"stringcountsegments":{"Name":"Count Segments in a String","Address":"fable.DataFormat.stringCountSegments"},"stringgetsegments":{"Name":"Get Segments from a String","Address":"fable.DataFormat.stringGetSegments"}};},{}],81:[function(require,module,exports){const libExpressionParserOperationBase=require('./Fable-Service-ExpressionParser-Base.js');class ExpressionParserLinter extends libExpressionParserOperationBase{constructor(pFable,pOptions,pServiceHash){super(pFable,pOptions,pServiceHash);this.serviceType='ExpressionParser-Linter';}lintTokenizedExpression(pTokenizedExpression,pResultObject){let tmpResults=typeof pResultObject==='object'?pResultObject:{ExpressionParserLog:[]};tmpResults.LinterResults=[];// Guard against bad data being passed in
+this.TokenizerDirectiveMutation.parseDirectives(tmpResults);return tmpResults.RawTokens;}}module.exports=ExpressionTokenizer;},{"./Fable-Service-ExpressionParser-Base.js":77}],80:[function(require,module,exports){module.exports={"sqrt":{"Name":"Square Root","Address":"fable.Math.sqrtPrecise"},"percent":{"Name":"Compute Percent (in IS over OF format)","Address":"fable.Math.percentagePrecise"},"compare":{"Name":"Compare","Address":"fable.Math.comparePrecise"},"abs":{"Name":"Absolute Value","Address":"fable.Math.absPrecise"},"floor":{"Name":"Floor Value","Address":"fable.Math.floorPrecise"},"ceil":{"Name":"Ceiling Value","Address":"fable.Math.ceilPrecise"},"rad":{"Name":"Degrees to Radians","Address":"fable.Math.radPrecise"},"pi":{"Name":"Pi","Address":"fable.Math.piPrecise"},"euler":{"Name":"Euler","Address":"fable.Math.eulerPrecise"},"log":{"Name":"Logarithm","Address":"fable.Math.logPrecise"},"exp":{"Name":"Eulers Number to the Power Of N","Address":"fable.Math.expPrecise"},"sin":{"Name":"Sine","Address":"fable.Math.sin"},"cos":{"Name":"Cosine","Address":"fable.Math.cos"},"tan":{"Name":"Tangent","Address":"fable.Math.tan"},"count":{"Name":"Count Set Elements","Address":"fable.Math.countSetElements"},"countset":{"Name":"Count Set Elements","Address":"fable.Math.countSetElements"},"sortset":{"Name":"Sort Set","Address":"fable.Math.sortSetPrecise"},"bucketset":{"Name":"Bucket Set","Address":"fable.Math.bucketSetPrecise"},"sorthistogram":{"Name":"Sort Histogram","Address":"fable.Math.sortHistogramPrecise"},"sorthistogrambykeys":{"Name":"Sort Histogram by Keys","Address":"fable.Math.sortHistogramByKeys"},"max":{"Name":"Maximum","Address":"fable.Math.maxPrecise"},"min":{"Name":"Minimum","Address":"fable.Math.minPrecise"},"sum":{"Name":"Sum","Address":"fable.Math.sumPrecise"},"avg":{"Name":"Average","Address":"fable.Math.averagePrecise"},"mean":{"Name":"Mean","Address":"fable.Math.meanPrecise"},"median":{"Name":"Median","Address":"fable.Math.medianPrecise"},"mode":{"Name":"Mode","Address":"fable.Math.modePrecise"},"var":{"Name":"Variance (Sample)","Address":"fable.Math.variancePrecise"},"vara":{"Name":"Variance (Sample)","Address":"fable.Math.variancePrecise"},"varp":{"Name":"Variance (Population)","Address":"fable.Math.populationVariancePrecise"},"stdev":{"Name":"Standard Deviation (Sample)","Address":"fable.Math.standardDeviationPrecise"},"stdeva":{"Name":"Standard Deviation (Sample)","Address":"fable.Math.standardDeviationPrecise"},"stdevp":{"Name":"Standard Deviation (Population)","Address":"fable.Math.populationStandardDeviationPrecise"},"round":{"Name":"Round","Address":"fable.Math.roundPrecise"},"tofixed":{"Name":"To Fixed","Address":"fable.Math.toFixedPrecise"},"cumulativesummation":{"Name":"Sum each value in a Histogram or Value Map cumulatively, creating or setting a property with the result on each row","Address":"fable.Math.cumulativeSummation"},"subtractingsummation":{"Name":"Subtract each subsequent value in a Histogram or Value Map cumulatively (by default from the first row), creating or setting a property with the result on each row.","Address":"fable.Math.subtractingSummation"},"iterativeseries":{"Name":"Perform an Iterative Series of Mathematical Operations on Set Elements","Address":"fable.Math.iterativeSeries"},"countsetelements":{"Name":"Count Set Elements in a Histogram or Value Map","Address":"fable.Math.countSetElements"},"getvalue":{"Name":"Get Value from Application State or Services (AppData, etc.)","Address":"fable.Utility.getInternalValueByHash"},"objectkeystoarray":{"Name":"Get Array of an Object's keys","Address":"fable.Utility.objectKeysToArray"},"objectvaluestoarray":{"Name":"Get Array of an Object's values","Address":"fable.Utility.objectValuesToArray"},"generatearrayofobjectsfromsets":{"Name":"Generate Array of Objects from Sets","Address":"fable.Utility.generateArrayOfObjectsFromSets"},"objectvaluessortbyexternalobjectarray":{"Name":"Get Array of an Object's values sorted by an external array","Address":"fable.Utility.objectValuesSortByExternalArray"},"setkeystoarray":{"Name":"Get Array of an Object's keys","Address":"fable.Utility.objectKeysToArray"},"setvaluestoarray":{"Name":"Get Array of an Object's values","Address":"fable.Utility.objectValuesToArray"},"histogramkeystoarray":{"Name":"Get Array of an Object's keys","Address":"fable.Utility.objectKeysToArray"},"histogramvaluestoarray":{"Name":"Get Array of an Object's values","Address":"fable.Utility.objectValuesToArray"},"createarrayfromabsolutevalues":{"Name":"Create Array from Absolute Values","Address":"fable.Utility.createArrayFromAbsoluteValues"},"flatten":{"Name":"flatten an array of values","Address":"fable.Utility.flattenArrayOfSolverInputs"},"findfirstvaluebyexactmatch":{"Name":"find + map on array of objects","Address":"fable.Utility.findFirstValueByExactMatchInternal"},"findfirstvaluebystringincludes":{"Name":"find + map on array of objects","Address":"fable.Utility.findFirstValueByStringIncludesInternal"},"match":{"Name":"Implementation of sheets MATCH() function","Address":"fable.Utility.findIndexInternal"},"resolvehtmlentities":{"Name":"resolve HTML entities","Address":"fable.DataFormat.resolveHtmlEntities"},"concat":{"Name":"concatenate an array of values and output a string","Address":"fable.DataFormat.concatenateStringsInternal"},"concatraw":{"Name":"concatenate an array of values and output a string","Address":"fable.DataFormat.concatenateStringsRawInternal"},"arrayconcat":{"Name":"concatenate two or more arrays generating a single output array","Address":"fable.Utility.concatenateArrays"},"join":{"Name":"join an array of values and output a string","Address":"fable.DataFormat.joinStringsInternal"},"joinraw":{"Name":"join an array of values and output a string","Address":"fable.DataFormat.joinStringsRawInternal"},"if":{"Name":"perform a conditional operator on two values, and choose one of two outcomes based on the result","Address":"fable.Logic.checkIf"},"when":{"Name":"perform a 'truthy' check on one value, and return one of two outcomes based on the result","Address":"fable.Logic.when"},"entryinset":{"Name":"Entry in Set","Address":"fable.Math.entryInSet"},"smallestinset":{"Name":"Smallest in Set","Address":"fable.Math.smallestInSet"},"largestinset":{"Name":"Largest in Set","Address":"fable.Math.largestInSet"},"aggregationhistogram":{"Name":"Generate a Histogram by Exact Value Aggregation","Address":"fable.Math.histogramAggregationByExactValueFromInternalState"},"aggregationhistogrambyobject":{"Name":"Generate a Histogram by Exact Value Aggregation from Object Property","Address":"fable.Math.histogramAggregationByExactValue"},"distributionhistogram":{"Name":"Generate a Histogram Based on Value Distribution","Address":"fable.Math.histogramDistributionByExactValueFromInternalState"},"distributionhistogrambyobject":{"Name":"Generate a Histogram Based on Value Distribution from Object Property","Address":"fable.Math.histogramDistributionByExactValue"},"setconcatenate":{"Name":"Set Concatenate","Address":"fable.Math.setConcatenate"},"getvaluearray":{"Name":"Get Value Array from Application State or Services (AppData, etc.)","Address":"fable.Utility.createValueArrayByHashParametersFromInternal"},"getvalueobject":{"Name":"Get Value Object from Application State or Services (AppData, etc.)","Address":"fable.Utility.createValueObjectByHashParametersFromInternal"},"cleanvaluearray":{"Name":"Clean Value Array","Address":"fable.Math.cleanValueArray"},"cleanvalueobject":{"Name":"Clean Value Object","Address":"fable.Math.cleanValueObject"},"polynomialregression":{"Name":"Perform an nth degree Polynomial Regression on a Set of X and Y Values","Address":"fable.Math.polynomialRegression"},"randominteger":{"Name":"Random Integer","Address":"fable.DataGeneration.randomInteger"},"randomintegerbetween":{"Name":"Random Integer Between Two Numbers","Address":"fable.DataGeneration.randomIntegerBetween"},"randomintegerupto":{"Name":"Random Integer","Address":"fable.DataGeneration.randomIntegerUpTo"},"randomfloat":{"Name":"Random Float","Address":"fable.DataGeneration.randomFloat"},"randomfloatbetween":{"Name":"Random Float","Address":"fable.DataGeneration.randomFloatBetween"},"randomfloatupto":{"Name":"Random Float","Address":"fable.DataGeneration.randomFloatUpTo"},"datemilliseconddifference":{"Name":"Date Difference in Milliseconds","Address":"fable.Dates.dateMillisecondDifference"},"dateseconddifference":{"Name":"Date Difference in Seconds","Address":"fable.Dates.dateSecondDifference"},"dateminutedifference":{"Name":"Date Difference in Minutes","Address":"fable.Dates.dateMinuteDifference"},"datehourdifference":{"Name":"Date Difference in Hours","Address":"fable.Dates.dateHourDifference"},"datedaydifference":{"Name":"Date Difference in Days","Address":"fable.Dates.dateDayDifference"},"dateweekdifference":{"Name":"Date Difference in Weeks","Address":"fable.Dates.dateWeekDifference"},"datemonthdifference":{"Name":"Date Difference in Months","Address":"fable.Dates.dateMonthDifference"},"dateyeardifference":{"Name":"Date Difference in Years","Address":"fable.Dates.dateYearDifference"},"datemathadd":{"Name":"Date Math Add","Address":"fable.Dates.dateMath"},"dateaddmilliseconds":{"Name":"Date Add Milliseconds","Address":"fable.Dates.dateAddMilliseconds"},"dateaddseconds":{"Name":"Date Add Seconds","Address":"fable.Dates.dateAddSeconds"},"dateaddminutes":{"Name":"Date Add Minutes","Address":"fable.Dates.dateAddMinutes"},"dateaddhours":{"Name":"Date Add Hours","Address":"fable.Dates.dateAddHours"},"dateadddays":{"Name":"Date Add Days","Address":"fable.Dates.dateAddDays"},"dateaddweeks":{"Name":"Date Add Weeks","Address":"fable.Dates.dateAddWeeks"},"dateaddmonths":{"Name":"Date Add Months","Address":"fable.Dates.dateAddMonths"},"dateaddyears":{"Name":"Date Add Years","Address":"fable.Dates.dateAddYears"},"datefromparts":{"Name":"Date From Parts","Address":"fable.Dates.dateFromParts"},"slice":{"Name":"Slice Array","Address":"fable.Utility.slice"},"createvalueobjectbyhashes":{"Name":"Create Value Object by Hashes","Address":"fable.Utility.createValueObjectByHashes"},"polynomialregression":{"Name":"Perform an nth degree Polynomial Regression on a Set of X and Y Values","Address":"fable.Math.polynomialRegression"},"leastsquares":{"Name":"Perform a Least Squares Regression on a Set of Independent Variable Vectors and a Dependent Variable Vector","Address":"fable.Math.leastSquares"},"linest":{"Name":"Perform a Least Squares Regression on a Set of Independent Variable Vectors and a Dependent Variable Vector","Address":"fable.Math.leastSquares"},"matrixtranspose":{"Name":"Transpose a Matrix","Address":"fable.Math.matrixTranspose"},"matrixmultiply":{"Name":"Multiply Two Matrices","Address":"fable.Math.matrixMultiply"},"matrixvectormultiply":{"Name":"Multiply a Matrix by a Vector","Address":"fable.Math.matrixVectorMultiply"},"matrixinverse":{"Name":"Inverse a Matrix","Address":"fable.Math.matrixInverse"},"gaussianelimination":{"Name":"Solve a System of Linear Equations using Gaussian Elimination","Address":"fable.Math.gaussianElimination"},"predict":{"Name":"Predict Y Values from X Values using a Regression Model","Address":"fable.Math.predictFromRegressionModel"},"stringcountsegments":{"Name":"Count Segments in a String","Address":"fable.DataFormat.stringCountSegments"},"stringgetsegments":{"Name":"Get Segments from a String","Address":"fable.DataFormat.stringGetSegments"}};},{}],81:[function(require,module,exports){const libExpressionParserOperationBase=require('./Fable-Service-ExpressionParser-Base.js');class ExpressionParserLinter extends libExpressionParserOperationBase{constructor(pFable,pOptions,pServiceHash){super(pFable,pOptions,pServiceHash);this.serviceType='ExpressionParser-Linter';}lintTokenizedExpression(pTokenizedExpression,pResultObject){let tmpResults=typeof pResultObject==='object'?pResultObject:{ExpressionParserLog:[]};tmpResults.LinterResults=[];// Guard against bad data being passed in
 if(!Array.isArray(pTokenizedExpression)){tmpResults.ExpressionParserLog.push("ERROR: ExpressionParser.lintTokenizedExpression was passed a non-array tokenized expression.");tmpResults.LinterResults.push(tmpResults.ExpressionParserLog[tmpResults.ExpressionParserLog.length-1]);this.log.error(tmpResults.ExpressionParserLog[tmpResults.ExpressionParserLog.length-1]);return pTokenizedExpression;}if(pTokenizedExpression.length<1){tmpResults.ExpressionParserLog.push("ERROR: ExpressionParser.lintTokenizedExpression was passed an empty tokenized expression.");tmpResults.LinterResults.push(tmpResults.ExpressionParserLog[tmpResults.ExpressionParserLog.length-1]);this.log.error(tmpResults.ExpressionParserLog[tmpResults.ExpressionParserLog.length-1]);return pTokenizedExpression;}// 1. Check for balanced parenthesis
 let tmpParenthesisDepth=0;// If it is in a state address, we don't care about the parenthesis
 // State addresses are between squiggly brackets
@@ -2057,7 +2057,7 @@ let tmpCleanedObject={};let tmpKeys=Object.keys(pValueObject);for(let i=0;i<tmpK
 	 * Make a histogram of representative counts for exact values (.tostring() is the keys to count)
 	 * @param {Array} pValueSet
 	 * @param {string} pValueAddress
-	 */histogramAggregationByExactValue(pValueObjectSet,pValueAddress,pValueAmountAddress,pManifest){if(!Array.isArray(pValueObjectSet)){return pValueObjectSet;}if(!pValueAddress||!pValueAmountAddress){return{};}let tmpHistogram={};for(let i=0;i<pValueObjectSet.length;i++){let tmpValue=this.fable.Utility.getValueByHash(pValueObjectSet[i],pValueAddress,pManifest).toString();let tmpAmount=this.parsePrecise(this.fable.Utility.getValueByHash(pValueObjectSet[i],pValueAmountAddress,pManifest),NaN);if(!(tmpValue in tmpHistogram)){tmpHistogram[tmpValue]=0;}if(!isNaN(tmpAmount)){tmpHistogram[tmpValue]=this.addPrecise(tmpHistogram[tmpValue],tmpAmount);}}return tmpHistogram;}/**
+	 */histogramAggregationByExactValue(pValueObjectSet,pValueAddress,pValueAmountAddress,pManifest){if(!Array.isArray(pValueObjectSet)){return pValueObjectSet;}if(!pValueAddress||!pValueAmountAddress){return{};}let tmpHistogram={};for(let i=0;i<pValueObjectSet.length;i++){let tmpValue=this.fable.Utility.getValueByHash(pValueObjectSet[i],pValueAddress,pManifest);if(typeof tmpValue===undefined){continue;}let tmpAmount=this.parsePrecise(this.fable.Utility.getValueByHash(pValueObjectSet[i],pValueAmountAddress,pManifest),NaN);if(!(tmpValue in tmpHistogram)){tmpHistogram[tmpValue]=0;}if(!isNaN(tmpAmount)){tmpHistogram[tmpValue]=this.addPrecise(tmpHistogram[tmpValue],tmpAmount);}}return tmpHistogram;}/**
 	 * Aggregates a histogram by exact value from an internal state object.
 	 *
 	 * @param {string} pValueObjectSetAddress - The address of the internal value object set.
@@ -2139,13 +2139,13 @@ if(!tmpFirstRowWithValue||tmpProcessFirstRow){switch(pSummationOperation){case'+
 	 */sumPrecise(pValueSet){let tmpSumValue="0.0";if(Array.isArray(pValueSet)){for(let i=0;i<pValueSet.length;i++){let tmpComparisonValue=this.parsePrecise(pValueSet[i],NaN);if(!isNaN(tmpComparisonValue)){tmpSumValue=this.addPrecise(tmpSumValue,tmpComparisonValue);}}}else if(typeof pValueSet==='object'){let tmpKeys=Object.keys(pValueSet);for(let i=0;i<tmpKeys.length;i++){let tmpComparisonValue=this.parsePrecise(pValueSet[tmpKeys[i]],NaN);if(!isNaN(tmpComparisonValue)){tmpSumValue=this.addPrecise(tmpSumValue,tmpComparisonValue);}}}return tmpSumValue;}/**
 	 * Calculates the precise mean of a given value set.
 	 *
-	 * @param {Array<number>} pValueSet - The array of values to calculate the mean.
+	 * @param {Array<string|number>} pValueSet - The array of values to calculate the mean.
 	 * @returns {string} The precise mean value as a string.
 	 */meanPrecise(pValueSet){let tmpSumValue=this.sumPrecise(pValueSet);let tmpCount=this.countSetElements(pValueSet);if(tmpCount==0){return'0.0';}return this.dividePrecise(tmpSumValue,tmpCount);}/**
 	 * Calculates the average of an array of values precisely.
 	 *
-	 * @param {Array<number>} pValueSet - The array of values to calculate the average of.
-	 * @returns {number} The precise average of the values.
+	 * @param {Array<string|number>} pValueSet - The array of values to calculate the average of.
+	 * @returns {string} The precise average of the values.
 	 */averagePrecise(pValueSet){return this.meanPrecise(pValueSet);}/**
 	 * Calculates the precise median value of a given value set.
 	 *
@@ -2161,6 +2161,32 @@ else{let tmpLeftMiddleValue=tmpSortedValueSet[tmpMiddleElement-1];let tmpRightMi
 	 * @returns {Array} - An array containing the mode value(s) from the given value set.
 	 */modePrecise(pValueSet){let tmpHistogram=this.bucketSetPrecise(pValueSet);let tmpMaxCount=0;// Philosophical question about whether the values should be returned sorted.
 let tmpHistogramValueSet=Object.keys(tmpHistogram);let tmpModeValueSet=[];for(let i=0;i<tmpHistogramValueSet.length;i++){if(tmpHistogram[tmpHistogramValueSet[i]]>tmpMaxCount){tmpMaxCount=tmpHistogram[tmpHistogramValueSet[i]];tmpModeValueSet=[tmpHistogramValueSet[i]];}else if(tmpHistogram[tmpHistogramValueSet[i]]==tmpMaxCount){tmpModeValueSet.push(tmpHistogramValueSet[i]);}}return tmpModeValueSet;}/**
+	 * Calculates the variance of a given value set using precise mode calculation.
+	 *
+	 * @param {Array<string|number>} pValueSet - The array of values to calculate the variance from.
+	 * @param {boolean} [pIsPopulation=false] - Whether to calculate population variance (true) or sample variance (false).
+	 *
+	 * @return {string} - The variance of the given value set.
+	 */variancePrecise(pValueSet){let pIsPopulation=arguments.length>1&&arguments[1]!==undefined?arguments[1]:false;let tmpValueSet=pValueSet;if(!Array.isArray(tmpValueSet)&&typeof tmpValueSet==='object'){tmpValueSet=Object.keys(tmpValueSet).map(pKey=>tmpValueSet[pKey]);}const tmpMeanValue=this.meanPrecise(tmpValueSet);const tmpVarianceSum=tmpValueSet.reduce((pAccumulator,pValue)=>{const tmpDiff=this.subtractPrecise(pValue,tmpMeanValue);const tmpSquaredDiff=this.multiplyPrecise(tmpDiff,tmpDiff);return this.addPrecise(pAccumulator,tmpSquaredDiff);},'0.0');return this.dividePrecise(tmpVarianceSum,pIsPopulation?tmpValueSet.length:tmpValueSet.length-1);}/**
+	 * Calculates the variance of a given population of values using precise mode calculation.
+	 *
+	 * @param {Array<string|number>} pValueSet - The array of values to calculate the variance from.
+	 *
+	 * @return {string} - The variance of the given value set.
+	 */populationVariancePrecise(pValueSet){return this.variancePrecise(pValueSet,true);}/**
+	 * Calculates the standard deviation of a given value set using precise mode calculation.
+	 *
+	 * @param {Array<string|number>} pValueSet - The array of values to calculate the standard deviation from.
+	 * @param {boolean} [pIsPopulation=false] - Whether to calculate population variance (true) or sample variance (false).
+	 *
+	 * @return {string} - The standard deviation of the given value set.
+	 */standardDeviationPrecise(pValueSet){let pIsPopulation=arguments.length>1&&arguments[1]!==undefined?arguments[1]:false;return this.sqrtPrecise(this.variancePrecise(pValueSet,pIsPopulation));}/**
+	 * Calculates the standard deviation of a given population of values using precise mode calculation.
+	 *
+	 * @param {Array<string|number>} pValueSet - The array of values to calculate the standard deviation from.
+	 *
+	 * @return {string} - The standard deviation of the given value set.
+	 */populationStandardDeviationPrecise(pValueSet){return this.standardDeviationPrecise(pValueSet,true);}/**
 	 * Performs an nth degree polynomial regression on the given data points.
 	 *
 	 * @param {Array<number|string>} pXVector - The x-coordinates of the data points.
@@ -2653,7 +2679,12 @@ module.exports=function inherits(ctor,superCtor){if(superCtor){ctor.super_=super
 //
 // TODO: Should template literals be processed?  If so what state do they have access to?  That should happen here if so.
 // TODO: Make a simple class include library with these
-const cleanWrapCharacters=(pCharacter,pString)=>{if(pString.startsWith(pCharacter)&&pString.endsWith(pCharacter)){return pString.substring(1,pString.length-1);}else{return pString;}};module.exports=cleanWrapCharacters;},{}],117:[function(require,module,exports){/**
+/**
+ * @param {string} pCharacter - The character to remove from the start and end of the string
+ * @param {string} pString - The string to clean
+ *
+ * @return {string} The cleaned string
+ */const cleanWrapCharacters=(pCharacter,pString)=>{if(pString.startsWith(pCharacter)&&pString.endsWith(pCharacter)){return pString.substring(1,pString.length-1);}else{return pString;}};module.exports=cleanWrapCharacters;},{}],117:[function(require,module,exports){/**
 * @author <steven@velozo.com>
 */let libSimpleLog=require('./Manyfest-LogToConsole.js');/**
 * Hash Translation
@@ -2669,20 +2700,38 @@ const cleanWrapCharacters=(pCharacter,pString)=>{if(pString.startsWith(pCharacte
 * their lookups by hash.
 *
 * @class ManyfestHashTranslation
-*/class ManyfestHashTranslation{constructor(pInfoLog,pErrorLog){// Wire in logging
-this.logInfo=typeof pInfoLog==='function'?pInfoLog:libSimpleLog;this.logError=typeof pErrorLog==='function'?pErrorLog:libSimpleLog;this.translationTable={};}translationCount(){return Object.keys(this.translationTable).length;}addTranslation(pTranslation){// This adds a translation in the form of:
+*/class ManyfestHashTranslation{/**
+     * @param {function} [pInfoLog] - (optional) A logging function for info messages
+     * @param {function} [pErrorLog] - (optional) A logging function for error messages
+     */constructor(pInfoLog,pErrorLog){// Wire in logging
+this.logInfo=typeof pInfoLog==='function'?pInfoLog:libSimpleLog;this.logError=typeof pErrorLog==='function'?pErrorLog:libSimpleLog;this.translationTable={};}/**
+     * @return {number} The number of translations in the table
+     */translationCount(){return Object.keys(this.translationTable).length;}/**
+     * @param {object} pTranslation - An object containing source:destination hash pairs to add to the translation table
+     */addTranslation(pTranslation){// This adds a translation in the form of:
 // { "SourceHash": "DestinationHash", "SecondSourceHash":"SecondDestinationHash" }
-if(typeof pTranslation!='object'){this.logError("Hash translation addTranslation expected a translation be type object but was passed in ".concat(typeof pTranslation));return false;}let tmpTranslationSources=Object.keys(pTranslation);tmpTranslationSources.forEach(pTranslationSource=>{if(typeof pTranslation[pTranslationSource]!='string'){this.logError("Hash translation addTranslation expected a translation destination hash for [".concat(pTranslationSource,"] to be a string but the referrant was a ").concat(typeof pTranslation[pTranslationSource]));}else{this.translationTable[pTranslationSource]=pTranslation[pTranslationSource];}});}removeTranslationHash(pTranslationHash){if(pTranslationHash in this.translationTable){delete this.translationTable[pTranslationHash];}}// This removes translations.
-// If passed a string, just removes the single one.
-// If passed an object, it does all the source keys.
-removeTranslation(pTranslation){if(typeof pTranslation=='string'){this.removeTranslationHash(pTranslation);return true;}else if(typeof pTranslation=='object'){let tmpTranslationSources=Object.keys(pTranslation);tmpTranslationSources.forEach(pTranslationSource=>{this.removeTranslation(pTranslationSource);});return true;}else{this.logError("Hash translation removeTranslation expected either a string or an object but the passed-in translation was type ".concat(typeof pTranslation));return false;}}clearTranslations(){this.translationTable={};}translate(pTranslation){if(pTranslation in this.translationTable){return this.translationTable[pTranslation];}else{return pTranslation;}}}module.exports=ManyfestHashTranslation;},{"./Manyfest-LogToConsole.js":118}],118:[function(require,module,exports){/**
+if(typeof pTranslation!='object'){this.logError("Hash translation addTranslation expected a translation be type object but was passed in ".concat(typeof pTranslation));return false;}let tmpTranslationSources=Object.keys(pTranslation);tmpTranslationSources.forEach(pTranslationSource=>{if(typeof pTranslation[pTranslationSource]!='string'){this.logError("Hash translation addTranslation expected a translation destination hash for [".concat(pTranslationSource,"] to be a string but the referrant was a ").concat(typeof pTranslation[pTranslationSource]));}else{this.translationTable[pTranslationSource]=pTranslation[pTranslationSource];}});}/**
+     * @param {string} pTranslationHash - The source hash to remove from the translation table
+     */removeTranslationHash(pTranslationHash){delete this.translationTable[pTranslationHash];}/**
+     * This removes translations.
+     * If passed a string, just removes the single one.
+     * If passed an object, it does all the source keys.
+     *
+     * @param {string|object} pTranslation - Either a source hash string to remove, or an object containing source:destination hash pairs to remove
+     *
+     * @return {boolean} True if the removal was successful, false otherwise
+     */removeTranslation(pTranslation){if(typeof pTranslation=='string'){this.removeTranslationHash(pTranslation);return true;}else if(typeof pTranslation=='object'){let tmpTranslationSources=Object.keys(pTranslation);tmpTranslationSources.forEach(pTranslationSource=>{this.removeTranslation(pTranslationSource);});return true;}else{this.logError("Hash translation removeTranslation expected either a string or an object but the passed-in translation was type ".concat(typeof pTranslation));return false;}}clearTranslations(){this.translationTable={};}/**
+     * @param {string} pTranslation - The source hash to translate
+     *
+     * @return {string} The translated hash, or the original if no translation exists
+     */translate(pTranslation){if(pTranslation in this.translationTable){return this.translationTable[pTranslation];}else{return pTranslation;}}}module.exports=ManyfestHashTranslation;},{"./Manyfest-LogToConsole.js":118}],118:[function(require,module,exports){/**
 * @author <steven@velozo.com>
 *//**
 * Manyfest simple logging shim (for browser and dependency-free running)
 */const logToConsole=(pLogLine,pLogObject)=>{let tmpLogLine=typeof pLogLine==='string'?pLogLine:'';console.log("[Manyfest] ".concat(tmpLogLine));if(pLogObject)console.log(JSON.stringify(pLogObject));};module.exports=logToConsole;},{}],119:[function(require,module,exports){/**
 * @author <steven@velozo.com>
 */const libSimpleLog=require('./Manyfest-LogToConsole.js');// This is for resolving functions mid-address
-const libGetObjectValue=require('./Manyfest-ObjectAddress-GetValue.js');// TODO: Just until this is a fable service.
+const libGetObjectValue=require('./Manyfest-ObjectAddress-GetValue.js');const fCleanWrapCharacters=require('./Manyfest-CleanWrapCharacters.js');// TODO: Just until this is a fable service.
 let _MockFable={DataFormat:require('./Manyfest-ObjectAddress-Parser.js')};/**
 * Object Address Resolver
 *
@@ -2700,14 +2749,24 @@ let _MockFable={DataFormat:require('./Manyfest-ObjectAddress-Parser.js')};/**
 *
 *
 * @class ManyfestObjectAddressResolverCheckAddressExists
-*/class ManyfestObjectAddressResolverCheckAddressExists{constructor(pInfoLog,pErrorLog){// Wire in logging
-this.logInfo=typeof pInfoLog=='function'?pInfoLog:libSimpleLog;this.logError=typeof pErrorLog=='function'?pErrorLog:libSimpleLog;this.getObjectValueClass=new libGetObjectValue(this.logInfo,this.logError);}// Check if an address exists.
-//
-// This is necessary because the getValueAtAddress function is ambiguous on
-// whether the element/property is actually there or not (it returns
-// undefined whether the property exists or not).  This function checks for
-// existance and returns true or false dependent.
-checkAddressExists(pObject,pAddress,pRootObject){// TODO: Should these throw an error?
+*/class ManyfestObjectAddressResolverCheckAddressExists{/**
+	 * @param {function} [pInfoLog] - (optional) Function to use for info logging
+	 * @param {function} [pErrorLog] - (optional) Function to use for error logging
+	 */constructor(pInfoLog,pErrorLog){// Wire in logging
+this.logInfo=typeof pInfoLog=='function'?pInfoLog:libSimpleLog;this.logError=typeof pErrorLog=='function'?pErrorLog:libSimpleLog;this.getObjectValueClass=new libGetObjectValue(this.logInfo,this.logError);this.cleanWrapCharacters=fCleanWrapCharacters;}/**
+	 * Check if an address exists.
+	 *
+	 * This is necessary because the getValueAtAddress function is ambiguous on
+	 * whether the element/property is actually there or not (it returns
+	 * undefined whether the property exists or not).  This function checks for
+	 * existance and returns true or false dependent.
+	 *
+	 * @param {object} pObject - The object to check within
+	 * @param {string} pAddress - The address to check for
+	 * @param {object} [pRootObject] - (optional) The root object for function resolution context
+	 *
+	 * @return {boolean} - True if the address exists, false if it does not
+	 */checkAddressExists(pObject,pAddress,pRootObject){// TODO: Should these throw an error?
 // Make sure pObject is an object
 if(typeof pObject!='object')return false;// Make sure pAddress is a string
 if(typeof pAddress!='string')return false;// Set the root object to the passed-in object if it isn't set yet.  This is expected to be the root object.
@@ -2775,19 +2834,19 @@ let tmpFunctionStartIndex=tmpSubObjectName.indexOf('(');// NOTE THAT FUNCTIONS M
 //    1) The start bracket is after character 0
 if(tmpFunctionStartIndex>0//    2) The end bracket is after the start bracket
 &&_MockFable.DataFormat.stringCountEnclosures(tmpSubObjectName)>0){let tmpFunctionAddress=tmpSubObjectName.substring(0,tmpFunctionStartIndex).trim();//tmpParentAddress = `${tmpParentAddress}${(tmpParentAddress.length > 0) ? '.' : ''}${tmpSubObjectName}`;
-if(!typeof pObject[tmpFunctionAddress]=='function'){// The address suggests it is a function, but it is not.
+if(typeof pObject[tmpFunctionAddress]!=='function'){// The address suggests it is a function, but it is not.
 return false;}// Now see if the function has arguments.
 // Implementation notes: * ARGUMENTS MUST SHARE THE SAME ROOT OBJECT CONTEXT *
 let tmpFunctionArguments=_MockFable.DataFormat.stringGetSegments(_MockFable.DataFormat.stringGetEnclosureValueByIndex(tmpSubObjectName.substring(tmpFunctionAddress.length),0),',');if(tmpFunctionArguments.length==0||tmpFunctionArguments[0]==''){// No arguments... just call the function (bound to the scope of the object it is contained withing)
 if(tmpFunctionAddress in pObject){try{return this.checkAddressExists(pObject[tmpFunctionAddress].apply(pObject),tmpNewAddress,tmpRootObject);}catch(pError){// The function call failed, so the address doesn't exist
-libSimpleLog.log("Error calling function ".concat(tmpFunctionAddress," (address [").concat(pAddress,"]): ").concat(pError.message));return false;}}else{// The function doesn't exist, so the address doesn't exist
-libSimpleLog.log("Function ".concat(tmpFunctionAddress," does not exist (address [").concat(pAddress,"])"));return false;}}else{let tmpArgumentValues=[];let tmpRootObject=typeof pRootObject=='undefined'?pObject:pRootObject;// Now get the value for each argument
+libSimpleLog("Error calling function ".concat(tmpFunctionAddress," (address [").concat(pAddress,"]): ").concat(pError.message));return false;}}else{// The function doesn't exist, so the address doesn't exist
+libSimpleLog("Function ".concat(tmpFunctionAddress," does not exist (address [").concat(pAddress,"])"));return false;}}else{let tmpArgumentValues=[];let tmpRootObject=typeof pRootObject=='undefined'?pObject:pRootObject;// Now get the value for each argument
 for(let i=0;i<tmpFunctionArguments.length;i++){// Resolve the values for each subsequent entry
 // NOTE: This is where the resolves get really tricky.  Recursion within recursion.  Programming gom jabbar, yo.
 tmpArgumentValues.push(this.getObjectValueClass.getValueAtAddress(tmpRootObject,tmpFunctionArguments[i]));}//return this.checkAddressExists(pObject[tmpFunctionAddress].apply(pObject, tmpArgumentValues), tmpNewAddress, tmpRootObject);
 if(tmpFunctionAddress in pObject){try{return this.checkAddressExists(pObject[tmpFunctionAddress].apply(pObject,tmpArgumentValues),tmpNewAddress,tmpRootObject);}catch(pError){// The function call failed, so the address doesn't exist
-libSimpleLog.log("Error calling function ".concat(tmpFunctionAddress," (address [").concat(pAddress,"]): ").concat(pError.message));return false;}}else{// The function doesn't exist, so the address doesn't exist
-libSimpleLog.log("Function ".concat(tmpFunctionAddress," does not exist (address [").concat(pAddress,"])"));return false;}}}// Boxed elements look like this:
+libSimpleLog("Error calling function ".concat(tmpFunctionAddress," (address [").concat(pAddress,"]): ").concat(pError.message));return false;}}else{// The function doesn't exist, so the address doesn't exist
+libSimpleLog("Function ".concat(tmpFunctionAddress," does not exist (address [").concat(pAddress,"])"));return false;}}}// Boxed elements look like this:
 // 		MyValues[42]
 // 		MyValues['Color']
 // 		MyValues["Weight"]
@@ -2824,7 +2883,7 @@ return this.checkAddressExists(pObject[tmpBoxedPropertyName][tmpBoxedPropertyNum
 // then the system can't set the value in there.  Error and abort!
 if(tmpSubObjectName in pObject&&typeof pObject[tmpSubObjectName]!=='object'){return false;}else if(tmpSubObjectName in pObject){// If there is already a subobject pass that to the recursive thingy
 return this.checkAddressExists(pObject[tmpSubObjectName],tmpNewAddress,tmpRootObject);}else{// Create a subobject and then pass that
-pObject[tmpSubObjectName]={};return this.checkAddressExists(pObject[tmpSubObjectName],tmpNewAddress,tmpRootObject);}}}};module.exports=ManyfestObjectAddressResolverCheckAddressExists;},{"./Manyfest-LogToConsole.js":118,"./Manyfest-ObjectAddress-GetValue.js":121,"./Manyfest-ObjectAddress-Parser.js":122}],120:[function(require,module,exports){/**
+pObject[tmpSubObjectName]={};return this.checkAddressExists(pObject[tmpSubObjectName],tmpNewAddress,tmpRootObject);}}}}module.exports=ManyfestObjectAddressResolverCheckAddressExists;},{"./Manyfest-CleanWrapCharacters.js":116,"./Manyfest-LogToConsole.js":118,"./Manyfest-ObjectAddress-GetValue.js":121,"./Manyfest-ObjectAddress-Parser.js":122}],120:[function(require,module,exports){/**
 * @author <steven@velozo.com>
 */let libSimpleLog=require('./Manyfest-LogToConsole.js');let fCleanWrapCharacters=require('./Manyfest-CleanWrapCharacters.js');let fParseConditionals=require("../source/Manyfest-ParseConditionals.js");/**
 * Object Address Resolver - DeleteValue
@@ -2845,10 +2904,25 @@ pObject[tmpSubObjectName]={};return this.checkAddressExists(pObject[tmpSubObject
 *       three separate modules.
 *
 * @class ManyfestObjectAddressResolverDeleteValue
-*/class ManyfestObjectAddressResolverDeleteValue{constructor(pInfoLog,pErrorLog){// Wire in logging
+*/class ManyfestObjectAddressResolverDeleteValue{/**
+	 * @param {function} [pInfoLog] - (optional) A logging function for info messages
+	 * @param {function} [pErrorLog] - (optional) A logging function for error messages
+	 */constructor(pInfoLog,pErrorLog){// Wire in logging
 this.logInfo=typeof pInfoLog=='function'?pInfoLog:libSimpleLog;this.logError=typeof pErrorLog=='function'?pErrorLog:libSimpleLog;this.cleanWrapCharacters=fCleanWrapCharacters;}// TODO: Dry me
-checkRecordFilters(pAddress,pRecord){return fParseConditionals(this,pAddress,pRecord);}// Delete the value of an element at an address
-deleteValueAtAddress(pObject,pAddress,pParentAddress){// Make sure pObject (the object we are meant to be recursing) is an object (which could be an array or object)
+/**
+	 * @param {string} pAddress - The address being evaluated
+	 * @param {object} pRecord - The record being evaluated
+	 *
+	 * @return {boolean} True if the record passes the filters, false if it does not
+	 */checkRecordFilters(pAddress,pRecord){return fParseConditionals(this,pAddress,pRecord);}/**
+	 * Delete the value of an element at an address
+	 *
+	 * @param {object} pObject - The object to delete the value from
+	 * @param {string} pAddress - The address to delete the value at
+	 * @param {string} [pParentAddress] - (optional) The parent address for recursion
+	 *
+	 * @return {boolean|object|undefined} - True if the value was deleted, false if it could not be deleted, undefined on error
+	 */deleteValueAtAddress(pObject,pAddress,pParentAddress){// Make sure pObject (the object we are meant to be recursing) is an object (which could be an array or object)
 if(typeof pObject!='object')return undefined;// Make sure pAddress (the address we are resolving) is a string
 if(typeof pAddress!='string')return undefined;// Stash the parent address for later resolution
 let tmpParentAddress="";if(typeof pParentAddress=='string'){tmpParentAddress=pParentAddress;}// TODO: Make this work for things like SomeRootObject.Metadata["Some.People.Use.Bad.Object.Property.Names"]
@@ -2972,9 +3046,25 @@ tmpParentAddress="".concat(tmpParentAddress).concat(tmpParentAddress.length>0?'.
 *       three separate modules.
 *
 * @class ManyfestObjectAddressResolverGetValue
-*/class ManyfestObjectAddressResolverGetValue{constructor(pInfoLog,pErrorLog){// Wire in logging
-this.logInfo=typeof pInfoLog=='function'?pInfoLog:libSimpleLog;this.logError=typeof pErrorLog=='function'?pErrorLog:libSimpleLog;this.cleanWrapCharacters=fCleanWrapCharacters;}checkRecordFilters(pAddress,pRecord){return fParseConditionals(this,pAddress,pRecord);}// Get the value of an element at an address
-getValueAtAddress(pObject,pAddress,pParentAddress,pRootObject){// Make sure pObject (the object we are meant to be recursing) is an object (which could be an array or object)
+*/class ManyfestObjectAddressResolverGetValue{/**
+	 * @param {function} [pInfoLog] - (optional) A logging function for info messages
+	 * @param {function} [pErrorLog] - (optional) A logging function for error messages
+	 */constructor(pInfoLog,pErrorLog){// Wire in logging
+this.logInfo=typeof pInfoLog=='function'?pInfoLog:libSimpleLog;this.logError=typeof pErrorLog=='function'?pErrorLog:libSimpleLog;this.cleanWrapCharacters=fCleanWrapCharacters;}/**
+	 * @param {string} pAddress - The address of the record to check
+	 * @param {object} pRecord - The record to check against the filters
+	 *
+	 * @return {boolean} - True if the record passes the filters, false otherwise
+	 */checkRecordFilters(pAddress,pRecord){return fParseConditionals(this,pAddress,pRecord);}/**
+	 * Get the value of an element at an address
+	 *
+	 * @param {object} pObject - The object to resolve the address against
+	 * @param {string} pAddress - The address to resolve
+	 * @param {string} [pParentAddress] - (optional) The parent address for back-navigation
+	 * @param {object} [pRootObject] - (optional) The root object for function argument resolution
+	 *
+	 * @return {any} The value at the address, or undefined if not found
+	 */getValueAtAddress(pObject,pAddress,pParentAddress,pRootObject){// Make sure pObject (the object we are meant to be recursing) is an object (which could be an array or object)
 if(typeof pObject!='object'){return undefined;}if(pObject===null){return undefined;}// Make sure pAddress (the address we are resolving) is a string
 if(typeof pAddress!='string'){return undefined;}// Stash the parent address for later resolution
 let tmpParentAddress="";if(typeof pParentAddress=='string'){tmpParentAddress=pParentAddress;}// Set the root object to the passed-in object if it isn't set yet.  This is expected to be the root object.
@@ -3008,7 +3098,7 @@ let tmpFunctionStartIndex=pAddress.indexOf('(');// NOTE THAT FUNCTIONS MUST RESO
 // The requirements to detect a function are:
 //    1) The start bracket is after character 0
 if(tmpFunctionStartIndex>0//    2) The end bracket is after the start bracket
-&&_MockFable.DataFormat.stringCountEnclosures(pAddress)>0){let tmpFunctionAddress=pAddress.substring(0,tmpFunctionStartIndex).trim();if(!typeof pObject[tmpFunctionAddress]=='function'){// The address suggests it is a function, but it is not.
+&&_MockFable.DataFormat.stringCountEnclosures(pAddress)>0){let tmpFunctionAddress=pAddress.substring(0,tmpFunctionStartIndex).trim();if(typeof pObject[tmpFunctionAddress]!=='function'){// The address suggests it is a function, but it is not.
 return false;}// Now see if the function has arguments.
 // Implementation notes: * ARGUMENTS MUST SHARE THE SAME ROOT OBJECT CONTEXT *
 let tmpFunctionArguments=_MockFable.DataFormat.stringGetSegments(_MockFable.DataFormat.stringGetEnclosureValueByIndex(pAddress.substring(tmpFunctionAddress.length),0),',');if(tmpFunctionArguments.length==0||tmpFunctionArguments[0]==''){// No arguments... just call the function (bound to the scope of the object it is contained withing)
@@ -3075,7 +3165,7 @@ let tmpFunctionStartIndex=tmpSubObjectName.indexOf('(');// NOTE THAT FUNCTIONS M
 // The requirements to detect a function are:
 //    1) The start bracket is after character 0
 if(tmpFunctionStartIndex>0//    2) The end bracket is after the start bracket
-&&_MockFable.DataFormat.stringCountEnclosures(tmpSubObjectName)>0){let tmpFunctionAddress=tmpSubObjectName.substring(0,tmpFunctionStartIndex).trim();tmpParentAddress="".concat(tmpParentAddress).concat(tmpParentAddress.length>0?'.':'').concat(tmpSubObjectName);if(!typeof pObject[tmpFunctionAddress]=='function'){// The address suggests it is a function, but it is not.
+&&_MockFable.DataFormat.stringCountEnclosures(tmpSubObjectName)>0){let tmpFunctionAddress=tmpSubObjectName.substring(0,tmpFunctionStartIndex).trim();tmpParentAddress="".concat(tmpParentAddress).concat(tmpParentAddress.length>0?'.':'').concat(tmpSubObjectName);if(typeof pObject[tmpFunctionAddress]!=='function'){// The address suggests it is a function, but it is not.
 return false;}// Now see if the function has arguments.
 // Implementation notes: * ARGUMENTS MUST SHARE THE SAME ROOT OBJECT CONTEXT *
 let tmpFunctionArguments=_MockFable.DataFormat.stringGetSegments(_MockFable.DataFormat.stringGetEnclosureValueByIndex(tmpSubObjectName.substring(tmpFunctionAddress.length),0),',');if(tmpFunctionArguments.length==0||tmpFunctionArguments[0]==''){// No arguments... just call the function (bound to the scope of the object it is contained withing)
@@ -3149,15 +3239,16 @@ tmpParentAddress="".concat(tmpParentAddress).concat(tmpParentAddress.length>0?'.
 // are more or less pure javascript and as functional as they can be made to be.
 // Until we shift Manyfest to be a fable service, these three functions were pulled out of
 // fable to aid in parsing functions with nested enclosures.
-module.exports={/**
+const DEFAULT_START_SYMBOL_MAP={'{':0,'[':1,'(':2};const DEFAULT_END_SYMBOL_MAP={'}':0,']':1,')':2};module.exports={/**
 	 * Count the number of segments in a string, respecting enclosures
-	 * 
-	 * @param {string} pString 
-	 * @param {string} pSeparator 
-	 * @param {object} pEnclosureStartSymbolMap 
-	 * @param {object} pEnclosureEndSymbolMap 
-	 * @returns the count of segments in the string as a number
-	 */stringCountSegments:(pString,pSeparator,pEnclosureStartSymbolMap,pEnclosureEndSymbolMap)=>{let tmpString=typeof pString=='string'?pString:'';let tmpSeparator=typeof pSeparator=='string'?pSeparator:'.';let tmpEnclosureStartSymbolMap=typeof pEnclosureStartSymbolMap=='object'?pEnclosureStart:{'{':0,'[':1,'(':2};let tmpEnclosureEndSymbolMap=typeof pEnclosureEndSymbolMap=='object'?pEnclosureEnd:{'}':0,']':1,')':2};if(pString.length<1){return 0;}let tmpSegmentCount=1;let tmpEnclosureStack=[];for(let i=0;i<tmpString.length;i++){// IF This is the start of a segment
+	 *
+	 * @param {string} pString
+	 * @param {string} [pSeparator]
+	 * @param {Record<string, number>} [pEnclosureStartSymbolMap]
+	 * @param {Record<string, number>} [pEnclosureEndSymbolMap]
+	 *
+	 * @return {number} - The number of segments in the string
+	 */stringCountSegments:(pString,pSeparator,pEnclosureStartSymbolMap,pEnclosureEndSymbolMap)=>{let tmpString=typeof pString=='string'?pString:'';let tmpSeparator=typeof pSeparator=='string'?pSeparator:'.';let tmpEnclosureStartSymbolMap=typeof pEnclosureStartSymbolMap=='object'?pEnclosureStartSymbolMap:DEFAULT_START_SYMBOL_MAP;let tmpEnclosureEndSymbolMap=typeof pEnclosureEndSymbolMap=='object'?pEnclosureEndSymbolMap:DEFAULT_END_SYMBOL_MAP;if(pString.length<1){return 0;}let tmpSegmentCount=1;let tmpEnclosureStack=[];for(let i=0;i<tmpString.length;i++){// IF This is the start of a segment
 if(tmpString[i]==tmpSeparator// AND we are not in a nested portion of the string
 &&tmpEnclosureStack.length==0){// Increment the segment count
 tmpSegmentCount++;}// IF This is the start of an enclosure
@@ -3167,13 +3258,14 @@ else if(tmpString[i]in tmpEnclosureEndSymbolMap// AND it matches the current nes
 &&tmpEnclosureEndSymbolMap[tmpString[i]]==tmpEnclosureStack[tmpEnclosureStack.length-1]){// Pop it off the stack!
 tmpEnclosureStack.pop();}}return tmpSegmentCount;},/**
 	 * Get the first segment in a string, respecting enclosures
-	 * 
-	 * @param {string} pString 
-	 * @param {string} pSeparator 
-	 * @param {object} pEnclosureStartSymbolMap 
-	 * @param {object} pEnclosureEndSymbolMap 
-	 * @returns the first segment in the string as a string
-	 */stringGetFirstSegment:(pString,pSeparator,pEnclosureStartSymbolMap,pEnclosureEndSymbolMap)=>{let tmpString=typeof pString=='string'?pString:'';let tmpSeparator=typeof pSeparator=='string'?pSeparator:'.';let tmpEnclosureStartSymbolMap=typeof pEnclosureStartSymbolMap=='object'?pEnclosureStart:{'{':0,'[':1,'(':2};let tmpEnclosureEndSymbolMap=typeof pEnclosureEndSymbolMap=='object'?pEnclosureEnd:{'}':0,']':1,')':2};if(pString.length<1){return 0;}let tmpEnclosureStack=[];for(let i=0;i<tmpString.length;i++){// IF This is the start of a segment
+	 *
+	 * @param {string} pString
+	 * @param {string} [pSeparator]
+	 * @param {Record<string, number>} [pEnclosureStartSymbolMap]
+	 * @param {Record<string, number>} [pEnclosureEndSymbolMap]
+	 *
+	 * @return {string} - the first segment in the string as a string
+	 */stringGetFirstSegment:(pString,pSeparator,pEnclosureStartSymbolMap,pEnclosureEndSymbolMap)=>{let tmpString=typeof pString=='string'?pString:'';let tmpSeparator=typeof pSeparator=='string'?pSeparator:'.';let tmpEnclosureStartSymbolMap=typeof pEnclosureStartSymbolMap=='object'?pEnclosureStartSymbolMap:DEFAULT_START_SYMBOL_MAP;let tmpEnclosureEndSymbolMap=typeof pEnclosureEndSymbolMap=='object'?pEnclosureEndSymbolMap:DEFAULT_END_SYMBOL_MAP;if(pString.length<1){return'';}let tmpEnclosureStack=[];for(let i=0;i<tmpString.length;i++){// IF This is the start of a segment
 if(tmpString[i]==tmpSeparator// AND we are not in a nested portion of the string
 &&tmpEnclosureStack.length==0){// Return the segment
 return tmpString.substring(0,i);}// IF This is the start of an enclosure
@@ -3183,13 +3275,14 @@ else if(tmpString[i]in tmpEnclosureEndSymbolMap// AND it matches the current nes
 &&tmpEnclosureEndSymbolMap[tmpString[i]]==tmpEnclosureStack[tmpEnclosureStack.length-1]){// Pop it off the stack!
 tmpEnclosureStack.pop();}}return tmpString;},/**
 	 * Get all segments in a string, respecting enclosures
-	 * 
-	 * @param {string} pString 
-	 * @param {string} pSeparator 
-	 * @param {object} pEnclosureStartSymbolMap 
-	 * @param {object} pEnclosureEndSymbolMap 
-	 * @returns the first segment in the string as a string
-	 */stringGetSegments:(pString,pSeparator,pEnclosureStartSymbolMap,pEnclosureEndSymbolMap)=>{let tmpString=typeof pString=='string'?pString:'';let tmpSeparator=typeof pSeparator=='string'?pSeparator:'.';let tmpEnclosureStartSymbolMap=typeof pEnclosureStartSymbolMap=='object'?pEnclosureStart:{'{':0,'[':1,'(':2};let tmpEnclosureEndSymbolMap=typeof pEnclosureEndSymbolMap=='object'?pEnclosureEnd:{'}':0,']':1,')':2};let tmpCurrentSegmentStart=0;let tmpSegmentList=[];if(pString.length<1){return tmpSegmentList;}let tmpEnclosureStack=[];for(let i=0;i<tmpString.length;i++){// IF This is the start of a segment
+	 *
+	 * @param {string} pString
+	 * @param {string} [pSeparator]
+	 * @param {Record<string, number>} [pEnclosureStartSymbolMap]
+	 * @param {Record<string, number>} [pEnclosureEndSymbolMap]
+	 *
+	 * @return {Array<string>} - the segments in the string as an array of strings
+	 */stringGetSegments:(pString,pSeparator,pEnclosureStartSymbolMap,pEnclosureEndSymbolMap)=>{let tmpString=typeof pString=='string'?pString:'';let tmpSeparator=typeof pSeparator=='string'?pSeparator:'.';let tmpEnclosureStartSymbolMap=typeof pEnclosureStartSymbolMap=='object'?pEnclosureStartSymbolMap:DEFAULT_START_SYMBOL_MAP;let tmpEnclosureEndSymbolMap=typeof pEnclosureEndSymbolMap=='object'?pEnclosureEndSymbolMap:DEFAULT_END_SYMBOL_MAP;let tmpCurrentSegmentStart=0;let tmpSegmentList=[];if(pString.length<1){return tmpSegmentList;}let tmpEnclosureStack=[];for(let i=0;i<tmpString.length;i++){// IF This is the start of a segment
 if(tmpString[i]==tmpSeparator// AND we are not in a nested portion of the string
 &&tmpEnclosureStack.length==0){// Return the segment
 tmpSegmentList.push(tmpString.substring(tmpCurrentSegmentStart,i));tmpCurrentSegmentStart=i+1;}// IF This is the start of an enclosure
@@ -3203,8 +3296,8 @@ tmpEnclosureStack.pop();}}if(tmpCurrentSegmentStart<tmpString.length){tmpSegment
 	 * If no start or end characters are specified, it will default to parentheses.  If the string is not a string, it will return 0.
 	 *
 	 * @param {string} pString
-	 * @param {string} pEnclosureStart
-	 * @param {string} pEnclosureEnd
+	 * @param {string} [pEnclosureStart]
+	 * @param {string} [pEnclosureEnd]
 	 * @returns the count of full in the string
 	 */stringCountEnclosures:(pString,pEnclosureStart,pEnclosureEnd)=>{let tmpString=typeof pString=='string'?pString:'';let tmpEnclosureStart=typeof pEnclosureStart=='string'?pEnclosureStart:'(';let tmpEnclosureEnd=typeof pEnclosureEnd=='string'?pEnclosureEnd:')';let tmpEnclosureCount=0;let tmpEnclosureDepth=0;for(let i=0;i<tmpString.length;i++){// This is the start of an enclosure
 if(tmpString[i]==tmpEnclosureStart){if(tmpEnclosureDepth==0){tmpEnclosureCount++;}tmpEnclosureDepth++;}else if(tmpString[i]==tmpEnclosureEnd){tmpEnclosureDepth--;}}return tmpEnclosureCount;},/**
@@ -3214,9 +3307,10 @@ if(tmpString[i]==tmpEnclosureStart){if(tmpEnclosureDepth==0){tmpEnclosureCount++
 	 *
 	 * @param {string} pString
 	 * @param {number} pEnclosureIndexToGet
-	 * @param {string} pEnclosureStart
-	 * @param {string}} pEnclosureEnd
-	 * @returns {string}
+	 * @param {string} [pEnclosureStart]
+	 * @param {string} [pEnclosureEnd]
+	 *
+	 * @return {string} - The value of the enclosure at the specified index
 	 */stringGetEnclosureValueByIndex:(pString,pEnclosureIndexToGet,pEnclosureStart,pEnclosureEnd)=>{let tmpString=typeof pString=='string'?pString:'';let tmpEnclosureIndexToGet=typeof pEnclosureIndexToGet=='number'?pEnclosureIndexToGet:0;let tmpEnclosureStart=typeof pEnclosureStart=='string'?pEnclosureStart:'(';let tmpEnclosureEnd=typeof pEnclosureEnd=='string'?pEnclosureEnd:')';let tmpEnclosureCount=0;let tmpEnclosureDepth=0;let tmpMatchedEnclosureIndex=false;let tmpEnclosedValueStartIndex=0;let tmpEnclosedValueEndIndex=0;for(let i=0;i<tmpString.length;i++){// This is the start of an enclosure
 if(tmpString[i]==tmpEnclosureStart){tmpEnclosureDepth++;// Only count enclosures at depth 1, but still this parses both pairs of all of them.
 if(tmpEnclosureDepth==1){tmpEnclosureCount++;if(tmpEnclosureIndexToGet==tmpEnclosureCount-1){// This is the start of *the* enclosure
@@ -3242,9 +3336,19 @@ return'';}if(tmpEnclosedValueEndIndex>0&&tmpEnclosedValueEndIndex>tmpEnclosedVal
 *
 *
 * @class ManyfestObjectAddressSetValue
-*/class ManyfestObjectAddressSetValue{constructor(pInfoLog,pErrorLog){// Wire in logging
-this.logInfo=typeof pInfoLog=='function'?pInfoLog:libSimpleLog;this.logError=typeof pErrorLog=='function'?pErrorLog:libSimpleLog;this.cleanWrapCharacters=fCleanWrapCharacters;}// Set the value of an element at an address
-setValueAtAddress(pObject,pAddress,pValue){// Make sure pObject is an object
+*/class ManyfestObjectAddressSetValue{/**
+	 * @param {function} [pInfoLog] - (optional) A logging function for info messages
+	 * @param {function} [pErrorLog] - (optional) A logging function for error messages
+	 */constructor(pInfoLog,pErrorLog){// Wire in logging
+this.logInfo=typeof pInfoLog=='function'?pInfoLog:libSimpleLog;this.logError=typeof pErrorLog=='function'?pErrorLog:libSimpleLog;this.cleanWrapCharacters=fCleanWrapCharacters;}/**
+	 * Set the value of an element at an address
+	 *
+	 * @param {object} pObject - The object to set the value in
+	 * @param {string} pAddress - The address to set the value at
+	 * @param {any} pValue - The value to set at the address
+	 *
+	 * @return {boolean} True if the value was set, false otherwise
+	 */setValueAtAddress(pObject,pAddress,pValue){// Make sure pObject is an object
 if(typeof pObject!='object')return false;// Make sure pAddress is a string
 if(typeof pAddress!='string')return false;let tmpSeparatorIndex=pAddress.indexOf('.');if(tmpSeparatorIndex==-1){// Check if it's a boxed property
 let tmpBracketStartIndex=pAddress.indexOf('[');let tmpBracketStopIndex=pAddress.indexOf(']');// Boxed elements look like this:
@@ -3341,18 +3445,28 @@ pObject[tmpSubObjectName]={};return this.setValueAtAddress(pObject[tmpSubObjectN
 *
 *
 * @class ManyfestObjectAddressGeneration
-*/class ManyfestObjectAddressGeneration{constructor(pInfoLog,pErrorLog){// Wire in logging
-this.logInfo=typeof pInfoLog=='function'?pInfoLog:libSimpleLog;this.logError=typeof pErrorLog=='function'?pErrorLog:libSimpleLog;}// generateAddressses
-//
-// This flattens an object into a set of key:value pairs for *EVERY SINGLE
-// POSSIBLE ADDRESS* in the object.  It can get ... really insane really
-// quickly.  This is not meant to be used directly to generate schemas, but
-// instead as a starting point for scripts or UIs.
-//
-// This will return a mega set of key:value pairs with all possible schema
-// permutations and default values (when not an object) and everything else.
-generateAddressses(pObject,pBaseAddress,pSchema){let tmpBaseAddress=typeof pBaseAddress=='string'?pBaseAddress:'';let tmpSchema=typeof pSchema=='object'?pSchema:{};let tmpObjectType=typeof pObject;let tmpSchemaObjectEntry={Address:tmpBaseAddress,Hash:tmpBaseAddress,Name:tmpBaseAddress,// This is so scripts and UI controls can force a developer to opt-in.
-InSchema:false};if(tmpObjectType=='object'&&pObject==null){tmpObjectType='null';}switch(tmpObjectType){case'string':tmpSchemaObjectEntry.DataType='String';tmpSchemaObjectEntry.Default=pObject;tmpSchema[tmpBaseAddress]=tmpSchemaObjectEntry;break;case'number':case'bigint':tmpSchemaObjectEntry.DataType='Number';tmpSchemaObjectEntry.Default=pObject;tmpSchema[tmpBaseAddress]=tmpSchemaObjectEntry;break;case'undefined':case'null':tmpSchemaObjectEntry.DataType='Any';tmpSchemaObjectEntry.Default=pObject;tmpSchema[tmpBaseAddress]=tmpSchemaObjectEntry;break;case'object':if(Array.isArray(pObject)){tmpSchemaObjectEntry.DataType='Array';if(tmpBaseAddress!=''){tmpSchema[tmpBaseAddress]=tmpSchemaObjectEntry;}for(let i=0;i<pObject.length;i++){this.generateAddressses(pObject[i],"".concat(tmpBaseAddress,"[").concat(i,"]"),tmpSchema);}}else{tmpSchemaObjectEntry.DataType='Object';if(tmpBaseAddress!=''){tmpSchema[tmpBaseAddress]=tmpSchemaObjectEntry;tmpBaseAddress+='.';}let tmpObjectProperties=Object.keys(pObject);for(let i=0;i<tmpObjectProperties.length;i++){this.generateAddressses(pObject[tmpObjectProperties[i]],"".concat(tmpBaseAddress).concat(tmpObjectProperties[i]),tmpSchema);}}break;case'symbol':case'function':// Symbols and functions neither recurse nor get added to the schema
+*/class ManyfestObjectAddressGeneration{/**
+	 * @param {function} [pInfoLog] - (optional) A logging function for info messages
+	 * @param {function} [pErrorLog] - (optional) A logging function for error messages
+	 */constructor(pInfoLog,pErrorLog){// Wire in logging
+this.logInfo=typeof pInfoLog=='function'?pInfoLog:libSimpleLog;this.logError=typeof pErrorLog=='function'?pErrorLog:libSimpleLog;}/**
+	 * generateAddressses
+	 *
+	 * This flattens an object into a set of key:value pairs for *EVERY SINGLE
+	 * POSSIBLE ADDRESS* in the object.  It can get ... really insane really
+	 * quickly.  This is not meant to be used directly to generate schemas, but
+	 * instead as a starting point for scripts or UIs.
+	 *
+	 * This will return a mega set of key:value pairs with all possible schema
+	 * permutations and default values (when not an object) and everything else.
+	 *
+	 * @param {any} pObject - The object to generate addresses for
+	 * @param {string} [pBaseAddress] - (optional) The base address to start from
+	 * @param {object} [pSchema] - (optional) The schema object to append to
+	 *
+	 * @return {object} The generated schema object
+	 */generateAddressses(pObject,pBaseAddress,pSchema){let tmpBaseAddress=typeof pBaseAddress=='string'?pBaseAddress:'';let tmpSchema=typeof pSchema=='object'?pSchema:{};let tmpObjectType=typeof pObject;let tmpSchemaObjectEntry={Address:tmpBaseAddress,Hash:tmpBaseAddress,Name:tmpBaseAddress,// This is so scripts and UI controls can force a developer to opt-in.
+InSchema:false};if(tmpObjectType=='object'&&pObject==null){tmpObjectType='undefined';}switch(tmpObjectType){case'string':tmpSchemaObjectEntry.DataType='String';tmpSchemaObjectEntry.Default=pObject;tmpSchema[tmpBaseAddress]=tmpSchemaObjectEntry;break;case'number':case'bigint':tmpSchemaObjectEntry.DataType='Number';tmpSchemaObjectEntry.Default=pObject;tmpSchema[tmpBaseAddress]=tmpSchemaObjectEntry;break;case'undefined':tmpSchemaObjectEntry.DataType='Any';tmpSchemaObjectEntry.Default=pObject;tmpSchema[tmpBaseAddress]=tmpSchemaObjectEntry;break;case'object':if(Array.isArray(pObject)){tmpSchemaObjectEntry.DataType='Array';if(tmpBaseAddress!=''){tmpSchema[tmpBaseAddress]=tmpSchemaObjectEntry;}for(let i=0;i<pObject.length;i++){this.generateAddressses(pObject[i],"".concat(tmpBaseAddress,"[").concat(i,"]"),tmpSchema);}}else{tmpSchemaObjectEntry.DataType='Object';if(tmpBaseAddress!=''){tmpSchema[tmpBaseAddress]=tmpSchemaObjectEntry;tmpBaseAddress+='.';}let tmpObjectProperties=Object.keys(pObject);for(let i=0;i<tmpObjectProperties.length;i++){this.generateAddressses(pObject[tmpObjectProperties[i]],"".concat(tmpBaseAddress).concat(tmpObjectProperties[i]),tmpSchema);}}break;case'symbol':case'function':// Symbols and functions neither recurse nor get added to the schema
 break;}return tmpSchema;}};module.exports=ManyfestObjectAddressGeneration;},{"./Manyfest-LogToConsole.js":118}],125:[function(require,module,exports){// Given a string, parse out any conditional expressions and set whether or not to keep the record.
 //
 // For instance:
@@ -3393,33 +3507,52 @@ tmpKeepRecord=tmpKeepRecord&&testCondition(pManyfest,pRecord,tmpSearchAddress,tm
 * Schema Manipulation Functions
 *
 * @class ManyfestSchemaManipulation
-*/class ManyfestSchemaManipulation{constructor(pInfoLog,pErrorLog){// Wire in logging
-this.logInfo=typeof pInfoLog==='function'?pInfoLog:libSimpleLog;this.logError=typeof pErrorLog==='function'?pErrorLog:libSimpleLog;}// This translates the default address mappings to something different.
-//
-// For instance you can pass in manyfest schema descriptor object:
-// 	{
-//	  "Address.Of.a": { "Hash": "a", "Type": "Number" },
-//	  "Address.Of.b": { "Hash": "b", "Type": "Number" }
-//  }
-//
-//
-// And then an address mapping (basically a Hash->Address map)
-//  {
-//    "a": "New.Address.Of.a",
-//    "b": "New.Address.Of.b"
-//  }
-//
-// NOTE: This mutates the schema object permanently, altering the base hash.
-//       If there is a collision with an existing address, it can lead to overwrites.
-// TODO: Discuss what should happen on collisions.
-resolveAddressMappings(pManyfestSchemaDescriptors,pAddressMapping){if(typeof pManyfestSchemaDescriptors!='object'){this.logError("Attempted to resolve address mapping but the descriptor was not an object.");return false;}if(typeof pAddressMapping!='object'){// No mappings were passed in
+*/class ManyfestSchemaManipulation{/**
+	 * @param {function} [pInfoLog] - (optional) A logging function for info messages
+	 * @param {function} [pErrorLog] - (optional) A logging function for error messages
+	 */constructor(pInfoLog,pErrorLog){// Wire in logging
+this.logInfo=typeof pInfoLog==='function'?pInfoLog:libSimpleLog;this.logError=typeof pErrorLog==='function'?pErrorLog:libSimpleLog;}/**
+     * This translates the default address mappings to something different.
+     *
+     * For instance you can pass in manyfest schema descriptor object:
+     * 	{
+	 *	  "Address.Of.a": { "Hash": "a", "Type": "Number" },
+	 *	  "Address.Of.b": { "Hash": "b", "Type": "Number" }
+	 *  }
+     *
+     *
+     * And then an address mapping (basically a Hash->Address map)
+     *  {
+     *    "a": "New.Address.Of.a",
+     *    "b": "New.Address.Of.b"
+     *  }
+     *
+     * NOTE: This mutates the schema object permanently, altering the base hash.
+     *       If there is a collision with an existing address, it can lead to overwrites.
+     * TODO: Discuss what should happen on collisions.
+	 *
+	 * @param {object} pManyfestSchemaDescriptors - The manyfest schema descriptors to resolve address mappings for
+	 * @param {object} pAddressMapping - The address mapping object to use for remapping
+	 *
+	 * @return {boolean} True if successful, false if there was an error
+	 */resolveAddressMappings(pManyfestSchemaDescriptors,pAddressMapping){if(typeof pManyfestSchemaDescriptors!='object'){this.logError("Attempted to resolve address mapping but the descriptor was not an object.");return false;}if(typeof pAddressMapping!='object'){// No mappings were passed in
 return true;}// Get the arrays of both the schema definition and the hash mapping
-let tmpManyfestAddresses=Object.keys(pManyfestSchemaDescriptors);let tmpHashMapping={};tmpManyfestAddresses.forEach(pAddress=>{if('Hash'in pManyfestSchemaDescriptors[pAddress]){tmpHashMapping[pManyfestSchemaDescriptors[pAddress].Hash]=pAddress;}});let tmpAddressMappingSet=Object.keys(pAddressMapping);tmpAddressMappingSet.forEach(pInputAddress=>{let tmpNewDescriptorAddress=pAddressMapping[pInputAddress];let tmpOldDescriptorAddress=false;let tmpDescriptor=false;// See if there is a matching descriptor either by Address directly or Hash
+let tmpManyfestAddresses=Object.keys(pManyfestSchemaDescriptors);let tmpHashMapping={};tmpManyfestAddresses.forEach(pAddress=>{if('Hash'in pManyfestSchemaDescriptors[pAddress]){tmpHashMapping[pManyfestSchemaDescriptors[pAddress].Hash]=pAddress;}});let tmpAddressMappingSet=Object.keys(pAddressMapping);tmpAddressMappingSet.forEach(pInputAddress=>{let tmpNewDescriptorAddress=pAddressMapping[pInputAddress];let tmpOldDescriptorAddress=null;let tmpDescriptor;// See if there is a matching descriptor either by Address directly or Hash
 if(pInputAddress in pManyfestSchemaDescriptors){tmpOldDescriptorAddress=pInputAddress;}else if(pInputAddress in tmpHashMapping){tmpOldDescriptorAddress=tmpHashMapping[pInputAddress];}// If there was a matching descriptor in the manifest, store it in the temporary descriptor
 if(tmpOldDescriptorAddress){tmpDescriptor=pManyfestSchemaDescriptors[tmpOldDescriptorAddress];delete pManyfestSchemaDescriptors[tmpOldDescriptorAddress];}else{// Create a new descriptor!  Map it to the input address.
 tmpDescriptor={Hash:pInputAddress};}// Now re-add the descriptor to the manyfest schema
-pManyfestSchemaDescriptors[tmpNewDescriptorAddress]=tmpDescriptor;});return true;}safeResolveAddressMappings(pManyfestSchemaDescriptors,pAddressMapping){// This returns the descriptors as a new object, safely remapping without mutating the original schema Descriptors
-let tmpManyfestSchemaDescriptors=JSON.parse(JSON.stringify(pManyfestSchemaDescriptors));this.resolveAddressMappings(tmpManyfestSchemaDescriptors,pAddressMapping);return tmpManyfestSchemaDescriptors;}mergeAddressMappings(pManyfestSchemaDescriptorsDestination,pManyfestSchemaDescriptorsSource){if(typeof pManyfestSchemaDescriptorsSource!='object'||typeof pManyfestSchemaDescriptorsDestination!='object'){this.logError("Attempted to merge two schema descriptors but both were not objects.");return false;}let tmpSource=JSON.parse(JSON.stringify(pManyfestSchemaDescriptorsSource));let tmpNewManyfestSchemaDescriptors=JSON.parse(JSON.stringify(pManyfestSchemaDescriptorsDestination));// The first passed-in set of descriptors takes precedence.
+pManyfestSchemaDescriptors[tmpNewDescriptorAddress]=tmpDescriptor;});return true;}/**
+	 * @param {object} pManyfestSchemaDescriptors - The manyfest schema descriptors to resolve address mappings for
+	 * @param {object} pAddressMapping - The address mapping object to use for remapping
+	 *
+	 * @return {object} A new object containing the remapped schema descriptors
+	 */safeResolveAddressMappings(pManyfestSchemaDescriptors,pAddressMapping){// This returns the descriptors as a new object, safely remapping without mutating the original schema Descriptors
+let tmpManyfestSchemaDescriptors=JSON.parse(JSON.stringify(pManyfestSchemaDescriptors));this.resolveAddressMappings(tmpManyfestSchemaDescriptors,pAddressMapping);return tmpManyfestSchemaDescriptors;}/**
+	 * @param {object} pManyfestSchemaDescriptorsDestination - The destination manyfest schema descriptors
+	 * @param {object} pManyfestSchemaDescriptorsSource - The source manyfest schema descriptors
+	 *
+	 * @return {object} A new object containing the merged schema descriptors
+	 */mergeAddressMappings(pManyfestSchemaDescriptorsDestination,pManyfestSchemaDescriptorsSource){if(typeof pManyfestSchemaDescriptorsSource!='object'||typeof pManyfestSchemaDescriptorsDestination!='object'){this.logError("Attempted to merge two schema descriptors but both were not objects.");return false;}let tmpSource=JSON.parse(JSON.stringify(pManyfestSchemaDescriptorsSource));let tmpNewManyfestSchemaDescriptors=JSON.parse(JSON.stringify(pManyfestSchemaDescriptorsDestination));// The first passed-in set of descriptors takes precedence.
 let tmpDescriptorAddresses=Object.keys(tmpSource);tmpDescriptorAddresses.forEach(pDescriptorAddress=>{if(!(pDescriptorAddress in tmpNewManyfestSchemaDescriptors)){tmpNewManyfestSchemaDescriptors[pDescriptorAddress]=tmpSource[pDescriptorAddress];}});return tmpNewManyfestSchemaDescriptors;}}module.exports=ManyfestSchemaManipulation;},{"./Manyfest-LogToConsole.js":118}],127:[function(require,module,exports){/**
 * @author <steven@velozo.com>
 */const libFableServiceProviderBase=require('fable-serviceproviderbase');let libSimpleLog=require('./Manyfest-LogToConsole.js');let libHashTranslation=require('./Manyfest-HashTranslation.js');let libObjectAddressCheckAddressExists=require('./Manyfest-ObjectAddress-CheckAddressExists.js');let libObjectAddressGetValue=require('./Manyfest-ObjectAddress-GetValue.js');let libObjectAddressSetValue=require('./Manyfest-ObjectAddress-SetValue.js');let libObjectAddressDeleteValue=require('./Manyfest-ObjectAddress-DeleteValue.js');let libObjectAddressGeneration=require('./Manyfest-ObjectAddressGeneration.js');let libSchemaManipulation=require('./Manyfest-SchemaManipulation.js');const _DefaultConfiguration={Scope:'DEFAULT',Descriptors:{}};/**
@@ -3436,19 +3569,31 @@ let tmpDescriptorAddresses=Object.keys(tmpSource);tmpDescriptorAddresses.forEach
 * Manyfest object address-based descriptions and manipulations.
 *
 * @class Manyfest
-*/class Manyfest extends libFableServiceProviderBase{constructor(pFable,pManifest,pServiceHash){if(pFable===undefined){super({});}else{super(pFable,pManifest,pServiceHash);}/** @type {Record<string, any>} */this.options;this.serviceType='Manifest';// Wire in logging
+*/class Manyfest extends libFableServiceProviderBase{constructor(pFable,pManifest,pServiceHash){if(pFable===undefined){super({});}else{super(pFable,pManifest,pServiceHash);}/** @type {import('fable')} */this.fable;/** @type {Record<string, any>} */this.options;/** @type {string} */this.Hash;/** @type {string} */this.UUID;this.serviceType='Manifest';// Wire in logging
 this.logInfo=libSimpleLog;this.logError=libSimpleLog;// Create an object address resolver and map in the functions
-this.objectAddressCheckAddressExists=new libObjectAddressCheckAddressExists(this.logInfo,this.logError);this.objectAddressGetValue=new libObjectAddressGetValue(this.logInfo,this.logError);this.objectAddressSetValue=new libObjectAddressSetValue(this.logInfo,this.logError);this.objectAddressDeleteValue=new libObjectAddressDeleteValue(this.logInfo,this.logError);if(!('defaultValues'in this.options)){this.options.defaultValues={"String":"","Number":0,"Float":0.0,"Integer":0,"PreciseNumber":"0.0","Boolean":false,"Binary":0,"DateTime":0,"Array":[],"Object":{},"Null":null};}if(!('strict'in this.options)){this.options.strict=false;}this.scope=undefined;this.elementAddresses=undefined;this.elementHashes=undefined;this.elementDescriptors=undefined;this.reset();if(typeof this.options==='object'){this.loadManifest(this.options);}this.schemaManipulations=new libSchemaManipulation(this.logInfo,this.logError);this.objectAddressGeneration=new libObjectAddressGeneration(this.logInfo,this.logError);this.hashTranslations=new libHashTranslation(this.logInfo,this.logError);this.numberRegex=/^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$/;}/*************************************************************************
+this.objectAddressCheckAddressExists=new libObjectAddressCheckAddressExists(this.logInfo,this.logError);this.objectAddressGetValue=new libObjectAddressGetValue(this.logInfo,this.logError);this.objectAddressSetValue=new libObjectAddressSetValue(this.logInfo,this.logError);this.objectAddressDeleteValue=new libObjectAddressDeleteValue(this.logInfo,this.logError);if(!('defaultValues'in this.options)){this.options.defaultValues={"String":"","Number":0,"Float":0.0,"Integer":0,"PreciseNumber":"0.0","Boolean":false,"Binary":0,"DateTime":0,"Array":[],"Object":{},"Null":null};}if(!('strict'in this.options)){this.options.strict=false;}/** @type {string} */this.scope=undefined;/** @type {Array<string>} */this.elementAddresses=undefined;/** @type {Record<string, string>} */this.elementHashes=undefined;/** @type {Record<string, ManifestDescriptor>} */this.elementDescriptors=undefined;this.reset();if(typeof this.options==='object'){this.loadManifest(this.options);}this.schemaManipulations=new libSchemaManipulation(this.logInfo,this.logError);this.objectAddressGeneration=new libObjectAddressGeneration(this.logInfo,this.logError);this.hashTranslations=new libHashTranslation(this.logInfo,this.logError);this.numberRegex=/^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$/;}/*************************************************************************
 	 * Schema Manifest Loading, Reading, Manipulation and Serialization Functions
 	 */// Reset critical manifest properties
 reset(){this.scope='DEFAULT';this.elementAddresses=[];this.elementHashes={};this.elementDescriptors={};}clone(){// Make a copy of the options in-place
-let tmpNewOptions=JSON.parse(JSON.stringify(this.options));let tmpNewManyfest=new Manyfest(this.getManifest(),this.logInfo,this.logError,tmpNewOptions);// Import the hash translations
+let tmpNewOptions=JSON.parse(JSON.stringify(this.options));let tmpNewManyfest=new Manyfest(this.fable,tmpNewOptions,this.Hash);tmpNewManyfest.logInfo=this.logInfo;tmpNewManyfest.logError=this.logError;//FIXME: mostly written by co-pilot
+const{Scope,Descriptors,HashTranslations}=this.getManifest();tmpNewManyfest.scope=Scope;tmpNewManyfest.elementDescriptors=Descriptors;tmpNewManyfest.elementAddresses=Object.keys(Descriptors);// Rebuild the element hashes
+for(let i=0;i<tmpNewManyfest.elementAddresses.length;i++){let tmpAddress=tmpNewManyfest.elementAddresses[i];let tmpDescriptor=tmpNewManyfest.elementDescriptors[tmpAddress];tmpNewManyfest.elementHashes[tmpAddress]=tmpAddress;if('Hash'in tmpDescriptor){tmpNewManyfest.elementHashes[tmpDescriptor.Hash]=tmpAddress;}}// Import the hash translations
 tmpNewManyfest.hashTranslations.addTranslation(this.hashTranslations.translationTable);return tmpNewManyfest;}// Deserialize a Manifest from a string
-deserialize(pManifestString){// TODO: Add guards for bad manifest string
-return this.loadManifest(JSON.parse(pManifestString));}// Load a manifest from an object
-loadManifest(pManifest){if(typeof pManifest!=='object'){this.logError("(".concat(this.scope,") Error loading manifest; expecting an object but parameter was type ").concat(typeof pManifest,"."));}let tmpManifest=typeof pManifest=='object'?pManifest:{};let tmpDescriptorKeys=Object.keys(_DefaultConfiguration);for(let i=0;i<tmpDescriptorKeys.length;i++){if(!(tmpDescriptorKeys[i]in tmpManifest)){tmpManifest[tmpDescriptorKeys[i]]=JSON.parse(JSON.stringify(_DefaultConfiguration[tmpDescriptorKeys[i]]));}}if('Scope'in tmpManifest){if(typeof tmpManifest.Scope==='string'){this.scope=tmpManifest.Scope;}else{this.logError("(".concat(this.scope,") Error loading scope from manifest; expecting a string but property was type ").concat(typeof tmpManifest.Scope,"."),tmpManifest);}}else{this.logError("(".concat(this.scope,") Error loading scope from manifest object.  Property \"Scope\" does not exist in the root of the object."),tmpManifest);}if('Descriptors'in tmpManifest){if(typeof tmpManifest.Descriptors==='object'){let tmpDescriptionAddresses=Object.keys(tmpManifest.Descriptors);for(let i=0;i<tmpDescriptionAddresses.length;i++){this.addDescriptor(tmpDescriptionAddresses[i],tmpManifest.Descriptors[tmpDescriptionAddresses[i]]);}}else{this.logError("(".concat(this.scope,") Error loading description object from manifest object.  Expecting an object in 'Manifest.Descriptors' but the property was type ").concat(typeof tmpManifest.Descriptors,"."),tmpManifest);}}else{this.logError("(".concat(this.scope,") Error loading object description from manifest object.  Property \"Descriptors\" does not exist in the root of the Manifest object."),tmpManifest);}if('HashTranslations'in tmpManifest){if(typeof tmpManifest.HashTranslations==='object'){for(let i=0;i<tmpManifest.HashTranslations.length;i++){// Each translation is 
-}}}}// Serialize the Manifest to a string
-serialize(){return JSON.stringify(this.getManifest());}getManifest(){return{Scope:this.scope,Descriptors:JSON.parse(JSON.stringify(this.elementDescriptors)),HashTranslations:JSON.parse(JSON.stringify(this.hashTranslations.translationTable))};}/**
+/**
+	 * @param {string} pManifestString - The manifest string to deserialize
+	 *
+	 * @return {Manyfest} The deserialized manifest
+	 */deserialize(pManifestString){// TODO: Add guards for bad manifest string
+this.loadManifest(JSON.parse(pManifestString));return this;}// Load a manifest from an object
+loadManifest(pManifest){if(typeof pManifest!=='object'){this.logError("(".concat(this.scope,") Error loading manifest; expecting an object but parameter was type ").concat(typeof pManifest,"."));}let tmpManifest=typeof pManifest=='object'?pManifest:{};let tmpDescriptorKeys=Object.keys(_DefaultConfiguration);for(let i=0;i<tmpDescriptorKeys.length;i++){if(!(tmpDescriptorKeys[i]in tmpManifest)){tmpManifest[tmpDescriptorKeys[i]]=JSON.parse(JSON.stringify(_DefaultConfiguration[tmpDescriptorKeys[i]]));}}if('Scope'in tmpManifest){if(typeof tmpManifest.Scope==='string'){this.scope=tmpManifest.Scope;}else{this.logError("(".concat(this.scope,") Error loading scope from manifest; expecting a string but property was type ").concat(typeof tmpManifest.Scope,"."),tmpManifest);}}else{this.logError("(".concat(this.scope,") Error loading scope from manifest object.  Property \"Scope\" does not exist in the root of the object."),tmpManifest);}if('Descriptors'in tmpManifest){if(typeof tmpManifest.Descriptors==='object'){let tmpDescriptionAddresses=Object.keys(tmpManifest.Descriptors);for(let i=0;i<tmpDescriptionAddresses.length;i++){this.addDescriptor(tmpDescriptionAddresses[i],tmpManifest.Descriptors[tmpDescriptionAddresses[i]]);}}else{this.logError("(".concat(this.scope,") Error loading description object from manifest object.  Expecting an object in 'Manifest.Descriptors' but the property was type ").concat(typeof tmpManifest.Descriptors,"."),tmpManifest);}}else{this.logError("(".concat(this.scope,") Error loading object description from manifest object.  Property \"Descriptors\" does not exist in the root of the Manifest object."),tmpManifest);}if('HashTranslations'in tmpManifest){if(typeof tmpManifest.HashTranslations==='object'){for(let i=0;i<tmpManifest.HashTranslations.length;i++){// Each translation is
+//FIXME: ?????????
+}}}}/**
+	 * Serialize the Manifest to a string
+	 *
+	 * @return {string} - The serialized manifest
+	 */serialize(){return JSON.stringify(this.getManifest());}/**
+	 * @return {{ Scope: string, Descriptors: Record<string, ManifestDescriptor>, HashTranslations: Record<string, string> }} - A copy of the manifest state.
+	 */getManifest(){return{Scope:this.scope,Descriptors:JSON.parse(JSON.stringify(this.elementDescriptors)),HashTranslations:JSON.parse(JSON.stringify(this.hashTranslations.translationTable))};}/**
 	 * Add a descriptor to the manifest
 	 *
 	 * @param {string} pAddress - The address of the element to add the descriptor for.
@@ -3814,7 +3959,7 @@ let tmpLoadedViews=Object.keys(this.pict.views);// Sort the views by their prior
 // If they are all the default priority 0, it will end up being add order due to JSON Object Property Key order stuff
 tmpLoadedViews.sort((a,b)=>{return this.pict.views[a].options.AutoRenderOrdinal-this.pict.views[b].options.AutoRenderOrdinal;});for(let i=0;i<tmpLoadedViews.length;i++){let tmpView=this.pict.views[tmpLoadedViews[i]];if(tmpView.options.AutoRender){tmpAnticipate.anticipate(tmpView.renderAsync.bind(tmpView));}}tmpAnticipate.wait(pError=>{this.lastAutoRenderTimestamp=this.fable.log.getTimeStamp();if(this.pict.LogNoisiness>0){this.log.trace("PictApp [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.Name," renderAutoViewsAsync complete."));}return tmpCallback(pError);});}/**
 	 * @return {boolean}
-	 */get isPictApplication(){return true;}}module.exports=PictApplication;},{"../package.json":139,"fable-serviceproviderbase":59}],141:[function(require,module,exports){module.exports={"name":"pict-provider","version":"1.0.6","description":"Pict Provider Base Class","main":"source/Pict-Provider.js","scripts":{"start":"node source/Pict-Provider.js","test":"npx mocha -u tdd -R spec","tests":"npx mocha -u tdd --exit -R spec --grep","coverage":"npx nyc --reporter=lcov --reporter=text-lcov npx mocha -- -u tdd -R spec","build":"npx quack build","docker-dev-build":"docker build ./ -f Dockerfile_LUXURYCode -t pict-provider-image:local","docker-dev-run":"docker run -it -d --name pict-provider-dev -p 24125:8080 -p 30027:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict-provider\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-provider-image:local","docker-dev-shell":"docker exec -it pict-provider-dev /bin/bash","lint":"eslint source/**","types":"tsc -p ."},"types":"types/source/Pict-Provider.d.ts","repository":{"type":"git","url":"git+https://github.com/stevenvelozo/pict-provider.git"},"author":"steven velozo <steven@velozo.com>","license":"MIT","bugs":{"url":"https://github.com/stevenvelozo/pict-provider/issues"},"homepage":"https://github.com/stevenvelozo/pict-provider#readme","devDependencies":{"@eslint/js":"^9.28.0","eslint":"^9.28.0","pict":"^1.0.270","quackage":"^1.0.41","typescript":"^5.8.3"},"dependencies":{"fable-serviceproviderbase":"^3.0.15"},"mocha":{"diff":true,"extension":["js"],"package":"./package.json","reporter":"spec","slow":"75","timeout":"5000","ui":"tdd","watch-files":["source/**/*.js","test/**/*.js"],"watch-ignore":["lib/vendor"]}};},{}],142:[function(require,module,exports){const libFableServiceBase=require('fable-serviceproviderbase');const libPackage=require('../package.json');const defaultPictProviderSettings={ProviderIdentifier:false,// If this is set to true, when the App initializes this will.
+	 */get isPictApplication(){return true;}}module.exports=PictApplication;},{"../package.json":139,"fable-serviceproviderbase":59}],141:[function(require,module,exports){module.exports={"name":"pict-provider","version":"1.0.7","description":"Pict Provider Base Class","main":"source/Pict-Provider.js","scripts":{"start":"node source/Pict-Provider.js","test":"npx mocha -u tdd -R spec","tests":"npx mocha -u tdd --exit -R spec --grep","coverage":"npx nyc --reporter=lcov --reporter=text-lcov npx mocha -- -u tdd -R spec","build":"npx quack build","docker-dev-build":"docker build ./ -f Dockerfile_LUXURYCode -t pict-provider-image:local","docker-dev-run":"docker run -it -d --name pict-provider-dev -p 24125:8080 -p 30027:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict-provider\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-provider-image:local","docker-dev-shell":"docker exec -it pict-provider-dev /bin/bash","lint":"eslint source/**","types":"tsc -p ."},"types":"types/source/Pict-Provider.d.ts","repository":{"type":"git","url":"git+https://github.com/stevenvelozo/pict-provider.git"},"author":"steven velozo <steven@velozo.com>","license":"MIT","bugs":{"url":"https://github.com/stevenvelozo/pict-provider/issues"},"homepage":"https://github.com/stevenvelozo/pict-provider#readme","devDependencies":{"@eslint/js":"^9.39.1","eslint":"^9.39.1","pict":"^1.0.342","quackage":"^1.0.45","typescript":"^5.9.3"},"dependencies":{"fable-serviceproviderbase":"^3.0.15"},"mocha":{"diff":true,"extension":["js"],"package":"./package.json","reporter":"spec","slow":"75","timeout":"5000","ui":"tdd","watch-files":["source/**/*.js","test/**/*.js"],"watch-ignore":["lib/vendor"]}};},{}],142:[function(require,module,exports){const libFableServiceBase=require('fable-serviceproviderbase');const libPackage=require('../package.json');const defaultPictProviderSettings={ProviderIdentifier:false,// If this is set to true, when the App initializes this will.
 // After the App initializes, initialize will be called as soon as it's added.
 AutoInitialize:true,AutoInitializeOrdinal:0,AutoLoadDataWithApp:true,AutoSolveWithApp:true,AutoSolveOrdinal:0,Manifests:{},Templates:[]};class PictProvider extends libFableServiceBase{/**
 	 * @param {import('fable')} pFable - The Fable instance.
@@ -3823,8 +3968,40 @@ AutoInitialize:true,AutoInitializeOrdinal:0,AutoLoadDataWithApp:true,AutoSolveWi
 	 */constructor(pFable,pOptions,pServiceHash){// Intersect default options, parent constructor, service information
 let tmpOptions=Object.assign({},JSON.parse(JSON.stringify(defaultPictProviderSettings)),pOptions);super(pFable,tmpOptions,pServiceHash);/** @type {import('fable') & import('pict') & { instantiateServiceProviderWithoutRegistration(pServiceType: string, pOptions?: Record<string, any>, pCustomServiceHash?: string): any }} */this.fable;/** @type {import('fable') & import('pict') & { instantiateServiceProviderWithoutRegistration(pServiceType: string, pOptions?: Record<string, any>, pCustomServiceHash?: string): any }} */this.pict;/** @type {any} */this.log;/** @type {Record<string, any>} */this.options;/** @type {string} */this.UUID;/** @type {string} */this.Hash;if(!this.options.ProviderIdentifier){this.options.ProviderIdentifier="AutoProviderID-".concat(this.fable.getUUID());}this.serviceType='PictProvider';/** @type {Record<string, any>} */this._Package=libPackage;// Convenience and consistency naming
 this.pict=this.fable;// Wire in the essential Pict application state
-/** @type {Record<string, any>} */this.AppData=this.pict.AppData;/** @type {Record<string, any>} */this.Bundle=this.pict.Bundle;this.initializeTimestamp=false;this.lastSolvedTimestamp=false;for(let i=0;i<this.options.Templates.length;i++){let tmpDefaultTemplate=this.options.Templates[i];if(!tmpDefaultTemplate.hasOwnProperty('Postfix')||!tmpDefaultTemplate.hasOwnProperty('Template')){this.log.error("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," could not load Default Template ").concat(i," in the options array."),tmpDefaultTemplate);}else{if(!tmpDefaultTemplate.Source){tmpDefaultTemplate.Source="PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," options object.");}this.pict.TemplateProvider.addDefaultTemplate(tmpDefaultTemplate.Prefix,tmpDefaultTemplate.Postfix,tmpDefaultTemplate.Template,tmpDefaultTemplate.Source);}}}/* -------------------------------------------------------------------------- *//*                        Code Section: Initialization                        *//* -------------------------------------------------------------------------- */onBeforeInitialize(){if(this.pict.LogNoisiness>3){this.log.trace("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," onBeforeInitialize:"));}return true;}onBeforeInitializeAsync(fCallback){this.onBeforeInitialize();return fCallback();}onInitialize(){if(this.pict.LogNoisiness>3){this.log.trace("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," onInitialize:"));}return true;}onInitializeAsync(fCallback){this.onInitialize();return fCallback();}initialize(){if(this.pict.LogControlFlow){this.log.trace("PICT-ControlFlow PROVIDER [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," initialize:"));}if(!this.initializeTimestamp){this.onBeforeInitialize();this.onInitialize();this.onAfterInitialize();this.initializeTimestamp=this.pict.log.getTimeStamp();return true;}else{this.log.warn("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," initialize called but initialization is already completed.  Aborting."));return false;}}initializeAsync(fCallback){if(this.pict.LogControlFlow){this.log.trace("PICT-ControlFlow PROVIDER [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," initializeAsync:"));}if(!this.initializeTimestamp){let tmpAnticipate=this.pict.instantiateServiceProviderWithoutRegistration('Anticipate');if(this.pict.LogNoisiness>0){this.log.info("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," beginning initialization..."));}tmpAnticipate.anticipate(this.onBeforeInitializeAsync.bind(this));tmpAnticipate.anticipate(this.onInitializeAsync.bind(this));tmpAnticipate.anticipate(this.onAfterInitializeAsync.bind(this));tmpAnticipate.wait(pError=>{this.initializeTimestamp=this.pict.log.getTimeStamp();if(pError){this.log.error("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," initialization failed: ").concat(pError.message||pError),{Stack:pError.stack});}else if(this.pict.LogNoisiness>0){this.log.info("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," initialization complete."));}return fCallback();});}else{this.log.warn("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," async initialize called but initialization is already completed.  Aborting."));// TODO: Should this be an error?
-return fCallback();}}onAfterInitialize(){if(this.pict.LogNoisiness>3){this.log.trace("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," onAfterInitialize:"));}return true;}onAfterInitializeAsync(fCallback){this.onAfterInitialize();return fCallback();}onPreRender(){if(this.pict.LogNoisiness>3){this.log.trace("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," onPreRender:"));}return true;}onPreRenderAsync(fCallback){this.onPreRender();return fCallback();}render(){return this.onPreRender();}renderAsync(fCallback){this.onPreRender();return fCallback();}onPreSolve(){if(this.pict.LogNoisiness>3){this.log.trace("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," onPreSolve:"));}return true;}onPreSolveAsync(fCallback){this.onPreSolve();return fCallback();}solve(){return this.onPreSolve();}solveAsync(fCallback){this.onPreSolve();return fCallback();}/**
+/** @type {Record<string, any>} */this.AppData=this.pict.AppData;/** @type {Record<string, any>} */this.Bundle=this.pict.Bundle;this.initializeTimestamp=false;this.lastSolvedTimestamp=false;for(let i=0;i<this.options.Templates.length;i++){let tmpDefaultTemplate=this.options.Templates[i];if(!tmpDefaultTemplate.hasOwnProperty('Postfix')||!tmpDefaultTemplate.hasOwnProperty('Template')){this.log.error("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," could not load Default Template ").concat(i," in the options array."),tmpDefaultTemplate);}else{if(!tmpDefaultTemplate.Source){tmpDefaultTemplate.Source="PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," options object.");}this.pict.TemplateProvider.addDefaultTemplate(tmpDefaultTemplate.Prefix,tmpDefaultTemplate.Postfix,tmpDefaultTemplate.Template,tmpDefaultTemplate.Source);}}}/* -------------------------------------------------------------------------- *//*                        Code Section: Initialization                        *//* -------------------------------------------------------------------------- */onBeforeInitialize(){if(this.pict.LogNoisiness>3){this.log.trace("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," onBeforeInitialize:"));}return true;}/**
+	 * @param {(pError?: Error) => void} fCallback - The callback to call after pre-pinitialization.
+	 *
+	 * @return {void}
+	 */onBeforeInitializeAsync(fCallback){this.onBeforeInitialize();return fCallback();}onInitialize(){if(this.pict.LogNoisiness>3){this.log.trace("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," onInitialize:"));}return true;}/**
+	 * @param {(pError?: Error) => void} fCallback - The callback to call after initialization.
+	 *
+	 * @return {void}
+	 */onInitializeAsync(fCallback){this.onInitialize();return fCallback();}initialize(){if(this.pict.LogControlFlow){this.log.trace("PICT-ControlFlow PROVIDER [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," initialize:"));}if(!this.initializeTimestamp){this.onBeforeInitialize();this.onInitialize();this.onAfterInitialize();this.initializeTimestamp=this.pict.log.getTimeStamp();return true;}else{this.log.warn("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," initialize called but initialization is already completed.  Aborting."));return false;}}/**
+	 * @param {(pError?: Error) => void} fCallback - The callback to call after initialization.
+	 *
+	 * @return {void}
+	 */initializeAsync(fCallback){if(this.pict.LogControlFlow){this.log.trace("PICT-ControlFlow PROVIDER [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," initializeAsync:"));}if(!this.initializeTimestamp){let tmpAnticipate=this.pict.instantiateServiceProviderWithoutRegistration('Anticipate');if(this.pict.LogNoisiness>0){this.log.info("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," beginning initialization..."));}tmpAnticipate.anticipate(this.onBeforeInitializeAsync.bind(this));tmpAnticipate.anticipate(this.onInitializeAsync.bind(this));tmpAnticipate.anticipate(this.onAfterInitializeAsync.bind(this));tmpAnticipate.wait(pError=>{this.initializeTimestamp=this.pict.log.getTimeStamp();if(pError){this.log.error("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," initialization failed: ").concat(pError.message||pError),{Stack:pError.stack});}else if(this.pict.LogNoisiness>0){this.log.info("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," initialization complete."));}return fCallback();});}else{this.log.warn("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," async initialize called but initialization is already completed.  Aborting."));// TODO: Should this be an error?
+return fCallback();}}onAfterInitialize(){if(this.pict.LogNoisiness>3){this.log.trace("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," onAfterInitialize:"));}return true;}/**
+	 * @param {(pError?: Error) => void} fCallback - The callback to call after initialization.
+	 *
+	 * @return {void}
+	 */onAfterInitializeAsync(fCallback){this.onAfterInitialize();return fCallback();}onPreRender(){if(this.pict.LogNoisiness>3){this.log.trace("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," onPreRender:"));}return true;}/**
+	 * @param {(pError?: Error) => void} fCallback - The callback to call after pre-render.
+	 *
+	 * @return {void}
+	 */onPreRenderAsync(fCallback){this.onPreRender();return fCallback();}render(){return this.onPreRender();}/**
+	 * @param {(pError?: Error) => void} fCallback - The callback to call after render.
+	 *
+	 * @return {void}
+	 */renderAsync(fCallback){this.onPreRender();return fCallback();}onPreSolve(){if(this.pict.LogNoisiness>3){this.log.trace("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," onPreSolve:"));}return true;}/**
+	 * @param {(pError?: Error) => void} fCallback - The callback to call after pre-solve.
+	 *
+	 * @return {void}
+	 */onPreSolveAsync(fCallback){this.onPreSolve();return fCallback();}solve(){return this.onPreSolve();}/**
+	 * @param {(pError?: Error) => void} fCallback - The callback to call after solve.
+	 *
+	 * @return {void}
+	 */solveAsync(fCallback){this.onPreSolve();return fCallback();}/**
 	 * @param {(pError?: Error) => void} fCallback - The callback to call after the data pre-load.
 	 */onBeforeLoadDataAsync(fCallback){return fCallback();}/**
 	 * Hook to allow the provider to load data during application data load.
@@ -3834,12 +4011,18 @@ return fCallback();}}onAfterInitialize(){if(this.pict.LogNoisiness>3){this.log.t
 	 * @param {(pError?: Error) => void} fCallback - The callback to call after the data post-load.
 	 */onAfterLoadDataAsync(fCallback){return fCallback();}/**
 	 * @param {(pError?: Error) => void} fCallback - The callback to call after the data pre-load.
+	 *
+	 * @return {void}
 	 */onBeforeSaveDataAsync(fCallback){return fCallback();}/**
 	 * Hook to allow the provider to load data during application data load.
 	 *
 	 * @param {(pError?: Error) => void} fCallback - The callback to call after the data load.
+	 *
+	 * @return {void}
 	 */onSaveDataAsync(fCallback){if(this.pict.LogNoisiness>3){this.log.trace("PictProvider [".concat(this.UUID,"]::[").concat(this.Hash,"] ").concat(this.options.ProviderIdentifier," onSaveDataAsync:"));}return fCallback();}/**
 	 * @param {(pError?: Error) => void} fCallback - The callback to call after the data post-load.
+	 *
+	 * @return {void}
 	 */onAfterSaveDataAsync(fCallback){return fCallback();}}module.exports=PictProvider;},{"../package.json":141,"fable-serviceproviderbase":59}],143:[function(require,module,exports){module.exports={"name":"pict-template","version":"1.0.13","description":"Pict Template Base Class","main":"source/Pict-Template.js","scripts":{"start":"node source/Pict-Template.js","test":"npx mocha -u tdd -R spec","tests":"npx mocha -u tdd --exit -R spec --grep","coverage":"npx nyc --reporter=lcov --reporter=text-lcov npx mocha -- -u tdd -R spec","build":"npx quack build","types":"tsc -p ."},"types":"types/source/Pict-Template.d.ts","repository":{"type":"git","url":"git+https://github.com/stevenvelozo/pict-view.git"},"author":"steven velozo <steven@velozo.com>","license":"MIT","bugs":{"url":"https://github.com/stevenvelozo/pict-view/issues"},"homepage":"https://github.com/stevenvelozo/pict-view#readme","devDependencies":{"pict":"^1.0.293","quackage":"^1.0.42","typescript":"^5.8.3"},"mocha":{"diff":true,"extension":["js"],"package":"./package.json","reporter":"spec","slow":"75","timeout":"5000","ui":"tdd","watch-files":["source/**/*.js","test/**/*.js"],"watch-ignore":["lib/vendor"]},"dependencies":{"fable-serviceproviderbase":"^3.0.15"}};},{}],144:[function(require,module,exports){const libFableServiceBase=require('fable-serviceproviderbase');const libPackage=require('../package.json');/** @typedef {import('pict') & {
  *     [key: string]: any, // represent services for now as a workaround
  * }} Pict *//**
@@ -5481,7 +5664,7 @@ try{if(!global.localStorage)return false;}catch(_){return false;}var val=global.
 // presumably different callback function.
 // This makes sure that own properties are retained, so that
 // decorations and such are not lost along the way.
-module.exports=wrappy;function wrappy(fn,cb){if(fn&&cb)return wrappy(fn)(cb);if(typeof fn!=='function')throw new TypeError('need wrapper function');Object.keys(fn).forEach(function(k){wrapper[k]=fn[k];});return wrapper;function wrapper(){var args=new Array(arguments.length);for(var i=0;i<args.length;i++){args[i]=arguments[i];}var ret=fn.apply(this,args);var cb=args[args.length-1];if(typeof ret==='function'&&ret!==cb){Object.keys(cb).forEach(function(k){ret[k]=cb[k];});}return ret;}}},{}],191:[function(require,module,exports){module.exports=extend;var hasOwnProperty=Object.prototype.hasOwnProperty;function extend(){var target={};for(var i=0;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;}},{}],192:[function(require,module,exports){module.exports={"name":"pict","version":"1.0.342","description":"Pict browser library.","main":"source/Pict.js","scripts":{"start":"node source/Pict.js","test":"npx mocha -u tdd -R spec","tests":"npx mocha -u tdd --exit -R spec --grep","coverage":"npx nyc --reporter=lcov --reporter=text-lcov npx mocha -- -u tdd -R spec","build":"npx quack build","docker-dev-build":"docker build ./ -f Dockerfile_LUXURYCode -t pict-image:local","docker-dev-run":"docker run -it -d --name pict-dev -p 37447:8080 -p 19506:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-image:local","docker-dev-shell":"docker exec -it pict-dev /bin/bash","lint":"eslint source/**/*.js test/**/*.js","types":"tsc -p ."},"types":"types/source/Pict.d.ts","mocha":{"diff":true,"extension":["js"],"package":"./package.json","reporter":"spec","slow":"75","timeout":"5000","ui":"tdd","watch-files":["source/**/*.js","test/**/*.js"],"watch-ignore":["lib/vendor"]},"repository":{"type":"git","url":"git+https://stevenvelozo@github.com/stevenvelozo/pict.git"},"author":"steven velozo <steven@velozo.com>","license":"MIT","bugs":{"url":"https://github.com/stevenvelozo/pict/issues"},"homepage":"https://github.com/stevenvelozo/pict#readme","devDependencies":{"@eslint/js":"^9.39.1","@types/jquery":"^3.5.33","@types/sinon":"^17.0.4","eslint":"^9.39.1","globals":"^16.5.0","quackage":"^1.0.45","sinon":"^20.0.0","typescript":"^5.9.3"},"dependencies":{"cachetrax":"^1.0.4","fable":"^3.1.49","pict-application":"^1.0.29","pict-provider":"^1.0.6","pict-template":"^1.0.13","pict-view":"^1.0.64"}};},{}],193:[function(require,module,exports){// This assumes Pict has been required in the browser. Delcare these as globals so linter can do its job.
+module.exports=wrappy;function wrappy(fn,cb){if(fn&&cb)return wrappy(fn)(cb);if(typeof fn!=='function')throw new TypeError('need wrapper function');Object.keys(fn).forEach(function(k){wrapper[k]=fn[k];});return wrapper;function wrapper(){var args=new Array(arguments.length);for(var i=0;i<args.length;i++){args[i]=arguments[i];}var ret=fn.apply(this,args);var cb=args[args.length-1];if(typeof ret==='function'&&ret!==cb){Object.keys(cb).forEach(function(k){ret[k]=cb[k];});}return ret;}}},{}],191:[function(require,module,exports){module.exports=extend;var hasOwnProperty=Object.prototype.hasOwnProperty;function extend(){var target={};for(var i=0;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;}},{}],192:[function(require,module,exports){module.exports={"name":"pict","version":"1.0.343","description":"Pict browser library.","main":"source/Pict.js","scripts":{"start":"node source/Pict.js","test":"npx mocha -u tdd -R spec","tests":"npx mocha -u tdd --exit -R spec --grep","coverage":"npx nyc --reporter=lcov --reporter=text-lcov npx mocha -- -u tdd -R spec","build":"npx quack build","docker-dev-build":"docker build ./ -f Dockerfile_LUXURYCode -t pict-image:local","docker-dev-run":"docker run -it -d --name pict-dev -p 37447:8080 -p 19506:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-image:local","docker-dev-shell":"docker exec -it pict-dev /bin/bash","lint":"eslint source/**/*.js test/**/*.js","types":"tsc -p ."},"types":"types/source/Pict.d.ts","mocha":{"diff":true,"extension":["js"],"package":"./package.json","reporter":"spec","slow":"75","timeout":"5000","ui":"tdd","watch-files":["source/**/*.js","test/**/*.js"],"watch-ignore":["lib/vendor"]},"repository":{"type":"git","url":"git+https://stevenvelozo@github.com/stevenvelozo/pict.git"},"author":"steven velozo <steven@velozo.com>","license":"MIT","bugs":{"url":"https://github.com/stevenvelozo/pict/issues"},"homepage":"https://github.com/stevenvelozo/pict#readme","devDependencies":{"@eslint/js":"^9.39.1","@types/jquery":"^3.5.33","@types/sinon":"^17.0.4","eslint":"^9.39.1","globals":"^16.5.0","quackage":"^1.0.45","sinon":"^20.0.0","typescript":"^5.9.3"},"dependencies":{"cachetrax":"^1.0.4","fable":"^3.1.51","pict-application":"^1.0.29","pict-provider":"^1.0.7","pict-template":"^1.0.13","pict-view":"^1.0.64"}};},{}],193:[function(require,module,exports){// This assumes Pict has been required in the browser. Delcare these as globals so linter can do its job.
 /* global Pict, _Pict: writeable *//**
  * Simple function to load a pict Application
  *
