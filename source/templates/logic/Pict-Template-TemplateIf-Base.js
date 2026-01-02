@@ -42,6 +42,8 @@ class PictTemplateProviderTemplateIfBase extends libPictTemplate
 					default:
 						return false;
 				}
+			case '!==':
+				return (pValueLeft !== pValueRight);
 			case '!=':
 				return (pValueLeft != pValueRight);
 			case '<':
