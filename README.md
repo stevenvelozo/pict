@@ -180,7 +180,6 @@ It is annoying to keep the terminal running to have API endpoints.  An easy and 
 extremely, awesomely stable way to run it in the background within the docker container
 is through the tmux command.
 
-
 Then you can press [ctrl-b] and then [d] to detach from the tmux terminal.  If you
 ever want to go back and watch the REST logs, or, restart the service, you can run
 `tmux attach` to reattach to the running sessions.  Further documentation of tmux
