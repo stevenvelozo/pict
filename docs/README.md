@@ -1,53 +1,68 @@
 # Pict
 
-Welcome to the pict documentation!
+> A flexible MVC framework for building applications with text-based UI
 
-Pict is a non-opinionated suite of tools meant to provide the disparate parts of Model, View and Controller patterns for web, console and other applications.  The technology was designed to not require development to be "fully bought in on a framework" to use.
+Pict is a non-opinionated suite of tools implementing Model, View, and Controller patterns for web, console, and other applications. The technology was designed to not require development to be fully invested in a framework to use, providing flexible and composable components that work with the Fable service provider architecture.
 
-## Ultra Quickstart
+## Features
 
-Here is a minimum viable quickstart from the documentation:
+- **Non-Opinionated Design** - Works in diverse environments without forcing a specific architecture
+- **View Lifecycle Management** - Complete initialization, rendering, and solving lifecycles
+- **MetaTemplate System** - Powerful templating with data interpolation and iteration
+- **State Management** - Centralized AppData store with two-way data binding
+- **Provider Architecture** - Extensible service providers for data and functionality
+- **Browser & Node.js** - Works seamlessly in both environments
 
-### Step 1: Install the pict Module
+## Quick Start
 
-```shell
+```javascript
+const libPict = require('pict');
+
+// Create a Pict instance with configuration
+const _Pict = new libPict({
+    Product: 'MyApplication',
+    ProductVersion: '1.0.0'
+});
+
+// Access built-in services
+_Pict.log.trace('Application started');
+
+// Use the template system
+const template = _Pict.parseTemplate('Hello {~Data:Name~}!');
+const result = _Pict.parseTemplateByHash(template, { Name: 'World' });
+```
+
+## Installation
+
+```bash
 npm install pict
 ```
 
-### Step 2: Import the Module to your Application and Initialize the Toolkit
+## Core Concepts
 
-```javascript
-const libPict = require('pict');
+### Views
+Views are the primary unit of UI composition in Pict. Each view manages one or more renderables and their associated templates.
 
-const _Pict = new libPict( { Product: 'Quickstart-Example', ProductVersion: '1.2.3' } );
-```
+### Providers
+Providers are services that participate in the application lifecycle, handling data loading, saving, and transformation.
 
-This will initialize a pict and prepare all the fable services available.  The object passed in becomes the `settings` property of pict.  So if you inspected `_Pict.settings.ProductVersion` it would be set to `1.2.3` in this case.  Settings are expected to be plain Javascript objects without loops or functions.  This configuration is technically used to initialize fable and includes things like logging init (which is what the Product string we set in the example is used for, primarily).
+### Applications
+Applications coordinate views and providers, managing the overall lifecycle and state of your application.
 
-Note that you don't *have* to pass any config.  No object or an empty object works just fine... fable sets the application name to `ApplicationNameHere` and the version to `0.0.0` so it's apparent nothing has been configured.
+### Templates
+Templates use Pict's template syntax to generate dynamic content from data, supporting interpolation, iteration, and conditionals.
 
-### Step 3: Do Something
+## Documentation
 
-Now that we have our pict, we can do something with it.  Like log to the javascript console.
+- [Quickstart](pict_quickstart.md) - Getting started guide
+- [Key Concepts](pict_keyconcepts.md) - Understanding Pict fundamentals
+- [State Management](state_management/README.md) - Working with AppData
+- [Views](views/README.md) - Building views
+- [Providers](providers/README.md) - Creating providers
 
-```javascript
-_Pict.log.trace(`This is a quickstart example log message for the ${_Pict.settings.Product} pict instance.`);
-```
+## Related Packages
 
-Which in my case output the following to the console:
-
-```
-2025-06-23T19:14:04.881Z [trace] (Quickstart-Example): This is a quickstart example log message for the Quickstart-Example pict instance.
-```
-
-Okay your pict is up and running!  Full source for the minimum viable example here:
-
-```javascript
-const libPict = require('pict');
-
-const _Pict = new libPict( { Product: 'Quickstart-Example', ProductVersion: '1.2.3' } );
-
-_Pict.log.trace(`This is a quickstart example log message for the ${_Pict.settings.Product} pict instance.`);
-```
-
-Obviously this is a silly example, but, *you are reading a quickstart*.  See more in the quickstart here...
+- [pict-view](https://github.com/stevenvelozo/pict-view) - View base class
+- [pict-application](https://github.com/stevenvelozo/pict-application) - Application base class
+- [pict-provider](https://github.com/stevenvelozo/pict-provider) - Provider base class
+- [fable](https://github.com/stevenvelozo/fable) - Service provider framework
