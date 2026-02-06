@@ -27,9 +27,10 @@ const _Pict = new libPict({
 // Access built-in services
 _Pict.log.trace('Application started');
 
-// Use the template system
-const template = _Pict.parseTemplate('Hello {~Data:Name~}!');
-const result = _Pict.parseTemplateByHash(template, { Name: 'World' });
+// Use the template system -- resolves jellyfish expressions inline
+_Pict.AppData.Name = 'World';
+const result = _Pict.parseTemplate('Hello {~Data:AppData.Name~}!');
+// result === 'Hello World!'
 ```
 
 ## Installation

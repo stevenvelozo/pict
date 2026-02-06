@@ -27,8 +27,8 @@ Both forms are equivalent. The address can point to any location in the state:
 If the data is empty or undefined, render a fallback template instead:
 
 ```javascript
-{~DataWithFallback:AppData.User.name:DefaultName-Template~}
-{~DWF:AppData.User.name:DefaultName-Template~}
+{~DataWithTemplateFallback:AppData.User.name:DefaultName-Template~}
+{~DWTF:AppData.User.name:DefaultName-Template~}
 ```
 
 ### Data With Absolute Fallback
@@ -57,7 +57,6 @@ Format a value as US currency:
 
 ```javascript
 {~Dollars:AppData.Total~}     // "$1,234.56"
-{~$:AppData.Total~}           // "$1,234.56"
 ```
 
 ### Date YYYYMMDD
@@ -165,7 +164,7 @@ Render a template whose hash is stored in data:
 
 ```javascript
 {~TemplateByDataAddress:AppData.SelectedTemplate~}
-{~TDA:AppData.SelectedTemplate~}
+{~TBDA:AppData.SelectedTemplate~}
 ```
 
 ### Template By Reference
@@ -217,9 +216,9 @@ Render a template set with additional payload data:
 {~TSWP:ItemRow:AppData.Items:AppData.Config~}
 ```
 
-Within the template:
-- `Data` refers to the current item
-- `Payload` refers to the payload object
+Within the template, each record is wrapped as `{ Data: <item>, Payload: <payload> }`:
+- `Record.Data` refers to the current item
+- `Record.Payload` refers to the payload object
 
 ### Template Value Set
 
@@ -241,30 +240,36 @@ Render literal content if a value is truthy:
 {~NE:AppData.HasPermission^<button>Delete</button>~}
 ```
 
-### Conditional If
+### Conditional If (Relative)
 
-Conditionally render a template based on a comparison:
+Conditionally render a template by comparing two data addresses. Both sides of the comparison are resolved from state:
 
 ```javascript
-{~TemplateIf:SuccessMessage:Record:AppData.Status^EQ^success~}
-{~TIf:SuccessMessage:Record:AppData.Status^EQ^success~}
+{~TemplateIf:SuccessMessage:Record:AppData.Status^==^AppData.ExpectedStatus~}
+{~TIf:SuccessMessage:Record:AppData.Status^==^AppData.ExpectedStatus~}
 ```
 
 Available operators:
-- `EQ` - Equal
-- `NE` - Not equal
-- `GT` - Greater than
-- `GE` - Greater than or equal
-- `LT` - Less than
-- `LE` - Less than or equal
+- `==` - Equal (loose)
+- `===` - Equal (strict)
+- `!=` - Not equal (loose)
+- `!==` - Not equal (strict)
+- `>` - Greater than
+- `>=` - Greater than or equal
+- `<` - Less than
+- `<=` - Less than or equal
+- `TRUE` - Left value is true
+- `FALSE` - Left value is false
+- `LNGT` / `LENGTH_GREATER_THAN` - Left value's length is greater than right
+- `LNLT` / `LENGTH_LESS_THAN` - Left value's length is less than right
 
 ### Conditional If with Absolute Value
 
-Compare against a literal value:
+Compare a data address against a literal value:
 
 ```javascript
-{~TemplateIfAbsolute:AdminPanel:Record:AppData.UserRole^EQ^admin~}
-{~TIfAbs:AdminPanel:Record:AppData.UserRole^EQ^admin~}
+{~TemplateIfAbsolute:AdminPanel:Record:AppData.UserRole^==^admin~}
+{~TIfAbs:AdminPanel:Record:AppData.UserRole^==^admin~}
 ```
 
 ## Meadow Entities
@@ -329,7 +334,6 @@ Insert a debugger statement:
 
 ```javascript
 {~Breakpoint~}
-{~BP~}
 ```
 
 ### Output a Data Value Tree
@@ -337,8 +341,8 @@ Insert a debugger statement:
 Output a JSON representation of a data tree:
 
 ```javascript
-{~DataValueTree:AppData.User~}
-{~DVT:AppData.User~}
+{~DataTree:AppData.User~}
+{~DT:AppData.User~}
 ```
 
 ### Log a Hard-Coded Debugger Statement
@@ -373,18 +377,45 @@ Log an entire object tree:
 | Expression | Shorthand | Description |
 | ---------- | --------- | ----------- |
 | `Data` | `D` | Access data by address |
-| `DataWithFallback` | `DWF` | Data with template fallback |
+| `DataWithTemplateFallback` | `DWTF` | Data with template fallback |
 | `DataWithAbsoluteFallback` | `DWAF` | Data with literal fallback |
+| `DataJson` | `DJ` | Output data as JSON |
+| `DataValueByKey` | `DVBK` | Access data value by a dynamic key |
+| `DataEncodeJavascriptString` | `DEJS` | Encode data for JS string |
 | `Template` | `T` | Render template by hash |
+| `TemplateByReference` | `TBR` | Render template with data from address |
+| `TemplateByDataAddress` | `TBDA` | Render template whose hash is in data |
+| `TemplateFromMap` | `TFM` | Select template by key from map |
+| `TemplateFromAddress` | `TFA` | Render template from address |
+| `TemplateByType` | `TBT` | Render template by type |
 | `TemplateSet` | `TS` | Render template for each item |
-| `TemplateIf` | `TIf` | Conditional template |
+| `TemplateSetFromMap` | `TSFM` | Render templates from map for each item |
+| `TemplateSetWithPayload` | `TSWP` | Render template set with payload |
+| `TemplateValueSet` | `TVS` | Render template for each value in object |
+| `TemplateIf` | `TIf` | Conditional (both sides are addresses) |
 | `TemplateIfAbsolute` | `TIfAbs` | Conditional with literal compare |
 | `NotEmpty` | `NE` | Show content if truthy |
 | `Digits` | - | Format as number |
-| `Dollars` | `$` | Format as currency |
-| `Join` | - | Join array |
+| `Dollars` | - | Format as currency |
+| `PascalCaseIdentifier` | - | Convert to PascalCase |
+| `Join` | `J` | Join array |
+| `JoinUnique` | `JU` | Join unique array values |
+| `PluckJoinUnique` | `PJU` | Pluck, unique, then join |
 | `Entity` | `E` | Load and render entity |
 | `View` | `V` | Render view |
+| `ViewRetainingScope` | `VRS` | Render view retaining scope |
 | `Solve` | `S` | Evaluate expression |
-| `Breakpoint` | `BP` | Insert debugger |
+| `SolveByReference` | `SBR` | Evaluate expression from data |
+| `Breakpoint` | - | Insert debugger |
+| `DataTree` | `DT` | Output data value tree |
+| `LogStatement` | `LS` | Log a static message |
 | `LogValue` | `LV` | Log value to console |
+| `LogValueTree` | `LVT` | Log object tree |
+| `RandomNumber` | `RN` | Generate random number |
+| `RandomNumberString` | `RNS` | Generate random number string |
+| `HtmlCommentStart` | `HCS` | Conditional HTML comment open |
+| `HtmlCommentEnd` | `HCE` | Conditional HTML comment close |
+| `DateTimeFormat` | - | Format date/time |
+| `DateTimeYMD` | - | Format date/time (YMD sortable) |
+| `DateOnlyFormat` | - | Format date only |
+| `DateOnlyYMD` | - | Format date only (YMD) |

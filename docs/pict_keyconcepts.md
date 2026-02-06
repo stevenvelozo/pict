@@ -59,8 +59,8 @@ const result = _Pict.parseTemplate(`Hello {~D:AppData.User.Name~}!`);
 // Iterating over a set
 const list = _Pict.parseTemplate(`{~TS:ListItem-Template:AppData.Items~}`);
 
-// Conditional rendering
-const conditional = _Pict.parseTemplate(`{~TIf:ShowMessage:Record:Record.Visible^EQ^true~}`);
+// Conditional rendering (comparing a value against an absolute)
+const conditional = _Pict.parseTemplate(`{~TIfAbs:ShowMessage:Record:Record.Visible^==^true~}`);
 ```
 
 The MetaTemplate manager stores templates accessible within a specific pict instance, allowing templates to reference each other.
@@ -194,8 +194,8 @@ _Pict.addSolverFunction(
     'Calculate tax based on the current tax rate'
 );
 
-// Use in a template
-const result = _Pict.parseTemplate(`{~Solve:AppData.Price * calculatetax()~}`);
+// Use in a template (the second parameter is the address space for resolving variables)
+const result = _Pict.parseTemplate(`{~S:Price * calculatetax():AppData~}`);
 ```
 
 The solve-render-marshal cycle allows views to perform calculations, display results, and collect user input in a coordinated manner.

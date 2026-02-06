@@ -126,11 +126,11 @@ const result = _Pict.parseTemplateSetByHash('UserItem', _Pict.AppData.Users);
 
 ### Template Set with Payload
 
-Pass additional payload data to each template iteration:
+Pass additional payload data to each template iteration. Each record is wrapped as `{ Data: <item>, Payload: <payload> }` and passed as `Record`:
 
 ```javascript
 const result = _Pict.parseTemplateSetWithPayload(
-    '<li class="{~D:Payload.className~}">{~D:Data.name~}</li>',
+    '<li class="{~D:Record.Payload.className~}">{~D:Record.Data.name~}</li>',
     _Pict.AppData.Users,
     { className: 'user-item' }
 );
@@ -200,13 +200,15 @@ const result = _Pict.parseTemplateByHash('Wrapper');
 
 ## Default Templates
 
-If a template isn't found, you can specify fallback behavior:
+The TemplateProvider supports default templates that are matched by prefix and postfix on the template hash. If a template is not found by hash, the default templates are checked:
 
 ```javascript
-// Template with fallback
-'{~DataWithFallback:AppData.Missing:DefaultTemplate~}'
+// Register a default template for any hash ending with "-ListRow"
+_Pict.TemplateProvider.addDefaultTemplate('', '-ListRow', '<li>{~D:Record.Name~}</li>');
 
-// If AppData.Missing is undefined, renders DefaultTemplate instead
+// Now any template hash ending in "-ListRow" will use this default
+// e.g. "Users-ListRow", "Orders-ListRow", etc.
+const result = _Pict.parseTemplate('{~TS:Products-ListRow:AppData.Products~}');
 ```
 
 ## Best Practices

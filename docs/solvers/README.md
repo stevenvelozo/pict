@@ -13,41 +13,62 @@ A solver in pict is a mechanism for:
 
 ## The Expression Parser
 
-Pict provides an expression parser service that evaluates mathematical expressions:
+Pict provides an expression parser service that is accessed through template expressions. The `{~Solve:...~}` (shorthand `{~S:...~}`) template evaluates mathematical expressions:
 
 ```javascript
-const result = _Pict.expressionParser.evaluate('2 + 2');
-// result = 4
+const result = _Pict.parseTemplate('{~S:2 + 2~}');
+// result = "4"
 
-const complex = _Pict.expressionParser.evaluate('(10 * 5) + (20 / 4)');
-// complex = 55
+const complex = _Pict.parseTemplate('{~S:(10 * 5) + (20 / 4)~}');
+// complex = "55"
+```
+
+To reference variables from state, provide an address space as the second parameter:
+
+```javascript
+_Pict.AppData.Width = 105;
+_Pict.AppData.Height = 48;
+
+const area = _Pict.parseTemplate('{~S:Width*Height:AppData~}');
+// area = "5040"
 ```
 
 ## Using Solvers in Templates
 
 ### Solve Template Expression
 
-The `{~Solve:...~}` template expression evaluates mathematical expressions:
+The `{~Solve:...~}` (shorthand `{~S:...~}`) template expression evaluates mathematical expressions:
 
 ```javascript
+const total = _Pict.parseTemplate('{~S:100 * 5~}');
+// total = "500"
+
+// To use named variables, supply an address space
 _Pict.AppData.Price = 100;
 _Pict.AppData.Quantity = 5;
-
-const total = _Pict.parseTemplate('{~Solve:100 * 5~}');
-// total = "500"
+const computed = _Pict.parseTemplate('{~S:Price * Quantity:AppData~}');
+// computed = "500"
 ```
 
 ### Solve By Reference
 
-The `{~SBR:...~}` (Solve By Reference) template expression evaluates expressions stored in state:
+The `{~SBR:...~}` (Solve By Reference) template expression evaluates an equation stored in state. The format is `{~SBR:EquationAddress:DataAddress:ManifestAddress~}`:
 
 ```javascript
-_Pict.AppData.Formula = 'Price * Quantity';
-_Pict.AppData.Price = 100;
-_Pict.AppData.Quantity = 5;
+_Pict.AppData.Equation = 'Area = Width * Height';
+_Pict.AppData.RectangleData = { Size: { Width: 100, Height: 50 } };
 
-const result = _Pict.parseTemplate('{~SBR:AppData.Formula:AppData:AppData~}');
-// Resolves the formula using AppData values
+// With a manifest to map variable names to data addresses
+_Pict.AppData.Manifest = _Pict.newManyfest({
+    Scope: 'Rectangle',
+    Descriptors: {
+        'Size.Height': { Hash: 'Height' },
+        'Size.Width': { Hash: 'Width' }
+    }
+});
+
+const result = _Pict.parseTemplate('{~SBR:AppData.Equation:AppData.RectangleData:AppData.Manifest~}');
+// result = "5000"
 ```
 
 ## Custom Solver Functions
@@ -130,8 +151,8 @@ The expression parser supports standard mathematical operations:
 Use parentheses to control order of operations:
 
 ```javascript
-'{~Solve:(10 + 5) * 2~}'  // = 30
-'{~Solve:10 + 5 * 2~}'    // = 20
+'{~S:(10 + 5) * 2~}'  // = 30
+'{~S:10 + 5 * 2~}'    // = 20
 ```
 
 ## Practical Examples
@@ -169,11 +190,11 @@ _Pict.addSolverFunction(parser, 'baseprice', 'AppData.Product.BasePrice', 'Base 
 _Pict.addSolverFunction(parser, 'markup', 'AppData.Config.MarkupRate', 'Markup rate');
 _Pict.addSolverFunction(parser, 'discount', 'AppData.Customer.DiscountRate', 'Customer discount');
 
-// Use in template
+// Use in template (functions resolve their own addresses, so no address space needed)
 const priceTemplate = `
-    Base: ${'{~D:AppData.Product.BasePrice~}'}
-    With Markup: {~Solve:baseprice() * (1 + markup())~}
-    Final Price: {~Solve:baseprice() * (1 + markup()) * (1 - discount())~}
+    Base: {~D:AppData.Product.BasePrice~}
+    With Markup: {~S:baseprice() * (1 + markup())~}
+    Final Price: {~S:baseprice() * (1 + markup()) * (1 - discount())~}
 `;
 ```
 
@@ -230,8 +251,8 @@ If you need the same value in multiple places, define a function:
 // Define once
 _Pict.addSolverFunction(parser, 'shippingrate', 'AppData.Config.ShippingRate', 'Shipping rate');
 
-// Use anywhere
-'{~Solve:subtotal * shippingrate()~}'
+// Use anywhere (Subtotal is a variable, so provide AppData as the address space)
+'{~S:Subtotal * shippingrate():AppData~}'
 ```
 
 ### Handle Missing Values
