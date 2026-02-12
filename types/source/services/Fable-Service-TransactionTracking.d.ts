@@ -2,16 +2,12 @@ export = TransactionTracking;
 /** @typedef {{ TimeStamp: Date, Category: string, Message: string }} TransactionLogEntry */
 /** @typedef {{ Timestamp: number, Data: any, Type: string }} TransactionQueueItem */
 /** @typedef {{ TransactionKey: string, Events: Record<string, Record<string, boolean>>, Log: Array<TransactionLogEntry>, TransactionQueue: Array<TransactionQueueItem> }} TransactionInfo */
-declare class TransactionTracking {
+declare class TransactionTracking extends libFableServiceProviderBase {
     constructor(pFable: any, pOptions: any, pServiceHash: any);
     /** @type {import('../Pict') & { addAndInstantiateSingletonService: (hash: string, options: any, prototype: any) => any }} */
     fable: import("../Pict") & {
         addAndInstantiateSingletonService: (hash: string, options: any, prototype: any) => any;
     };
-    /** @type {any} */
-    log: any;
-    /** @type {string} */
-    UUID: string;
     /**
      * @type {Record<string, TransactionInfo>}
      */
@@ -74,6 +70,7 @@ declare class TransactionTracking {
 declare namespace TransactionTracking {
     export { default_configuration, TransactionLogEntry, TransactionQueueItem, TransactionInfo };
 }
+import libFableServiceProviderBase = require("fable-serviceproviderbase");
 declare var default_configuration: Record<string, any>;
 type TransactionLogEntry = {
     TimeStamp: Date;

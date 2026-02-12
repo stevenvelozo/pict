@@ -8,6 +8,10 @@ declare class Pict extends Pict_base {
      * @param {Object<String, any>} pSettings - The settings for the Pict instance.
      */
     constructor(pSettings: any);
+    /** @type {Record<string, any>} */
+    services: Record<string, any>;
+    /** @type {Record<string, any>} */
+    servicesMap: Record<string, any>;
     isBrowser: Function;
     /** @type {Object} */
     _PackageFable: any;
@@ -283,7 +287,7 @@ declare class Pict extends Pict_base {
     parseTemplateSetWithPayloadByHash(pTemplateHash: string, pDataSet: Array<any> | any, pPayload: any, fCallback?: Function, pContextArray?: Array<any>, pScope?: any, pState?: any): string | null;
 }
 declare namespace Pict {
-    export { PictApplicationClass, PictViewClass, PictProviderClass, PictTemplateClass, EnvironmentLog, EnvironmentObject, FilterClauseBase, FilterClauseLocal, FilterClauseInternalJoin, FilterClauseExternalJoin, isBrowser, safeOnDocumentReady, safeLoadPictApplication, Fable };
+    export { ServiceProviderBase, PictApplicationClass, PictViewClass, PictProviderClass, PictTemplateClass, EnvironmentLog, EnvironmentObject, FilterClauseBase, FilterClauseLocal, FilterClauseInternalJoin, FilterClauseExternalJoin, isBrowser, safeOnDocumentReady, safeLoadPictApplication, Fable };
 }
 import PictTemplateProvider = require("./Pict-Template-Provider.js");
 import PictMeadowEntityProvider = require("./Pict-Meadow-EntityProvider.js");
@@ -292,6 +296,7 @@ import PictContentAssignment = require("./Pict-Content-Assignment.js");
 import PictCSS = require("./Pict-CSS.js");
 import libProviderFilterManager = require("./providers/Provider-Filter-Manager.js");
 import libFableServiceTransactionTracking = require("./services/Fable-Service-TransactionTracking.js");
+declare const ServiceProviderBase: typeof import("fable-serviceproviderbase");
 declare const PictApplicationClass: typeof import("pict-application");
 declare const PictViewClass: typeof import("pict-view");
 declare const PictProviderClass: typeof import("pict-provider");

@@ -49,6 +49,10 @@ class Pict extends libFable {
 
 		/** @type {any} */
 		this.settings;
+		/** @type {Record<string, any>} */
+		this.services;
+		/** @type {Record<string, any>} */
+		this.servicesMap;
 
 		this.isBrowser = new Function(
 			"try {return (this===window);} catch(pError) {return false;}",
@@ -1000,6 +1004,7 @@ class Pict extends libFable {
 }
 
 module.exports = Pict;
+module.exports.ServiceProviderBase = require('fable-serviceproviderbase');
 
 module.exports.PictApplicationClass = require("pict-application");
 
