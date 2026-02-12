@@ -18,6 +18,8 @@ class PictCSS extends libFableServiceBase
 		this.options;
 		/** @type {{ ContentAssignment: import('./Pict-Content-Assignment') }} */
 		this.services;
+		/** @type {import('fable')} */
+		this.fable;
 
 		// No merging of options necessary
 		if (typeof(this.options.CSSElementAddress) === 'undefined')

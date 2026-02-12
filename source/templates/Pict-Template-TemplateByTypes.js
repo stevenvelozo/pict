@@ -83,14 +83,12 @@ class PictTemplateProviderTemplateByTypes extends libPictTemplate
 			tmpRecord = this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope, pState);
 		}
 
-		let tmpTypeOfDataAtAddress = typeof(this.resolveStateFromAddress(tmpAddressToTest, tmpData, pContextArray, null, pScope, pState));
-		if (tmpTypeOfDataAtAddress == 'object')
+		const tmpValueAtAddress = this.resolveStateFromAddress(tmpAddressToTest, tmpData, pContextArray, null, pScope, pState);
+		/** @type {string} */
+		let tmpTypeOfDataAtAddress = typeof tmpValueAtAddress;
+		if (tmpTypeOfDataAtAddress == 'object' && Array.isArray(tmpValueAtAddress))
 		{
-			// Test if it's an array
-			if (Array.isArray(this.resolveStateFromAddress(tmpAddressToTest, tmpData, pContextArray, null, pScope, pState)))
-			{
-				tmpTypeOfDataAtAddress = 'array';
-			}
+			tmpTypeOfDataAtAddress = 'array';
 		}
 		if (tmpDataTypesToTest.indexOf(tmpTypeOfDataAtAddress) === -1)
 		{
@@ -176,14 +174,12 @@ class PictTemplateProviderTemplateByTypes extends libPictTemplate
 			tmpRecord = this.resolveStateFromAddress(tmpAddressOfData, tmpData, pContextArray, null, pScope, pState);
 		}
 
-		let tmpTypeOfDataAtAddress = typeof(this.resolveStateFromAddress(tmpAddressToTest, tmpData, pContextArray, null, pScope, pState));
-		if (tmpTypeOfDataAtAddress == 'object')
+		const tmpValueAtAddress = this.resolveStateFromAddress(tmpAddressToTest, tmpData, pContextArray, null, pScope, pState);
+		/** @type {string} */
+		let tmpTypeOfDataAtAddress = typeof tmpValueAtAddress;
+		if (tmpTypeOfDataAtAddress == 'object' && Array.isArray(tmpValueAtAddress))
 		{
-			// Test if it's an array
-			if (Array.isArray(this.resolveStateFromAddress(tmpAddressToTest, tmpData, pContextArray, null, pScope, pState)))
-			{
-				tmpTypeOfDataAtAddress = 'array';
-			}
+			tmpTypeOfDataAtAddress = 'array';
 		}
 		if (tmpDataTypesToTest.indexOf(tmpTypeOfDataAtAddress) === -1)
 		{

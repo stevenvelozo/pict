@@ -7,6 +7,8 @@ declare class PictCSS {
     services: {
         ContentAssignment: import("./Pict-Content-Assignment");
     };
+    /** @type {import('fable')} */
+    fable: any;
     inlineCSSMap: {};
     addCSS(pHash: any, pContent: any, pPriority: any, pProvider: any): void;
     removeCSS(pHash: any): void;
