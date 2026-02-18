@@ -7,5 +7,5 @@
 - Powerful templating with MetaTemplate
 - Seamless integration with Fable service architecture
 
+[Get Started](README.md)
 [GitHub](https://github.com/stevenvelozo/pict)
-[Get Started](#pict)
