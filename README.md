@@ -204,3 +204,19 @@ source maps.
 npm run build
 npm run build-compatible
 ```
+
+## Related Packages
+
+- [pict-view](https://github.com/stevenvelozo/pict-view) - View base class
+- [pict-template](https://github.com/stevenvelozo/pict-template) - Template engine
+- [pict-provider](https://github.com/stevenvelozo/pict-provider) - Data provider base class
+- [pict-application](https://github.com/stevenvelozo/pict-application) - Application lifecycle wrapper
+- [fable](https://github.com/stevenvelozo/fable) - Application services framework
+
+## License
+
+MIT
+
+## Contributing
+
+Pull requests are welcome. For details on our code of conduct, contribution process, and testing requirements, see the [Retold Contributing Guide](https://github.com/stevenvelozo/retold/blob/main/docs/contributing.md).

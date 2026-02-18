@@ -50,13 +50,13 @@
     "@types/sinon": "^17.0.4",
     "eslint": "^9.39.1",
     "globals": "^16.5.0",
-    "quackage": "^1.0.47",
+    "quackage": "^1.0.51",
     "sinon": "^20.0.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
     "cachetrax": "^1.0.4",
-    "fable": "^3.1.55",
+    "fable": "^3.1.57",
     "pict-application": "^1.0.30",
     "pict-provider": "^1.0.9",
     "pict-template": "^1.0.13",
