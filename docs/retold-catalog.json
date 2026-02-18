@@ -1,0 +1,382 @@
+{
+	"Generated": "2026-02-18T04:31:28.585Z",
+	"GitHubOrg": "stevenvelozo",
+	"DefaultBranch": "master",
+	"Groups": [
+		{
+			"Name": ".config",
+			"Key": ".config",
+			"Description": "",
+			"Modules": [
+				{
+					"Name": "code-server",
+					"Repo": "code-server",
+					"Group": ".config",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				},
+				{
+					"Name": "configstore",
+					"Repo": "configstore",
+					"Group": ".config",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				},
+				{
+					"Name": "installation",
+					"Repo": "installation",
+					"Group": ".config",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				},
+				{
+					"Name": "luxury-extras",
+					"Repo": "luxury-extras",
+					"Group": ".config",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				},
+				{
+					"Name": "quackage-templates",
+					"Repo": "quackage-templates",
+					"Group": ".config",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				},
+				{
+					"Name": "vscode-sqltools",
+					"Repo": "vscode-sqltools",
+					"Group": ".config",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				}
+			]
+		},
+		{
+			"Name": "Coverage",
+			"Key": "coverage",
+			"Description": "",
+			"Modules": [
+				{
+					"Name": "lcov-report",
+					"Repo": "lcov-report",
+					"Group": "coverage",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				}
+			]
+		},
+		{
+			"Name": "Debug",
+			"Key": "debug",
+			"Description": "",
+			"Modules": [
+				{
+					"Name": "examples",
+					"Repo": "examples",
+					"Group": "debug",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				}
+			]
+		},
+		{
+			"Name": "Dist",
+			"Key": "dist",
+			"Description": "",
+			"Modules": [
+				{
+					"Name": "indoctrinate_content_staging",
+					"Repo": "indoctrinate_content_staging",
+					"Group": "dist",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				}
+			]
+		},
+		{
+			"Name": "Docs",
+			"Key": "docs",
+			"Description": "",
+			"Modules": [
+				{
+					"Name": "application_lifecycle",
+					"Repo": "application_lifecycle",
+					"Group": "docs",
+					"Branch": "master",
+					"HasDocs": true,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": [
+						"application_lifecycle/README.md"
+					]
+				},
+				{
+					"Name": "applications",
+					"Repo": "applications",
+					"Group": "docs",
+					"Branch": "master",
+					"HasDocs": true,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": [
+						"applications/README.md"
+					]
+				},
+				{
+					"Name": "design_philosophy",
+					"Repo": "design_philosophy",
+					"Group": "docs",
+					"Branch": "master",
+					"HasDocs": true,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": [
+						"design_philosophy/applications_providers_views_and_solvers.md",
+						"design_philosophy/config.json",
+						"design_philosophy/model_view_controller_ohmy.md",
+						"design_philosophy/overall_design_philosophy.md",
+						"design_philosophy/state_management_and_lifecycle_coupling.md",
+						"design_philosophy/traditional_application_shape.excalidraw.svg"
+					]
+				},
+				{
+					"Name": "development",
+					"Repo": "development",
+					"Group": "docs",
+					"Branch": "master",
+					"HasDocs": true,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": [
+						"development/building_pict.md",
+						"development/pict_luxury_code.md",
+						"development/pict_virtual_environments.md",
+						"development/testing_pict.md"
+					]
+				},
+				{
+					"Name": "examples",
+					"Repo": "examples",
+					"Group": "docs",
+					"Branch": "master",
+					"HasDocs": true,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": [
+						"examples/complex_example_seattle_data/data/Seattle_Data_Information.md",
+						"examples/complex_example_seattle_data/data/housing_characteristics_Neighborhoods_4965628210524256870.csv",
+						"examples/complex_example_seattle_data/data/housing_costs_Neighborhoods_-8848403750169343217.csv",
+						"examples/complex_example_seattle_data/data/race_ethnicity_Neighborhoods_-7085838689260358328.csv",
+						"examples/hello_world/.babelrc",
+						"examples/hello_world/.browserslistrc",
+						"examples/hello_world/.browserslistrc-BACKUP",
+						"examples/hello_world/.gulpfile-quackage-config.json",
+						"examples/hello_world/.gulpfile-quackage.js",
+						"examples/hello_world/.quackage.json",
+						"examples/hello_world/README.md",
+						"examples/hello_world/dist/.gitignore",
+						"examples/hello_world/dist/hello_world.js",
+						"examples/hello_world/dist/hello_world.js.map",
+						"examples/hello_world/dist/hello_world.min.js",
+						"examples/hello_world/dist/hello_world.min.js.map",
+						"examples/hello_world/dist/index.html",
+						"examples/hello_world/index.js",
+						"examples/hello_world/package-lock.json",
+						"examples/hello_world/package.json",
+						"examples/quickstart.js"
+					]
+				},
+				{
+					"Name": "providers",
+					"Repo": "providers",
+					"Group": "docs",
+					"Branch": "master",
+					"HasDocs": true,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": [
+						"providers/README.md"
+					]
+				},
+				{
+					"Name": "solvers",
+					"Repo": "solvers",
+					"Group": "docs",
+					"Branch": "master",
+					"HasDocs": true,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": [
+						"solvers/README.md"
+					]
+				},
+				{
+					"Name": "state_management",
+					"Repo": "state_management",
+					"Group": "docs",
+					"Branch": "master",
+					"HasDocs": true,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": [
+						"state_management/README.md"
+					]
+				},
+				{
+					"Name": "templating",
+					"Repo": "templating",
+					"Group": "docs",
+					"Branch": "master",
+					"HasDocs": true,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": [
+						"templating/pict_metatemplate_manager.md",
+						"templating/pict_template_expressions.md"
+					]
+				},
+				{
+					"Name": "views",
+					"Repo": "views",
+					"Group": "docs",
+					"Branch": "master",
+					"HasDocs": true,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": [
+						"views/README.md"
+					]
+				}
+			]
+		},
+		{
+			"Name": "Source",
+			"Key": "source",
+			"Description": "",
+			"Modules": [
+				{
+					"Name": "environments",
+					"Repo": "environments",
+					"Group": "source",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				},
+				{
+					"Name": "filters",
+					"Repo": "filters",
+					"Group": "source",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				},
+				{
+					"Name": "providers",
+					"Repo": "providers",
+					"Group": "source",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				},
+				{
+					"Name": "services",
+					"Repo": "services",
+					"Group": "source",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				},
+				{
+					"Name": "templates",
+					"Repo": "templates",
+					"Group": "source",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				}
+			]
+		},
+		{
+			"Name": "Test",
+			"Key": "test",
+			"Description": "",
+			"Modules": [
+				{
+					"Name": "configurations",
+					"Repo": "configurations",
+					"Group": "test",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				},
+				{
+					"Name": "data",
+					"Repo": "data",
+					"Group": "test",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				}
+			]
+		},
+		{
+			"Name": "Types",
+			"Key": "types",
+			"Description": "",
+			"Modules": [
+				{
+					"Name": "source",
+					"Repo": "source",
+					"Group": "types",
+					"Branch": "master",
+					"HasDocs": false,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": []
+				}
+			]
+		}
+	]
+}
