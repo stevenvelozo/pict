@@ -30,6 +30,12 @@ declare class Pict extends Pict_base {
      */
     TemplateProvider: PictTemplateProvider;
     /**
+     * The template audit provider.
+     *
+     * @type {PictTemplateAudit}
+     */
+    TemplateAudit: PictTemplateAudit;
+    /**
      * The meadow entity provider.
      *
      * @type {PictMeadowEntityProvider}
@@ -65,6 +71,8 @@ declare class Pict extends Pict_base {
     LogNoisiness: number;
     LogControlFlow: boolean;
     LogControlFlowWatchAddressList: any[];
+    TemplateDebug: boolean;
+    TemplateDebugStack: boolean;
     _DefaultPictTemplatesInitialized: boolean;
     /** @type {{ FilterManager: libProviderFilterManager, [key: string]: any }} */
     providers: {
@@ -290,6 +298,7 @@ declare namespace Pict {
     export { ServiceProviderBase, PictApplicationClass, PictViewClass, PictProviderClass, PictTemplateClass, EnvironmentLog, EnvironmentObject, FilterClauseBase, FilterClauseLocal, FilterClauseInternalJoin, FilterClauseExternalJoin, isBrowser, safeOnDocumentReady, safeLoadPictApplication, Fable };
 }
 import PictTemplateProvider = require("./Pict-Template-Provider.js");
+import PictTemplateAudit = require("./Pict-Template-Audit.js");
 import PictMeadowEntityProvider = require("./Pict-Meadow-EntityProvider.js");
 import PictDataProvider = require("./Pict-DataProvider.js");
 import PictContentAssignment = require("./Pict-Content-Assignment.js");
