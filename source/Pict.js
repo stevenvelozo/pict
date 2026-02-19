@@ -32,6 +32,7 @@ const libProviderFilterManager = require('./providers/Provider-Filter-Manager.js
 const libProviderDataBroker = require('./providers/Provider-DataBroker.js');
 
 const PictTemplateProvider = require('./Pict-Template-Provider.js');
+const PictTemplateAudit = require('./Pict-Template-Audit.js');
 const PictContentAssignment = require('./Pict-Content-Assignment.js');
 const PictDataProvider = require('./Pict-DataProvider.js');
 const PictCSS = require('./Pict-CSS.js');
@@ -83,6 +84,13 @@ class Pict extends libFable {
 		 */
 		this.TemplateProvider = null;
 		this.addAndInstantiateServiceType("TemplateProvider", PictTemplateProvider);
+		/**
+		 * The template audit provider.
+		 *
+		 * @type {PictTemplateAudit}
+		 */
+		this.TemplateAudit = null;
+		this.addAndInstantiateServiceType("TemplateAudit", PictTemplateAudit);
 		/**
 		 * The meadow entity provider.
 		 *
@@ -152,6 +160,11 @@ class Pict extends libFable {
 		this.LogControlFlow = false;
 		// And an easy way to be introspective about data at various locations
 		this.LogControlFlowWatchAddressList = [];
+
+		// Template auditing -- when enabled, builds a tree of template processing info
+		this.TemplateDebug = false;
+		// Secondary flag to capture real Error().stack traces (expensive, off by default)
+		this.TemplateDebugStack = false;
 
 		// Load manifest sets
 		if (this.settings.Manifests) {
@@ -773,6 +786,7 @@ class Pict extends libFable {
 		if (!tmpTemplateString) {
 			tmpTemplateString = "";
 		}
+
 		return this.parseTemplate(
 			tmpTemplateString,
 			pData,
@@ -881,6 +895,7 @@ class Pict extends libFable {
 		if (!tmpTemplateString) {
 			tmpTemplateString = "";
 		}
+
 		return this.parseTemplateSet(
 			tmpTemplateString,
 			pDataSet,
@@ -991,6 +1006,7 @@ class Pict extends libFable {
 		if (!tmpTemplateString) {
 			tmpTemplateString = "";
 		}
+
 		return this.parseTemplateSetWithPayload(
 			tmpTemplateString,
 			pDataSet,
