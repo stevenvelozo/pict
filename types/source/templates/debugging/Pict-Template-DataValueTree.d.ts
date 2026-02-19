@@ -6,8 +6,6 @@ declare class PictTemplateProviderDataValueTree extends libPictTemplate {
      * @param {String} pServiceHash - The hash of the service
      */
     constructor(pFable: any, pOptions: any, pServiceHash: string);
-    /** @type {any} */
-    log: any;
     /**
      * Render a template expression, returning a string with the resulting content.
      *

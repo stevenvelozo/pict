@@ -55,7 +55,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "cachetrax": "^1.0.4",
+    "cachetrax": "^1.0.5",
     "fable": "^3.1.58",
     "pict-application": "^1.0.32",
     "pict-provider": "^1.0.10",

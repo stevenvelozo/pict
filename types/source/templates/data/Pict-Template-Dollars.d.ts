@@ -8,8 +8,6 @@ declare class PictTemplateProviderDollars extends libPictTemplate {
     constructor(pFable: any, pOptions: any, pServiceHash: string);
     /** @type {any} */
     options: any;
-    /** @type {any} */
-    log: any;
 }
 import libPictTemplate = require("pict-template");
 //# sourceMappingURL=Pict-Template-Dollars.d.ts.map
