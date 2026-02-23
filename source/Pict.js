@@ -303,7 +303,7 @@ class Pict extends libFable {
 	 * Just passing an options will construct one for us.
 	 * Passing a hash will set the hash.
 	 * Passing a prototype will use that!
-	 * 	
+	 *
 	 * @param {String} pViewHash - The hash of the view.
 	 * @param {Object<String, any>} [pOptions] - The options for the view.
 	 * @param {any} [pViewPrototype] - The prototype for the view.
@@ -350,8 +350,8 @@ class Pict extends libFable {
 
 	/**
 	 * Add an Expression Parser function to the solver.
-	 * 
-	 * @param {Object} pExpressionParser - The expresssion parser to add the function to 
+	 *
+	 * @param {Object} pExpressionParser - The expresssion parser to add the function to
 	 * @param {string} pFunctionName - The name of the function
 	 * @param {string} pFunctionAddress - The address of the function
 	 * @param {string} pFunctionComment - A comment about the function

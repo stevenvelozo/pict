@@ -3,9 +3,9 @@ const libFableServiceBase = require('fable').ServiceProviderBase;
 class PictTemplateAudit extends libFableServiceBase
 {
 	/**
-	 * @param {Object} pFable - The Fable Framework instance
-	 * @param {Object} pOptions - The options for the service
-	 * @param {String} pServiceHash - The hash of the service
+	 * @param {import('pict')} pFable - The Fable Framework instance
+	 * @param {Record<string, any>} [pOptions] - The options for the service
+	 * @param {string} [pServiceHash] - The hash of the service
 	 */
 	constructor(pFable, pOptions, pServiceHash)
 	{
@@ -19,6 +19,9 @@ class PictTemplateAudit extends libFableServiceBase
 		this.Hash;
 
 		this.serviceType = 'PictTemplateAudit';
+
+		/** @type {import('pict') & { TemplateDebug?: boolean, TemplateDebugStack?: boolean }} */
+		this.fable;
 
 		// Array of root-level audit trees
 		this.auditLog = [];
@@ -200,7 +203,7 @@ class PictTemplateAudit extends libFableServiceBase
 			tmpPict.parseTemplateSetByHash = this._originalParseTemplateSetByHash;
 			this._originalParseTemplateSetByHash = null;
 		}
-		
+
 		if (this._originalParseTemplateSetWithPayload && typeof(this._originalParseTemplateSetWithPayload) === 'function')
 		{
 			tmpPict.parseTemplateSetWithPayload = this._originalParseTemplateSetWithPayload;

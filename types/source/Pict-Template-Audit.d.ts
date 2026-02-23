@@ -1,11 +1,11 @@
 export = PictTemplateAudit;
 declare class PictTemplateAudit {
     /**
-     * @param {Object} pFable - The Fable Framework instance
-     * @param {Object} pOptions - The options for the service
-     * @param {String} pServiceHash - The hash of the service
+     * @param {import('pict')} pFable - The Fable Framework instance
+     * @param {Record<string, any>} [pOptions] - The options for the service
+     * @param {string} [pServiceHash] - The hash of the service
      */
-    constructor(pFable: any, pOptions: any, pServiceHash: string);
+    constructor(pFable: import("pict"), pOptions?: Record<string, any>, pServiceHash?: string);
     /** @type {any} */
     log: any;
     /** @type {string} */
@@ -13,6 +13,11 @@ declare class PictTemplateAudit {
     /** @type {string} */
     Hash: string;
     serviceType: string;
+    /** @type {import('pict') & { TemplateDebug?: boolean, TemplateDebugStack?: boolean }} */
+    fable: import("pict") & {
+        TemplateDebug?: boolean;
+        TemplateDebugStack?: boolean;
+    };
     auditLog: any[];
     prepareAuditing(): void;
     /**

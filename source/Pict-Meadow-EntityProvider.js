@@ -51,9 +51,13 @@ class PictMeadowEntityProvider extends libFableServiceBase
 				DeletingIDUser: 'User'
 			});
 
+		/** @type {(pOptions: Record<string, any>) => Record<string, any>} */
 		this.prepareRequestOptions = (pOptions) => { return pOptions; };
 	}
 
+	/**
+	 * @param {string} pEntity - The name of the entity to initialize the cache for
+	 */
 	initializeCache(pEntity)
 	{
 		// This should not be happening as often as it's happening.
@@ -80,12 +84,22 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 	}
 
+	/**
+	 * @param {object} pEntityInformation - The entity information object.
+	 * @param {object} pContext - The context object to use when parsing the filter template and assigning the results to the destination.
+	 * @param {() => void} fCallback - The callback function to call when the operation is complete, which should take an optional error as its first parameter.
+	 */
 	gatherEntitySetCount(pEntityInformation, pContext, fCallback)
 	{
 		pEntityInformation.CountOnly = true;
 		return this.gatherEntitySet(pEntityInformation, pContext, fCallback);
 	}
 
+	/**
+	 * @param {Record<string, any>} pEntityInformation - The entity information object.
+	 * @param {Record<string, any>} pContext - The context object to use when parsing the filter template and assigning the results to the destination.
+	 * @param {(pError?: Error) => void} fCallback - The callback function to call when the operation is complete, which should take an optional error as its first parameter and the record set or count as its second parameter.
+	 */
 	gatherEntitySet(pEntityInformation, pContext, fCallback)
 	{
 		// First sanity check the pEntityInformation
@@ -139,7 +153,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			if (pError)
 			{
 				this.log.error(`EntityBundleRequest request Error getting entity set for [${pEntityInformation.Entity}] with filter [${tmpFilterString}]: ${pError}`, pError);
-				return fCallback(pError, '');
+				return fCallback(pError);
 			}
 
 			if (pEntityInformation.CountOnly)
@@ -186,6 +200,11 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 	}
 
+	/**
+	 * @param {Record<string, any>} pDestinationEntity - The destination entity to map the join results to.
+	 * @param {Record<string, any>} pCustomRequestInformation - The custom request information object.
+	 * @param {Record<string, any>} pContext - The context object to use when parsing templates and resolving addresses.
+	 */
 	mapJoinSingleDestination(pDestinationEntity, pCustomRequestInformation, pContext)
 	{
 		const tmpSourceEntities = this.fable.manifest.getValueByHash(pContext, pCustomRequestInformation.JoinRecordSetAddress);
@@ -276,6 +295,10 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		return [pDestinationEntity];
 	}
 
+	/**
+	 * @param {Record<string, any>} pCustomRequestInformation - The custom request information object.
+	 * @param {Record<string, any>} pContext - The context object to use when parsing templates and resolving addresses.
+	 */
 	mapJoin(pCustomRequestInformation, pContext)
 	{
 		const tmpSingleDestinationEntity = pCustomRequestInformation.DestinationRecordAddress ? this.fable.manifest.getValueByHash(pContext, pCustomRequestInformation.DestinationRecordAddress) : null;
@@ -445,6 +468,9 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	 *          }
 	 *      }
 	 * }
+	 *
+	 * @param {Record<string, any>} pConfiguration - The configuration object for the dataset projection.
+	 * @param {Record<string, any>} pContext - The context object to use when parsing the record prototype template and resolving the output recordset address mapping.
 	 */
 	projectDataset(pConfiguration, pContext)
 	{
@@ -513,6 +539,13 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 	}
 
+	/**
+	 * @param {Record<string, any>} pConfiguration - The configuration object for the dataset projection.
+	 * @param {Record<string, any>} pContext - The context object to use when resolving the output recordset address mapping.
+	 * @param {Record<string, any>} pInputRecord - The input record to use when resolving the output recordset address mapping.
+	 *
+	 * @return {string|null} - The resolved output recordset address, or null if no mapping was found.
+	 */
 	_resolveOutputRecordsetAddressMapping(pConfiguration, pContext, pInputRecord)
 	{
 		const tmpAddressSpace = Object.assign({ InputRecord: pInputRecord }, pContext);
@@ -549,6 +582,11 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		return null;
 	}
 
+	/**
+	 * @param {Record<string, any>} pCustomRequestInformation - The custom request information object.
+	 * @param {Record<string, any>} pContext - The context object to use when parsing templates and resolving addresses.
+	 * @param {(pError?: Error) => void} fCallback - The callback function to call when the operation is complete, which should take an optional error as its first parameter and the data set as its second parameter.
+	 */
 	gatherCustomDataSet(pCustomRequestInformation, pContext, fCallback)
 	{
 		// First sanity check the pCustomRequestInformation
@@ -591,12 +629,13 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 
 		// Now get the records
+		/** @type {(pError: Error | null, pResponse: any, pData: any) => void} */
 		const callback = (pError, pResponse, pData) =>
 		{
 			if (pError)
 			{
 				this.log.error(`EntityBundleRequest request Error getting data set for [${pCustomRequestInformation.Entity}] with filter [${tmpURLTemplateString}]: ${pError}`, pError);
-				return fCallback(pError, '');
+				return fCallback(pError);
 			}
 
 			this.log.trace(`EntityBundleRequest completed request for ${pCustomRequestInformation.Entity} filtered to [${tmpURLTemplateString}]`);
@@ -610,6 +649,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			return fCallback();
 		};
 
+		/** @type {Record<string, any>} */
 		let tmpOptions = (
 			{
 				url: `${tmpURLPrefix}${tmpURLTemplateString}`
@@ -779,6 +819,11 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		};
 	}
 
+	/**
+	 * @param {string} pEntity - The name of the entity to get.
+	 * @param {string|number} pIDRecord - The ID of the record to get.
+	 * @param {(pError?: Error, pRecord?: any) => void} fCallback - The callback function to call when the operation is complete.
+	 */
 	getEntity(pEntity, pIDRecord, fCallback)
 	{
 		this.initializeCache(pEntity);
@@ -821,14 +866,17 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 	/**
 	 * For a given list of objects, cache connected entity records.
+	 *
 	 * @param {Array} pRecordSet - An array of objects to check cache on joined records for, and, get/cache the records as needed.
 	 * @param {Array} pIDListToCache - An array of property strings that are the ID fields to cache connected records for.
 	 * @param {Array} pEntityListToCache - An array of entity names, which can override the speculative entity name derived from the ID field name.
 	 * @param {boolean} pLiteRecords - If true, only cache lite records (ID and Name fields).
-	 * @returns 
+	 *
+	 * @return {void}
 	 */
 	cacheConnectedEntityRecords(pRecordSet, pIDListToCache, pEntityListToCache, pLiteRecords, fCallback)
 	{
+		//FIXME: pLiteRecords is ignored?
 		if (!Array.isArray(pRecordSet) || pRecordSet.length < 1)
 		{
 			return fCallback();
@@ -908,21 +956,21 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 	/**
 	 * Cache an array of records, likely from a meadow endpoint
-	 * 
-	 * @param {string} pEntity - The entity to cache individual records for
-	 * @param {*} pRecordSet - An array of records to cache
+	 *
+	 * @param {string} pEntity - The entity type to cache individual records for
+	 * @param {Array<Record<string, any>>} pRecordSet - An array of records to cache
 	 */
 	cacheIndividualEntityRecords(pEntity, pRecordSet)
 	{
 		this.initializeCache(pEntity);
-		
+
 		const tmpEntitySet = pRecordSet;
 
-		if ((typeof(tmpEntitySet) == 'object') && Array.isArray(tmpEntitySet) && (tmpEntitySet.length > 0))
+		if (Array.isArray(tmpEntitySet) && tmpEntitySet.length > 0)
 		{
 			// Cache each record individually.
 			// This code is here because the downstream getEntitySet function uses this to load records, so both are covered here.
-			let tmpSpeculativeRecordIDColumn = `ID${pEntity}`;
+			const tmpSpeculativeRecordIDColumn = `ID${pEntity}`;
 			if (tmpSpeculativeRecordIDColumn in tmpEntitySet[0])
 			{
 				for (let i = 0; i < tmpEntitySet.length; i++)
@@ -938,6 +986,13 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 	}
 
+	/**
+	 * @param {string} pEntity - The name of the entity to get.
+	 * @param {string} pMeadowFilterExpression - The meadow filter expression to filter the entity set by.
+	 * @param {number} pRecordStartCursor - The starting cursor for record pagination.
+	 * @param {number} pRecordCount - The number of records to return for pagination.
+	 * @param {(pError?: Error, pEntitySet?: Array<Record<string, any>>) => void} fCallback - The callback function to call when the operation is complete.
+	 */
 	getEntitySetPage(pEntity, pMeadowFilterExpression, pRecordStartCursor, pRecordCount, fCallback)
 	{
 		const tmpFilterStanza = pMeadowFilterExpression ? `/FilteredTo/${pMeadowFilterExpression}` : '';
@@ -958,6 +1013,11 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			}.bind(this));
 	}
 
+	/**
+	 * @param {string} pEntity - The name of the entity to get the count of.
+	 * @param {string} pMeadowFilterExpression - The meadow filter expression to filter the entity set by.
+	 * @param {(pError?: Error, pRecordCount?: number) => void} fCallback - The callback function to call when the operation is complete.
+	 */
 	getEntitySetRecordCount(pEntity, pMeadowFilterExpression, fCallback)
 	{
 		const tmpFilterStanza = pMeadowFilterExpression ? `/FilteredTo/${pMeadowFilterExpression}` : '';
@@ -985,6 +1045,11 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			}.bind(this));
 	}
 
+	/**
+	 * @param {string} pEntity - The name of the entity to get.
+	 * @param {string} pMeadowFilterExpression - The meadow filter expression to filter the entity set by.
+	 * @param {(pError?: Error, pEntitySet?: Array<Record<string, any>>) => void} fCallback - The callback function to call when the operation is complete.
+	 */
 	getEntitySetWithAutoCaching(pEntity, pMeadowFilterExpression, fCallback)
 	{
 		let tmpAnticipate = this.fable.newAnticipate();
@@ -1006,7 +1071,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 						return fNext();
 					});
 			}.bind(this));
-		
+
 		tmpAnticipate.anticipate(
 			function(fNext)
 			{
@@ -1061,7 +1126,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 					return fNext();
 				}
 			}.bind(this));
-		
+
 		tmpAnticipate.wait(
 			function (pError)
 			{
@@ -1074,6 +1139,13 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			}.bind(this));
 	}
 
+	/**
+	 * @param {string} pEntity - The entity to get a set of.
+	 * @param {string} pMeadowFilterExpression - The meadow filter expression to filter the entity set by.
+	 * @param {(pError?: Error, pEntitySet?: Array) => void} fCallback - The callback to call when the request is complete.
+	 *
+	 * @return {void}
+	 */
 	getEntitySet(pEntity, pMeadowFilterExpression, fCallback)
 	{
 		// TODO: Should we test for too many record IDs here by string length in pMeadowFilterExpression?
@@ -1150,6 +1222,11 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Entity Creation and Update Methods
+	/**
+	 * @param {string} pEntityType - The type of the entity to format the URL for.
+	 *
+	 * @return {string} - The formatted URL for the given entity type.
+	 */
 	formatUrl(pEntityType)
 	{
 		return `${this.options.urlPrefix}${pEntityType}`;
@@ -1159,9 +1236,9 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	/**
 	 * Create a new entity record.
 	 *
-	 * @param {String} pEntityType - The entity type to create.
-	 * @param {Object<String, any>} pRecord - The record to create.
-	 * @param {(pError?: Error, pResult?: any) => void} fCallback - The callback to call when the request is complete.
+	 * @param {string} pEntityType - The entity type to create.
+	 * @param {Record<string, any>} pRecord - The record to create.
+	 * @param {(pError?: Error, pResult?: Record<string, any>) => void} fCallback - The callback to call when the request is complete.
 	 *
 	 * @return {void}
 	 */
@@ -1191,9 +1268,9 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	/**
 	 * Update an entity record.
 	 *
-	 * @param {String} pEntityType - The entity type to create.
-	 * @param {Object<String, any>} pRecord - The record to create.
-	 * @param {(pError?: Error, pResult?: any) => void} fCallback - The callback to call when the request is complete.
+	 * @param {string} pEntityType - The entity type to create.
+	 * @param {Record<string, any>} pRecord - The record to create.
+	 * @param {(pError?: Error, pResult?: Record<string, any>) => void} fCallback - The callback to call when the request is complete.
 	 *
 	 * @return {void}
 	 */
@@ -1255,8 +1332,8 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	/**
 	 * Upsert a array of entity records.
 	 *
-	 * @param {String} pEntityType - The entity type to be upserted.
-	 * @param {Array<Object<String, any>>} pRecords - The records to upsert.
+	 * @param {string} pEntityType - The entity type to be upserted.
+	 * @param {Array<Record<string, any>>} pRecords - The records to upsert.
 	 * @param {(pError?: Error, pResults?: Array<any>) => void} fCallback - The callback to call when the request is complete.
 	 *
 	 * @return {void}
@@ -1287,9 +1364,9 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	/**
 	 * Delete an entity record.
 	 *
-	 * @param {String} pEntityType - The entity type to create.
-	 * @param {String | Number} pIDRecord - The ID of the record to delete.
-	 * @param {Function} fCallback - The callback to call when the request is complete.
+	 * @param {string} pEntityType - The entity type to create.
+	 * @param {string | Number} pIDRecord - The ID of the record to delete.
+	 * @param {(pError?: Error, pResult?: Record<string, any>) => void} fCallback - The callback to call when the request is complete.
 	 *
 	 * @return {void}
 	 */
