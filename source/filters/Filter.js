@@ -70,9 +70,9 @@ class FilterMeadowStanzaTokenGenerator
 		let tmpResult = [];
 		pFilterState.UserFilters = [];
 		const groupedFilterStates = {};
-		if (pFilterState?.Groups)
+		if (Array.isArray(pFilterState.Groups))
 		{
-			for (let g of pFilterState?.Groups)
+			for (let g of pFilterState.Groups)
 			{
 				groupedFilterStates[g.GUIDGroup] =
 				Object.assign({
