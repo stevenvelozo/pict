@@ -13,16 +13,23 @@
  *   GUID: string,
  *   Filters: Array<Record<string, any>>,
  *   JoinConfig?: FilterConnection,
- * 	 Ordinal: number,
+ * 	 Ordinal?: number,
  * 	 Junction?: string,
  * 	 GroupOpen?: boolean,
  *   GroupJunction?: string,
  *   GroupClose?: boolean
  * }} PreparedFilter
+ * 
+ * * @typedef {{
+ *   PreparedFilters?: Array<PreparedFilter>,
+ *   Junction?: string,
+ *   Ordinal?: number,
+ *   GUIDGroup: string
+ * }} FilterGroup
  *
  * @typedef {{
  *   Entity: string,
- * 	 Groups: Array<object>,
+ * 	 Groups: Array<FilterGroup>,
  *   Filter: string,
  *   ResultDestinationAddress: string,
  *   Mode?: 'Count' | 'Records',
@@ -575,7 +582,6 @@ class FilterMeadowStanzaTokenGenerator
 		{
 			for (let x = 0; x < arr.length; x++)
 			{
-				arr[x].sortIndex = x;
 				arr[x].Ordinal = arr[x].Ordinal || 0;
 			}
 			return arr.sort((a, b) => 
@@ -588,7 +594,7 @@ class FilterMeadowStanzaTokenGenerator
 				{
 					return -1;
 				}
-				return a.sortIndex > b.sortIndex ? 1 : -1;
+				return 0;
 			});
 		};
 		const spreadGroupings = (arr) =>
@@ -794,7 +800,17 @@ class FilterMeadowStanzaTokenGenerator
 			tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas = tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas.filter((f) => f.length > 0);
 			if (tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas.length > 0)
 			{
-				tmpCoreFilterStrings.push((tmpGroupedCoreFilters[tmpCoreFilterKey].GroupOpen ? (tmpGroupedCoreFilters[tmpCoreFilterKey].GroupJunction == 'OR' ? 'FOPOR~0~(~0~' : 'FOP~0~(~0~') : '') + [ tmpGroupedCoreFilters[tmpCoreFilterKey].Junction == 'OR' ? 'FOPOR~0~(~0' : 'FOP~0~(~0', ...tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas, 'FCP~0~)~0'].join('~') + ( tmpGroupedCoreFilters[tmpCoreFilterKey].GroupClose ? '~FCP~0~)~0' : ''));
+				let stringConstruct = '';
+				if (tmpGroupedCoreFilters[tmpCoreFilterKey].GroupOpen)
+				{
+					stringConstruct += tmpGroupedCoreFilters[tmpCoreFilterKey].GroupJunction == 'OR' ? 'FOPOR~0~(~0~' : 'FOP~0~(~0~';
+				}
+				stringConstruct += [ tmpGroupedCoreFilters[tmpCoreFilterKey].Junction == 'OR' ? 'FOPOR~0~(~0' : 'FOP~0~(~0', ...tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas, 'FCP~0~)~0'].join('~');
+				if (tmpGroupedCoreFilters[tmpCoreFilterKey].GroupClose)
+				{
+					stringConstruct += '~FCP~0~)~0'
+				}
+				tmpCoreFilterStrings.push(stringConstruct);
 			}
 		}
 		if (!tmpCoreEntity)
