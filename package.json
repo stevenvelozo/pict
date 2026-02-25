@@ -56,7 +56,7 @@
   },
   "dependencies": {
     "cachetrax": "^1.0.5",
-    "fable": "^3.1.61",
+    "fable": "^3.1.62",
     "pict-application": "^1.0.32",
     "pict-provider": "^1.0.11",
     "pict-template": "^1.0.14",
