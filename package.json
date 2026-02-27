@@ -5,8 +5,8 @@
   "main": "source/Pict.js",
   "scripts": {
     "start": "node source/Pict.js",
-    "test": "npx mocha -u tdd -R spec",
-    "tests": "npx mocha -u tdd --exit -R spec --grep",
+    "test": "npx quack test",
+    "tests": "npx quack test -g",
     "coverage": "npx quack coverage",
     "build": "npx quack build",
     "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t pict-image:local",
