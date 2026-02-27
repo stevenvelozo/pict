@@ -7,7 +7,7 @@
     "start": "node source/Pict.js",
     "test": "npx mocha -u tdd -R spec",
     "tests": "npx mocha -u tdd --exit -R spec --grep",
-    "coverage": "npx nyc --reporter=lcov --reporter=text-lcov npx mocha -- -u tdd -R spec",
+    "coverage": "npx quack coverage",
     "build": "npx quack build",
     "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t pict-image:local",
     "docker-dev-run": "docker run -it -d --name pict-dev -p 37447:8080 -p 19506:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-image:local",
