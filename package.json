@@ -15,6 +15,11 @@
     "lint": "eslint source/**/*.js test/**/*.js",
     "types": "tsc -p ."
   },
+  "files": [
+    "source/",
+    "dist/",
+    "types/"
+  ],
   "types": "types/source/Pict.d.ts",
   "mocha": {
     "diff": true,
