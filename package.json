@@ -1,6 +1,6 @@
 {
   "name": "pict",
-  "version": "1.0.355",
+  "version": "1.0.356",
   "description": "Pict browser library.",
   "main": "source/Pict.js",
   "scripts": {
@@ -9,6 +9,7 @@
     "tests": "npx quack test -g",
     "coverage": "npx quack coverage",
     "build": "npx quack build",
+    "prepublishOnly": "npx quack build",
     "docker-dev-build": "docker build ./ -f Dockerfile_LUXURYCode -t pict-image:local",
     "docker-dev-run": "docker run -it -d --name pict-dev -p 37447:8080 -p 19506:8086 -v \"$PWD/.config:/home/coder/.config\"  -v \"$PWD:/home/coder/pict\" -u \"$(id -u):$(id -g)\" -e \"DOCKER_USER=$USER\" pict-image:local",
     "docker-dev-shell": "docker exec -it pict-dev /bin/bash",
