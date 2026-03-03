@@ -245,6 +245,255 @@ suite
 
 		test
 		(
+			'Filter - test Junctions and Ordinal functionality',
+			async function()
+			{
+				let _Application = new DoNothingApplication(_Pict, {});
+				await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+				{
+					if (error)
+					{
+						return reject(error);
+					}
+					resolve();
+				}));
+				const tmpResults =
+				{
+					"Entity": "Book",
+					"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
+					"ResultDestinationAddress": "AppData.Test",
+				};
+				await new Promise((resolve, reject) => _Pict.providers.FilterManager.loadRecordsByFilter(
+				[
+					{
+						"Type": "NumericRange",
+						"Junction": "OR",
+						"Values":
+						{
+							"Start": 1,
+							"End": 3
+						},
+						"Ordinal": 5,
+						"FilterByColumn": "IDBook"
+					},
+					{
+						"FilterHash": "FilterBookByAuthor[Name]",
+						"Type": "ExternalJoinStringMatch",
+						"Values": [ "George Orwell", "Tolkien" ],
+						"ExternalFilterByColumns": [ "Name" ],
+
+						"CoreConnectionColumn": "IDBook",
+
+						"JoinTable": "BookAuthorJoin",
+						"JoinTableExternalConnectionColumn": "IDAuthor",
+						"JoinTableCoreConnectionColumn": "IDBook",
+
+						"ExternalFilterByTable": "Author",
+						"ExternalFilterByTableConnectionColumn": "IDAuthor",
+					},
+				], tmpResults, (pError) =>
+				{
+					try
+					{
+						// The Ordinal on the first filter should sort it to the end of the query, 
+						// and the OR Junction should mean the query includes the results of both filters.
+						Expect(pError).to.not.exist;
+						Expect(_Pict.AppData.Test).to.be.an('array');
+						Expect(_Pict.AppData.Test?.length).to.equal(23);
+						resolve();
+					}
+					catch (pError)
+					{
+						reject(pError);
+					}
+				}));
+			}
+		);
+
+		test
+		(
+			'Filter - test Grouping with Ordinals',
+			async function()
+			{
+				let _Application = new DoNothingApplication(_Pict, {});
+				await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+				{
+					if (error)
+					{
+						return reject(error);
+					}
+					resolve();
+				}));
+				const tmpResults =
+				{
+					"Entity": "Book",
+					"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
+					"ResultDestinationAddress": "AppData.Test",
+				};
+				await new Promise((resolve, reject) => _Pict.providers.FilterManager.loadRecordsByFilter(
+				[
+					{
+						"Type": "NumericRange",
+						"Junction": "OR",
+						"Values":
+						{
+							"Start": 1,
+							"End": 3
+						},
+						"Ordinal": 5,
+						"FilterByColumn": "IDBook"
+					},
+					{
+						"GUIDGroup": "Group1",
+						"FilterHash": "FilterBookByAuthor[Name]",
+						"Type": "ExternalJoinStringMatch",
+						"Values": [ "Tolkien" ],
+						"ExternalFilterByColumns": [ "Name" ],
+
+						"CoreConnectionColumn": "IDBook",
+
+						"Junction": "OR",
+
+						"JoinTable": "BookAuthorJoin",
+						"JoinTableExternalConnectionColumn": "IDAuthor",
+						"JoinTableCoreConnectionColumn": "IDBook",
+
+						"ExternalFilterByTable": "Author",
+						"ExternalFilterByTableConnectionColumn": "IDAuthor",
+					},
+					{
+						"GUIDGroup": "Group1",
+						"FilterHash": "FilterBookByAuthor[Name]",
+						"Type": "ExternalJoinStringMatch",
+						"Values": [ "George Orwell" ],
+						"ExternalFilterByColumns": [ "Name" ],
+
+						"Ordinal": -1,
+
+						"CoreConnectionColumn": "IDBook",
+
+						"JoinTable": "BookAuthorJoin",
+						"JoinTableExternalConnectionColumn": "IDAuthor",
+						"JoinTableCoreConnectionColumn": "IDBook",
+
+						"ExternalFilterByTable": "Author",
+						"ExternalFilterByTableConnectionColumn": "IDAuthor",
+					},
+				], tmpResults, (pError) =>
+				{
+					try
+					{
+						// This test uses Grouping as well as Ordinals and Junctions, the resulting query with the proper grouping and ordering should look like:
+						// ( ( IDBook IN <Orwell Book IDs> ) OR ( IDBook IN <Tolkien Book IDs> ) ) OR ( ( IDBook >= 1 AND IDBook <= 3 ) )
+						Expect(pError).to.not.exist;
+						Expect(_Pict.AppData.Test).to.be.an('array');
+						Expect(_Pict.AppData.Test?.length).to.equal(23);
+						resolve();
+					}
+					catch (pError)
+					{
+						reject(pError);
+					}
+				}));
+			}
+		);
+
+		test
+		(
+			'Filter - test Group Ordinals and Group Junctions',
+			async function()
+			{
+				let _Application = new DoNothingApplication(_Pict, {});
+				await new Promise((resolve, reject) => _Application.initializeAsync((error) =>
+				{
+					if (error)
+					{
+						return reject(error);
+					}
+					resolve();
+				}));
+				const tmpResults =
+				{
+					"Entity": "Book",
+					"Filter": "Book-e2196901-b386-44c1-84a8-dfef174ac712",
+					"ResultDestinationAddress": "AppData.Test",
+					"Groups": [
+						{
+							"GUIDGroup": "Group1",
+							"Junction": "OR",
+							"Ordinal": 3
+						}
+					]
+				};
+				await new Promise((resolve, reject) => _Pict.providers.FilterManager.loadRecordsByFilter(
+				[
+					{
+						"GUIDGroup": "Group1",
+						"Type": "NumericRange",
+						"Junction": "OR",
+						"Values":
+						{
+							"Start": 1,
+							"End": 3
+						},
+						"Ordinal": 5,
+						"FilterByColumn": "IDBook"
+					},
+					{
+						"GUIDGroup": "Group1",
+						"FilterHash": "FilterBookByAuthor[Name]",
+						"Type": "ExternalJoinStringMatch",
+						"Values": [ "George Orwell" ],
+						"ExternalFilterByColumns": [ "Name" ],
+
+						"Ordinal": 1,
+
+						"CoreConnectionColumn": "IDBook",
+
+						"JoinTable": "BookAuthorJoin",
+						"JoinTableExternalConnectionColumn": "IDAuthor",
+						"JoinTableCoreConnectionColumn": "IDBook",
+
+						"ExternalFilterByTable": "Author",
+						"ExternalFilterByTableConnectionColumn": "IDAuthor",
+					},
+					{
+						"FilterHash": "FilterBookByAuthor[Name]",
+						"Type": "ExternalJoinStringMatch",
+						"Values": [ "Tolkien" ],
+						"ExternalFilterByColumns": [ "Name" ],
+
+						"CoreConnectionColumn": "IDBook",
+
+						"JoinTable": "BookAuthorJoin",
+						"JoinTableExternalConnectionColumn": "IDAuthor",
+						"JoinTableCoreConnectionColumn": "IDBook",
+
+						"ExternalFilterByTable": "Author",
+						"ExternalFilterByTableConnectionColumn": "IDAuthor",
+					},
+				], tmpResults, (pError) =>
+				{
+					try
+					{
+						// This test uses a bunch of things, Grouping, Group Ordinals, Ordinals within groups, Junctions, Group Junctions.
+						// It should generate a query that looks like this with the groupings and junctions:
+						// ( IDBook IN <Tolkien Book IDs> ) OR ( ( IDBook IN <Orwell Book IDs> ) OR ( ( IDBook >= 1 AND IDBook <= 3 ) ) )
+						Expect(pError).to.not.exist;
+						Expect(_Pict.AppData.Test).to.be.an('array');
+						Expect(_Pict.AppData.Test?.length).to.equal(23);
+						resolve();
+					}
+					catch (pError)
+					{
+						reject(pError);
+					}
+				}));
+			}
+		);
+
+		test
+		(
 			'Filter - load all records by internal selected value',
 			async function()
 			{

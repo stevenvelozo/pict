@@ -13,10 +13,23 @@
  *   GUID: string,
  *   Filters: Array<Record<string, any>>,
  *   JoinConfig?: FilterConnection,
+ * 	 Ordinal?: number,
+ * 	 Junction?: string,
+ * 	 GroupOpen?: boolean,
+ *   GroupJunction?: string,
+ *   GroupClose?: boolean
  * }} PreparedFilter
+ * 
+ * * @typedef {{
+ *   PreparedFilters?: Array<PreparedFilter>,
+ *   Junction?: string,
+ *   Ordinal?: number,
+ *   GUIDGroup: string
+ * }} FilterGroup
  *
  * @typedef {{
  *   Entity: string,
+ * 	 Groups: Array<FilterGroup>,
  *   Filter: string,
  *   ResultDestinationAddress: string,
  *   Mode?: 'Count' | 'Records',
@@ -54,8 +67,21 @@ class FilterMeadowStanzaTokenGenerator
 	 */
 	generateMeadowFilterStanzas(pFilterState)
 	{
-		const tmpResult = [];
+		let tmpResult = [];
 		pFilterState.UserFilters = [];
+		const groupedFilterStates = {};
+		if (Array.isArray(pFilterState.Groups))
+		{
+			for (let g of pFilterState.Groups)
+			{
+				groupedFilterStates[g.GUIDGroup] =
+				Object.assign({
+					PreparedFilters: [],
+					Junction: 'AND',
+					Ordinal: 0
+				}, g);
+			}
+		}
 		for (const tmpFilterConfig of pFilterState.FilterConfiguration || [])
 		{
 			if (tmpFilterConfig.Enabled === false)
@@ -67,7 +93,7 @@ class FilterMeadowStanzaTokenGenerator
 				continue;
 			}
 			/** @type {PreparedFilter} */
-			const tmpFilterResult = { GUID: this.pict.getUUID(), Filters: [] };
+			const tmpFilterResult = { GUID: this.pict.getUUID(), Filters: [], Ordinal: tmpFilterConfig.Ordinal || 0, Junction: tmpFilterConfig.Junction || 'AND' };
 			const tmpValuesArray = Array.isArray(tmpFilterConfig.Values) ? tmpFilterConfig.Values : tmpFilterConfig.Value != null && tmpFilterConfig.Value != '' && (tmpFilterConfig.Type != 'ExternalJoinDateMatch' || tmpFilterConfig.Value != 0) ? [ tmpFilterConfig.Value ] : [];
 			let tmpFilterByColumns;
 			switch (tmpFilterConfig.Type)
@@ -530,9 +556,78 @@ class FilterMeadowStanzaTokenGenerator
 			}
 			if (tmpFilterResult.Filters.length > 0)
 			{
-				tmpResult.push(tmpFilterResult);
+				if (tmpFilterConfig.GUIDGroup)
+				{
+					if (groupedFilterStates[tmpFilterConfig.GUIDGroup])
+					{
+						groupedFilterStates[tmpFilterConfig.GUIDGroup].PreparedFilters.push(tmpFilterResult);
+					}
+					else
+					{
+						groupedFilterStates[tmpFilterConfig.GUIDGroup] = 
+						{
+							PreparedFilters: [tmpFilterResult],
+							Junction: 'AND',
+							Ordinal: 0
+						};
+					}
+				}
+				else
+				{
+					tmpResult.push(tmpFilterResult);
+				}
 			}
 		}
+		const sortSet = (arr) =>
+		{
+			for (let x = 0; x < arr.length; x++)
+			{
+				arr[x].Ordinal = arr[x].Ordinal || 0;
+			}
+			return arr.sort((a, b) => 
+			{
+				if (a.Ordinal > b.Ordinal)
+				{
+					return 1;
+				}
+				else if (b.Ordinal > a.Ordinal)
+				{
+					return -1;
+				}
+				return 0;
+			});
+		};
+		const spreadGroupings = (arr) =>
+		{
+			const outputSet = [];
+			for (const group of arr)
+			{
+				if (group.PreparedFilters)
+				{
+					group.PreparedFilters[0].GroupOpen = true;
+					group.PreparedFilters[0].GroupJunction = group.Junction;
+					group.PreparedFilters[group.PreparedFilters.length - 1].GroupClose = true;
+					for (let x = 0; x < group.PreparedFilters.length; x++)
+					{
+						outputSet.push(group.PreparedFilters[x]);
+					}
+				}
+				else
+				{
+					outputSet.push(group);
+				}
+			}
+			return outputSet;
+		};
+		for (let g of Object.keys(groupedFilterStates))
+		{
+			if (groupedFilterStates[g].PreparedFilters?.length)
+			{
+				groupedFilterStates[g].PreparedFilters = sortSet(groupedFilterStates[g].PreparedFilters);
+			}
+			tmpResult.push(groupedFilterStates[g]);
+		}
+		tmpResult = spreadGroupings(sortSet(tmpResult));
 		pFilterState.PreparedFilters = tmpResult;
 	}
 
@@ -666,7 +761,7 @@ class FilterMeadowStanzaTokenGenerator
 					}
 					if (!tmpGroupedCoreFilters[tmpFilterGUID])
 					{
-						tmpGroupedCoreFilters[tmpFilterGUID] = { Stanzas: [], ComputedIndex: tmpFilter.ComputedIndex, Entity: tmpFilter.Entity };
+						tmpGroupedCoreFilters[tmpFilterGUID] = { Stanzas: [], ComputedIndex: tmpFilter.ComputedIndex, Entity: tmpFilter.Entity, Junction: tmpFilterGroup.Junction || 'AND', GroupOpen: tmpFilterGroup.GroupOpen || false, GroupJunction: tmpFilterGroup.GroupJunction || 'AND', GroupClose: tmpFilterGroup.GroupClose || false };
 					}
 					tmpGroupedCoreFilters[tmpFilterGUID].Stanzas.push(this._compileSimpleFilterToString(tmpFilter));
 				}
@@ -705,7 +800,17 @@ class FilterMeadowStanzaTokenGenerator
 			tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas = tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas.filter((f) => f.length > 0);
 			if (tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas.length > 0)
 			{
-				tmpCoreFilterStrings.push([ 'FOP~0~(~0', ...tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas, 'FCP~0~)~0'].join('~'));
+				let stringConstruct = '';
+				if (tmpGroupedCoreFilters[tmpCoreFilterKey].GroupOpen)
+				{
+					stringConstruct += tmpGroupedCoreFilters[tmpCoreFilterKey].GroupJunction == 'OR' ? 'FOPOR~0~(~0~' : 'FOP~0~(~0~';
+				}
+				stringConstruct += [ tmpGroupedCoreFilters[tmpCoreFilterKey].Junction == 'OR' ? 'FOPOR~0~(~0' : 'FOP~0~(~0', ...tmpGroupedCoreFilters[tmpCoreFilterKey].Stanzas, 'FCP~0~)~0'].join('~');
+				if (tmpGroupedCoreFilters[tmpCoreFilterKey].GroupClose)
+				{
+					stringConstruct += '~FCP~0~)~0'
+				}
+				tmpCoreFilterStrings.push(stringConstruct);
 			}
 		}
 		if (!tmpCoreEntity)
