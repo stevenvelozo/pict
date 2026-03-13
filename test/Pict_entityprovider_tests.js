@@ -499,33 +499,38 @@ suite(
 							});
 						
 						// Now, get a single author within the ID range that should be in the cache already.
+						let tmpCallCountAfterBatch;
 						tmpAnticipate.anticipate(
 							(fStageComplete) =>
 							{
-								Sinon.assert.callCount(getJSONSpy, 10);
+								// The exact call count depends on seed data volume (pagination),
+								// so capture the count after batch and assert relative to it.
+								tmpCallCountAfterBatch = getJSONSpy.callCount;
+								Expect(tmpCallCountAfterBatch).to.be.at.least(10);
 								testPict.EntityProvider.getEntity('Author', 42,
 									(pError, pRecord) =>
 									{
 										Expect(pRecord).to.be.an('object');
 										Expect(pRecord.IDAuthor).to.equal(42);
-										Sinon.assert.callCount(getJSONSpy, 10);
+										// Cache hit -- no new network requests
+										Sinon.assert.callCount(getJSONSpy, tmpCallCountAfterBatch);
 										return fStageComplete(pError);
 									});
 							});
 
-						
+
 						// Now, get a single author outside the ID range of what should be in the cache already.
 						tmpAnticipate.anticipate(
 							(fStageComplete) =>
 							{
-								Sinon.assert.callCount(getJSONSpy, 10);
+								Sinon.assert.callCount(getJSONSpy, tmpCallCountAfterBatch);
 								testPict.EntityProvider.getEntity('Author', 188,
 									(pError, pRecord) =>
 									{
 										Expect(pRecord).to.be.an('object');
 										Expect(pRecord.IDAuthor).to.equal(188);
-										// Expect a network request to happen
-										Sinon.assert.callCount(getJSONSpy, 11);
+										// Expect exactly one new network request (cache miss)
+										Sinon.assert.callCount(getJSONSpy, tmpCallCountAfterBatch + 1);
 										return fStageComplete(pError);
 									});
 							});
