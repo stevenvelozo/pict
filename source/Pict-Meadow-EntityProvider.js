@@ -188,15 +188,15 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		};
 		if (pEntityInformation.CountOnly)
 		{
-			this.getEntitySetRecordCount(pEntityInformation.Entity, tmpFilterString, fRecordFetchComplete);
+			this.getEntitySetRecordCount(pEntityInformation.Entity, tmpFilterString, fRecordFetchComplete, pEntityInformation.Postfix);
 		}
 		else if (tmpPageSize && !pEntityInformation.AllRecords)
 		{
-			this.getEntitySetPage(pEntityInformation.Entity, tmpFilterString, tmpRecordStartCursor, tmpPageSize, fRecordFetchComplete);
+			this.getEntitySetPage(pEntityInformation.Entity, tmpFilterString, tmpRecordStartCursor, tmpPageSize, fRecordFetchComplete, pEntityInformation.Postfix);
 		}
 		else
 		{
-			this.getEntitySet(pEntityInformation.Entity, tmpFilterString, fRecordFetchComplete);
+			this.getEntitySet(pEntityInformation.Entity, tmpFilterString, fRecordFetchComplete, pEntityInformation.Postfix);
 		}
 	}
 
@@ -992,13 +992,14 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	 * @param {number} pRecordStartCursor - The starting cursor for record pagination.
 	 * @param {number} pRecordCount - The number of records to return for pagination.
 	 * @param {(pError?: Error, pEntitySet?: Array<Record<string, any>>) => void} fCallback - The callback function to call when the operation is complete.
+	 * @param {string} [postfix] - Optional, adds a postfix string to the url.
 	 */
-	getEntitySetPage(pEntity, pMeadowFilterExpression, pRecordStartCursor, pRecordCount, fCallback)
+	getEntitySetPage(pEntity, pMeadowFilterExpression, pRecordStartCursor, pRecordCount, fCallback, postfix = '')
 	{
 		const tmpFilterStanza = pMeadowFilterExpression ? `/FilteredTo/${pMeadowFilterExpression}` : '';
 		const tmpURL = `${this.options.urlPrefix}${pEntity}s${tmpFilterStanza}/${pRecordStartCursor}/${pRecordCount}`;
 
-		return this.restClient.getJSON(tmpURL,
+		return this.restClient.getJSON(tmpURL + (postfix || ''),
 			function (pDownloadError, pDownloadResponse, pDownloadBody)
 			{
 				if (pDownloadResponse && pDownloadResponse.statusCode && pDownloadResponse.statusCode >= 400)
@@ -1017,13 +1018,14 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	 * @param {string} pEntity - The name of the entity to get the count of.
 	 * @param {string} pMeadowFilterExpression - The meadow filter expression to filter the entity set by.
 	 * @param {(pError?: Error, pRecordCount?: number) => void} fCallback - The callback function to call when the operation is complete.
+	 * @param {string} [postfix] - Optional, adds a postfix string to the count url
 	 */
-	getEntitySetRecordCount(pEntity, pMeadowFilterExpression, fCallback)
+	getEntitySetRecordCount(pEntity, pMeadowFilterExpression, fCallback, postfix = '')
 	{
 		const tmpFilterStanza = pMeadowFilterExpression ? `/FilteredTo/${pMeadowFilterExpression}` : '';
 		const tmpURL = `${this.options.urlPrefix}${pEntity}s/Count${tmpFilterStanza}`;
 
-		return this.restClient.getJSON(tmpURL,
+		return this.restClient.getJSON(tmpURL + (postfix || ''),
 			function (pError, pResponse, pBody)
 			{
 				if (pResponse && pResponse.statusCode && pResponse.statusCode >= 400)
@@ -1143,10 +1145,11 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	 * @param {string} pEntity - The entity to get a set of.
 	 * @param {string} pMeadowFilterExpression - The meadow filter expression to filter the entity set by.
 	 * @param {(pError?: Error, pEntitySet?: Array) => void} fCallback - The callback to call when the request is complete.
+	 * @param {string} [postfix] - Optional, adds a postfix string to all calls made.
 	 *
 	 * @return {void}
 	 */
-	getEntitySet(pEntity, pMeadowFilterExpression, fCallback)
+	getEntitySet(pEntity, pMeadowFilterExpression, fCallback, postfix = '')
 	{
 		// TODO: Should we test for too many record IDs here by string length in pMeadowFilterExpression?
 		//       FBL~ID${pDestinationEntity}~INN~${tmpIDRecordsCommaSeparated}
@@ -1192,7 +1195,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 						this.fable.Utility.eachLimit(tmpDownloadURIFragments, 1,
 							(pURIFragment, fDownloadCallback) =>
 							{
-								this.restClient.getJSON(pURIFragment,
+								this.restClient.getJSON(pURIFragment + (postfix || ''),
 									(pDownloadError, pDownloadResponse, pDownloadBody) =>
 									{
 										if (pDownloadResponse && pDownloadResponse.statusCode && pDownloadResponse.statusCode >= 400)
@@ -1216,7 +1219,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 								return fCallback(pFullDownloadError, tmpEntitySet);
 							})
-					});
+					}, postfix);
 			}.bind(this));
 	}
 

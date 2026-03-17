@@ -39,6 +39,7 @@
  *   PreparedFilters: Array<PreparedFilter>,
  *   BundleConfig?: Array<Record<string, any>>,
  *   UserFilters?: Array<string>,
+ * 	 Postfix?: string
  * }} FilterState
  *
  * @typedef { 'None' |
@@ -824,6 +825,7 @@ class FilterMeadowStanzaTokenGenerator
 			Filter: tmpCoreFilterStrings.join('~'),
 			AllRecords: typeof pFilterState.PageSize === 'undefined',
 			RecordStartCursor: pFilterState.RecordOffset,
+			Postfix: pFilterState.Postfix || '',
 			PageSize: pFilterState.PageSize,
 			Destination: pFilterState.ResultDestinationAddress,
 		};
