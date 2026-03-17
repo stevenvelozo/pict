@@ -13,10 +13,23 @@ export = FilterMeadowStanzaTokenGenerator;
  *   GUID: string,
  *   Filters: Array<Record<string, any>>,
  *   JoinConfig?: FilterConnection,
+ * 	 Ordinal?: number,
+ * 	 Junction?: string,
+ * 	 GroupOpen?: boolean,
+ *   GroupJunction?: string,
+ *   GroupClose?: boolean
  * }} PreparedFilter
+ *
+ * * @typedef {{
+ *   PreparedFilters?: Array<PreparedFilter>,
+ *   Junction?: string,
+ *   Ordinal?: number,
+ *   GUIDGroup: string
+ * }} FilterGroup
  *
  * @typedef {{
  *   Entity: string,
+ * 	 Groups: Array<FilterGroup>,
  *   Filter: string,
  *   ResultDestinationAddress: string,
  *   Mode?: 'Count' | 'Records',
@@ -77,7 +90,7 @@ declare class FilterMeadowStanzaTokenGenerator {
     _compileSimpleFilterToString(pFilter: any): string;
 }
 declare namespace FilterMeadowStanzaTokenGenerator {
-    export { FilterConnection, PreparedFilter, FilterState, FilterType };
+    export { FilterConnection, PreparedFilter, FilterGroup, FilterState, FilterType };
 }
 type FilterConnection = {
     ValueTemplate?: string;
@@ -87,13 +100,28 @@ type FilterConnection = {
     Operator: string;
     Fields: string[];
 };
+/**
+ * *
+ */
 type PreparedFilter = {
     GUID: string;
     Filters: Array<Record<string, any>>;
     JoinConfig?: FilterConnection;
+    Ordinal?: number;
+    Junction?: string;
+    GroupOpen?: boolean;
+    GroupJunction?: string;
+    GroupClose?: boolean;
+};
+type FilterGroup = {
+    PreparedFilters?: Array<PreparedFilter>;
+    Junction?: string;
+    Ordinal?: number;
+    GUIDGroup: string;
 };
 type FilterState = {
     Entity: string;
+    Groups: Array<FilterGroup>;
     Filter: string;
     ResultDestinationAddress: string;
     Mode?: "Count" | "Records";
