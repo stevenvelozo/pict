@@ -815,7 +815,6 @@ class Pict extends libFable {
 		let tmpValue = "";
 		if (typeof fCallback == "function") {
 			if (Array.isArray(pDataSet) || typeof pDataSet == "object") {
-				let tmpIterationCount = 0;
 				this.Utility.eachLimit(
 					pDataSet,
 					1,
@@ -825,17 +824,7 @@ class Pict extends libFable {
 							pRecord,
 							(pError, pTemplateResult) => {
 								tmpValue += pTemplateResult;
-								tmpIterationCount++;
-								// Yield to the event loop every 100 iterations to prevent
-								// stack overflow on large data sets when templates resolve synchronously
-								if (tmpIterationCount % 100 === 0)
-								{
-									setImmediate(fRecordTemplateCallback);
-								}
-								else
-								{
-									fRecordTemplateCallback();
-								}
+								return fRecordTemplateCallback();
 							},
 							pContextArray,
 							pScope,
@@ -936,7 +925,6 @@ class Pict extends libFable {
 		let tmpValue = "";
 		if (typeof fCallback == "function") {
 			if (Array.isArray(pDataSet) || typeof pDataSet == "object") {
-				let tmpIterationCount = 0;
 				this.Utility.eachLimit(
 					pDataSet,
 					1,
@@ -946,17 +934,7 @@ class Pict extends libFable {
 							{ Data: pRecord, Payload: pPayload },
 							(pError, pTemplateResult) => {
 								tmpValue += pTemplateResult;
-								tmpIterationCount++;
-								// Yield to the event loop every 100 iterations to prevent
-								// stack overflow on large data sets when templates resolve synchronously
-								if (tmpIterationCount % 100 === 0)
-								{
-									setImmediate(fRecordTemplateCallback);
-								}
-								else
-								{
-									fRecordTemplateCallback();
-								}
+								return fRecordTemplateCallback();
 							},
 							pContextArray,
 							pScope,
