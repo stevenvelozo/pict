@@ -477,6 +477,33 @@ suite(
 
 
 				test(
+					'Cache individual records handles undefined and non-object entries gracefully',
+					function()
+					{
+						const testPict = new libPict(_MockSettings);
+
+						// Should not throw when given an array containing undefined entries
+						Expect(() => testPict.EntityProvider.cacheIndividualEntityRecords('Book', [undefined, null, 'string', 42])).to.not.throw();
+
+						// Should not throw when given undefined
+						Expect(() => testPict.EntityProvider.cacheIndividualEntityRecords('Book', undefined)).to.not.throw();
+
+						// Should not throw when given an empty array
+						Expect(() => testPict.EntityProvider.cacheIndividualEntityRecords('Book', [])).to.not.throw();
+
+						// Should still work correctly with valid records
+						testPict.EntityProvider.cacheIndividualEntityRecords('Book',
+							[
+								{ IDBook: 501, Title: 'Test Book' },
+								{ IDBook: 502, Title: 'Another Book' }
+							]);
+						const tmpCachedRecord = testPict.EntityProvider.recordCache['Book'].read(501);
+						Expect(tmpCachedRecord).to.be.an('object');
+						Expect(tmpCachedRecord.IDBook).to.equal(501);
+					}
+				);
+
+				test(
 					'Exercise the automagic cache function',
 					function(fDone)
 					{

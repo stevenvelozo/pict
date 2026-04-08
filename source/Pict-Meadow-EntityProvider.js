@@ -971,7 +971,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			// Cache each record individually.
 			// This code is here because the downstream getEntitySet function uses this to load records, so both are covered here.
 			const tmpSpeculativeRecordIDColumn = `ID${pEntity}`;
-			if (tmpSpeculativeRecordIDColumn in tmpEntitySet[0])
+			if (tmpEntitySet[0] && typeof tmpEntitySet[0] === 'object' && tmpSpeculativeRecordIDColumn in tmpEntitySet[0])
 			{
 				for (let i = 0; i < tmpEntitySet.length; i++)
 				{
@@ -1203,7 +1203,10 @@ class PictMeadowEntityProvider extends libFableServiceBase
 											this.log.error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${pURIFragment}]: ${pDownloadResponse.statusCode} ${pDownloadResponse.statusMessage}`);
 											return fDownloadCallback(new Error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${pURIFragment}]: ${pDownloadResponse.statusCode} ${JSON.stringify(pDownloadBody || {})}`));
 										}
-										tmpEntitySet = tmpEntitySet.concat(pDownloadBody);
+										if (Array.isArray(pDownloadBody))
+										{
+											tmpEntitySet = tmpEntitySet.concat(pDownloadBody);
+										}
 										// Should we be caching each record?
 										return fDownloadCallback(pDownloadError);
 									});

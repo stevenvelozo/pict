@@ -165,14 +165,16 @@ declare class PictMeadowEntityProvider {
      * @param {number} pRecordStartCursor - The starting cursor for record pagination.
      * @param {number} pRecordCount - The number of records to return for pagination.
      * @param {(pError?: Error, pEntitySet?: Array<Record<string, any>>) => void} fCallback - The callback function to call when the operation is complete.
+     * @param {string} [postfix] - Optional, adds a postfix string to the url.
      */
-    getEntitySetPage(pEntity: string, pMeadowFilterExpression: string, pRecordStartCursor: number, pRecordCount: number, fCallback: (pError?: Error, pEntitySet?: Array<Record<string, any>>) => void): any;
+    getEntitySetPage(pEntity: string, pMeadowFilterExpression: string, pRecordStartCursor: number, pRecordCount: number, fCallback: (pError?: Error, pEntitySet?: Array<Record<string, any>>) => void, postfix?: string): any;
     /**
      * @param {string} pEntity - The name of the entity to get the count of.
      * @param {string} pMeadowFilterExpression - The meadow filter expression to filter the entity set by.
      * @param {(pError?: Error, pRecordCount?: number) => void} fCallback - The callback function to call when the operation is complete.
+     * @param {string} [postfix] - Optional, adds a postfix string to the count url
      */
-    getEntitySetRecordCount(pEntity: string, pMeadowFilterExpression: string, fCallback: (pError?: Error, pRecordCount?: number) => void): any;
+    getEntitySetRecordCount(pEntity: string, pMeadowFilterExpression: string, fCallback: (pError?: Error, pRecordCount?: number) => void, postfix?: string): any;
     /**
      * @param {string} pEntity - The name of the entity to get.
      * @param {string} pMeadowFilterExpression - The meadow filter expression to filter the entity set by.
@@ -183,10 +185,11 @@ declare class PictMeadowEntityProvider {
      * @param {string} pEntity - The entity to get a set of.
      * @param {string} pMeadowFilterExpression - The meadow filter expression to filter the entity set by.
      * @param {(pError?: Error, pEntitySet?: Array) => void} fCallback - The callback to call when the request is complete.
+     * @param {string} [postfix] - Optional, adds a postfix string to all calls made.
      *
      * @return {void}
      */
-    getEntitySet(pEntity: string, pMeadowFilterExpression: string, fCallback: (pError?: Error, pEntitySet?: any[]) => void): void;
+    getEntitySet(pEntity: string, pMeadowFilterExpression: string, fCallback: (pError?: Error, pEntitySet?: any[]) => void, postfix?: string): void;
     /**
      * @param {string} pEntityType - The type of the entity to format the URL for.
      *
