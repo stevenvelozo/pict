@@ -64,5 +64,104 @@ suite(
 				);
 			}
 		);
+
+		suite(
+			'unregisterTransaction',
+			function()
+			{
+				test(
+					'returns false for an unknown key without side effects',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+						let tmpEnvironment = new libPict.EnvironmentLog(testPict, {});
+						const tmpTransactionTracker = testPict.newTransactionTracker();
+
+						const tmpResult = tmpTransactionTracker.unregisterTransaction('never-existed');
+						Expect(tmpResult).to.equal(false);
+						Expect(tmpTransactionTracker.transactions).to.not.have.property('never-existed');
+
+						return fDone();
+					}
+				);
+
+				test(
+					'removes a registered transaction with an empty queue and returns true',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+						let tmpEnvironment = new libPict.EnvironmentLog(testPict, {});
+						const tmpTransactionTracker = testPict.newTransactionTracker();
+
+						const tmpTransactionID = testPict.getUUID();
+						tmpTransactionTracker.registerTransaction(tmpTransactionID);
+						Expect(tmpTransactionTracker.transactions).to.have.property(tmpTransactionID);
+
+						const tmpResult = tmpTransactionTracker.unregisterTransaction(tmpTransactionID);
+						Expect(tmpResult).to.equal(true);
+						Expect(tmpTransactionTracker.transactions).to.not.have.property(tmpTransactionID);
+
+						return fDone();
+					}
+				);
+
+				test(
+					'refuses to unregister a transaction with a non-empty queue by default',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+						let tmpEnvironment = new libPict.EnvironmentLog(testPict, {});
+						const tmpTransactionTracker = testPict.newTransactionTracker();
+
+						const tmpTransactionID = testPict.getUUID();
+						tmpTransactionTracker.pushToTransactionQueue(tmpTransactionID, { Event: 'still-pending' });
+
+						const tmpResult = tmpTransactionTracker.unregisterTransaction(tmpTransactionID);
+						Expect(tmpResult).to.equal(false, 'should refuse to delete while queue has items');
+						Expect(tmpTransactionTracker.transactions).to.have.property(tmpTransactionID, tmpTransactionTracker.transactions[tmpTransactionID], 'transaction entry should still be present after refused unregister');
+						Expect(tmpTransactionTracker.transactions[tmpTransactionID].TransactionQueue).to.have.lengthOf(1);
+
+						return fDone();
+					}
+				);
+
+				test(
+					'force flag deletes a transaction even when the queue is non-empty',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+						let tmpEnvironment = new libPict.EnvironmentLog(testPict, {});
+						const tmpTransactionTracker = testPict.newTransactionTracker();
+
+						const tmpTransactionID = testPict.getUUID();
+						tmpTransactionTracker.pushToTransactionQueue(tmpTransactionID, { Event: 'abandon' });
+
+						const tmpResult = tmpTransactionTracker.unregisterTransaction(tmpTransactionID, true);
+						Expect(tmpResult).to.equal(true);
+						Expect(tmpTransactionTracker.transactions).to.not.have.property(tmpTransactionID);
+
+						return fDone();
+					}
+				);
+
+				test(
+					'is safe to call twice on the same key',
+					function(fDone)
+					{
+						var testPict = new libPict(_MockSettings);
+						let tmpEnvironment = new libPict.EnvironmentLog(testPict, {});
+						const tmpTransactionTracker = testPict.newTransactionTracker();
+
+						const tmpTransactionID = testPict.getUUID();
+						tmpTransactionTracker.registerTransaction(tmpTransactionID);
+
+						Expect(tmpTransactionTracker.unregisterTransaction(tmpTransactionID)).to.equal(true);
+						Expect(tmpTransactionTracker.unregisterTransaction(tmpTransactionID)).to.equal(false);
+
+						return fDone();
+					}
+				);
+			}
+		);
 	}
 );
