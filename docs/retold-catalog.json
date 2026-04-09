@@ -1,5 +1,5 @@
 {
-	"Generated": "2026-02-18T04:31:28.585Z",
+	"Generated": "2026-04-09T23:24:22.064Z",
 	"GitHubOrg": "stevenvelozo",
 	"DefaultBranch": "master",
 	"Groups": [
@@ -62,23 +62,6 @@
 					"Name": "vscode-sqltools",
 					"Repo": "vscode-sqltools",
 					"Group": ".config",
-					"Branch": "master",
-					"HasDocs": false,
-					"HasCover": false,
-					"Sidebar": [],
-					"DocFiles": []
-				}
-			]
-		},
-		{
-			"Name": "Coverage",
-			"Key": "coverage",
-			"Description": "",
-			"Modules": [
-				{
-					"Name": "lcov-report",
-					"Repo": "lcov-report",
-					"Group": "coverage",
 					"Branch": "master",
 					"HasDocs": false,
 					"HasCover": false,
@@ -151,6 +134,18 @@
 					]
 				},
 				{
+					"Name": "css",
+					"Repo": "css",
+					"Group": "docs",
+					"Branch": "master",
+					"HasDocs": true,
+					"HasCover": false,
+					"Sidebar": [],
+					"DocFiles": [
+						"css/docuserve.css"
+					]
+				},
+				{
 					"Name": "design_philosophy",
 					"Repo": "design_philosophy",
 					"Group": "docs",
@@ -197,19 +192,12 @@
 						"examples/complex_example_seattle_data/data/race_ethnicity_Neighborhoods_-7085838689260358328.csv",
 						"examples/hello_world/.babelrc",
 						"examples/hello_world/.browserslistrc",
-						"examples/hello_world/.browserslistrc-BACKUP",
-						"examples/hello_world/.gulpfile-quackage-config.json",
-						"examples/hello_world/.gulpfile-quackage.js",
 						"examples/hello_world/.quackage.json",
 						"examples/hello_world/README.md",
 						"examples/hello_world/dist/.gitignore",
-						"examples/hello_world/dist/hello_world.js",
-						"examples/hello_world/dist/hello_world.js.map",
 						"examples/hello_world/dist/hello_world.min.js",
-						"examples/hello_world/dist/hello_world.min.js.map",
 						"examples/hello_world/dist/index.html",
 						"examples/hello_world/index.js",
-						"examples/hello_world/package-lock.json",
 						"examples/hello_world/package.json",
 						"examples/quickstart.js"
 					]
