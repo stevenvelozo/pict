@@ -16,7 +16,7 @@ Trygve Reenskaug, originator of MVC at PARC, has written that "MVC was conceived
 
 Wikipedia being the acknowledged universal source of truth for humanity?  At least getting close to Hitchiker's Guide level of relevance...
 
-> Model–view–controller (MVC) is a software design pattern[1] commonly used for developing user interfaces that divides the related program logic into three interconnected elements. These elements are the internal representations of information (the Model), the interface (the View) that presents information to and accepts it from the user, and the Controller software linking the two.
+> Model-view-controller (MVC) is a software design pattern[1] commonly used for developing user interfaces that divides the related program logic into three interconnected elements. These elements are the internal representations of information (the Model), the interface (the View) that presents information to and accepts it from the user, and the Controller software linking the two.
 >
 > Traditionally used for desktop graphical user interfaces (GUIs), this pattern became popular for designing web applications. Popular programming languages have MVC frameworks that facilitate the implementation of the pattern.
 
