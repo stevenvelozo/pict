@@ -4,60 +4,18 @@ The pict application lifecycle defines the ordered sequence of events from appli
 
 ## Lifecycle Overview
 
-```
-┌─────────────────┐
-│  Construction   │ ─── Application object created, views/providers added
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Initialization  │ ─── initialize() called
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ onBeforeInit    │ ─── Pre-initialization hook
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│   onInitialize  │ ─── Synchronous initialization
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│onInitializeAsync│ ─── Async initialization (data loading)
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Provider Init   │ ─── All providers initialize
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│   View Init     │ ─── All views initialize
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Initial Solve  │ ─── Views perform initial calculations
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Initial Render  │ ─── Main viewport view renders (if AutoRender)
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ onAfterInit     │ ─── Post-initialization hook
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│    Running      │ ─── Application is active
-└─────────────────┘
+```mermaid
+graph TD
+    A["Construction<br/><i>Application object created, views/providers added</i>"] --> B["Initialization<br/><i>initialize() called</i>"]
+    B --> C["onBeforeInit<br/><i>Pre-initialization hook</i>"]
+    C --> D["onInitialize<br/><i>Synchronous initialization</i>"]
+    D --> E["onInitializeAsync<br/><i>Async initialization (data loading)</i>"]
+    E --> F["Provider Init<br/><i>All providers initialize</i>"]
+    F --> G["View Init<br/><i>All views initialize</i>"]
+    G --> H["Initial Solve<br/><i>Views perform initial calculations</i>"]
+    H --> I["Initial Render<br/><i>Main viewport view renders (if AutoRender)</i>"]
+    I --> J["onAfterInit<br/><i>Post-initialization hook</i>"]
+    J --> K["Running<br/><i>Application is active</i>"]
 ```
 
 ## Detailed Lifecycle Phases
@@ -272,22 +230,11 @@ The application is now running and ready for user interaction.
 
 During the running state, views operate in a solve-render-marshal cycle:
 
-```
-┌──────────┐
-│   Solve  │ ◄─── Calculate values from state
-└────┬─────┘
-     │
-     ▼
-┌──────────┐
-│  Render  │ ◄─── Generate output from templates
-└────┬─────┘
-     │
-     ▼
-┌──────────┐
-│ Marshal  │ ◄─── Collect user input back to state
-└────┬─────┘
-     │
-     └──────────► (back to Solve on state change)
+```mermaid
+graph TD
+    S["Solve<br/><i>Calculate values from state</i>"] --> R["Render<br/><i>Generate output from templates</i>"]
+    R --> M["Marshal<br/><i>Collect user input back to state</i>"]
+    M -->|"state change"| S
 ```
 
 ### Solve Phase

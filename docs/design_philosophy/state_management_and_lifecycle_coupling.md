@@ -207,35 +207,14 @@ Marshaling is typically triggered by:
 
 Components move through the lifecycle in this order:
 
-```
-┌─────────────────┐
-│  Instantiation  │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Construction   │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Initialization  │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│    Solving      │◄──────────┐
-└────────┬────────┘           │
-         │                    │
-         ▼                    │
-┌─────────────────┐           │
-│   Rendering     │           │
-└────────┬────────┘           │
-         │                    │
-         ▼                    │
-┌─────────────────┐           │
-│   Marshaling    │───────────┘
-└─────────────────┘    (on user action)
+```mermaid
+graph TD
+    A["Instantiation"] --> B["Construction"]
+    B --> C["Initialization"]
+    C --> D["Solving"]
+    D --> E["Rendering"]
+    E --> F["Marshaling"]
+    F -->|"on user action"| D
 ```
 
 ## Coupling State with Lifecycle
