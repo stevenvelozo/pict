@@ -1,4 +1,4 @@
-# Pict <small>1</small>
+# Pict
 
 > A flexible MVC framework for building applications with text-based UI
 
