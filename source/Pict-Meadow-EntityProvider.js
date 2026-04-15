@@ -36,6 +36,20 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			}
 		}
 
+		if (typeof this.options.downloadPageConcurrency !== 'number')
+		{
+			this.options.downloadPageConcurrency = (typeof this.fable.settings.PictDefaultDownloadPageConcurrency === 'number')
+				? this.fable.settings.PictDefaultDownloadPageConcurrency
+				: 4;
+		}
+
+		if (typeof this.options.maxBundleConcurrency !== 'number')
+		{
+			this.options.maxBundleConcurrency = (typeof this.fable.settings.PictDefaultMaxBundleConcurrency === 'number')
+				? this.fable.settings.PictDefaultMaxBundleConcurrency
+				: 8;
+		}
+
 		//@ts-ignore - FIXME - remove once we have fable types
 		this.restClient = this.fable.RestClient ?? this.fable.instantiateServiceProviderWithoutRegistration('RestClient');
 
@@ -53,6 +67,13 @@ class PictMeadowEntityProvider extends libFableServiceBase
 
 		/** @type {(pOptions: Record<string, any>) => Record<string, any>} */
 		this.prepareRequestOptions = (pOptions) => { return pOptions; };
+
+		/**
+		 * After buildBundleWaves() is called by gatherDataFromServer(), this
+		 * property holds the computed wave schedule for inspection/debugging.
+		 * @type {Array<Array<{Index: number, Step: Record<string, any>}>>|null}
+		 */
+		this.lastBundleWaves = null;
 	}
 
 	/**
@@ -196,7 +217,7 @@ class PictMeadowEntityProvider extends libFableServiceBase
 		}
 		else
 		{
-			this.getEntitySet(pEntityInformation.Entity, tmpFilterString, fRecordFetchComplete, pEntityInformation.Postfix);
+			this.getEntitySet(pEntityInformation.Entity, tmpFilterString, fRecordFetchComplete, pEntityInformation.Postfix, pEntityInformation);
 		}
 	}
 
@@ -722,6 +743,274 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	 * @param {Array<Record<string, any>>} pEntitiesBundleDescription - The entity bundle description object.
 	 * @param {(error?: Error) => void} fCallback - The callback function to call when the data gathering is complete.
 	 */
+	/**
+	 * Extract the set of destination addresses that a bundle step depends on.
+	 *
+	 * Scans the step's Filter, URL, and data-address properties for template
+	 * references of the form:
+	 *   - {~PJU:..^Field^SomeAddress~}  (primary-key join/unique)
+	 *   - {~D:SomeAddress.Field~}        (data-address lookup)
+	 *
+	 * Also inspects MapJoin/ProjectDataset address properties for references
+	 * to destinations produced by earlier steps.
+	 *
+	 * @param {Record<string, any>} pStep - A single entity bundle step.
+	 * @return {Set<string>} - The set of destination address prefixes this step references.
+	 */
+	extractStepDependencies(pStep)
+	{
+		const tmpDependencies = new Set();
+
+		// Collect all string fields that may contain template expressions
+		const tmpTemplateFields = [];
+		if (typeof pStep.Filter === 'string')
+		{
+			tmpTemplateFields.push(pStep.Filter);
+		}
+		if (typeof pStep.URL === 'string')
+		{
+			tmpTemplateFields.push(pStep.URL);
+		}
+		if (typeof pStep.BucketByTemplate === 'string')
+		{
+			tmpTemplateFields.push(pStep.BucketByTemplate);
+		}
+
+		/**
+		 * Add a dependency address, stripping the Record. prefix if present.
+		 * The Record. prefix is used in PJU/D templates because the template
+		 * parser receives a context object with Record as a root property,
+		 * but the actual data address is everything after Record.
+		 *
+		 * @param {string} pValue - The raw address from the template or step config.
+		 */
+		const addDependency = (pValue) =>
+		{
+			if (typeof pValue === 'string' && pValue.startsWith('Record.'))
+			{
+				tmpDependencies.add(pValue.substring('Record.'.length));
+			}
+			else
+			{
+				tmpDependencies.add(pValue);
+			}
+		};
+
+		// Parse template references from Filter/URL strings
+		for (const tmpField of tmpTemplateFields)
+		{
+			// Match {~PJU:..^Field^Address.Path~} — the address is after the last ^
+			// Address characters include alphanumerics, dots, brackets, hyphens (e.g. State[Step-1])
+			const tmpPJUMatches = tmpField.matchAll(/\^([^~}^]+)~\}/g);
+			for (const tmpMatch of tmpPJUMatches)
+			{
+				addDependency(tmpMatch[1]);
+			}
+			// Match {~D:Address.Path.Field~}
+			const tmpDMatches = tmpField.matchAll(/\{~D:([^~}]+)~\}/g);
+			for (const tmpMatch of tmpDMatches)
+			{
+				addDependency(tmpMatch[1]);
+			}
+		}
+
+		// MapJoin steps reference data from prior steps via address properties
+		if (pStep.Type === 'MapJoin')
+		{
+			if (typeof pStep.DestinationRecordSetAddress === 'string')
+			{
+				addDependency(pStep.DestinationRecordSetAddress);
+			}
+			if (typeof pStep.DestinationRecordAddress === 'string')
+			{
+				addDependency(pStep.DestinationRecordAddress);
+			}
+			if (typeof pStep.Joins === 'string')
+			{
+				addDependency(pStep.Joins);
+			}
+			if (typeof pStep.JoinRecordSetAddress === 'string')
+			{
+				addDependency(pStep.JoinRecordSetAddress);
+			}
+		}
+
+		// ProjectDataset steps reference input recordset addresses
+		if (pStep.Type === 'ProjectDataset')
+		{
+			if (typeof pStep.InputRecordsetAddress === 'string')
+			{
+				// Strip any manyfest filter expression from the address
+				const tmpCleanAddress = pStep.InputRecordsetAddress.split('[]')[0];
+				addDependency(tmpCleanAddress);
+			}
+		}
+		return tmpDependencies;
+	}
+
+	/**
+	 * Build execution waves from a bundle description by analyzing inter-step
+	 * dependencies. Steps within the same wave have no data dependencies on
+	 * each other and can execute concurrently. Waves execute sequentially.
+	 *
+	 * SetStateAddress and PopState steps act as wave barriers — they always
+	 * start a new wave and execute alone.
+	 *
+	 * @param {Array<Record<string, any>>} pEntitiesBundleDescription - The entity bundle description.
+	 * @return {Array<Array<{Index: number, Step: Record<string, any>}>>} - An array of waves, each wave an array of {Index, Step} objects.
+	 */
+	buildBundleWaves(pEntitiesBundleDescription)
+	{
+		// First, annotate each step with its dependencies and destination
+		const tmpAnnotatedSteps = [];
+		for (let i = 0; i < pEntitiesBundleDescription.length; i++)
+		{
+			const tmpStep = pEntitiesBundleDescription[i];
+			// MapJoin and ProjectDataset are synchronous steps that mutate records
+			// in-place, creating implicit data dependencies that can't be reliably
+			// detected from the step config alone. Force them to run sequentially.
+			const tmpIsSyncMutation = (tmpStep.Type === 'MapJoin' || tmpStep.Type === 'ProjectDataset');
+			tmpAnnotatedSteps.push({
+				Index: i,
+				Step: tmpStep,
+				Destination: typeof tmpStep.Destination === 'string' ? tmpStep.Destination : null,
+				Dependencies: this.extractStepDependencies(tmpStep),
+				IsBarrier: (tmpStep.Type === 'SetStateAddress' || tmpStep.Type === 'PopState'),
+				// Allow individual steps to opt out of parallel execution.
+				// Sync mutation steps are always sequential unless explicitly overridden.
+				ForceSequential: tmpIsSyncMutation ? (tmpStep.Parallel !== true) : (tmpStep.Parallel === false)
+			});
+		}
+
+		const tmpWaves = [];
+		const tmpResolved = new Set();
+		const tmpRemaining = new Set(tmpAnnotatedSteps.map((pEntry) => { return pEntry.Index; }));
+
+		while (tmpRemaining.size > 0)
+		{
+			const tmpWave = [];
+
+			// Process steps in original order to find candidates for this wave
+			for (const tmpIdx of tmpRemaining)
+			{
+				const tmpEntry = tmpAnnotatedSteps[tmpIdx];
+
+				// Barrier steps always run alone in their own wave
+				if (tmpEntry.IsBarrier)
+				{
+					if (tmpWave.length === 0)
+					{
+						tmpWave.push(tmpEntry);
+					}
+					// If we already have steps in this wave, the barrier starts the next wave
+					break;
+				}
+
+				// If this wave already contains a barrier, stop adding
+				if (tmpWave.length > 0 && tmpWave[0].IsBarrier)
+				{
+					break;
+				}
+
+				// Check if all dependencies are resolved
+				let tmpDepsResolved = true;
+				for (const tmpDep of tmpEntry.Dependencies)
+				{
+					// Check if any resolved destination is a prefix of (or equal to) this dependency
+					let tmpFoundResolved = false;
+					for (const tmpResolvedDest of tmpResolved)
+					{
+						if (tmpDep === tmpResolvedDest || tmpDep.startsWith(tmpResolvedDest + '.'))
+						{
+							tmpFoundResolved = true;
+							break;
+						}
+					}
+					if (tmpFoundResolved)
+					{
+						continue;
+					}
+
+					// Check if any unresolved step (remaining or current wave) produces this dependency.
+					// If so, we cannot run this step yet.
+					let tmpProducedByUnresolved = false;
+					for (const tmpOtherIdx of tmpRemaining)
+					{
+						if (tmpOtherIdx === tmpEntry.Index)
+						{
+							continue;
+						}
+						const tmpOther = tmpAnnotatedSteps[tmpOtherIdx];
+						if (tmpOther.Destination && (tmpDep === tmpOther.Destination || tmpDep.startsWith(tmpOther.Destination + '.')))
+						{
+							tmpProducedByUnresolved = true;
+							break;
+						}
+					}
+					// Also check steps already added to this wave
+					if (!tmpProducedByUnresolved)
+					{
+						for (const tmpWaveEntry of tmpWave)
+						{
+							if (tmpWaveEntry.Destination && (tmpDep === tmpWaveEntry.Destination || tmpDep.startsWith(tmpWaveEntry.Destination + '.')))
+							{
+								tmpProducedByUnresolved = true;
+								break;
+							}
+						}
+					}
+					if (tmpProducedByUnresolved)
+					{
+						tmpDepsResolved = false;
+						break;
+					}
+					// Dependency refers to data not produced by any step (e.g. pre-seeded AppData);
+					// treat as already available
+				}
+
+				if (!tmpDepsResolved)
+				{
+					continue;
+				}
+
+				// If this step forces sequential, it must be alone in its wave
+				if (tmpEntry.ForceSequential)
+				{
+					if (tmpWave.length === 0)
+					{
+						tmpWave.push(tmpEntry);
+						break;
+					}
+					// Otherwise skip it for now — it will be alone in a future wave
+					continue;
+				}
+
+				tmpWave.push(tmpEntry);
+			}
+
+			// Safety valve: if we made no progress, force the next remaining step
+			// to avoid an infinite loop (e.g. circular or unresolvable dependency)
+			if (tmpWave.length === 0)
+			{
+				const tmpNextIdx = tmpRemaining.values().next().value;
+				tmpWave.push(tmpAnnotatedSteps[tmpNextIdx]);
+			}
+
+			tmpWaves.push(tmpWave.map((pEntry) => { return { Index: pEntry.Index, Step: pEntry.Step }; }));
+
+			for (const tmpEntry of tmpWave)
+			{
+				tmpRemaining.delete(tmpEntry.Index);
+				if (tmpEntry.Destination)
+				{
+					tmpResolved.add(tmpEntry.Destination);
+				}
+			}
+		}
+
+		return tmpWaves;
+	}
+
 	gatherDataFromServer(pEntitiesBundleDescription, fCallback)
 	{
 		if (!Array.isArray(pEntitiesBundleDescription))
@@ -730,74 +1019,98 @@ class PictMeadowEntityProvider extends libFableServiceBase
 			return fCallback(new Error('EntityBundleRequest failed to parse entity bundle request because the input was not an array.'));
 		}
 
-		let tmpAnticipate = this.fable.newAnticipate();
 		const tmpStateStack = [];
 		let tmpState = {};
 
-		for (let i = 0; i < pEntitiesBundleDescription.length; i++)
+		// Build execution waves from the bundle description
+		const tmpWaves = this.buildBundleWaves(pEntitiesBundleDescription);
+		this.lastBundleWaves = tmpWaves;
+
+		// The maximum number of concurrent requests per wave
+		const tmpMaxConcurrency = (typeof this.options.maxBundleConcurrency === 'number') ? this.options.maxBundleConcurrency : 8;
+
+		// Execute waves sequentially; steps within each wave run concurrently
+		let tmpWaveIndex = 0;
+
+		const fExecuteNextWave = () =>
 		{
-			let tmpEntityBundleEntry = pEntitiesBundleDescription[i];
-			tmpAnticipate.anticipate(
-				(fNext) =>
-				{
-					try
+			if (tmpWaveIndex >= tmpWaves.length)
+			{
+				return fCallback();
+			}
+
+			const tmpWave = tmpWaves[tmpWaveIndex];
+			tmpWaveIndex++;
+
+			let tmpWaveAnticipate = this.fable.newAnticipate();
+			tmpWaveAnticipate.maxOperations = Math.min(tmpWave.length, tmpMaxConcurrency);
+
+			for (let w = 0; w < tmpWave.length; w++)
+			{
+				const tmpEntityBundleEntry = tmpWave[w].Step;
+				tmpWaveAnticipate.anticipate(
+					(fNext) =>
 					{
-						switch (tmpEntityBundleEntry.Type)
+						try
 						{
-							case 'SetStateAddress':
-								tmpStateStack.push(tmpState);
-								tmpState = this.fable.manifest.getValueByHash(this.fable, tmpEntityBundleEntry.StateAddress);
-								if (typeof tmpState === 'undefined')
-								{
-									tmpState = {};
-									this.fable.manifest.setValueByHash(this.fable, tmpEntityBundleEntry.StateAddress, tmpState);
-								}
-								return fNext();
-							case 'PopState':
-								if (tmpStateStack.length > 0)
-								{
-									tmpState = tmpStateStack.pop();
-								}
-								else
-								{
-									this.log.warn(`EntityBundleRequest encountered a PopState without a matching SetStateAddress.`);
-								}
-								return fNext();
-							case 'Custom':
-								return this.gatherCustomDataSet(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry), fNext);
-							case 'MapJoin':
-								this.mapJoin(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry));
-								return fNext();
-							case 'ProjectDataset':
-								this.projectDataset(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry));
-								return fNext();
-							// This is the default case, for a meadow entity set or single entity
-							case 'MeadowEntityCount':
-								return this.gatherEntitySetCount(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry), fNext);
-							case 'MeadowEntity':
-							default:
-								return this.gatherEntitySet(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry), fNext);
+							switch (tmpEntityBundleEntry.Type)
+							{
+								case 'SetStateAddress':
+									tmpStateStack.push(tmpState);
+									tmpState = this.fable.manifest.getValueByHash(this.fable, tmpEntityBundleEntry.StateAddress);
+									if (typeof tmpState === 'undefined')
+									{
+										tmpState = {};
+										this.fable.manifest.setValueByHash(this.fable, tmpEntityBundleEntry.StateAddress, tmpState);
+									}
+									return fNext();
+								case 'PopState':
+									if (tmpStateStack.length > 0)
+									{
+										tmpState = tmpStateStack.pop();
+									}
+									else
+									{
+										this.log.warn(`EntityBundleRequest encountered a PopState without a matching SetStateAddress.`);
+									}
+									return fNext();
+								case 'Custom':
+									return this.gatherCustomDataSet(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry), fNext);
+								case 'MapJoin':
+									this.mapJoin(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry));
+									return fNext();
+								case 'ProjectDataset':
+									this.projectDataset(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry));
+									return fNext();
+								// This is the default case, for a meadow entity set or single entity
+								case 'MeadowEntityCount':
+									return this.gatherEntitySetCount(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry), fNext);
+								case 'MeadowEntity':
+								default:
+									return this.gatherEntitySet(tmpEntityBundleEntry, this.prepareState(tmpState, tmpEntityBundleEntry), fNext);
+							}
 						}
-					}
-					catch (pError)
+						catch (pError)
+						{
+							this.log.error(`EntityBundleRequest error gathering entity set: ${pError}`, { Stack: pError.stack });
+							return fNext();
+						}
+					});
+			}
+
+			tmpWaveAnticipate.wait(
+				(pError) =>
+				{
+					if (pError)
 					{
 						this.log.error(`EntityBundleRequest error gathering entity set: ${pError}`, { Stack: pError.stack });
-						return fNext();
+						return fCallback(pError);
 					}
+					return fExecuteNextWave();
 				});
-		}
+		};
 
-		tmpAnticipate.wait(
-			(pError) =>
-			{
-				//FIXME: should we be ignoring this error? rejecting here is unsafe since the result isn't guaranteed to be handled, so will crash stuff currently
-				if (pError)
-				{
-					this.log.error(`EntityBundleRequest error gathering entity set: ${pError}`, { Stack: pError.stack });
-					return fCallback(pError);
-				}
-				return fCallback();
-			});
+		fExecuteNextWave();
 	}
 
 	/**
@@ -1146,10 +1459,11 @@ class PictMeadowEntityProvider extends libFableServiceBase
 	 * @param {string} pMeadowFilterExpression - The meadow filter expression to filter the entity set by.
 	 * @param {(pError?: Error, pEntitySet?: Array) => void} fCallback - The callback to call when the request is complete.
 	 * @param {string} [postfix] - Optional, adds a postfix string to all calls made.
+	 * @param {Record<string, any>} [pOptions] - Optional, per-call options (e.g. { DownloadPageConcurrency: 1 }).
 	 *
 	 * @return {void}
 	 */
-	getEntitySet(pEntity, pMeadowFilterExpression, fCallback, postfix = '')
+	getEntitySet(pEntity, pMeadowFilterExpression, fCallback, postfix = '', pOptions = {})
 	{
 		// TODO: Should we test for too many record IDs here by string length in pMeadowFilterExpression?
 		//       FBL~ID${pDestinationEntity}~INN~${tmpIDRecordsCommaSeparated}
@@ -1180,39 +1494,56 @@ class PictMeadowEntityProvider extends libFableServiceBase
 							return fCallback(new Error('Entity count did not return a number in getEntitySet.'));
 						}
 
-						let tmpDownloadURIFragments = [];
 						let tmpDownloadBatchSize = this.options.downloadBatchSize;
 						const tmpFilterStanza = pMeadowFilterExpression ? `/FilteredTo/${pMeadowFilterExpression}` : '';
-						for (let i = 0; i < (tmpRecordCount / tmpDownloadBatchSize); i++)
+						const tmpPageCount = Math.ceil(tmpRecordCount / tmpDownloadBatchSize);
+
+						// Build an indexed array of page descriptors to preserve ordering
+						const tmpPages = [];
+						for (let i = 0; i < tmpPageCount; i++)
 						{
-							// Generate each of the URI fragments to download
-							tmpDownloadURIFragments.push(`${this.options.urlPrefix}${pEntity}s${tmpFilterStanza}/${i * tmpDownloadBatchSize}/${tmpDownloadBatchSize}`);
+							tmpPages.push({
+								Index: i,
+								URL: `${this.options.urlPrefix}${pEntity}s${tmpFilterStanza}/${i * tmpDownloadBatchSize}/${tmpDownloadBatchSize}`,
+								Records: null
+							});
 						}
 
-						let tmpEntitySet = [];
-
-						// Now run these in series (it's possible to parallelize the requests but they would not be in server order)
-						this.fable.Utility.eachLimit(tmpDownloadURIFragments, 1,
-							(pURIFragment, fDownloadCallback) =>
+						// Fetch pages concurrently and reassemble in order.
+						// Per-call DownloadPageConcurrency overrides the provider-level default.
+						const tmpPageConcurrency = (typeof pOptions.DownloadPageConcurrency === 'number')
+							? pOptions.DownloadPageConcurrency
+							: ((typeof this.options.downloadPageConcurrency === 'number') ? this.options.downloadPageConcurrency : 4);
+						this.fable.Utility.eachLimit(tmpPages, tmpPageConcurrency,
+							(pPage, fDownloadCallback) =>
 							{
-								this.restClient.getJSON(pURIFragment + (postfix || ''),
+								this.restClient.getJSON(pPage.URL + (postfix || ''),
 									(pDownloadError, pDownloadResponse, pDownloadBody) =>
 									{
 										if (pDownloadResponse && pDownloadResponse.statusCode && pDownloadResponse.statusCode >= 400)
 										{
-											this.log.error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${pURIFragment}]: ${pDownloadResponse.statusCode} ${pDownloadResponse.statusMessage}`);
-											return fDownloadCallback(new Error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${pURIFragment}]: ${pDownloadResponse.statusCode} ${JSON.stringify(pDownloadBody || {})}`));
+											this.log.error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${pPage.URL}]: ${pDownloadResponse.statusCode} ${pDownloadResponse.statusMessage}`);
+											return fDownloadCallback(new Error(`Error getting entity set of [${pEntity}] filtered to [${pMeadowFilterExpression}] from url [${pPage.URL}]: ${pDownloadResponse.statusCode} ${JSON.stringify(pDownloadBody || {})}`));
 										}
 										if (Array.isArray(pDownloadBody))
 										{
-											tmpEntitySet = tmpEntitySet.concat(pDownloadBody);
+											pPage.Records = pDownloadBody;
 										}
-										// Should we be caching each record?
 										return fDownloadCallback(pDownloadError);
 									});
 							},
 							(pFullDownloadError) =>
 							{
+								// Reassemble pages in index order to maintain consistent ordering
+								let tmpEntitySet = [];
+								for (let i = 0; i < tmpPages.length; i++)
+								{
+									if (Array.isArray(tmpPages[i].Records))
+									{
+										tmpEntitySet = tmpEntitySet.concat(tmpPages[i].Records);
+									}
+								}
+
 								if (tmpEntitySet)
 								{
 									this.recordSetCache[pEntity].put(tmpEntitySet, pMeadowFilterExpression);

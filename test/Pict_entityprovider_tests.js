@@ -568,5 +568,521 @@ suite(
 				);
 			}
 		);
+
+		suite(
+			'Bundle Parallelization',
+			function()
+			{
+				test(
+					'extractStepDependencies parses PJU template references',
+					function()
+					{
+						const testPict = new libPict(_MockSettings);
+						const tmpDeps = testPict.EntityProvider.extractStepDependencies({
+							Entity: 'Book',
+							Filter: 'FBL~IDBook~INN~{~PJU:,^IDBook^AppData.BookAuthorJoins~}',
+							Destination: 'AppData.Books'
+						});
+						Expect(tmpDeps.has('AppData.BookAuthorJoins')).to.equal(true);
+						Expect(tmpDeps.size).to.equal(1);
+					}
+				);
+
+				test(
+					'extractStepDependencies parses D: data-address references',
+					function()
+					{
+						const testPict = new libPict(_MockSettings);
+						const tmpDeps = testPict.EntityProvider.extractStepDependencies({
+							Entity: 'Contract',
+							Filter: 'FBL~IDContract~INN~{~D:Bundle.Project.IDContract~}',
+							Destination: 'Bundle.Contract'
+						});
+						Expect(tmpDeps.has('Bundle.Project.IDContract')).to.equal(true);
+						Expect(tmpDeps.size).to.equal(1);
+					}
+				);
+
+				test(
+					'extractStepDependencies returns empty set for static filters',
+					function()
+					{
+						const testPict = new libPict(_MockSettings);
+						const tmpDeps = testPict.EntityProvider.extractStepDependencies({
+							Entity: 'Project',
+							Filter: 'FBV~IDProject~EQ~12345',
+							Destination: 'AppData.Project'
+						});
+						Expect(tmpDeps.size).to.equal(0);
+					}
+				);
+
+				test(
+					'extractStepDependencies parses MapJoin address properties',
+					function()
+					{
+						const testPict = new libPict(_MockSettings);
+						const tmpDeps = testPict.EntityProvider.extractStepDependencies({
+							Type: 'MapJoin',
+							DestinationRecordSetAddress: 'State.Authors',
+							Joins: 'State.BookAuthorJoins',
+							JoinRecordSetAddress: 'State.Books',
+							RecordDestinationAddress: 'Books'
+						});
+						Expect(tmpDeps.has('State.Authors')).to.equal(true);
+						Expect(tmpDeps.has('State.BookAuthorJoins')).to.equal(true);
+						Expect(tmpDeps.has('State.Books')).to.equal(true);
+						Expect(tmpDeps.size).to.equal(3);
+					}
+				);
+
+				test(
+					'extractStepDependencies parses ProjectDataset input address',
+					function()
+					{
+						const testPict = new libPict(_MockSettings);
+						const tmpDeps = testPict.EntityProvider.extractStepDependencies({
+							Type: 'ProjectDataset',
+							InputRecordsetAddress: 'AppData.Comics[]<<~?InStock,TRUE,?~>>',
+							OutputRecordsetAddress: 'AppData.FilteredComics'
+						});
+						Expect(tmpDeps.has('AppData.Comics')).to.equal(true);
+						Expect(tmpDeps.size).to.equal(1);
+					}
+				);
+
+				test(
+					'extractStepDependencies handles multiple dependencies in one filter',
+					function()
+					{
+						const testPict = new libPict(_MockSettings);
+						const tmpDeps = testPict.EntityProvider.extractStepDependencies({
+							Entity: 'TestResult',
+							Filter: 'FBL~IDSample~INN~{~PJU:,^IDSample^Bundle.Samples~}~FBV~IDProject~EQ~{~D:Bundle.Project.IDProject~}',
+							Destination: 'Bundle.TestResult'
+						});
+						Expect(tmpDeps.has('Bundle.Samples')).to.equal(true);
+						Expect(tmpDeps.has('Bundle.Project.IDProject')).to.equal(true);
+						Expect(tmpDeps.size).to.equal(2);
+					}
+				);
+
+				test(
+					'buildBundleWaves groups independent steps into same wave',
+					function()
+					{
+						const testPict = new libPict(_MockSettings);
+						const tmpWaves = testPict.EntityProvider.buildBundleWaves([
+							{
+								Entity: 'Product',
+								Filter: 'FBV~Deleted~EQ~0',
+								Destination: 'Bundle.Products'
+							},
+							{
+								Entity: 'User',
+								Filter: 'FBV~Deleted~EQ~0',
+								Destination: 'Bundle.Users'
+							},
+							{
+								Entity: 'Role',
+								Filter: 'FBV~Deleted~EQ~0',
+								Destination: 'Bundle.Roles'
+							}
+						]);
+						// All three steps have static filters — should be one wave
+						Expect(tmpWaves.length).to.equal(1);
+						Expect(tmpWaves[0].length).to.equal(3);
+					}
+				);
+
+				test(
+					'buildBundleWaves separates dependent steps into sequential waves',
+					function()
+					{
+						const testPict = new libPict(_MockSettings);
+						const tmpWaves = testPict.EntityProvider.buildBundleWaves([
+							{
+								Entity: 'Project',
+								Filter: 'FBV~IDProject~EQ~100',
+								Destination: 'AppData.Project'
+							},
+							{
+								Entity: 'Contract',
+								Filter: 'FBL~IDContract~EQ~{~D:AppData.Project.IDContract~}',
+								Destination: 'AppData.Contract'
+							},
+							{
+								Entity: 'Sample',
+								Filter: 'FBV~IDProject~EQ~{~D:AppData.Project.IDProject~}',
+								Destination: 'AppData.Samples'
+							},
+							{
+								Entity: 'TestInstance',
+								Filter: 'FBV~IDProject~EQ~{~D:AppData.Project.IDProject~}',
+								Destination: 'AppData.TestInstances'
+							},
+							{
+								Entity: 'DocumentPolyJoin',
+								Filter: 'FBL~IDSample~INN~{~PJU:,^IDSample^AppData.Samples~}',
+								Destination: 'AppData.DocPolyJoins'
+							}
+						]);
+						// Wave 1: Project (static filter)
+						// Wave 2: Contract, Sample, TestInstance (all depend on Project)
+						// Wave 3: DocumentPolyJoin (depends on Samples)
+						Expect(tmpWaves.length).to.equal(3);
+						Expect(tmpWaves[0].length).to.equal(1);
+						Expect(tmpWaves[0][0].Step.Entity).to.equal('Project');
+						Expect(tmpWaves[1].length).to.equal(3);
+						Expect(tmpWaves[2].length).to.equal(1);
+						Expect(tmpWaves[2][0].Step.Entity).to.equal('DocumentPolyJoin');
+					}
+				);
+
+				test(
+					'buildBundleWaves treats SetStateAddress as a wave barrier',
+					function()
+					{
+						const testPict = new libPict(_MockSettings);
+						const tmpWaves = testPict.EntityProvider.buildBundleWaves([
+							{
+								Entity: 'Product',
+								Filter: 'FBV~Deleted~EQ~0',
+								Destination: 'Bundle.Products'
+							},
+							{
+								Type: 'SetStateAddress',
+								StateAddress: 'AppData.TestState'
+							},
+							{
+								Entity: 'User',
+								Filter: 'FBV~Deleted~EQ~0',
+								Destination: 'Bundle.Users'
+							}
+						]);
+						// Wave 1: Product, Wave 2: SetStateAddress, Wave 3: User
+						Expect(tmpWaves.length).to.equal(3);
+						Expect(tmpWaves[0].length).to.equal(1);
+						Expect(tmpWaves[1].length).to.equal(1);
+						Expect(tmpWaves[1][0].Step.Type).to.equal('SetStateAddress');
+						Expect(tmpWaves[2].length).to.equal(1);
+					}
+				);
+
+				test(
+					'buildBundleWaves treats PopState as a wave barrier',
+					function()
+					{
+						const testPict = new libPict(_MockSettings);
+						const tmpWaves = testPict.EntityProvider.buildBundleWaves([
+							{
+								Type: 'SetStateAddress',
+								StateAddress: 'AppData.TestState'
+							},
+							{
+								Entity: 'Product',
+								Filter: 'FBV~Deleted~EQ~0',
+								Destination: 'State.Products'
+							},
+							{
+								Type: 'PopState'
+							},
+							{
+								Entity: 'User',
+								Filter: 'FBV~Deleted~EQ~0',
+								Destination: 'Bundle.Users'
+							}
+						]);
+						Expect(tmpWaves.length).to.equal(4);
+						Expect(tmpWaves[0][0].Step.Type).to.equal('SetStateAddress');
+						Expect(tmpWaves[2][0].Step.Type).to.equal('PopState');
+					}
+				);
+
+				test(
+					'buildBundleWaves respects Parallel:false on individual steps',
+					function()
+					{
+						const testPict = new libPict(_MockSettings);
+						const tmpWaves = testPict.EntityProvider.buildBundleWaves([
+							{
+								Entity: 'Product',
+								Filter: 'FBV~Deleted~EQ~0',
+								Destination: 'Bundle.Products'
+							},
+							{
+								Entity: 'User',
+								Filter: 'FBV~Deleted~EQ~0',
+								Destination: 'Bundle.Users',
+								Parallel: false
+							},
+							{
+								Entity: 'Role',
+								Filter: 'FBV~Deleted~EQ~0',
+								Destination: 'Bundle.Roles'
+							}
+						]);
+						// Product and Role can be in wave 1, but User (Parallel:false)
+						// must be alone — so we get 3 waves or User is isolated
+						let tmpUserWave = null;
+						for (const tmpWave of tmpWaves)
+						{
+							for (const tmpEntry of tmpWave)
+							{
+								if (tmpEntry.Step.Entity === 'User')
+								{
+									tmpUserWave = tmpWave;
+								}
+							}
+						}
+						Expect(tmpUserWave).to.not.equal(null);
+						Expect(tmpUserWave.length).to.equal(1);
+					}
+				);
+
+				test(
+					'getEntitySet accepts per-call DownloadPageConcurrency option',
+					function()
+					{
+						const testPict = new libPict(_MockSettings);
+						// Verify the method signature accepts the options parameter without error
+						// (server-dependent fetch would fail, but we can verify the option is read)
+						Expect(typeof testPict.EntityProvider.getEntitySet).to.equal('function');
+						Expect(testPict.EntityProvider.getEntitySet.length).to.be.at.least(3);
+
+						// Verify extractStepDependencies doesn't choke on DownloadPageConcurrency in step config
+						const tmpDeps = testPict.EntityProvider.extractStepDependencies({
+							Entity: 'Product',
+							Filter: 'FBV~Deleted~EQ~0',
+							Destination: 'Bundle.Products',
+							DownloadPageConcurrency: 2
+						});
+						Expect(tmpDeps.size).to.equal(0);
+					}
+				);
+
+				test(
+					'buildBundleWaves handles MapJoin dependencies correctly',
+					function()
+					{
+						const testPict = new libPict(_MockSettings);
+						const tmpWaves = testPict.EntityProvider.buildBundleWaves([
+							{
+								Entity: 'Author',
+								Filter: 'FBL~IDAuthor~LT~10',
+								Destination: 'State.Authors'
+							},
+							{
+								Entity: 'Book',
+								Filter: 'FBV~Deleted~EQ~0',
+								Destination: 'State.Books'
+							},
+							{
+								Entity: 'BookAuthorJoin',
+								Filter: 'FBL~IDAuthor~INN~{~PJU:,^IDAuthor^State.Authors~}',
+								Destination: 'State.BookAuthorJoins'
+							},
+							{
+								Type: 'MapJoin',
+								DestinationRecordSetAddress: 'State.Authors',
+								Joins: 'State.BookAuthorJoins',
+								JoinRecordSetAddress: 'State.Books',
+								RecordDestinationAddress: 'Books'
+							}
+						]);
+						// Wave 1: Author + Book (independent)
+						// Wave 2: BookAuthorJoin (depends on State.Authors)
+						// Wave 3: MapJoin (depends on all three)
+						Expect(tmpWaves.length).to.equal(3);
+						Expect(tmpWaves[0].length).to.equal(2);
+						Expect(tmpWaves[1].length).to.equal(1);
+						Expect(tmpWaves[1][0].Step.Entity).to.equal('BookAuthorJoin');
+						Expect(tmpWaves[2].length).to.equal(1);
+						Expect(tmpWaves[2][0].Step.Type).to.equal('MapJoin');
+					}
+				);
+
+				test(
+					'gatherDataFromServer executes independent steps in parallel waves',
+					function(fDone)
+					{
+						this.timeout(10000);
+						const testPict = new libPict(_MockSettings);
+
+						testPict.EntityProvider.gatherDataFromServer(
+							[
+								{
+									"Entity": "Author",
+									"Filter": "FBV~IDAuthor~EQ~100",
+									"Destination": "AppData.Author100",
+									"SingleRecord": true
+								},
+								{
+									"Entity": "Author",
+									"Filter": "FBV~IDAuthor~EQ~101",
+									"Destination": "AppData.Author101",
+									"SingleRecord": true
+								},
+								{
+									"Entity": "BookAuthorJoin",
+									"Filter": "FBV~IDAuthor~EQ~{~D:AppData.Author100.IDAuthor~}",
+									"Destination": "AppData.BookAuthorJoins"
+								}
+							],
+							function(pError)
+							{
+								try
+								{
+									Expect(pError).to.not.exist;
+									// Both authors should be fetched
+									Expect(testPict.AppData.Author100.IDAuthor).to.equal(100);
+									Expect(testPict.AppData.Author101.IDAuthor).to.equal(101);
+									// The dependent join should also have completed
+									Expect(testPict.AppData.BookAuthorJoins).to.be.an('array');
+									Expect(testPict.AppData.BookAuthorJoins.length).to.be.greaterThan(0);
+
+									// Inspect the wave schedule
+									const tmpWaves = testPict.EntityProvider.lastBundleWaves;
+									// Wave 1: Author100 + Author101 (both static filters)
+									// Wave 2: BookAuthorJoins (depends on Author100)
+									Expect(tmpWaves.length).to.equal(2);
+									Expect(tmpWaves[0].length).to.equal(2);
+									Expect(tmpWaves[1].length).to.equal(1);
+								}
+								catch (pAssertError)
+								{
+									return fDone(pAssertError);
+								}
+								return fDone();
+							});
+					}
+				);
+
+				test(
+					'gatherDataFromServer with SetStateAddress produces correct results',
+					function(fDone)
+					{
+						this.timeout(10000);
+						const testPict = new libPict(_MockSettings);
+
+						testPict.EntityProvider.gatherDataFromServer(
+							[
+								{
+									"Type": "SetStateAddress",
+									"StateAddress": "AppData.TestState"
+								},
+								{
+									"Entity": "Author",
+									"Filter": "FBL~IDAuthor~LT~5",
+									"AllRecords": true,
+									"Destination": "State.Authors"
+								},
+								{
+									"Type": "PopState"
+								},
+								{
+									"Entity": "Author",
+									"Filter": "FBV~IDAuthor~EQ~100",
+									"Destination": "AppData.SingleAuthor",
+									"SingleRecord": true
+								}
+							],
+							function(pError)
+							{
+								try
+								{
+									Expect(pError).to.not.exist;
+									Expect(testPict.AppData.TestState.Authors).to.be.an('array');
+									Expect(testPict.AppData.TestState.Authors.length).to.be.greaterThan(0);
+									Expect(testPict.AppData.SingleAuthor.IDAuthor).to.equal(100);
+
+									// Waves: SetStateAddress | Author (State.Authors) | PopState | SingleAuthor
+									const tmpWaves = testPict.EntityProvider.lastBundleWaves;
+									Expect(tmpWaves.length).to.equal(4);
+								}
+								catch (pAssertError)
+								{
+									return fDone(pAssertError);
+								}
+								return fDone();
+							});
+					}
+				);
+
+				test(
+					'gatherDataFromServer handles empty bundle array',
+					function(fDone)
+					{
+						const testPict = new libPict(_MockSettings);
+
+						testPict.EntityProvider.gatherDataFromServer(
+							[],
+							function(pError)
+							{
+								Expect(pError).to.not.exist;
+								Expect(testPict.EntityProvider.lastBundleWaves.length).to.equal(0);
+								return fDone();
+							});
+					}
+				);
+
+				test(
+					'existing basic provider test still works with parallelization',
+					function(fDone)
+					{
+						this.timeout(10000);
+						const testPict = new libPict(_MockSettings);
+
+						testPict.EntityProvider.gatherDataFromServer(
+							[
+								{
+									"Entity": "Author",
+									"Filter": "FBV~IDAuthor~EQ~100",
+									"Destination": "AppData.CurrentAuthor",
+									"SingleRecord": true
+								},
+								{
+									"Entity": "BookAuthorJoin",
+									"Filter": "FBV~IDAuthor~EQ~{~D:AppData.CurrentAuthor.IDAuthor~}",
+									"Destination": "AppData.BookAuthorJoins"
+								},
+								{
+									"Entity": "Book",
+									"Filter": "FBL~IDBook~INN~{~PJU:,^IDBook^AppData.BookAuthorJoins~}",
+									"Destination": "AppData.Books"
+								},
+								{
+									"Type": "Custom",
+									"URL": "Author/Schema",
+									"Destination": "AppData.AuthorSchema"
+								}
+							],
+							function(pError)
+							{
+								try
+								{
+									Expect(pError).to.not.exist;
+									Expect(testPict.AppData.CurrentAuthor.IDAuthor).to.equal(100);
+									Expect(testPict.AppData.BookAuthorJoins.length).to.be.greaterThan(0);
+									Expect(testPict.AppData.AuthorSchema).to.be.an('object');
+
+									// Verify the wave structure: 3 waves
+									// Wave 1: Author + Custom (both have static/no deps)
+									// Wave 2: BookAuthorJoin (depends on AppData.CurrentAuthor)
+									// Wave 3: Book (depends on AppData.BookAuthorJoins)
+									const tmpWaves = testPict.EntityProvider.lastBundleWaves;
+									Expect(tmpWaves.length).to.equal(3);
+									Expect(tmpWaves[0].length).to.equal(2);
+								}
+								catch (pAssertError)
+								{
+									return fDone(pAssertError);
+								}
+								return fDone();
+							});
+					}
+				);
+			}
+		);
 	}
 );

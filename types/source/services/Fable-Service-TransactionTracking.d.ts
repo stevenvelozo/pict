@@ -29,6 +29,30 @@ declare class TransactionTracking extends libFableServiceProviderBase {
      */
     registerTransaction(pKey: string): TransactionInfo;
     /**
+     * Remove a transaction from the tracking map. Safe to call on a key that
+     * no longer exists (returns false without side effects).
+     *
+     * Guarded: logs a warning and refuses to delete if the transaction still
+     * has a non-empty queue - that would indicate the caller is unregistering
+     * prematurely with work still pending. Callers who have explicitly
+     * drained or discarded the queue can pass pForce=true to bypass the
+     * guard.
+     *
+     * Note that the existing `finalizeTransaction` /
+     * `eventTransactionAsyncOperationComplete` pathways in pict-section-form
+     * manage their own map cleanup directly on the `transactions` getter;
+     * this method is the canonical API for any other caller that needs to
+     * remove a transaction entry.
+     *
+     * @param {string} pKey - The transaction key to unregister.
+     * @param {boolean} [pForce] - If true, unregister even if the queue is
+     *     not empty. Use only when the caller has explicitly drained or
+     *     discarded the queue state.
+     *
+     * @return {boolean} true if an entry was removed, false otherwise.
+     */
+    unregisterTransaction(pKey: string, pForce?: boolean): boolean;
+    /**
      * @param {string} pKey
      * @param {any} pData
      * @param {string} [pType='Entry']

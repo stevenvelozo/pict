@@ -25,6 +25,15 @@ declare class PictMeadowEntityProvider {
     /** @type {(pOptions: Record<string, any>) => Record<string, any>} */
     prepareRequestOptions: (pOptions: Record<string, any>) => Record<string, any>;
     /**
+     * After buildBundleWaves() is called by gatherDataFromServer(), this
+     * property holds the computed wave schedule for inspection/debugging.
+     * @type {Array<Array<{Index: number, Step: Record<string, any>}>>|null}
+     */
+    lastBundleWaves: Array<Array<{
+        Index: number;
+        Step: Record<string, any>;
+    }>> | null;
+    /**
      * @param {string} pEntity - The name of the entity to initialize the cache for
      */
     initializeCache(pEntity: string): void;
@@ -126,7 +135,37 @@ declare class PictMeadowEntityProvider {
      * @param {Array<Record<string, any>>} pEntitiesBundleDescription - The entity bundle description object.
      * @param {(error?: Error) => void} fCallback - The callback function to call when the data gathering is complete.
      */
-    gatherDataFromServer(pEntitiesBundleDescription: Array<Record<string, any>>, fCallback: (error?: Error) => void): void;
+    /**
+     * Extract the set of destination addresses that a bundle step depends on.
+     *
+     * Scans the step's Filter, URL, and data-address properties for template
+     * references of the form:
+     *   - {~PJU:..^Field^SomeAddress~}  (primary-key join/unique)
+     *   - {~D:SomeAddress.Field~}        (data-address lookup)
+     *
+     * Also inspects MapJoin/ProjectDataset address properties for references
+     * to destinations produced by earlier steps.
+     *
+     * @param {Record<string, any>} pStep - A single entity bundle step.
+     * @return {Set<string>} - The set of destination address prefixes this step references.
+     */
+    extractStepDependencies(pStep: Record<string, any>): Set<string>;
+    /**
+     * Build execution waves from a bundle description by analyzing inter-step
+     * dependencies. Steps within the same wave have no data dependencies on
+     * each other and can execute concurrently. Waves execute sequentially.
+     *
+     * SetStateAddress and PopState steps act as wave barriers — they always
+     * start a new wave and execute alone.
+     *
+     * @param {Array<Record<string, any>>} pEntitiesBundleDescription - The entity bundle description.
+     * @return {Array<Array<{Index: number, Step: Record<string, any>}>>} - An array of waves, each wave an array of {Index, Step} objects.
+     */
+    buildBundleWaves(pEntitiesBundleDescription: Array<Record<string, any>>): Array<Array<{
+        Index: number;
+        Step: Record<string, any>;
+    }>>;
+    gatherDataFromServer(pEntitiesBundleDescription: any, fCallback: any): any;
     /**
      * Creates a wrapper state object to allow referencing common global state in addition to flow-state.
      *
@@ -186,10 +225,11 @@ declare class PictMeadowEntityProvider {
      * @param {string} pMeadowFilterExpression - The meadow filter expression to filter the entity set by.
      * @param {(pError?: Error, pEntitySet?: Array) => void} fCallback - The callback to call when the request is complete.
      * @param {string} [postfix] - Optional, adds a postfix string to all calls made.
+     * @param {Record<string, any>} [pOptions] - Optional, per-call options (e.g. { DownloadPageConcurrency: 1 }).
      *
      * @return {void}
      */
-    getEntitySet(pEntity: string, pMeadowFilterExpression: string, fCallback: (pError?: Error, pEntitySet?: any[]) => void, postfix?: string): void;
+    getEntitySet(pEntity: string, pMeadowFilterExpression: string, fCallback: (pError?: Error, pEntitySet?: any[]) => void, postfix?: string, pOptions?: Record<string, any>): void;
     /**
      * @param {string} pEntityType - The type of the entity to format the URL for.
      *

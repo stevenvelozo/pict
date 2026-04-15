@@ -1,6 +1,6 @@
 {
   "name": "pict",
-  "version": "1.0.363",
+  "version": "1.0.364",
   "description": "Pict browser library.",
   "main": "source/Pict.js",
   "scripts": {
@@ -57,16 +57,16 @@
     "eslint": "^9.39.1",
     "globals": "^16.5.0",
     "pict-docuserve": "^0.1.5",
-    "quackage": "^1.1.0",
+    "quackage": "^1.1.2",
     "sinon": "^20.0.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
     "cachetrax": "^1.0.6",
-    "fable": "^3.1.67",
+    "fable": "^3.1.70",
     "pict-application": "^1.0.33",
     "pict-provider": "^1.0.12",
     "pict-template": "^1.0.15",
-    "pict-view": "^1.0.67"
+    "pict-view": "^1.0.68"
   }
 }
