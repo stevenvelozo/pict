@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "cachetrax": "^1.0.6",
-    "fable": "^3.1.70",
+    "fable": "^3.1.71",
     "pict-application": "^1.0.33",
     "pict-provider": "^1.0.12",
     "pict-template": "^1.0.15",

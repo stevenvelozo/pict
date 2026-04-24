@@ -2,8 +2,10 @@
 	"include": ["source"],
 	"compilerOptions":
 	{
-		"lib": ["es2017", "dom"],
+		"target": "es2019",
+		"lib": ["es2020", "dom"],
 		"module": "commonjs",
+		"esModuleInterop": true,
 		"allowJs": true,
 		"checkJs": true,
 		"declaration": true,

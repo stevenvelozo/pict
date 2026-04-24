@@ -404,10 +404,23 @@ class PictContentAssignment extends libFableServiceBase
 				return this.prependContent(pDestinationAddress, pContent);
 			case 'append_once':
 			{
-				// Try to find the content in either the test address or the destination address
-				let tmpTestAddress = (typeof(pTestAddress) == 'string') ? pTestAddress : pDestinationAddress;
-				let tmpExistingContent = this.getElement(tmpTestAddress);
-				if (tmpExistingContent.length < 1)
+				if (typeof(pTestAddress) == 'string' && pTestAddress.length > 0)
+				{
+					let tmpExistingContent = this.getElement(pTestAddress);
+					if (tmpExistingContent.length < 1)
+					{
+						return this.appendContent(pDestinationAddress, pContent);
+					}
+					break;
+				}
+				// Without a test address, preserve the "once" guarantee by
+				// treating a non-empty destination as "already populated."
+				// (The previous fallback ran getElement on the destination
+				// container itself, which virtually always exists, so
+				// append_once silently became a no-op whenever TestAddress
+				// was omitted.)
+				let tmpDestinationContent = this.readContent(pDestinationAddress);
+				if (tmpDestinationContent == null || String(tmpDestinationContent).trim() === '')
 				{
 					return this.appendContent(pDestinationAddress, pContent);
 				}

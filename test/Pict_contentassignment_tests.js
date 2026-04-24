@@ -114,5 +114,128 @@ suite(
 				);
 			}
 		);
+
+		suite(
+			'append_once semantics',
+			() =>
+			{
+				// Simulate a real-browser-like DOM by wiring custom functions, since the
+				// default Node test path has no document and the EnvironmentObject mock
+				// always returns empty for getElement (which masks the bug).
+				const buildPict = () =>
+				{
+					let tmpPict = new libPict(_MockSettings);
+					let tmpDomState = {};
+					let tmpDestinationContent = {};
+					let tmpAppendLog = [];
+					tmpPict.ContentAssignment.customGetElementFunction = (pAddress) => tmpDomState[pAddress] || [];
+					tmpPict.ContentAssignment.customReadFunction = (pAddress) =>
+					{
+						return (pAddress in tmpDestinationContent) ? tmpDestinationContent[pAddress] : null;
+					};
+					tmpPict.ContentAssignment.customAppendFunction = (pAddress, pContent) =>
+					{
+						tmpAppendLog.push({ Address: pAddress, Content: pContent });
+					};
+					return { pict: tmpPict, dom: tmpDomState, content: tmpDestinationContent, appends: tmpAppendLog };
+				};
+
+				test(
+					'TestAddress provided; selector not in DOM -> appends',
+					(fDone) =>
+					{
+						let tmpHarness = buildPict();
+						tmpHarness.dom['#host'] = [ { tagName: 'DIV' } ];
+						tmpHarness.dom['#Widget-Row-Once'] = [];
+						tmpHarness.pict.ContentAssignment.projectContent('append_once', '#host', '<div id="Widget-Row-Once"/>', '#Widget-Row-Once');
+						Expect(tmpHarness.appends.length).to.equal(1);
+						Expect(tmpHarness.appends[0].Address).to.equal('#host');
+						fDone();
+					}
+				);
+
+				test(
+					'TestAddress provided; selector already present -> skips append',
+					(fDone) =>
+					{
+						let tmpHarness = buildPict();
+						tmpHarness.dom['#host'] = [ { tagName: 'DIV' } ];
+						tmpHarness.dom['#Widget-Row-Once'] = [ { tagName: 'DIV' } ];
+						tmpHarness.pict.ContentAssignment.projectContent('append_once', '#host', '<div id="Widget-Row-Once"/>', '#Widget-Row-Once');
+						Expect(tmpHarness.appends.length).to.equal(0);
+						fDone();
+					}
+				);
+
+				test(
+					'No TestAddress; destination is empty -> appends',
+					(fDone) =>
+					{
+						// Without a TestAddress the "once" promise is kept by
+						// treating an empty destination as "nothing here yet."
+						let tmpHarness = buildPict();
+						tmpHarness.dom['#host'] = [ { tagName: 'DIV' } ];
+						tmpHarness.content['#host'] = '';
+						tmpHarness.pict.ContentAssignment.projectContent('append_once', '#host', '<div/>');
+						Expect(tmpHarness.appends.length).to.equal(1);
+						fDone();
+					}
+				);
+
+				test(
+					'No TestAddress; destination already has content -> skips append',
+					(fDone) =>
+					{
+						// A populated destination is the signal that the append
+						// already happened -- re-renders must not duplicate.
+						let tmpHarness = buildPict();
+						tmpHarness.dom['#host'] = [ { tagName: 'DIV' } ];
+						tmpHarness.content['#host'] = '<div>already here</div>';
+						tmpHarness.pict.ContentAssignment.projectContent('append_once', '#host', '<div/>');
+						Expect(tmpHarness.appends.length).to.equal(0);
+						fDone();
+					}
+				);
+
+				test(
+					'Empty-string TestAddress is treated as no TestAddress (does not hit getElement)',
+					(fDone) =>
+					{
+						// querySelectorAll('') throws in real browsers; routing an
+						// empty string into getElement would crash on the DOM path.
+						// Treat '' the same as omitted and fall back to the
+						// destination-emptiness check.
+						let tmpHarness = buildPict();
+						tmpHarness.dom['#host'] = [ { tagName: 'DIV' } ];
+						tmpHarness.content['#host'] = '';
+						let tmpGetElementCalls = [];
+						let tmpOriginalGet = tmpHarness.pict.ContentAssignment.customGetElementFunction;
+						tmpHarness.pict.ContentAssignment.customGetElementFunction = (pAddress) =>
+						{
+							tmpGetElementCalls.push(pAddress);
+							return tmpOriginalGet(pAddress);
+						};
+						tmpHarness.pict.ContentAssignment.projectContent('append_once', '#host', '<div/>', '');
+						Expect(tmpHarness.appends.length).to.equal(1);
+						Expect(tmpGetElementCalls).to.not.include('');
+						fDone();
+					}
+				);
+
+				test(
+					'No TestAddress; destination is whitespace-only -> appends',
+					(fDone) =>
+					{
+						// Whitespace (indentation between HTML tags) counts as empty.
+						let tmpHarness = buildPict();
+						tmpHarness.dom['#host'] = [ { tagName: 'DIV' } ];
+						tmpHarness.content['#host'] = '   \n\t  ';
+						tmpHarness.pict.ContentAssignment.projectContent('append_once', '#host', '<div/>');
+						Expect(tmpHarness.appends.length).to.equal(1);
+						fDone();
+					}
+				);
+			}
+		);
 	}
 );
